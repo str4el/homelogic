@@ -1077,13 +1077,13 @@ design rules under a new name.</description>
 <element name="R215" library="passiv" package="0204V" value="" x="143.51" y="87.63" rot="R270"/>
 <element name="R216" library="passiv" package="0204V" value="" x="148.59" y="87.63" rot="R270"/>
 <element name="SV101" library="stecker" package="ML6" value="" x="33.02" y="93.98"/>
-<element name="R101" library="passiv" package="0204V" value="" x="16.51" y="60.96" rot="R270"/>
+<element name="R101" library="passiv" package="0204V" value="10k" x="16.51" y="60.96" rot="R270"/>
 <element name="IC103" library="ic-wandler" package="DIL08" value="MAX483CPA" x="33.02" y="21.59" rot="R180"/>
-<element name="V101" library="schaltregler" package="TME-24V" value="TME2415S" x="16.51" y="21.59" rot="R90">
-<attribute name="OC_NEWARK" value="51R5332" x="16.51" y="21.59" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MPN" value="TME 2415S" x="16.51" y="21.59" size="1.778" layer="27" rot="R90" display="off"/>
+<element name="V101" library="schaltregler" package="TME-24V" value="TME2405S" x="16.51" y="21.59" rot="R90">
+<attribute name="OC_NEWARK" value="51R5329" x="16.51" y="21.59" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MPN" value="TME 2405S" x="16.51" y="21.59" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="MF" value="" x="16.51" y="21.59" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="OC_FARNELL" value="1007550" x="16.51" y="21.59" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="OC_FARNELL" value="1007547" x="16.51" y="21.59" size="1.778" layer="27" rot="R90" display="off"/>
 </element>
 <element name="K309" library="relais" package="SIP4" value="S202S02" x="106.68" y="20.32" rot="R90">
 <attribute name="VDRM" value="600" x="106.68" y="20.32" size="1.778" layer="27" rot="R90" display="off"/>
@@ -1140,7 +1140,7 @@ design rules under a new name.</description>
 <attribute name="OC_FARNELL" value="unknown" x="17.78" y="71.12" size="1.778" layer="27" rot="R90" display="off"/>
 </element>
 <element name="IC102" library="ic-controller" package="DIL08" value="DS1337" x="17.78" y="86.36" rot="R270"/>
-<element name="Q1" library="passiv" package="HC49/S" value="" x="7.62" y="86.36" rot="R90"/>
+<element name="Q1" library="passiv" package="HC49/S" value="32,768kHz" x="7.62" y="86.36" rot="R90"/>
 <element name="C1" library="passiv" package="C025-025X050" value="10nF" x="17.78" y="93.98" rot="R180"/>
 </elements>
 <signals>
@@ -2459,6 +2459,144 @@ design rules under a new name.</description>
 <wire x1="11.43" y1="87.63" x2="13.97" y2="87.63" width="0.4064" layer="16"/>
 </signal>
 </signals>
+<errors>
+<approved hash="4,1,6adb2feb8bd5a2e9"/>
+<approved hash="4,1,ac27ad10dd344008"/>
+<approved hash="4,1,2e2cef16a3248e1a"/>
+<approved hash="4,1,ac222916e126d815"/>
+<approved hash="4,1,2a24a716db24821a"/>
+<approved hash="4,1,e42235168516a02d"/>
+<approved hash="4,1,9623a717432e2610"/>
+<approved hash="4,1,2423296ba12d9811"/>
+<approved hash="4,1,aa27ef1f2b2c4210"/>
+<approved hash="4,1,2c28ad1edd2ce01e"/>
+<approved hash="4,1,ee1a2f2e832aae15"/>
+<approved hash="4,1,ac3ba90f4132d808"/>
+<approved hash="4,1,663cb716c335260a"/>
+<approved hash="4,1,d42229168116a815"/>
+<approved hash="4,1,aa23af175b2ec210"/>
+<approved hash="4,1,2c236d13ad2d8011"/>
+<approved hash="4,1,ae2f2f1f632c5e10"/>
+<approved hash="4,1,6c38a90ec12d2816"/>
+<approved hash="4,1,2a1a272e9b12a22a"/>
+<approved hash="4,1,a42b951f252ac018"/>
+<approved hash="4,1,6a24af16cb35220a"/>
+<approved hash="4,1,2c222d169d26801e"/>
+<approved hash="4,1,ae226f17232ece10"/>
+<approved hash="4,1,2c2ca91c612d9811"/>
+<approved hash="4,1,6a27376f8b2da211"/>
+<approved hash="4,1,9438a50ec52d200d"/>
+<approved hash="4,1,262bd71ea32a861a"/>
+<approved hash="4,1,b42a691f2122c818"/>
+<approved hash="4,1,ae2caf16c3255e1d"/>
+<approved hash="4,1,2c23e916a1268816"/>
+<approved hash="4,1,aa2227171b2ec210"/>
+<approved hash="4,1,e424b50c452d2011"/>
+<approved hash="4,1,565f276f832da611"/>
+<approved hash="4,1,a428a91e212d5815"/>
+<approved hash="4,1,2a2bef1eab22821a"/>
+<approved hash="4,1,ac1a2d289d2ae028"/>
+<approved hash="4,1,8a24c530ab80329c"/>
+<approved hash="4,1,ea2bc53c59b9aca1"/>
+<approved hash="4,1,6a3d4528a3977689"/>
+<approved hash="4,1,ea55e5445d8464e0"/>
+<approved hash="4,1,322d7d3d7b8c5a9f"/>
+<approved hash="4,1,8238cd24898c7c88"/>
+<approved hash="4,1,f21c3d08538db695"/>
+<approved hash="4,1,62216d34558f4495"/>
+<approved hash="4,1,6a2c85314398669f"/>
+<approved hash="4,1,ea1805346db1b4a9"/>
+<approved hash="4,1,62356d284b875a81"/>
+<approved hash="4,1,b22dfd3c39845c98"/>
+<approved hash="4,1,c2550d45738c06ef"/>
+<approved hash="4,1,7238bd2d558c7497"/>
+<approved hash="4,1,ea23e5386b8c5295"/>
+<approved hash="4,1,4a21653c798f2c95"/>
+<approved hash="4,1,7224bd315b907a8f"/>
+<approved hash="4,1,e21bed0c49b85ca1"/>
+<approved hash="4,1,b22d7d3873875698"/>
+<approved hash="4,1,0235cd243593848f"/>
+<approved hash="4,1,ea5cc54c5b8c22ef"/>
+<approved hash="4,1,6a2b4525298c4c97"/>
+<approved hash="4,1,0a23e538438c6694"/>
+<approved hash="4,1,8a2165346d8f5494"/>
+<approved hash="4,1,623b6d315398468f"/>
+<approved hash="4,1,322bfd37b5805498"/>
+<approved hash="4,1,ca1485386bb772a0"/>
+<approved hash="4,1,6a3d052c598b6c8f"/>
+<approved hash="4,1,ea548544638c369f"/>
+<approved hash="4,1,6a2b653d5d8ca497"/>
+<approved hash="4,1,3223fd37bb8c5a94"/>
+<approved hash="4,1,c2208d0c0988bc94"/>
+<approved hash="4,16,8a24c530ab80329c"/>
+<approved hash="4,16,ea2bc53c59b9aca1"/>
+<approved hash="4,16,6a3d4528a3977689"/>
+<approved hash="4,16,ea55e5445d8464e0"/>
+<approved hash="4,16,322d7d3d7b8c5a9f"/>
+<approved hash="4,16,8238cd24898c7c88"/>
+<approved hash="4,16,f21c3d08538db695"/>
+<approved hash="4,16,62216d34558f4495"/>
+<approved hash="4,16,6a2c85314398669f"/>
+<approved hash="4,16,ea1805346db1b4a9"/>
+<approved hash="4,16,62356d284b875a81"/>
+<approved hash="4,16,b22dfd3c39845c98"/>
+<approved hash="4,16,c2550d45738c06ef"/>
+<approved hash="4,16,7238bd2d558c7497"/>
+<approved hash="4,16,ea23e5386b8c5295"/>
+<approved hash="4,16,4a21653c798f2c95"/>
+<approved hash="4,16,7224bd315b907a8f"/>
+<approved hash="4,16,e21bed0c49b85ca1"/>
+<approved hash="4,16,b22d7d3873875698"/>
+<approved hash="4,16,0235cd243593848f"/>
+<approved hash="4,16,ea5cc54c5b8c22ef"/>
+<approved hash="4,16,6a2b4525298c4c97"/>
+<approved hash="4,16,0a23e538438c6694"/>
+<approved hash="4,16,8a2165346d8f5494"/>
+<approved hash="4,16,623b6d315398468f"/>
+<approved hash="4,16,322bfd37b5805498"/>
+<approved hash="4,16,ca1485386bb772a0"/>
+<approved hash="4,16,6a3d052c598b6c8f"/>
+<approved hash="4,16,ea548544638c369f"/>
+<approved hash="4,16,6a2b653d5d8ca497"/>
+<approved hash="4,16,3223fd37bb8c5a94"/>
+<approved hash="4,16,c2208d0c0988bc94"/>
+<approved hash="4,16,6adb2feb8bd5a2e9"/>
+<approved hash="4,16,ac27ad10dd344008"/>
+<approved hash="4,16,2e2cef16a3248e1a"/>
+<approved hash="4,16,ac222916e126d815"/>
+<approved hash="4,16,2a24a716db24821a"/>
+<approved hash="4,16,e42235168516a02d"/>
+<approved hash="4,16,9623a717432e2610"/>
+<approved hash="4,16,2423296ba12d9811"/>
+<approved hash="4,16,aa27ef1f2b2c4210"/>
+<approved hash="4,16,2c28ad1edd2ce01e"/>
+<approved hash="4,16,ee1a2f2e832aae15"/>
+<approved hash="4,16,ac3ba90f4132d808"/>
+<approved hash="4,16,663cb716c335260a"/>
+<approved hash="4,16,d42229168116a815"/>
+<approved hash="4,16,aa23af175b2ec210"/>
+<approved hash="4,16,2c236d13ad2d8011"/>
+<approved hash="4,16,ae2f2f1f632c5e10"/>
+<approved hash="4,16,6c38a90ec12d2816"/>
+<approved hash="4,16,2a1a272e9b12a22a"/>
+<approved hash="4,16,a42b951f252ac018"/>
+<approved hash="4,16,6a24af16cb35220a"/>
+<approved hash="4,16,2c222d169d26801e"/>
+<approved hash="4,16,ae226f17232ece10"/>
+<approved hash="4,16,2c2ca91c612d9811"/>
+<approved hash="4,16,6a27376f8b2da211"/>
+<approved hash="4,16,9438a50ec52d200d"/>
+<approved hash="4,16,262bd71ea32a861a"/>
+<approved hash="4,16,b42a691f2122c818"/>
+<approved hash="4,16,ae2caf16c3255e1d"/>
+<approved hash="4,16,2c23e916a1268816"/>
+<approved hash="4,16,aa2227171b2ec210"/>
+<approved hash="4,16,e424b50c452d2011"/>
+<approved hash="4,16,565f276f832da611"/>
+<approved hash="4,16,a428a91e212d5815"/>
+<approved hash="4,16,2a2bef1eab22821a"/>
+<approved hash="4,16,ac1a2d289d2ae028"/>
+</errors>
 </board>
 </drawing>
 </eagle>

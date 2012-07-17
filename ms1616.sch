@@ -3810,10 +3810,14 @@ Datasheet: &lt;a href="./eagle/doc/ic-controller/ds1337.pdf"&gt;ds1337.pdf&lt;/a
 <part name="SV101" library="stecker" deviceset="AVR_ISP6" device=""/>
 <part name="GND25" library="versorgung" deviceset="GND" device=""/>
 <part name="P+2" library="versorgung" deviceset="+5V" device=""/>
-<part name="R101" library="passiv" deviceset="R_" device="0204/2V"/>
+<part name="R101" library="passiv" deviceset="R_" device="0204/2V" value="10k"/>
 <part name="P+1" library="versorgung" deviceset="+5V" device=""/>
 <part name="IC103" library="ic-wandler" deviceset="MAX48*" device="CPA" technology="3"/>
-<part name="V101" library="schaltregler" deviceset="TME?*" device="24" technology="15S"/>
+<part name="V101" library="schaltregler" deviceset="TME?*" device="24" technology="05S">
+<attribute name="MPN" value="TME 2405S"/>
+<attribute name="OC_FARNELL" value="1007547"/>
+<attribute name="OC_NEWARK" value="51R5329"/>
+</part>
 <part name="GND26" library="versorgung" deviceset="GND" device=""/>
 <part name="P+3" library="versorgung" deviceset="+5V" device=""/>
 <part name="K309" library="relais" deviceset="S*02S02" device="" technology="2"/>
@@ -3876,7 +3880,7 @@ Datasheet: &lt;a href="./eagle/doc/ic-controller/ds1337.pdf"&gt;ds1337.pdf&lt;/a
 <part name="IC105" library="74xx-eu" deviceset="74*594" device="N" technology="HC"/>
 <part name="S101" library="schalter" deviceset="DIP04YL" device=""/>
 <part name="IC102" library="ic-controller" deviceset="DS1337" device=""/>
-<part name="Q1" library="passiv" deviceset="Q_" device="HC49S"/>
+<part name="Q1" library="passiv" deviceset="Q_" device="HC49S" value="32,768kHz"/>
 <part name="C1" library="passiv" deviceset="C_" device="025-025X050" value="10nF"/>
 <part name="P+12" library="versorgung" deviceset="+5V" device=""/>
 <part name="P+13" library="versorgung" deviceset="+5V" device=""/>
@@ -3925,7 +3929,7 @@ Datasheet: &lt;a href="./eagle/doc/ic-controller/ds1337.pdf"&gt;ds1337.pdf&lt;/a
 <instance part="P+11" gate="1" x="182.88" y="25.4"/>
 <instance part="GND42" gate="1" x="182.88" y="5.08"/>
 <instance part="GND43" gate="1" x="172.72" y="5.08"/>
-<instance part="GND44" gate="1" x="139.7" y="96.52"/>
+<instance part="GND44" gate="1" x="139.7" y="106.68"/>
 <instance part="IC104" gate="A" x="198.12" y="114.3"/>
 <instance part="IC104" gate="P" x="185.42" y="154.94"/>
 <instance part="IC105" gate="A" x="198.12" y="73.66"/>
@@ -4013,20 +4017,8 @@ Datasheet: &lt;a href="./eagle/doc/ic-controller/ds1337.pdf"&gt;ds1337.pdf&lt;/a
 </segment>
 <segment>
 <pinref part="GND44" gate="1" pin="GND"/>
-<wire x1="137.16" y1="101.6" x2="139.7" y2="101.6" width="0.1524" layer="91"/>
-<wire x1="139.7" y1="101.6" x2="139.7" y2="99.06" width="0.1524" layer="91"/>
-<wire x1="137.16" y1="104.14" x2="139.7" y2="104.14" width="0.1524" layer="91"/>
-<wire x1="139.7" y1="104.14" x2="139.7" y2="101.6" width="0.1524" layer="91"/>
-<junction x="139.7" y="101.6"/>
-<wire x1="137.16" y1="106.68" x2="139.7" y2="106.68" width="0.1524" layer="91"/>
-<wire x1="139.7" y1="106.68" x2="139.7" y2="104.14" width="0.1524" layer="91"/>
-<junction x="139.7" y="104.14"/>
-<wire x1="137.16" y1="109.22" x2="139.7" y2="109.22" width="0.1524" layer="91"/>
-<wire x1="139.7" y1="109.22" x2="139.7" y2="106.68" width="0.1524" layer="91"/>
-<junction x="139.7" y="106.68"/>
 <wire x1="137.16" y1="111.76" x2="139.7" y2="111.76" width="0.1524" layer="91"/>
 <wire x1="139.7" y1="111.76" x2="139.7" y2="109.22" width="0.1524" layer="91"/>
-<junction x="139.7" y="109.22"/>
 <wire x1="137.16" y1="114.3" x2="139.7" y2="114.3" width="0.1524" layer="91"/>
 <wire x1="139.7" y1="114.3" x2="139.7" y2="111.76" width="0.1524" layer="91"/>
 <junction x="139.7" y="111.76"/>
@@ -4301,9 +4293,9 @@ Datasheet: &lt;a href="./eagle/doc/ic-controller/ds1337.pdf"&gt;ds1337.pdf&lt;/a
 <net name="N$123" class="0">
 <segment>
 <pinref part="SV101" gate="1" pin="MISO"/>
-<wire x1="68.58" y1="160.02" x2="66.04" y2="160.02" width="0.1524" layer="91"/>
-<wire x1="66.04" y1="160.02" x2="66.04" y2="170.18" width="0.1524" layer="91"/>
-<wire x1="66.04" y1="170.18" x2="114.3" y2="170.18" width="0.1524" layer="91"/>
+<wire x1="68.58" y1="160.02" x2="63.5" y2="160.02" width="0.1524" layer="91"/>
+<wire x1="63.5" y1="160.02" x2="63.5" y2="170.18" width="0.1524" layer="91"/>
+<wire x1="63.5" y1="170.18" x2="114.3" y2="170.18" width="0.1524" layer="91"/>
 <wire x1="114.3" y1="170.18" x2="114.3" y2="116.84" width="0.1524" layer="91"/>
 <pinref part="IC101" gate="G$1" pin="(MISO)PB6"/>
 <wire x1="96.52" y1="116.84" x2="114.3" y2="116.84" width="0.1524" layer="91"/>
@@ -4315,9 +4307,9 @@ Datasheet: &lt;a href="./eagle/doc/ic-controller/ds1337.pdf"&gt;ds1337.pdf&lt;/a
 <net name="N$125" class="0">
 <segment>
 <pinref part="SV101" gate="1" pin="SCK"/>
-<wire x1="68.58" y1="157.48" x2="63.5" y2="157.48" width="0.1524" layer="91"/>
-<wire x1="63.5" y1="157.48" x2="63.5" y2="172.72" width="0.1524" layer="91"/>
-<wire x1="63.5" y1="172.72" x2="116.84" y2="172.72" width="0.1524" layer="91"/>
+<wire x1="68.58" y1="157.48" x2="60.96" y2="157.48" width="0.1524" layer="91"/>
+<wire x1="60.96" y1="157.48" x2="60.96" y2="172.72" width="0.1524" layer="91"/>
+<wire x1="60.96" y1="172.72" x2="116.84" y2="172.72" width="0.1524" layer="91"/>
 <wire x1="116.84" y1="172.72" x2="116.84" y2="119.38" width="0.1524" layer="91"/>
 <pinref part="IC101" gate="G$1" pin="(SCK)PB7"/>
 <wire x1="116.84" y1="119.38" x2="96.52" y2="119.38" width="0.1524" layer="91"/>
@@ -4611,6 +4603,7 @@ Datasheet: &lt;a href="./eagle/doc/ic-controller/ds1337.pdf"&gt;ds1337.pdf&lt;/a
 <pinref part="IC102" gate="G$1" pin="SCL"/>
 <wire x1="152.4" y1="83.82" x2="162.56" y2="83.82" width="0.1524" layer="91"/>
 <wire x1="162.56" y1="83.82" x2="165.1" y2="81.28" width="0.1524" layer="91"/>
+<label x="154.94" y="83.82" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="SDA" class="0">
@@ -4624,6 +4617,7 @@ Datasheet: &lt;a href="./eagle/doc/ic-controller/ds1337.pdf"&gt;ds1337.pdf&lt;/a
 <pinref part="IC102" gate="G$1" pin="SDA"/>
 <wire x1="152.4" y1="81.28" x2="162.56" y2="81.28" width="0.1524" layer="91"/>
 <wire x1="162.56" y1="81.28" x2="165.1" y2="78.74" width="0.1524" layer="91"/>
+<label x="154.94" y="81.28" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$126" class="0">
