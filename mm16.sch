@@ -2093,6 +2093,12 @@ grid 27.5 mm, outline 17.3 x 31.6 mm</description>
 <text x="-2.54" y="-2.54" size="1.778" layer="96">&gt;VALUE</text>
 <pin name="GNDIO" x="0" y="2.54" visible="off" length="short" direction="sup" rot="R270"/>
 </symbol>
+<symbol name="VCC">
+<wire x1="1.27" y1="-1.905" x2="0" y2="0" width="0.254" layer="94"/>
+<wire x1="0" y1="0" x2="-1.27" y2="-1.905" width="0.254" layer="94"/>
+<text x="-2.54" y="-2.54" size="1.778" layer="96" rot="R90">&gt;VALUE</text>
+<pin name="VCC" x="0" y="-2.54" visible="off" length="short" direction="sup" rot="R90"/>
+</symbol>
 </symbols>
 <devicesets>
 <deviceset name="GND" prefix="GND">
@@ -2125,6 +2131,19 @@ grid 27.5 mm, outline 17.3 x 31.6 mm</description>
 <description>&lt;b&gt;SUPPLY SYMBOL&lt;/b&gt;</description>
 <gates>
 <gate name="G$1" symbol="GNDIO" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="VCC" prefix="P+">
+<description>&lt;b&gt;SUPPLY SYMBOL&lt;/b&gt;</description>
+<gates>
+<gate name="VCC" symbol="VCC" x="0" y="0"/>
 </gates>
 <devices>
 <device name="">
@@ -4216,6 +4235,94 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 </deviceset>
 </devicesets>
 </library>
+<library name="battery">
+<description>&lt;b&gt;Lithium Batteries and NC Accus&lt;/b&gt;&lt;p&gt;
+&lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
+<packages>
+<package name="CR2032V">
+<description>&lt;b&gt;LI BATTERY&lt;/b&gt; Varta</description>
+<wire x1="1.651" y1="-1.905" x2="1.651" y2="-4.445" width="0.1524" layer="21"/>
+<wire x1="2.286" y1="1.905" x2="2.286" y2="4.445" width="0.1524" layer="21"/>
+<wire x1="-2.54" y1="-3.175" x2="-2.54" y2="3.175" width="0.1524" layer="21"/>
+<wire x1="2.286" y1="-1.905" x2="2.286" y2="1.905" width="0.1524" layer="51"/>
+<wire x1="-2.54" y1="-6.858" x2="-2.54" y2="-3.175" width="0.1524" layer="51"/>
+<wire x1="-2.54" y1="3.175" x2="-2.54" y2="6.858" width="0.1524" layer="51"/>
+<wire x1="-1.905" y1="-6.858" x2="-2.54" y2="-6.858" width="0.1524" layer="21"/>
+<wire x1="-1.905" y1="-6.858" x2="-1.905" y2="-3.175" width="0.1524" layer="51"/>
+<wire x1="-1.905" y1="-3.175" x2="-1.905" y2="3.175" width="0.1524" layer="21"/>
+<wire x1="-1.905" y1="3.175" x2="-1.905" y2="6.858" width="0.1524" layer="51"/>
+<wire x1="1.651" y1="-1.905" x2="1.651" y2="1.905" width="0.1524" layer="51"/>
+<wire x1="2.286" y1="-1.905" x2="1.651" y2="-1.905" width="0.1524" layer="21"/>
+<wire x1="2.286" y1="1.905" x2="1.651" y2="1.905" width="0.1524" layer="21"/>
+<wire x1="2.286" y1="-1.905" x2="2.286" y2="-4.445" width="0.1524" layer="21"/>
+<wire x1="1.651" y1="1.905" x2="1.651" y2="4.445" width="0.1524" layer="21"/>
+<wire x1="-1.905" y1="6.858" x2="-2.54" y2="6.858" width="0.1524" layer="21"/>
+<wire x1="-1.905" y1="3.175" x2="-2.54" y2="3.175" width="0.1524" layer="21"/>
+<wire x1="-1.905" y1="-3.175" x2="-2.54" y2="-3.175" width="0.1524" layer="21"/>
+<wire x1="-4.191" y1="0" x2="-2.921" y2="0" width="0.254" layer="21"/>
+<wire x1="-3.556" y1="0.635" x2="-3.556" y2="-0.635" width="0.254" layer="21"/>
+<wire x1="2.921" y1="-2.413" x2="2.921" y2="-3.683" width="0.254" layer="21"/>
+<wire x1="-1.905" y1="-9.398" x2="-1.27" y2="-10.033" width="0.1524" layer="21" curve="90"/>
+<wire x1="-1.905" y1="9.398" x2="-1.27" y2="10.033" width="0.1524" layer="21" curve="-90"/>
+<wire x1="-1.27" y1="-10.033" x2="0.381" y2="-10.033" width="0.1524" layer="21"/>
+<wire x1="-1.27" y1="10.033" x2="0.381" y2="10.033" width="0.1524" layer="21"/>
+<wire x1="0.381" y1="-10.033" x2="1.016" y2="-9.398" width="0.1524" layer="21" curve="90"/>
+<wire x1="0.381" y1="10.033" x2="1.016" y2="9.398" width="0.1524" layer="21" curve="-90"/>
+<wire x1="1.016" y1="-9.017" x2="1.651" y2="-8.382" width="0.1524" layer="21" curve="90"/>
+<wire x1="1.016" y1="9.017" x2="1.651" y2="8.382" width="0.1524" layer="21" curve="-90"/>
+<wire x1="1.016" y1="-9.398" x2="1.016" y2="-1.143" width="0.1524" layer="21"/>
+<wire x1="1.016" y1="1.143" x2="1.016" y2="-1.143" width="0.1524" layer="51"/>
+<wire x1="1.016" y1="1.143" x2="1.016" y2="9.398" width="0.1524" layer="21"/>
+<wire x1="2.286" y1="-4.445" x2="1.651" y2="-4.445" width="0.1524" layer="21"/>
+<wire x1="1.651" y1="-4.445" x2="1.651" y2="-8.382" width="0.1524" layer="21"/>
+<wire x1="2.286" y1="4.445" x2="1.651" y2="4.445" width="0.1524" layer="21"/>
+<wire x1="1.651" y1="4.445" x2="1.651" y2="8.382" width="0.1524" layer="21"/>
+<wire x1="-1.905" y1="-9.398" x2="-1.905" y2="-6.858" width="0.1524" layer="21"/>
+<wire x1="-1.905" y1="6.858" x2="-1.905" y2="9.398" width="0.1524" layer="21"/>
+<pad name="+" x="-2.54" y="-5.08" drill="1.3208" diameter="3.1496" shape="octagon"/>
+<pad name="+@1" x="-2.54" y="5.08" drill="1.3208" diameter="3.1496" shape="octagon"/>
+<pad name="-" x="2.286" y="0" drill="1.3208" diameter="3.1496" shape="octagon"/>
+<text x="4.064" y="2.54" size="1.27" layer="25" ratio="10" rot="R90">&gt;NAME</text>
+<text x="0.254" y="-3.683" size="1.27" layer="21" ratio="10" rot="R90">Lith.3V</text>
+<text x="4.699" y="-9.017" size="1.27" layer="27" ratio="10" rot="R90">&gt;VALUE</text>
+</package>
+</packages>
+<symbols>
+<symbol name="1V2+2">
+<wire x1="-1.905" y1="0.635" x2="-1.905" y2="0" width="0.4064" layer="94"/>
+<wire x1="-2.54" y1="0" x2="-1.905" y2="0" width="0.1524" layer="94"/>
+<wire x1="-1.905" y1="0" x2="-1.905" y2="-0.635" width="0.4064" layer="94"/>
+<wire x1="-0.635" y1="2.54" x2="-0.635" y2="0" width="0.4064" layer="94"/>
+<wire x1="-0.635" y1="0" x2="2.54" y2="0" width="0.1524" layer="94"/>
+<wire x1="-0.635" y1="0" x2="-0.635" y2="-2.54" width="0.4064" layer="94"/>
+<text x="-2.54" y="3.175" size="1.778" layer="95">&gt;NAME</text>
+<text x="-2.54" y="-5.08" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="+" x="5.08" y="0" visible="pad" length="short" direction="pas" rot="R180"/>
+<pin name="-" x="-5.08" y="0" visible="pad" length="short" direction="pas"/>
+<pin name="+@1" x="2.54" y="0" visible="off" length="point" direction="pas" rot="R180"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="CR2032V" prefix="G">
+<description>&lt;b&gt;LI BATTERY&lt;/b&gt; Varta</description>
+<gates>
+<gate name="1" symbol="1V2+2" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="CR2032V">
+<connects>
+<connect gate="1" pin="+" pad="+"/>
+<connect gate="1" pin="+@1" pad="+@1"/>
+<connect gate="1" pin="-" pad="-"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -4281,7 +4388,6 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <part name="GND24" library="versorgung" deviceset="GND" device=""/>
 <part name="SV101" library="stecker" deviceset="AVR_ISP6" device=""/>
 <part name="GND25" library="versorgung" deviceset="GND" device=""/>
-<part name="P+2" library="versorgung" deviceset="+5V" device=""/>
 <part name="R101" library="passiv" deviceset="R_" device="0204/2V" value="10k"/>
 <part name="P+1" library="versorgung" deviceset="+5V" device=""/>
 <part name="IC103" library="ic-wandler" deviceset="MAX48*" device="CPA" technology="3"/>
@@ -4309,8 +4415,6 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <part name="IC102" library="ic-controller" deviceset="DS1337" device=""/>
 <part name="Q1" library="passiv" deviceset="Q_" device="HC49S" value="32,768kHz"/>
 <part name="C1" library="passiv" deviceset="C_" device="025-025X050" value="10nF"/>
-<part name="P+12" library="versorgung" deviceset="+5V" device=""/>
-<part name="P+13" library="versorgung" deviceset="+5V" device=""/>
 <part name="GND45" library="versorgung" deviceset="GND" device=""/>
 <part name="GND46" library="versorgung" deviceset="GND" device=""/>
 <part name="P+6" library="versorgung" deviceset="+5V" device=""/>
@@ -4337,6 +4441,14 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <part name="X5" library="anschluss" deviceset="WAGO_236-402" device=""/>
 <part name="X6" library="anschluss" deviceset="WAGO_236-402" device=""/>
 <part name="X1" library="anschluss" deviceset="WS16" device="V"/>
+<part name="P+7" library="versorgung" deviceset="VCC" device="" value="VBAT"/>
+<part name="P+2" library="versorgung" deviceset="VCC" device="" value="VBAT"/>
+<part name="P+8" library="versorgung" deviceset="VCC" device="" value="VBAT"/>
+<part name="P+9" library="versorgung" deviceset="VCC" device="" value="VBAT"/>
+<part name="D1" library="diode" deviceset="1N4148" device="-7"/>
+<part name="D2" library="diode" deviceset="1N4148" device="-7"/>
+<part name="G1" library="battery" deviceset="CR2032V" device=""/>
+<part name="GND39" library="versorgung" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -4346,7 +4458,6 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <instance part="IC101" gate="G$1" x="76.2" y="99.06"/>
 <instance part="SV101" gate="1" x="76.2" y="157.48" rot="R180"/>
 <instance part="GND25" gate="1" x="86.36" y="147.32"/>
-<instance part="P+2" gate="1" x="86.36" y="167.64"/>
 <instance part="R101" gate="G$1" x="53.34" y="162.56" rot="R90"/>
 <instance part="P+1" gate="1" x="53.34" y="172.72"/>
 <instance part="IC103" gate="G$1" x="137.16" y="15.24"/>
@@ -4372,8 +4483,6 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <instance part="Q1" gate="G$1" x="119.38" y="76.2" rot="R90"/>
 <instance part="IC102" gate="P" x="210.82" y="15.24"/>
 <instance part="C1" gate="G$1" x="200.66" y="17.78"/>
-<instance part="P+12" gate="1" x="200.66" y="25.4"/>
-<instance part="P+13" gate="1" x="210.82" y="25.4"/>
 <instance part="GND45" gate="1" x="200.66" y="5.08"/>
 <instance part="GND46" gate="1" x="210.82" y="5.08"/>
 <instance part="P+6" gate="1" x="172.72" y="93.98"/>
@@ -4398,6 +4507,14 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <instance part="X1" gate="-14" x="180.34" y="50.8" rot="R180"/>
 <instance part="X1" gate="-15" x="180.34" y="48.26" rot="R180"/>
 <instance part="X1" gate="-16" x="180.34" y="45.72" rot="R180"/>
+<instance part="P+7" gate="VCC" x="187.96" y="165.1"/>
+<instance part="P+2" gate="VCC" x="86.36" y="167.64"/>
+<instance part="P+8" gate="VCC" x="210.82" y="25.4"/>
+<instance part="P+9" gate="VCC" x="200.66" y="25.4"/>
+<instance part="D1" gate="G$1" x="170.18" y="157.48"/>
+<instance part="D2" gate="G$1" x="205.74" y="157.48" rot="R180"/>
+<instance part="G1" gate="1" x="218.44" y="152.4" rot="R90"/>
+<instance part="GND39" gate="1" x="218.44" y="144.78"/>
 </instances>
 <busses>
 <bus name="IN[0..15],OUT[0..15],C1,C2,D,!R,SCL,SDA">
@@ -4498,6 +4615,10 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <pinref part="X1" gate="-15" pin="A"/>
 <pinref part="X1" gate="-16" pin="A"/>
 </segment>
+<segment>
+<pinref part="G1" gate="1" pin="-"/>
+<pinref part="GND39" gate="1" pin="GND"/>
+</segment>
 </net>
 <net name="IN0" class="0">
 <segment>
@@ -4557,12 +4678,6 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 </net>
 <net name="+5V" class="0">
 <segment>
-<pinref part="P+2" gate="1" pin="+5V"/>
-<pinref part="SV101" gate="1" pin="VCC"/>
-<wire x1="86.36" y1="165.1" x2="86.36" y2="160.02" width="0.1524" layer="91"/>
-<wire x1="86.36" y1="160.02" x2="83.82" y2="160.02" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <pinref part="R101" gate="G$1" pin="2"/>
 <pinref part="P+1" gate="1" pin="+5V"/>
 <wire x1="53.34" y1="167.64" x2="53.34" y2="170.18" width="0.1524" layer="91"/>
@@ -4572,6 +4687,9 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <wire x1="165.1" y1="162.56" x2="165.1" y2="157.48" width="0.1524" layer="91"/>
 <pinref part="V101" gate="G$1" pin="+VOUT"/>
 <wire x1="165.1" y1="157.48" x2="160.02" y2="157.48" width="0.1524" layer="91"/>
+<pinref part="D1" gate="G$1" pin="A"/>
+<wire x1="165.1" y1="157.48" x2="167.64" y2="157.48" width="0.1524" layer="91"/>
+<junction x="165.1" y="157.48"/>
 </segment>
 <segment>
 <pinref part="IC101" gate="G$1" pin="VCC"/>
@@ -4599,15 +4717,6 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <segment>
 <pinref part="P+11" gate="1" pin="+5V"/>
 <pinref part="IC103" gate="P" pin="VCC"/>
-</segment>
-<segment>
-<pinref part="IC102" gate="P" pin="VCC"/>
-<pinref part="P+13" gate="1" pin="+5V"/>
-</segment>
-<segment>
-<pinref part="P+12" gate="1" pin="+5V"/>
-<pinref part="C1" gate="G$1" pin="1"/>
-<wire x1="200.66" y1="22.86" x2="200.66" y2="20.32" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="P+6" gate="1" pin="+5V"/>
@@ -4949,6 +5058,41 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <wire x1="149.86" y1="12.7" x2="152.4" y2="12.7" width="0.1524" layer="91"/>
 <pinref part="X6" gate=".1" pin="B"/>
 <wire x1="152.4" y1="12.7" x2="154.94" y2="12.7" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="VCC" class="0">
+<segment>
+<pinref part="SV101" gate="1" pin="VCC"/>
+<wire x1="86.36" y1="165.1" x2="86.36" y2="160.02" width="0.1524" layer="91"/>
+<wire x1="86.36" y1="160.02" x2="83.82" y2="160.02" width="0.1524" layer="91"/>
+<pinref part="P+2" gate="VCC" pin="VCC"/>
+</segment>
+<segment>
+<pinref part="IC102" gate="P" pin="VCC"/>
+<pinref part="P+8" gate="VCC" pin="VCC"/>
+</segment>
+<segment>
+<pinref part="C1" gate="G$1" pin="1"/>
+<wire x1="200.66" y1="22.86" x2="200.66" y2="20.32" width="0.1524" layer="91"/>
+<pinref part="P+9" gate="VCC" pin="VCC"/>
+</segment>
+<segment>
+<pinref part="D1" gate="G$1" pin="C"/>
+<pinref part="P+7" gate="VCC" pin="VCC"/>
+<wire x1="172.72" y1="157.48" x2="187.96" y2="157.48" width="0.1524" layer="91"/>
+<wire x1="187.96" y1="157.48" x2="187.96" y2="162.56" width="0.1524" layer="91"/>
+<pinref part="D2" gate="G$1" pin="C"/>
+<wire x1="203.2" y1="157.48" x2="187.96" y2="157.48" width="0.1524" layer="91"/>
+<junction x="187.96" y="157.48"/>
+</segment>
+</net>
+<net name="N$21" class="0">
+<segment>
+<pinref part="D2" gate="G$1" pin="A"/>
+<pinref part="G1" gate="1" pin="+"/>
+<wire x1="208.28" y1="157.48" x2="218.44" y2="157.48" width="0.1524" layer="91"/>
+<pinref part="G1" gate="1" pin="+@1"/>
+<wire x1="218.44" y1="157.48" x2="218.44" y2="154.94" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
