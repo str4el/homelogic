@@ -1514,6 +1514,43 @@ grid 27.5 mm, outline 17.3 x 31.6 mm</description>
 <text x="-5.08" y="10.414" size="1.27" layer="25" ratio="10">&gt;NAME</text>
 <text x="-4.572" y="0" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
 </package>
+<package name="TC38H">
+<description>&lt;b&gt;CRYSTAL&lt;/b&gt;</description>
+<wire x1="-1.397" y1="1.651" x2="1.397" y2="1.651" width="0.1524" layer="21"/>
+<wire x1="1.27" y1="9.906" x2="1.524" y2="9.652" width="0.1524" layer="21" curve="-90"/>
+<wire x1="-1.524" y1="9.652" x2="-1.27" y2="9.906" width="0.1524" layer="21" curve="-90"/>
+<wire x1="-1.27" y1="9.906" x2="1.27" y2="9.906" width="0.1524" layer="21"/>
+<wire x1="1.397" y1="1.651" x2="1.397" y2="2.032" width="0.1524" layer="21"/>
+<wire x1="1.524" y1="2.032" x2="1.397" y2="2.032" width="0.1524" layer="21"/>
+<wire x1="1.524" y1="2.032" x2="1.524" y2="9.652" width="0.1524" layer="21"/>
+<wire x1="-1.397" y1="1.651" x2="-1.397" y2="2.032" width="0.1524" layer="21"/>
+<wire x1="-1.524" y1="2.032" x2="-1.397" y2="2.032" width="0.1524" layer="21"/>
+<wire x1="-1.524" y1="2.032" x2="-1.524" y2="9.652" width="0.1524" layer="21"/>
+<wire x1="1.397" y1="2.032" x2="-1.397" y2="2.032" width="0.1524" layer="21"/>
+<wire x1="0.5588" y1="0.7112" x2="0.508" y2="0.762" width="0.4064" layer="21"/>
+<wire x1="0.508" y1="0.762" x2="0.508" y2="1.143" width="0.4064" layer="21"/>
+<wire x1="-0.508" y1="0.762" x2="-0.508" y2="1.016" width="0.4064" layer="21"/>
+<wire x1="-0.5588" y1="0.7112" x2="-0.508" y2="0.762" width="0.4064" layer="21"/>
+<wire x1="0.635" y1="0.635" x2="1.27" y2="0" width="0.4064" layer="51"/>
+<wire x1="-0.635" y1="0.635" x2="-1.27" y2="0" width="0.4064" layer="51"/>
+<wire x1="-0.762" y1="5.588" x2="-0.762" y2="5.207" width="0.1524" layer="21"/>
+<wire x1="0.762" y1="5.207" x2="-0.762" y2="5.207" width="0.1524" layer="21"/>
+<wire x1="0.762" y1="5.207" x2="0.762" y2="5.588" width="0.1524" layer="21"/>
+<wire x1="-0.762" y1="5.588" x2="0.762" y2="5.588" width="0.1524" layer="21"/>
+<wire x1="-0.762" y1="5.969" x2="0" y2="5.969" width="0.1524" layer="21"/>
+<wire x1="-0.762" y1="4.826" x2="0" y2="4.826" width="0.1524" layer="21"/>
+<wire x1="0" y1="4.826" x2="0" y2="4.318" width="0.1524" layer="21"/>
+<wire x1="0" y1="4.826" x2="0.762" y2="4.826" width="0.1524" layer="21"/>
+<wire x1="0" y1="5.969" x2="0" y2="6.477" width="0.1524" layer="21"/>
+<wire x1="0" y1="5.969" x2="0.762" y2="5.969" width="0.1524" layer="21"/>
+<pad name="1" x="-1.27" y="0" drill="0.8128" shape="long" rot="R90"/>
+<pad name="2" x="1.27" y="0" drill="0.8128" shape="long" rot="R90"/>
+<text x="-1.905" y="2.032" size="1.27" layer="25" ratio="10" rot="R90">&gt;NAME</text>
+<text x="3.175" y="2.032" size="1.27" layer="27" ratio="10" rot="R90">&gt;VALUE</text>
+<rectangle x1="0.3048" y1="1.016" x2="0.7112" y2="1.6002" layer="21"/>
+<rectangle x1="-0.7112" y1="1.016" x2="-0.3048" y2="1.6002" layer="21"/>
+<rectangle x1="-1.778" y1="1.016" x2="1.778" y2="10.414" layer="43"/>
+</package>
 </packages>
 <symbols>
 <symbol name="R">
@@ -2054,6 +2091,15 @@ grid 27.5 mm, outline 17.3 x 31.6 mm</description>
 </technologies>
 </device>
 <device name="HC49U-LM" package="HC49U-LM">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="TC38H" package="TC38H">
 <connects>
 <connect gate="G$1" pin="1" pad="1"/>
 <connect gate="G$1" pin="2" pad="2"/>
@@ -4668,7 +4714,7 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <part name="GND43" library="versorgung" deviceset="GND" device=""/>
 <part name="GND44" library="versorgung" deviceset="GND" device=""/>
 <part name="IC102" library="ic-controller" deviceset="DS1337" device=""/>
-<part name="Q1" library="passiv" deviceset="Q_" device="HC49S" value="32,768kHz"/>
+<part name="Q1" library="passiv" deviceset="Q_" device="TC38H" value="32,768kHz"/>
 <part name="C1" library="passiv" deviceset="C_" device="025-025X050" value="10nF"/>
 <part name="GND45" library="versorgung" deviceset="GND" device=""/>
 <part name="GND46" library="versorgung" deviceset="GND" device=""/>
@@ -4696,7 +4742,6 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <part name="X6" library="anschluss" deviceset="WAGO_236-402" device=""/>
 <part name="X1" library="anschluss" deviceset="WS16" device="V"/>
 <part name="P+7" library="versorgung" deviceset="VCC" device="" value="VBAT"/>
-<part name="P+2" library="versorgung" deviceset="VCC" device="" value="VBAT"/>
 <part name="P+8" library="versorgung" deviceset="VCC" device="" value="VBAT"/>
 <part name="P+9" library="versorgung" deviceset="VCC" device="" value="VBAT"/>
 <part name="D1" library="diode" deviceset="1N4148" device="-7"/>
@@ -4705,6 +4750,7 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <part name="GND39" library="versorgung" deviceset="GND" device=""/>
 <part name="S1" library="switch-dil" deviceset="P103" device=""/>
 <part name="X4" library="anschluss" deviceset="WAGO_236-401" device=""/>
+<part name="P+2" library="versorgung" deviceset="+5V" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -4735,7 +4781,7 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <instance part="GND43" gate="1" x="172.72" y="5.08"/>
 <instance part="GND44" gate="1" x="142.24" y="111.76"/>
 <instance part="IC102" gate="G$1" x="137.16" y="76.2"/>
-<instance part="Q1" gate="G$1" x="119.38" y="76.2" rot="R90"/>
+<instance part="Q1" gate="G$1" x="119.38" y="76.2" rot="R270"/>
 <instance part="IC102" gate="P" x="210.82" y="15.24"/>
 <instance part="C1" gate="G$1" x="200.66" y="17.78"/>
 <instance part="GND45" gate="1" x="200.66" y="5.08"/>
@@ -4763,7 +4809,6 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <instance part="X1" gate="-15" x="180.34" y="48.26" rot="R180"/>
 <instance part="X1" gate="-16" x="180.34" y="45.72" rot="R180"/>
 <instance part="P+7" gate="VCC" x="187.96" y="165.1"/>
-<instance part="P+2" gate="VCC" x="86.36" y="167.64"/>
 <instance part="P+8" gate="VCC" x="210.82" y="25.4"/>
 <instance part="P+9" gate="VCC" x="200.66" y="25.4"/>
 <instance part="D1" gate="G$1" x="170.18" y="157.48"/>
@@ -4771,9 +4816,10 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <instance part="G1" gate="1" x="218.44" y="152.4" rot="R90"/>
 <instance part="GND39" gate="1" x="218.44" y="144.78"/>
 <instance part="S1" gate="1" x="132.08" y="116.84" rot="R90"/>
+<instance part="P+2" gate="1" x="86.36" y="167.64"/>
 </instances>
 <busses>
-<bus name="IN[0..15],OUT[0..15],C1,C2,D,!R,SCL,SDA">
+<bus name="IN[0..15],C1,C2,D,!R,SCL,SDA,ALARM1,ALARM2">
 <segment>
 <wire x1="116.84" y1="40.64" x2="109.22" y2="48.26" width="0.762" layer="92"/>
 <wire x1="109.22" y1="48.26" x2="109.22" y2="139.7" width="0.762" layer="92"/>
@@ -4979,6 +5025,12 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <pinref part="X1" gate="-2" pin="A"/>
 <pinref part="X1" gate="-3" pin="A"/>
 <pinref part="X1" gate="-4" pin="A"/>
+</segment>
+<segment>
+<pinref part="SV101" gate="1" pin="VCC"/>
+<wire x1="86.36" y1="165.1" x2="86.36" y2="160.02" width="0.1524" layer="91"/>
+<wire x1="86.36" y1="160.02" x2="83.82" y2="160.02" width="0.1524" layer="91"/>
+<pinref part="P+2" gate="1" pin="+5V"/>
 </segment>
 </net>
 <net name="N$42" class="0">
@@ -5259,17 +5311,17 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <net name="N$126" class="0">
 <segment>
 <pinref part="IC102" gate="G$1" pin="X1"/>
-<pinref part="Q1" gate="G$1" pin="2"/>
 <wire x1="121.92" y1="83.82" x2="119.38" y2="83.82" width="0.1524" layer="91"/>
+<pinref part="Q1" gate="G$1" pin="1"/>
 <wire x1="119.38" y1="83.82" x2="119.38" y2="78.74" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$127" class="0">
 <segment>
-<pinref part="Q1" gate="G$1" pin="1"/>
-<wire x1="119.38" y1="73.66" x2="119.38" y2="68.58" width="0.1524" layer="91"/>
 <pinref part="IC102" gate="G$1" pin="X2"/>
 <wire x1="119.38" y1="68.58" x2="121.92" y2="68.58" width="0.1524" layer="91"/>
+<pinref part="Q1" gate="G$1" pin="2"/>
+<wire x1="119.38" y1="73.66" x2="119.38" y2="68.58" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$17" class="0">
@@ -5310,12 +5362,6 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 </net>
 <net name="VCC" class="0">
 <segment>
-<pinref part="SV101" gate="1" pin="VCC"/>
-<wire x1="86.36" y1="165.1" x2="86.36" y2="160.02" width="0.1524" layer="91"/>
-<wire x1="86.36" y1="160.02" x2="83.82" y2="160.02" width="0.1524" layer="91"/>
-<pinref part="P+2" gate="VCC" pin="VCC"/>
-</segment>
-<segment>
 <pinref part="IC102" gate="P" pin="VCC"/>
 <pinref part="P+8" gate="VCC" pin="VCC"/>
 </segment>
@@ -5341,6 +5387,34 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <wire x1="208.28" y1="157.48" x2="218.44" y2="157.48" width="0.1524" layer="91"/>
 <pinref part="G1" gate="1" pin="+@1"/>
 <wire x1="218.44" y1="157.48" x2="218.44" y2="154.94" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="ALARM1" class="0">
+<segment>
+<pinref part="IC102" gate="G$1" pin="!INTA"/>
+<wire x1="152.4" y1="71.12" x2="162.56" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="162.56" y1="71.12" x2="165.1" y2="68.58" width="0.1524" layer="91"/>
+<label x="154.94" y="71.12" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="IC101" gate="G$1" pin="(AIN1/OC0)PB3"/>
+<wire x1="96.52" y1="109.22" x2="106.68" y2="109.22" width="0.1524" layer="91"/>
+<wire x1="106.68" y1="109.22" x2="109.22" y2="106.68" width="0.1524" layer="91"/>
+<label x="99.06" y="109.22" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="ALARM2" class="0">
+<segment>
+<pinref part="IC101" gate="G$1" pin="(AIN0/INT2)PB2"/>
+<wire x1="96.52" y1="106.68" x2="106.68" y2="106.68" width="0.1524" layer="91"/>
+<wire x1="106.68" y1="106.68" x2="109.22" y2="104.14" width="0.1524" layer="91"/>
+<label x="99.06" y="106.68" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="IC102" gate="G$1" pin="SQW/!INTB"/>
+<wire x1="152.4" y1="68.58" x2="162.56" y2="68.58" width="0.1524" layer="91"/>
+<wire x1="162.56" y1="68.58" x2="165.1" y2="66.04" width="0.1524" layer="91"/>
+<label x="154.94" y="68.58" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
@@ -6163,9 +6237,6 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <errors>
 <approved hash="104,1,55.88,121.92,IC101,AVCC,+5V,,,"/>
 <approved hash="104,1,55.88,114.3,IC101,VCC,+5V,,,"/>
-<approved hash="104,1,182.88,22.86,IC102P,VCC,+5V,,,"/>
-<approved hash="104,1,185.42,162.56,IC1P,VCC,+5V,,,"/>
-<approved hash="104,1,205.74,162.56,IC2P,VCC,+5V,,,"/>
 </errors>
 </schematic>
 </drawing>
