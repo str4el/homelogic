@@ -4645,14 +4645,14 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <part name="D206" library="diode" deviceset="1N4148" device="-V"/>
 <part name="D207" library="diode" deviceset="1N4148" device="-V"/>
 <part name="D208" library="diode" deviceset="1N4148" device="-V"/>
-<part name="R201" library="passiv" deviceset="R_" device="0204/2V"/>
-<part name="R202" library="passiv" deviceset="R_" device="0204/2V"/>
-<part name="R203" library="passiv" deviceset="R_" device="0204/2V"/>
-<part name="R204" library="passiv" deviceset="R_" device="0204/2V"/>
-<part name="R205" library="passiv" deviceset="R_" device="0204/2V"/>
-<part name="R206" library="passiv" deviceset="R_" device="0204/2V"/>
-<part name="R207" library="passiv" deviceset="R_" device="0204/2V"/>
-<part name="R208" library="passiv" deviceset="R_" device="0204/2V"/>
+<part name="R201" library="passiv" deviceset="R_" device="0204/2V" value="220kΩ"/>
+<part name="R202" library="passiv" deviceset="R_" device="0204/2V" value="220kΩ"/>
+<part name="R203" library="passiv" deviceset="R_" device="0204/2V" value="220kΩ"/>
+<part name="R204" library="passiv" deviceset="R_" device="0204/2V" value="220kΩ"/>
+<part name="R205" library="passiv" deviceset="R_" device="0204/2V" value="220kΩ"/>
+<part name="R206" library="passiv" deviceset="R_" device="0204/2V" value="220kΩ"/>
+<part name="R207" library="passiv" deviceset="R_" device="0204/2V" value="220kΩ"/>
+<part name="R208" library="passiv" deviceset="R_" device="0204/2V" value="220kΩ"/>
 <part name="GND1" library="versorgung" deviceset="GND" device=""/>
 <part name="GND2" library="versorgung" deviceset="GND" device=""/>
 <part name="GND3" library="versorgung" deviceset="GND" device=""/>
@@ -4672,14 +4672,14 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <part name="D214" library="diode" deviceset="1N4148" device="-V"/>
 <part name="D215" library="diode" deviceset="1N4148" device="-V"/>
 <part name="D216" library="diode" deviceset="1N4148" device="-V"/>
-<part name="R209" library="passiv" deviceset="R_" device="0204/2V"/>
-<part name="R210" library="passiv" deviceset="R_" device="0204/2V"/>
-<part name="R211" library="passiv" deviceset="R_" device="0204/2V"/>
-<part name="R212" library="passiv" deviceset="R_" device="0204/2V"/>
-<part name="R213" library="passiv" deviceset="R_" device="0204/2V"/>
-<part name="R214" library="passiv" deviceset="R_" device="0204/2V"/>
-<part name="R215" library="passiv" deviceset="R_" device="0204/2V"/>
-<part name="R216" library="passiv" deviceset="R_" device="0204/2V"/>
+<part name="R209" library="passiv" deviceset="R_" device="0204/2V" value="220kΩ"/>
+<part name="R210" library="passiv" deviceset="R_" device="0204/2V" value="220kΩ"/>
+<part name="R211" library="passiv" deviceset="R_" device="0204/2V" value="220kΩ"/>
+<part name="R212" library="passiv" deviceset="R_" device="0204/2V" value="220kΩ"/>
+<part name="R213" library="passiv" deviceset="R_" device="0204/2V" value="220kΩ"/>
+<part name="R214" library="passiv" deviceset="R_" device="0204/2V" value="220kΩ"/>
+<part name="R215" library="passiv" deviceset="R_" device="0204/2V" value="220kΩ"/>
+<part name="R216" library="passiv" deviceset="R_" device="0204/2V" value="220kΩ"/>
 <part name="GND17" library="versorgung" deviceset="GND" device=""/>
 <part name="GND18" library="versorgung" deviceset="GND" device=""/>
 <part name="GND19" library="versorgung" deviceset="GND" device=""/>
@@ -4700,14 +4700,14 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 </part>
 <part name="GND26" library="versorgung" deviceset="GND" device=""/>
 <part name="P+3" library="versorgung" deviceset="+5V" device=""/>
-<part name="C101" library="passiv" deviceset="C_" device="025-025X050" value="10nF"/>
-<part name="C102" library="passiv" deviceset="C_" device="025-025X050" value="10nF"/>
+<part name="C101" library="passiv" deviceset="C_" device="025-025X050" value="100nF"/>
+<part name="C102" library="passiv" deviceset="C_" device="025-025X050" value="100nF"/>
 <part name="GND35" library="versorgung" deviceset="GND" device=""/>
 <part name="GND36" library="versorgung" deviceset="GND" device=""/>
 <part name="GND37" library="versorgung" deviceset="GND" device=""/>
 <part name="P+4" library="versorgung" deviceset="+5V" device=""/>
 <part name="P+5" library="versorgung" deviceset="+5V" device=""/>
-<part name="C103" library="passiv" deviceset="C_" device="025-025X050" value="10nF"/>
+<part name="C103" library="passiv" deviceset="C_" device="025-025X050" value="100nF"/>
 <part name="P+10" library="versorgung" deviceset="+5V" device=""/>
 <part name="P+11" library="versorgung" deviceset="+5V" device=""/>
 <part name="GND42" library="versorgung" deviceset="GND" device=""/>
@@ -4715,7 +4715,7 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <part name="GND44" library="versorgung" deviceset="GND" device=""/>
 <part name="IC102" library="ic-controller" deviceset="DS1337" device=""/>
 <part name="Q1" library="passiv" deviceset="Q_" device="TC38H" value="32,768kHz"/>
-<part name="C1" library="passiv" deviceset="C_" device="025-025X050" value="10nF"/>
+<part name="C1" library="passiv" deviceset="C_" device="025-025X050" value="100nF"/>
 <part name="GND45" library="versorgung" deviceset="GND" device=""/>
 <part name="GND46" library="versorgung" deviceset="GND" device=""/>
 <part name="P+6" library="versorgung" deviceset="+5V" device=""/>

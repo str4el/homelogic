@@ -3396,14 +3396,14 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <part name="K306" library="relais" deviceset="S*02S02" device="" technology="2"/>
 <part name="K307" library="relais" deviceset="S*02S02" device="" technology="2"/>
 <part name="K308" library="relais" deviceset="S*02S02" device="" technology="2"/>
-<part name="R301" library="passiv" deviceset="R_" device="0204/7"/>
-<part name="R302" library="passiv" deviceset="R_" device="0204/7"/>
-<part name="R303" library="passiv" deviceset="R_" device="0204/7"/>
-<part name="R304" library="passiv" deviceset="R_" device="0204/7"/>
-<part name="R305" library="passiv" deviceset="R_" device="0204/7"/>
-<part name="R306" library="passiv" deviceset="R_" device="0204/7"/>
-<part name="R307" library="passiv" deviceset="R_" device="0204/7"/>
-<part name="R308" library="passiv" deviceset="R_" device="0204/7"/>
+<part name="R301" library="passiv" deviceset="R_" device="0204/7" value="180Ω"/>
+<part name="R302" library="passiv" deviceset="R_" device="0204/7" value="180Ω"/>
+<part name="R303" library="passiv" deviceset="R_" device="0204/7" value="180Ω"/>
+<part name="R304" library="passiv" deviceset="R_" device="0204/7" value="180Ω"/>
+<part name="R305" library="passiv" deviceset="R_" device="0204/7" value="180Ω"/>
+<part name="R306" library="passiv" deviceset="R_" device="0204/7" value="180Ω"/>
+<part name="R307" library="passiv" deviceset="R_" device="0204/7" value="180Ω"/>
+<part name="R308" library="passiv" deviceset="R_" device="0204/7" value="180Ω"/>
 <part name="GND9" library="versorgung" deviceset="GND" device=""/>
 <part name="GND10" library="versorgung" deviceset="GND" device=""/>
 <part name="GND11" library="versorgung" deviceset="GND" device=""/>
@@ -3412,19 +3412,19 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <part name="GND14" library="versorgung" deviceset="GND" device=""/>
 <part name="GND15" library="versorgung" deviceset="GND" device=""/>
 <part name="GND16" library="versorgung" deviceset="GND" device=""/>
-<part name="C101" library="passiv" deviceset="C_" device="025-025X050" value="10nF"/>
+<part name="C101" library="passiv" deviceset="C_" device="025-025X050" value="100nF"/>
 <part name="P+6" library="versorgung" deviceset="+5V" device=""/>
 <part name="P+7" library="versorgung" deviceset="+5V" device=""/>
 <part name="GND38" library="versorgung" deviceset="GND" device=""/>
 <part name="GND39" library="versorgung" deviceset="GND" device=""/>
-<part name="F1" library="sicherung" deviceset="TR5" device=""/>
-<part name="F2" library="sicherung" deviceset="TR5" device=""/>
-<part name="F3" library="sicherung" deviceset="TR5" device=""/>
-<part name="F4" library="sicherung" deviceset="TR5" device=""/>
-<part name="F5" library="sicherung" deviceset="TR5" device=""/>
-<part name="F6" library="sicherung" deviceset="TR5" device=""/>
-<part name="F7" library="sicherung" deviceset="TR5" device=""/>
-<part name="F8" library="sicherung" deviceset="TR5" device=""/>
+<part name="F1" library="sicherung" deviceset="TR5" device="" value="2T"/>
+<part name="F2" library="sicherung" deviceset="TR5" device="" value="2T"/>
+<part name="F3" library="sicherung" deviceset="TR5" device="" value="2T"/>
+<part name="F4" library="sicherung" deviceset="TR5" device="" value="2T"/>
+<part name="F5" library="sicherung" deviceset="TR5" device="" value="2T"/>
+<part name="F6" library="sicherung" deviceset="TR5" device="" value="2T"/>
+<part name="F7" library="sicherung" deviceset="TR5" device="" value="2T"/>
+<part name="F8" library="sicherung" deviceset="TR5" device="" value="2T"/>
 <part name="X1" library="anschluss" deviceset="WAGO_236-408" device=""/>
 <part name="X2" library="anschluss" deviceset="WAGO_236-408" device=""/>
 <part name="GND1" library="versorgung" deviceset="GND" device=""/>

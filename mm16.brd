@@ -1291,14 +1291,14 @@ design rules under a new name.</description>
 <element name="D206" library="diode" package="DO35-V" value="1N4148-V" x="34.29" y="62.23" rot="R270"/>
 <element name="D207" library="diode" package="DO35-V" value="1N4148-V" x="39.37" y="62.23" rot="R270"/>
 <element name="D208" library="diode" package="DO35-V" value="1N4148-V" x="44.45" y="62.23" rot="R270"/>
-<element name="R201" library="passiv" package="0204V" value="" x="6.35" y="62.23" rot="R270"/>
-<element name="R202" library="passiv" package="0204V" value="" x="11.43" y="62.23" rot="R270"/>
-<element name="R203" library="passiv" package="0204V" value="" x="16.51" y="62.23" rot="R270"/>
-<element name="R204" library="passiv" package="0204V" value="" x="21.59" y="62.23" rot="R270"/>
-<element name="R205" library="passiv" package="0204V" value="" x="26.67" y="62.23" rot="R270"/>
-<element name="R206" library="passiv" package="0204V" value="" x="31.75" y="62.23" rot="R270"/>
-<element name="R207" library="passiv" package="0204V" value="" x="36.83" y="62.23" rot="R270"/>
-<element name="R208" library="passiv" package="0204V" value="" x="41.91" y="62.23" rot="R270"/>
+<element name="R201" library="passiv" package="0204V" value="220kΩ" x="6.35" y="62.23" rot="R270"/>
+<element name="R202" library="passiv" package="0204V" value="220kΩ" x="11.43" y="62.23" rot="R270"/>
+<element name="R203" library="passiv" package="0204V" value="220kΩ" x="16.51" y="62.23" rot="R270"/>
+<element name="R204" library="passiv" package="0204V" value="220kΩ" x="21.59" y="62.23" rot="R270"/>
+<element name="R205" library="passiv" package="0204V" value="220kΩ" x="26.67" y="62.23" rot="R270"/>
+<element name="R206" library="passiv" package="0204V" value="220kΩ" x="31.75" y="62.23" rot="R270"/>
+<element name="R207" library="passiv" package="0204V" value="220kΩ" x="36.83" y="62.23" rot="R270"/>
+<element name="R208" library="passiv" package="0204V" value="220kΩ" x="41.91" y="62.23" rot="R270"/>
 <element name="IC101" library="ic-mcu" package="DIL40" value="ATMEGA32-PU" x="46.99" y="31.75"/>
 <element name="IC203" library="ic-optokoppler" package="DIL16" value="LTV847" x="57.15" y="52.07" rot="R180"/>
 <element name="IC204" library="ic-optokoppler" package="DIL16" value="LTV847" x="80.01" y="52.07" rot="R180"/>
@@ -1310,14 +1310,14 @@ design rules under a new name.</description>
 <element name="D214" library="diode" package="DO35-V" value="1N4148-V" x="80.01" y="62.23" rot="R270"/>
 <element name="D215" library="diode" package="DO35-V" value="1N4148-V" x="85.09" y="62.23" rot="R270"/>
 <element name="D216" library="diode" package="DO35-V" value="1N4148-V" x="90.17" y="62.23" rot="R270"/>
-<element name="R209" library="passiv" package="0204V" value="" x="52.07" y="62.23" rot="R270"/>
-<element name="R210" library="passiv" package="0204V" value="" x="57.15" y="62.23" rot="R270"/>
-<element name="R211" library="passiv" package="0204V" value="" x="62.23" y="62.23" rot="R270"/>
-<element name="R212" library="passiv" package="0204V" value="" x="67.31" y="62.23" rot="R270"/>
-<element name="R213" library="passiv" package="0204V" value="" x="72.39" y="62.23" rot="R270"/>
-<element name="R214" library="passiv" package="0204V" value="" x="77.47" y="62.23" rot="R270"/>
-<element name="R215" library="passiv" package="0204V" value="" x="82.55" y="62.23" rot="R270"/>
-<element name="R216" library="passiv" package="0204V" value="" x="87.63" y="62.23" rot="R270"/>
+<element name="R209" library="passiv" package="0204V" value="220kΩ" x="52.07" y="62.23" rot="R270"/>
+<element name="R210" library="passiv" package="0204V" value="220kΩ" x="57.15" y="62.23" rot="R270"/>
+<element name="R211" library="passiv" package="0204V" value="220kΩ" x="62.23" y="62.23" rot="R270"/>
+<element name="R212" library="passiv" package="0204V" value="220kΩ" x="67.31" y="62.23" rot="R270"/>
+<element name="R213" library="passiv" package="0204V" value="220kΩ" x="72.39" y="62.23" rot="R270"/>
+<element name="R214" library="passiv" package="0204V" value="220kΩ" x="77.47" y="62.23" rot="R270"/>
+<element name="R215" library="passiv" package="0204V" value="220kΩ" x="82.55" y="62.23" rot="R270"/>
+<element name="R216" library="passiv" package="0204V" value="220kΩ" x="87.63" y="62.23" rot="R270"/>
 <element name="SV101" library="stecker" package="ML6" value="" x="12.7" y="31.75" rot="R90"/>
 <element name="R101" library="passiv" package="0204V" value="10k" x="46.99" y="15.24"/>
 <element name="IC103" library="ic-wandler" package="DIL08" value="MAX483CPA" x="62.23" y="16.51" rot="R180"/>
@@ -1327,12 +1327,12 @@ design rules under a new name.</description>
 <attribute name="MF" value="" x="57.15" y="101.6" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="OC_FARNELL" value="1007547" x="57.15" y="101.6" size="1.778" layer="27" rot="R180" display="off"/>
 </element>
-<element name="C101" library="passiv" package="C025-025X050" value="10nF" x="46.99" y="20.32"/>
-<element name="C102" library="passiv" package="C025-025X050" value="10nF" x="46.99" y="43.18" rot="R180"/>
-<element name="C103" library="passiv" package="C025-025X050" value="10nF" x="69.85" y="16.51" rot="R90"/>
+<element name="C101" library="passiv" package="C025-025X050" value="100nF" x="46.99" y="20.32"/>
+<element name="C102" library="passiv" package="C025-025X050" value="100nF" x="46.99" y="43.18" rot="R180"/>
+<element name="C103" library="passiv" package="C025-025X050" value="100nF" x="69.85" y="16.51" rot="R90"/>
 <element name="IC102" library="ic-controller" package="DIL08" value="DS1337" x="21.59" y="16.51"/>
 <element name="Q1" library="passiv" package="TC38H" value="32,768kHz" x="17.78" y="8.89" rot="R270"/>
-<element name="C1" library="passiv" package="C025-025X050" value="10nF" x="29.21" y="16.51" rot="R270"/>
+<element name="C1" library="passiv" package="C025-025X050" value="100nF" x="29.21" y="16.51" rot="R270"/>
 <element name="X2" library="anschluss" package="WAGO_236-408" value="" x="26.67" y="71.12" rot="R180"/>
 <element name="X3" library="anschluss" package="WAGO_236-408" value="" x="72.39" y="71.12" rot="R180"/>
 <element name="X5" library="anschluss" package="WAGO_236-402" value="" x="91.44" y="7.62"/>
