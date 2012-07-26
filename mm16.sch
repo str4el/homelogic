@@ -3862,6 +3862,53 @@ Datasheet: &lt;a href="./eagle/doc/ic-controller/ds1337.pdf"&gt;ds1337.pdf&lt;/a
 <hole x="-14.732" y="0.5334" drill="3.302"/>
 <hole x="14.732" y="0.5334" drill="3.302"/>
 </package>
+<package name="WAGO_236-401">
+<wire x1="-2.54" y1="-7.62" x2="2.54" y2="-7.62" width="0.1524" layer="21"/>
+<wire x1="2.54" y1="-7.62" x2="2.54" y2="6.35" width="0.1524" layer="21"/>
+<wire x1="2.54" y1="6.35" x2="-2.54" y2="6.35" width="0.1524" layer="21"/>
+<wire x1="-2.54" y1="-7.62" x2="-2.54" y2="6.35" width="0.1524" layer="21"/>
+<wire x1="-2.159" y1="-7.239" x2="2.159" y2="-7.239" width="0.1524" layer="21"/>
+<wire x1="2.159" y1="-1.524" x2="2.159" y2="-7.239" width="0.1524" layer="21"/>
+<wire x1="2.159" y1="-1.524" x2="-2.159" y2="-1.524" width="0.1524" layer="21"/>
+<wire x1="-2.159" y1="-7.239" x2="-2.159" y2="-1.524" width="0.1524" layer="21"/>
+<wire x1="-2.54" y1="-7.62" x2="-3.302" y2="-7.62" width="0.1524" layer="21"/>
+<wire x1="-3.302" y1="-7.62" x2="-3.302" y2="-6.35" width="0.1524" layer="21"/>
+<wire x1="-3.302" y1="6.35" x2="-2.54" y2="6.35" width="0.1524" layer="21"/>
+<wire x1="-3.302" y1="-5.207" x2="-3.556" y2="-5.207" width="0.1524" layer="21"/>
+<wire x1="-3.302" y1="-5.207" x2="-3.302" y2="3.302" width="0.1524" layer="21"/>
+<wire x1="-3.556" y1="-5.207" x2="-3.556" y2="-6.35" width="0.1524" layer="21"/>
+<wire x1="-3.556" y1="-6.35" x2="-3.302" y2="-6.35" width="0.1524" layer="21"/>
+<wire x1="-3.302" y1="-6.35" x2="-3.302" y2="-5.207" width="0.1524" layer="21"/>
+<wire x1="-3.302" y1="4.445" x2="-3.556" y2="4.445" width="0.1524" layer="21"/>
+<wire x1="-3.302" y1="4.445" x2="-3.302" y2="6.35" width="0.1524" layer="21"/>
+<wire x1="-3.556" y1="3.302" x2="-3.556" y2="4.445" width="0.1524" layer="21"/>
+<wire x1="-3.556" y1="3.302" x2="-3.302" y2="3.302" width="0.1524" layer="21"/>
+<wire x1="-3.302" y1="3.302" x2="-3.302" y2="4.445" width="0.1524" layer="21"/>
+<wire x1="1.524" y1="-6.858" x2="-1.524" y2="-6.858" width="0.1524" layer="21"/>
+<wire x1="0.889" y1="-2.286" x2="1.524" y2="-2.286" width="0.1524" layer="21"/>
+<wire x1="-0.889" y1="-2.286" x2="-1.524" y2="-2.286" width="0.1524" layer="21"/>
+<wire x1="-0.889" y1="-2.286" x2="0.889" y2="-2.286" width="0.1524" layer="51"/>
+<wire x1="-1.524" y1="-2.921" x2="-1.524" y2="-2.286" width="0.1524" layer="21"/>
+<wire x1="-1.524" y1="-2.921" x2="-1.524" y2="-4.699" width="0.1524" layer="51"/>
+<wire x1="-1.524" y1="-4.699" x2="-1.524" y2="-6.858" width="0.1524" layer="21"/>
+<wire x1="1.524" y1="-2.921" x2="1.524" y2="-2.286" width="0.1524" layer="21"/>
+<wire x1="1.524" y1="-2.921" x2="1.524" y2="-4.699" width="0.1524" layer="51"/>
+<wire x1="1.524" y1="-4.699" x2="1.524" y2="-6.858" width="0.1524" layer="21"/>
+<wire x1="-2.159" y1="0.635" x2="-2.159" y2="2.54" width="0.1524" layer="21"/>
+<wire x1="-2.159" y1="2.54" x2="-1.143" y2="2.54" width="0.1524" layer="21"/>
+<wire x1="1.143" y1="2.54" x2="2.159" y2="2.54" width="0.1524" layer="21"/>
+<wire x1="2.159" y1="2.54" x2="2.159" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="1.778" y1="0.635" x2="2.159" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="-2.159" y1="0.635" x2="-1.778" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="-1.778" y1="0.635" x2="1.778" y2="0.635" width="0.1524" layer="51"/>
+<wire x1="1.143" y1="2.54" x2="-1.143" y2="2.54" width="0.1524" layer="51"/>
+<pad name="A1" x="0" y="-3.81" drill="1.1176" diameter="2.1844" shape="long" rot="R90"/>
+<pad name="B1" x="0" y="1.27" drill="1.1176" diameter="2.1844" shape="long" rot="R90"/>
+<text x="-2.159" y="3.937" size="1.27" layer="21" ratio="10">1</text>
+<text x="-3.302" y="-9.271" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
+<text x="-3.302" y="6.731" size="1.27" layer="25" ratio="10">&gt;NAME</text>
+<rectangle x1="-1.143" y1="-4.953" x2="1.143" y2="-2.286" layer="51"/>
+</package>
 </packages>
 <symbols>
 <symbol name="DKL">
@@ -4070,6 +4117,24 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <connect gate="-7" pin="A" pad="7"/>
 <connect gate="-8" pin="A" pad="8"/>
 <connect gate="-9" pin="A" pad="9"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="WAGO_236-401" prefix="X" uservalue="yes">
+<description>&lt;b&gt;Anschlussklemme&lt;/b&gt;&lt;p&gt;
+Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&gt;&lt;p&gt;</description>
+<gates>
+<gate name=".1" symbol="DKL+V" x="0" y="0" addlevel="always"/>
+</gates>
+<devices>
+<device name="" package="WAGO_236-401">
+<connects>
+<connect gate=".1" pin="A" pad="A1"/>
+<connect gate=".1" pin="B" pad="B1"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -4627,7 +4692,6 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <part name="GND33" library="versorgung" deviceset="GNDIO" device=""/>
 <part name="GND34" library="versorgung" deviceset="GNDIO" device=""/>
 <part name="GND38" library="versorgung" deviceset="GNDIO" device=""/>
-<part name="X4" library="anschluss" deviceset="WAGO_236-402" device=""/>
 <part name="X5" library="anschluss" deviceset="WAGO_236-402" device=""/>
 <part name="X6" library="anschluss" deviceset="WAGO_236-402" device=""/>
 <part name="X1" library="anschluss" deviceset="WS16" device="V"/>
@@ -4640,6 +4704,7 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <part name="G1" library="battery" deviceset="CR2032V" device=""/>
 <part name="GND39" library="versorgung" deviceset="GND" device=""/>
 <part name="S1" library="switch-dil" deviceset="P103" device=""/>
+<part name="X4" library="anschluss" deviceset="WAGO_236-401" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -5381,7 +5446,6 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <instance part="GND34" gate="G$1" x="165.1" y="55.88"/>
 <instance part="GND38" gate="G$1" x="165.1" y="38.1"/>
 <instance part="X4" gate=".1" x="68.58" y="167.64"/>
-<instance part="X4" gate=".2" x="157.48" y="167.64"/>
 </instances>
 <busses>
 <bus name="IN[0..15],OUT[0..7]">
@@ -6076,26 +6140,21 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <wire x1="165.1" y1="43.18" x2="165.1" y2="40.64" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<wire x1="73.66" y1="167.64" x2="76.2" y2="167.64" width="0.1524" layer="91"/>
-<pinref part="X4" gate=".1" pin="A"/>
 <pinref part="GND10" gate="G$1" pin="GNDIO"/>
 <wire x1="76.2" y1="165.1" x2="76.2" y2="167.64" width="0.1524" layer="91"/>
-<pinref part="X4" gate=".1" pin="B"/>
-<wire x1="73.66" y1="167.64" x2="71.12" y2="167.64" width="0.1524" layer="91"/>
 <pinref part="R201" gate="G$1" pin="1"/>
 <wire x1="76.2" y1="167.64" x2="78.74" y2="167.64" width="0.1524" layer="91"/>
+<pinref part="X4" gate=".1" pin="A"/>
+<wire x1="76.2" y1="167.64" x2="73.66" y2="167.64" width="0.1524" layer="91"/>
 <junction x="76.2" y="167.64"/>
+<pinref part="X4" gate=".1" pin="B"/>
+<wire x1="73.66" y1="167.64" x2="71.12" y2="167.64" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="R209" gate="G$1" pin="1"/>
-<wire x1="162.56" y1="167.64" x2="165.1" y2="167.64" width="0.1524" layer="91"/>
-<pinref part="X4" gate=".2" pin="A"/>
 <pinref part="GND28" gate="G$1" pin="GNDIO"/>
 <wire x1="165.1" y1="167.64" x2="167.64" y2="167.64" width="0.1524" layer="91"/>
 <wire x1="165.1" y1="165.1" x2="165.1" y2="167.64" width="0.1524" layer="91"/>
-<junction x="165.1" y="167.64"/>
-<pinref part="X4" gate=".2" pin="B"/>
-<wire x1="162.56" y1="167.64" x2="160.02" y2="167.64" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
