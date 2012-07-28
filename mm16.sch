@@ -4186,94 +4186,6 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 </deviceset>
 </devicesets>
 </library>
-<library name="battery">
-<description>&lt;b&gt;Lithium Batteries and NC Accus&lt;/b&gt;&lt;p&gt;
-&lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
-<packages>
-<package name="CR2032V">
-<description>&lt;b&gt;LI BATTERY&lt;/b&gt; Varta</description>
-<wire x1="1.651" y1="-1.905" x2="1.651" y2="-4.445" width="0.1524" layer="21"/>
-<wire x1="2.286" y1="1.905" x2="2.286" y2="4.445" width="0.1524" layer="21"/>
-<wire x1="-2.54" y1="-3.175" x2="-2.54" y2="3.175" width="0.1524" layer="21"/>
-<wire x1="2.286" y1="-1.905" x2="2.286" y2="1.905" width="0.1524" layer="51"/>
-<wire x1="-2.54" y1="-6.858" x2="-2.54" y2="-3.175" width="0.1524" layer="51"/>
-<wire x1="-2.54" y1="3.175" x2="-2.54" y2="6.858" width="0.1524" layer="51"/>
-<wire x1="-1.905" y1="-6.858" x2="-2.54" y2="-6.858" width="0.1524" layer="21"/>
-<wire x1="-1.905" y1="-6.858" x2="-1.905" y2="-3.175" width="0.1524" layer="51"/>
-<wire x1="-1.905" y1="-3.175" x2="-1.905" y2="3.175" width="0.1524" layer="21"/>
-<wire x1="-1.905" y1="3.175" x2="-1.905" y2="6.858" width="0.1524" layer="51"/>
-<wire x1="1.651" y1="-1.905" x2="1.651" y2="1.905" width="0.1524" layer="51"/>
-<wire x1="2.286" y1="-1.905" x2="1.651" y2="-1.905" width="0.1524" layer="21"/>
-<wire x1="2.286" y1="1.905" x2="1.651" y2="1.905" width="0.1524" layer="21"/>
-<wire x1="2.286" y1="-1.905" x2="2.286" y2="-4.445" width="0.1524" layer="21"/>
-<wire x1="1.651" y1="1.905" x2="1.651" y2="4.445" width="0.1524" layer="21"/>
-<wire x1="-1.905" y1="6.858" x2="-2.54" y2="6.858" width="0.1524" layer="21"/>
-<wire x1="-1.905" y1="3.175" x2="-2.54" y2="3.175" width="0.1524" layer="21"/>
-<wire x1="-1.905" y1="-3.175" x2="-2.54" y2="-3.175" width="0.1524" layer="21"/>
-<wire x1="-4.191" y1="0" x2="-2.921" y2="0" width="0.254" layer="21"/>
-<wire x1="-3.556" y1="0.635" x2="-3.556" y2="-0.635" width="0.254" layer="21"/>
-<wire x1="2.921" y1="-2.413" x2="2.921" y2="-3.683" width="0.254" layer="21"/>
-<wire x1="-1.905" y1="-9.398" x2="-1.27" y2="-10.033" width="0.1524" layer="21" curve="90"/>
-<wire x1="-1.905" y1="9.398" x2="-1.27" y2="10.033" width="0.1524" layer="21" curve="-90"/>
-<wire x1="-1.27" y1="-10.033" x2="0.381" y2="-10.033" width="0.1524" layer="21"/>
-<wire x1="-1.27" y1="10.033" x2="0.381" y2="10.033" width="0.1524" layer="21"/>
-<wire x1="0.381" y1="-10.033" x2="1.016" y2="-9.398" width="0.1524" layer="21" curve="90"/>
-<wire x1="0.381" y1="10.033" x2="1.016" y2="9.398" width="0.1524" layer="21" curve="-90"/>
-<wire x1="1.016" y1="-9.017" x2="1.651" y2="-8.382" width="0.1524" layer="21" curve="90"/>
-<wire x1="1.016" y1="9.017" x2="1.651" y2="8.382" width="0.1524" layer="21" curve="-90"/>
-<wire x1="1.016" y1="-9.398" x2="1.016" y2="-1.143" width="0.1524" layer="21"/>
-<wire x1="1.016" y1="1.143" x2="1.016" y2="-1.143" width="0.1524" layer="51"/>
-<wire x1="1.016" y1="1.143" x2="1.016" y2="9.398" width="0.1524" layer="21"/>
-<wire x1="2.286" y1="-4.445" x2="1.651" y2="-4.445" width="0.1524" layer="21"/>
-<wire x1="1.651" y1="-4.445" x2="1.651" y2="-8.382" width="0.1524" layer="21"/>
-<wire x1="2.286" y1="4.445" x2="1.651" y2="4.445" width="0.1524" layer="21"/>
-<wire x1="1.651" y1="4.445" x2="1.651" y2="8.382" width="0.1524" layer="21"/>
-<wire x1="-1.905" y1="-9.398" x2="-1.905" y2="-6.858" width="0.1524" layer="21"/>
-<wire x1="-1.905" y1="6.858" x2="-1.905" y2="9.398" width="0.1524" layer="21"/>
-<pad name="+" x="-2.54" y="-5.08" drill="1.3208" diameter="3.1496" shape="octagon"/>
-<pad name="+@1" x="-2.54" y="5.08" drill="1.3208" diameter="3.1496" shape="octagon"/>
-<pad name="-" x="2.286" y="0" drill="1.3208" diameter="3.1496" shape="octagon"/>
-<text x="4.064" y="2.54" size="1.27" layer="25" ratio="10" rot="R90">&gt;NAME</text>
-<text x="0.254" y="-3.683" size="1.27" layer="21" ratio="10" rot="R90">Lith.3V</text>
-<text x="4.699" y="-9.017" size="1.27" layer="27" ratio="10" rot="R90">&gt;VALUE</text>
-</package>
-</packages>
-<symbols>
-<symbol name="1V2+2">
-<wire x1="-1.905" y1="0.635" x2="-1.905" y2="0" width="0.4064" layer="94"/>
-<wire x1="-2.54" y1="0" x2="-1.905" y2="0" width="0.1524" layer="94"/>
-<wire x1="-1.905" y1="0" x2="-1.905" y2="-0.635" width="0.4064" layer="94"/>
-<wire x1="-0.635" y1="2.54" x2="-0.635" y2="0" width="0.4064" layer="94"/>
-<wire x1="-0.635" y1="0" x2="2.54" y2="0" width="0.1524" layer="94"/>
-<wire x1="-0.635" y1="0" x2="-0.635" y2="-2.54" width="0.4064" layer="94"/>
-<text x="-2.54" y="3.175" size="1.778" layer="95">&gt;NAME</text>
-<text x="-2.54" y="-5.08" size="1.778" layer="96">&gt;VALUE</text>
-<pin name="+" x="5.08" y="0" visible="pad" length="short" direction="pas" rot="R180"/>
-<pin name="-" x="-5.08" y="0" visible="pad" length="short" direction="pas"/>
-<pin name="+@1" x="2.54" y="0" visible="off" length="point" direction="pas" rot="R180"/>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="CR2032V" prefix="G">
-<description>&lt;b&gt;LI BATTERY&lt;/b&gt; Varta</description>
-<gates>
-<gate name="1" symbol="1V2+2" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="CR2032V">
-<connects>
-<connect gate="1" pin="+" pad="+"/>
-<connect gate="1" pin="+@1" pad="+@1"/>
-<connect gate="1" pin="-" pad="-"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="switch-dil">
 <description>&lt;b&gt;DIL Switches and Code Switches&lt;/b&gt;&lt;p&gt;
 &lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
@@ -4621,6 +4533,90 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 </deviceset>
 </devicesets>
 </library>
+<library name="batterie">
+<packages>
+<package name="KZH20PCB-V">
+<description>&lt;b&gt;Knopfzellenhalter vertikal, PCB-Version&lt;/b&gt;&lt;p&gt;
+Datasheet: &lt;a href="./eagle/doc/batterie/kzh20pcb-v.pdf"&gt;kzh20pcb-v.pdf&lt;/a&gt;</description>
+<wire x1="-6.858" y1="1.905" x2="-3.175" y2="1.905" width="0.1524" layer="51"/>
+<wire x1="-3.175" y1="1.905" x2="3.175" y2="1.905" width="0.1524" layer="21"/>
+<wire x1="3.175" y1="1.905" x2="6.858" y2="1.905" width="0.1524" layer="51"/>
+<wire x1="-1.905" y1="-1.651" x2="1.905" y2="-1.651" width="0.1524" layer="51"/>
+<wire x1="-9.398" y1="1.905" x2="-10.033" y2="1.27" width="0.1524" layer="21" curve="90"/>
+<wire x1="9.398" y1="1.905" x2="10.033" y2="1.27" width="0.1524" layer="21" curve="-90"/>
+<wire x1="-10.033" y1="1.27" x2="-10.033" y2="-0.381" width="0.1524" layer="21"/>
+<wire x1="10.033" y1="1.27" x2="10.033" y2="-0.381" width="0.1524" layer="21"/>
+<wire x1="-10.033" y1="-0.381" x2="-9.398" y2="-1.016" width="0.1524" layer="21" curve="90"/>
+<wire x1="10.033" y1="-0.381" x2="9.398" y2="-1.016" width="0.1524" layer="21" curve="-90"/>
+<wire x1="-9.017" y1="-1.016" x2="-8.382" y2="-1.651" width="0.1524" layer="21" curve="90"/>
+<wire x1="9.017" y1="-1.016" x2="8.382" y2="-1.651" width="0.1524" layer="21" curve="-90"/>
+<wire x1="-9.398" y1="-1.016" x2="-1.143" y2="-1.016" width="0.1524" layer="21"/>
+<wire x1="1.143" y1="-1.016" x2="-1.143" y2="-1.016" width="0.1524" layer="51"/>
+<wire x1="1.143" y1="-1.016" x2="9.398" y2="-1.016" width="0.1524" layer="21"/>
+<wire x1="-1.905" y1="-1.651" x2="-8.382" y2="-1.651" width="0.1524" layer="21"/>
+<wire x1="1.905" y1="-1.651" x2="8.382" y2="-1.651" width="0.1524" layer="21"/>
+<wire x1="-9.398" y1="1.905" x2="-6.858" y2="1.905" width="0.1524" layer="21"/>
+<wire x1="6.858" y1="1.905" x2="9.398" y2="1.905" width="0.1524" layer="21"/>
+<pad name="+2" x="-5.08" y="1.27" drill="1" diameter="2.54" rot="R270"/>
+<pad name="+1" x="5.08" y="1.27" drill="1" diameter="2.54" rot="R270"/>
+<text x="11.43" y="-3.81" size="1.27" layer="25" ratio="10" align="top-right">&gt;NAME</text>
+<text x="-3.683" y="-0.254" size="1.27" layer="21" ratio="10">Lith.3V</text>
+<text x="-11.43" y="-3.81" size="1.27" layer="27" ratio="10" align="top-left">&gt;VALUE</text>
+<pad name="-" x="0" y="-1.27" drill="1" diameter="2.54" rot="R270"/>
+<wire x1="11.43" y1="3.175" x2="11.43" y2="-3.175" width="0.127" layer="21"/>
+<wire x1="11.43" y1="-3.175" x2="10.16" y2="-3.175" width="0.127" layer="21"/>
+<wire x1="10.16" y1="-3.175" x2="6.35" y2="-3.175" width="0.127" layer="21"/>
+<wire x1="6.35" y1="-3.175" x2="-6.35" y2="-3.175" width="0.127" layer="21"/>
+<wire x1="-6.35" y1="-3.175" x2="-10.16" y2="-3.175" width="0.127" layer="21"/>
+<wire x1="-10.16" y1="-3.175" x2="-11.43" y2="-3.175" width="0.127" layer="21"/>
+<wire x1="-11.43" y1="-3.175" x2="-11.43" y2="3.175" width="0.127" layer="21"/>
+<wire x1="-11.43" y1="3.175" x2="-10.16" y2="3.175" width="0.127" layer="21"/>
+<wire x1="-10.16" y1="3.175" x2="-6.35" y2="3.175" width="0.127" layer="21"/>
+<wire x1="-6.35" y1="3.175" x2="6.35" y2="3.175" width="0.127" layer="21"/>
+<wire x1="6.35" y1="3.175" x2="10.16" y2="3.175" width="0.127" layer="21"/>
+<wire x1="10.16" y1="3.175" x2="11.43" y2="3.175" width="0.127" layer="21"/>
+<wire x1="10.16" y1="3.175" x2="10.16" y2="-3.175" width="0.127" layer="21"/>
+<wire x1="-10.16" y1="-3.175" x2="-10.16" y2="3.175" width="0.127" layer="21"/>
+<wire x1="-6.35" y1="-3.175" x2="-6.35" y2="3.175" width="0.127" layer="21" style="shortdash"/>
+<wire x1="6.35" y1="-3.175" x2="6.35" y2="3.175" width="0.127" layer="21" style="shortdash"/>
+</package>
+</packages>
+<symbols>
+<symbol name="1C">
+<wire x1="-0.635" y1="0.635" x2="0" y2="0.635" width="0.4064" layer="94"/>
+<wire x1="0" y1="0" x2="0" y2="0.635" width="0.1524" layer="94"/>
+<wire x1="0" y1="0.635" x2="0.635" y2="0.635" width="0.4064" layer="94"/>
+<wire x1="-2.54" y1="1.905" x2="0" y2="1.905" width="0.4064" layer="94"/>
+<wire x1="0" y1="1.905" x2="0" y2="2.54" width="0.1524" layer="94"/>
+<wire x1="0" y1="1.905" x2="2.54" y2="1.905" width="0.4064" layer="94"/>
+<text x="-3.81" y="1.27" size="1.778" layer="95" rot="R90" align="bottom-center">&gt;NAME</text>
+<text x="3.81" y="1.27" size="1.778" layer="96" rot="R90" align="top-center">&gt;VALUE</text>
+<pin name="-" x="0" y="-2.54" visible="off" length="short" direction="pas" rot="R90"/>
+<pin name="+" x="0" y="5.08" visible="off" length="short" direction="pas" rot="R270"/>
+<text x="1.27" y="3.81" size="1.27" layer="97" align="center">+</text>
+<text x="1.27" y="-1.27" size="1.27" layer="97" align="center">-</text>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="KZH20" prefix="G">
+<description>&lt;b&gt;Knopfzellenhalter&lt;/b&gt;</description>
+<gates>
+<gate name="1" symbol="1C" x="0" y="0"/>
+</gates>
+<devices>
+<device name="PCB-V" package="KZH20PCB-V">
+<connects>
+<connect gate="1" pin="+" pad="+1 +2" route="any"/>
+<connect gate="1" pin="-" pad="-"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -4738,7 +4734,6 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <part name="P+9" library="versorgung" deviceset="VCC" device="" value="VBAT"/>
 <part name="D1" library="diode" deviceset="1N4148" device="-7"/>
 <part name="D2" library="diode" deviceset="1N4148" device="-7"/>
-<part name="G1" library="battery" deviceset="CR2032V" device=""/>
 <part name="GND39" library="versorgung" deviceset="GND" device=""/>
 <part name="S1" library="switch-dil" deviceset="P103" device=""/>
 <part name="X4" library="anschluss" deviceset="WAGO_236-401" device=""/>
@@ -4748,6 +4743,7 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <part name="X2" library="anschluss" deviceset="WAGO_236-408" device=""/>
 <part name="X3" library="anschluss" deviceset="WAGO_236-408" device=""/>
 <part name="R1" library="passiv" deviceset="R_" device="0204/2V" value="120Ω"/>
+<part name="G1" library="batterie" deviceset="KZH20" device="PCB-V"/>
 </parts>
 <sheets>
 <sheet>
@@ -4806,8 +4802,7 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <instance part="P+9" gate="VCC" x="175.26" y="129.54"/>
 <instance part="D1" gate="G$1" x="170.18" y="157.48"/>
 <instance part="D2" gate="G$1" x="205.74" y="157.48" rot="R180"/>
-<instance part="G1" gate="1" x="218.44" y="152.4" rot="R90"/>
-<instance part="GND39" gate="1" x="218.44" y="144.78"/>
+<instance part="GND39" gate="1" x="218.44" y="142.24"/>
 <instance part="S1" gate="1" x="132.08" y="116.84" rot="R90"/>
 <instance part="P+2" gate="1" x="83.82" y="167.64"/>
 <instance part="X5" gate=".1" x="129.54" y="157.48"/>
@@ -4815,6 +4810,7 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <instance part="X6" gate=".1" x="165.1" y="7.62" rot="R180"/>
 <instance part="X6" gate=".2" x="165.1" y="22.86" rot="R180"/>
 <instance part="R1" gate="G$1" x="157.48" y="15.24" rot="R90"/>
+<instance part="G1" gate="1" x="218.44" y="149.86"/>
 </instances>
 <busses>
 <bus name="IN[0..15],C1,C2,D,!R,SCL,SDA,ALARM1,ALARM2">
@@ -4898,14 +4894,15 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <pinref part="X1" gate="-16" pin="A"/>
 </segment>
 <segment>
-<pinref part="G1" gate="1" pin="-"/>
-<pinref part="GND39" gate="1" pin="GND"/>
-</segment>
-<segment>
 <pinref part="S1" gate="1" pin="C"/>
 <pinref part="GND44" gate="1" pin="GND"/>
 <wire x1="139.7" y1="116.84" x2="142.24" y2="116.84" width="0.1524" layer="91"/>
 <wire x1="142.24" y1="116.84" x2="142.24" y2="114.3" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="GND39" gate="1" pin="GND"/>
+<pinref part="G1" gate="1" pin="-"/>
+<wire x1="218.44" y1="144.78" x2="218.44" y2="147.32" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="IN0" class="0">
@@ -5358,10 +5355,9 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 <net name="N$21" class="0">
 <segment>
 <pinref part="D2" gate="G$1" pin="A"/>
-<pinref part="G1" gate="1" pin="+"/>
 <wire x1="208.28" y1="157.48" x2="218.44" y2="157.48" width="0.1524" layer="91"/>
-<pinref part="G1" gate="1" pin="+@1"/>
 <wire x1="218.44" y1="157.48" x2="218.44" y2="154.94" width="0.1524" layer="91"/>
+<pinref part="G1" gate="1" pin="+"/>
 </segment>
 </net>
 <net name="ALARM1" class="0">
@@ -6204,10 +6200,6 @@ Datasheet: &lt;a href="./eagle/doc/anschluss/wago236.pdf"&gt;wago236.pdf&lt;/a&g
 </nets>
 </sheet>
 </sheets>
-<errors>
-<approved hash="104,1,55.88,121.92,IC101,AVCC,+5V,,,"/>
-<approved hash="104,1,55.88,114.3,IC101,VCC,+5V,,,"/>
-</errors>
 </schematic>
 </drawing>
 </eagle>
