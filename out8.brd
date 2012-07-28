@@ -70,8 +70,8 @@
 <hole x="83.82" y="76.2" drill="3.2"/>
 <hole x="3.81" y="6.35" drill="3.2"/>
 <hole x="96.52" y="6.35" drill="3.2"/>
-<hole x="3.81" y="30.48" drill="3.2"/>
-<hole x="96.52" y="30.48" drill="3.2"/>
+<hole x="3.81" y="31.75" drill="3.2"/>
+<hole x="96.52" y="31.75" drill="3.2"/>
 </plain>
 <libraries>
 <library name="passiv">
