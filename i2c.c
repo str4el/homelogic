@@ -110,7 +110,7 @@ uint8_t i2c_read_byte()
 int8_t i2c_write(uint8_t adr, void *data, uint8_t len)
 {
         i2c_start();
-        if (i2c_write_byte(adr &= (1 << 7))) {
+        if (i2c_write_byte(adr << 1)) {
                 i2c_stop();
                 return -1;
         }
@@ -132,7 +132,7 @@ int8_t i2c_write(uint8_t adr, void *data, uint8_t len)
 int8_t i2c_read(uint8_t adr, void *data, uint8_t len)
 {
         i2c_start();
-        if (i2c_write_byte(adr &= (1 << 7))) {
+        if (i2c_write_byte((adr << 1) | 1)) {
                 i2c_stop();
                 return -1;
         }
