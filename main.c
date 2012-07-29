@@ -3,6 +3,8 @@
 #include <avr/sleep.h>
 
 #include <string.h>
+#include "i2c.h"
+#include "rtc.h"
 
 
 uint8_t peb[32];

@@ -5,16 +5,7 @@
 
 
 
-inline void i2c_init()
-{
-        I2C_SET_SDA;
-        I2C_SET_SCL;
-}
-
-
-
-
-inline void i2c_start()
+static inline void i2c_start()
 {
         while(!I2C_IS_SCL) I2C_SET_SCL;
         while(!I2C_IS_SDA) I2C_SET_SDA;
@@ -28,7 +19,7 @@ inline void i2c_start()
 
 
 
-inline void i2c_stop()
+static inline void i2c_stop()
 {
         while(I2C_IS_SDA) I2C_CLR_SDA;
         while(!I2C_IS_SCL) I2C_SET_SCL;
