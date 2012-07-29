@@ -5,11 +5,12 @@
 #include <string.h>
 
 
+uint8_t peb[32];
 uint8_t eb [32];
 uint8_t ab [32];
 uint8_t mb [32];
 
-volatile uint8_t peb[2];
+volatile uint8_t leb[2];
 
 
 /* Initialisierung des 1ms Timer
@@ -31,29 +32,29 @@ ISR(TIMER2_COMP_vect) {
 
         uint8_t n = 0;
 
-        for (uint8_t i = 0; i < 8; i++) {
+        for (int8_t i = 0; i < 8; i++) {
                 if (!(PINA & (1 << i))) {
                         intimer[n] = 100;
-                        peb[0] |= (1 << n);
+                        leb[0] |= (1 << n);
                 } else {
                         if (intimer[n]) {
                                 intimer[n]--;
                         } else {
-                                peb[0] &= ~(1 << n);
+                                leb[0] &= ~(1 << n);
                         }
                 }
                 n++;
         }
 
-        for (uint8_t i = 7; i >= 0; i++) {
+        for (int8_t i = 7; i >= 0; i++) {
                 if (!(PINC & (1 << i))) {
                         intimer[n] = 100;
-                        peb[1] |= (1 << n);
+                        leb[1] |= (1 << n);
                 } else {
                         if (intimer[n]) {
                                 intimer[n]--;
                         } else {
-                                peb[1] &= ~(1 << (n - 8));
+                                leb[1] &= ~(1 << (n - 8));
                         }
                 }
                 n++;
@@ -66,8 +67,15 @@ ISR(TIMER2_COMP_vect) {
 
 void read_input (uint8_t adr)
 {
-        eb[adr] = peb[0];
-        eb[adr + 1] = peb[1];
+        if (leb[0] != peb[adr]) {
+                peb[adr] = leb[0];
+        }
+
+        if (leb[1] != peb[adr + 1]) {
+                peb[adr + 1] = leb[1];
+        }
+
+        memcpy(eb, peb, sizeof(eb));
 }
 
 
@@ -80,7 +88,7 @@ void write_output(uint8_t adr)
 
         for (uint8_t i = 0; i < 16; i++) {
                 PORTD &= ~(1 << 4);
-                if (ab[(adr << 1) + (i >> 3)] & (1 << i % 8)) {
+                if (ab[adr + (i >> 3)] & (1 << i % 8)) {
                         PORTD |= (1 << 6);
                 } else {
                         PORTD &= ~(1 << 6);
@@ -128,10 +136,10 @@ int main (void) {
 
 
         while(1) {
-                read_input(adr);
+                read_input(adr << 1);
                 ab[1] = eb[0];
                 ab[0] = eb[1];
-                write_output(adr);
+                write_output(adr << 1);
         }
 
         return 0;
