@@ -14,6 +14,9 @@
 #define I2C_T_SU_DAT 1
 #define I2C_T_SU_STO 4
 
+#define I2C_ACK 1
+#define I2C_NACK 0
+
 
 #define I2C_SET_SCL \
         DDRB &= ~(1 << 0); \
@@ -41,8 +44,10 @@ extern inline void i2c_init(void);
 extern inline void i2c_start(void);
 extern inline void i2c_stop(void);
 extern int8_t i2c_write_byte(uint8_t data);
-extern uint8_t i2c_read_byte(void);
-extern int8_t i2c_write(uint8_t adr, void *data, uint8_t len);
-extern int8_t i2c_read(uint8_t adr, void *data, uint8_t len);
+extern uint8_t i2c_read_byte(uint8_t ack);
+extern int8_t i2c_write(uint8_t sadr, void *data, uint8_t len);
+extern int8_t i2c_read(uint8_t sadr, void *data, uint8_t len);
+extern int8_t i2c_pwrite(uint8_t sadr, uint8_t wadr, void *data, uint8_t len);
+extern int8_t i2c_pread(uint8_t sadr, uint8_t wadr, void *data, uint8_t len);
 
 #endif // I2C_H
