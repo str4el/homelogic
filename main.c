@@ -48,7 +48,7 @@ ISR(TIMER2_COMP_vect) {
                 n++;
         }
 
-        for (int8_t i = 7; i >= 0; i++) {
+        for (int8_t i = 7; i >= 0; i--) {
                 if (!(PINC & (1 << i))) {
                         intimer[n] = 100;
                         leb[1] |= (1 << n);
@@ -88,7 +88,7 @@ void write_output(uint8_t adr)
 {
         PORTD &= ~(1 << 5);
 
-        for (uint8_t i = 0; i < 16; i++) {
+        for (int8_t i = 15; i >= 0; i--) {
                 PORTD &= ~(1 << 4);
                 if (ab[adr + (i >> 3)] & (1 << i % 8)) {
                         PORTD |= (1 << 6);
@@ -98,7 +98,7 @@ void write_output(uint8_t adr)
                 PORTD |= (1 << 4);
         }
 
-        PORTD |= ~(1 << 5);
+        PORTD |= (1 << 5);
 }
 
 
@@ -112,7 +112,6 @@ int main (void) {
 
 
         init_timer2();
-
 
         // Adressdecodierung wird nur nach dem Reset durchgeführt
         uint8_t adr = 0;
@@ -139,8 +138,8 @@ int main (void) {
 
         while(1) {
                 read_input(adr << 1);
-                ab[1] = eb[0];
-                ab[0] = eb[1];
+                ab[0] = eb[0];
+                ab[1] = eb[1];
                 write_output(adr << 1);
         }
 
