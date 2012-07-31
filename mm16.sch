@@ -4557,12 +4557,12 @@ Datasheet: &lt;a href="./eagle/doc/batterie/kzh20pcb-v.pdf"&gt;kzh20pcb-v.pdf&lt
 <wire x1="1.905" y1="-1.651" x2="8.382" y2="-1.651" width="0.1524" layer="21"/>
 <wire x1="-9.398" y1="1.905" x2="-6.858" y2="1.905" width="0.1524" layer="21"/>
 <wire x1="6.858" y1="1.905" x2="9.398" y2="1.905" width="0.1524" layer="21"/>
-<pad name="+2" x="-5.08" y="1.27" drill="1" diameter="2.54" rot="R270"/>
-<pad name="+1" x="5.08" y="1.27" drill="1" diameter="2.54" rot="R270"/>
+<pad name="+2" x="-5.08" y="1.7" drill="1" diameter="2.54" rot="R270"/>
+<pad name="+1" x="5.08" y="1.7" drill="1" diameter="2.54" rot="R270"/>
 <text x="11.43" y="-3.81" size="1.27" layer="25" ratio="10" align="top-right">&gt;NAME</text>
 <text x="-3.683" y="-0.254" size="1.27" layer="21" ratio="10">Lith.3V</text>
 <text x="-11.43" y="-3.81" size="1.27" layer="27" ratio="10" align="top-left">&gt;VALUE</text>
-<pad name="-" x="0" y="-1.27" drill="1" diameter="2.54" rot="R270"/>
+<pad name="-" x="0" y="-1.7" drill="1" diameter="2.54" rot="R270"/>
 <wire x1="11.43" y1="3.175" x2="11.43" y2="-3.175" width="0.127" layer="21"/>
 <wire x1="11.43" y1="-3.175" x2="10.16" y2="-3.175" width="0.127" layer="21"/>
 <wire x1="10.16" y1="-3.175" x2="6.35" y2="-3.175" width="0.127" layer="21"/>
