@@ -53,7 +53,7 @@ TARGET = main
 
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = $(TARGET).c i2c.c
+SRC = $(TARGET).c i2c.c bus.c
 
 
 # List Assembler source files here.

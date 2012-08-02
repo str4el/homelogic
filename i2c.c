@@ -1,7 +1,7 @@
 #include "i2c.h"
 
 #include <avr/io.h>
-#include <avr/delay.h>
+#include <util/delay.h>
 
 
 

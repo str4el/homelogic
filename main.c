@@ -3,8 +3,11 @@
 #include <avr/sleep.h>
 
 #include <string.h>
+#include "adr.h"
 #include "i2c.h"
 #include "rtc.h"
+#include "bus.h"
+
 
 
 uint8_t peb[32];
@@ -31,8 +34,9 @@ static inline void init_timer2(void)
  */
 ISR(TIMER2_COMP_vect) {
         static uint8_t intimer[16];
-
         uint8_t n = 0;
+
+        if (bus.tx_lock) bus.tx_lock--;
 
         for (int8_t i = 0; i < 8; i++) {
                 if (!(PINA & (1 << i))) {
@@ -67,14 +71,28 @@ ISR(TIMER2_COMP_vect) {
 
 
 
-void read_input (uint8_t adr)
+void read_input (uint8_t a)
 {
-        if (leb[0] != peb[adr]) {
-                peb[adr] = leb[0];
+        uint8_t diff;
+
+        if (leb[0] != peb[a]) {
+                diff = leb[0] ^ peb[a];
+                for (uint8_t i = 0; i < 8; i++) {
+                        if (diff & (1 << i)) {
+                                bus_send_bit_change(leb[0] & (1 << i), 'E', a, i);
+                        }
+                }
+                peb[a] = leb[0];
         }
 
-        if (leb[1] != peb[adr + 1]) {
-                peb[adr + 1] = leb[1];
+        if (leb[1] != peb[a + 1]) {
+                diff = leb[1] ^ peb[a + 1];
+                for (uint8_t i = 0; i < 8; i++) {
+                        if (diff & (1 << i)) {
+                                bus_send_bit_change(leb[1] & (1 << i), 'E', a, i);
+                        }
+                }
+                peb[a + 1] = leb[1];
         }
 
         memcpy(eb, peb, sizeof(eb));
@@ -84,13 +102,13 @@ void read_input (uint8_t adr)
 
 
 
-void write_output(uint8_t adr)
+void write_output(uint8_t a)
 {
         PORTD &= ~(1 << 5);
 
         for (int8_t i = 15; i >= 0; i--) {
                 PORTD &= ~(1 << 4);
-                if (ab[adr + (i >> 3)] & (1 << i % 8)) {
+                if (ab[a + (i >> 3)] & (1 << i % 8)) {
                         PORTD |= (1 << 6);
                 } else {
                         PORTD &= ~(1 << 6);
@@ -112,13 +130,10 @@ int main (void) {
 
 
         init_timer2();
+        bus_init();
 
         // Adressdecodierung wird nur nach dem Reset durchgeführt
-        uint8_t adr = 0;
-        if (!(PINB & (1 << 4))) adr |= 1;
-        if (!(PINB & (1 << 6))) adr |= 2;
-        if (!(PINB & (1 << 7))) adr |= 4;
-        if (!(PINB & (1 << 5))) adr |= 8;
+        adr_read();
 
 
         // Prozessabbild auf null setzen
@@ -135,6 +150,8 @@ int main (void) {
         // Interrupts ein
         sei();
 
+        bus_send ("Hallo\n", 6);
+        bus_send_bit_change(1, 'm', 12, 4);
 
         while(1) {
                 read_input(adr << 1);
