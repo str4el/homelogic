@@ -15,7 +15,24 @@ bus_t bus;
 
 
 ISR(USART_RXC_vect) {
-        bus.tx_lock = 10 + adr * 10;
+        uint8_t in = UDR;
+
+        switch (bus.status) {
+
+        case tx_start:
+                bus.rx_len = 0;
+                bus.status = tx_verify;
+        case tx_verify:
+                if (bus.rx_len < BUS_BUFSIZE) {
+                        bus.rx_buffer[bus.rx_len] = in;
+                        bus.rx_len++;
+                }
+                break;
+
+        default:
+                BUS_TX_LOCK(2 + adr * 2);
+        }
+
 }
 
 
@@ -37,6 +54,7 @@ void bus_init(void)
 void bus_send (const char * data, uint8_t len)
 {
         while (bus.tx_lock);
+        bus.status = tx_start;
         PORTD |= (1 << 2);
 
 
@@ -49,7 +67,28 @@ void bus_send (const char * data, uint8_t len)
         while (!(UCSRA & (1 << TXC)));
         UCSRA |= (1 << TXC);
         PORTD &= ~(1 << 2);
-        bus.tx_lock = 180 - adr * 10;
+        BUS_TX_LOCK(35 - adr * 2);
+}
+
+
+
+
+void bus_verified_send(const char *data, uint8_t len)
+{
+        bus_send(data, len);
+        while (!(len == bus.rx_len && memcmp(data, bus.rx_buffer, len) == 0)) {
+                bus_send(data, len);
+        }
+}
+
+
+
+
+void bus_send_ready()
+{
+        char str[] = "RDY 0 \n";
+        str[5] = adr < 10 ? '0' + adr : 'A' + adr - 10;
+        bus_verified_send(str, sizeof(str));
 }
 
 
@@ -57,14 +96,14 @@ void bus_send (const char * data, uint8_t len)
 
 void bus_send_bit_change (uint8_t status, char type, uint8_t byte, uint8_t bit)
 {
-        char buf[] = "\x02\BC     . \n\x03";
+        char str[] = "BC     . \n";
         if (byte >= 32 || bit >= 8) return;
 
-        buf[3] = status ? 'S' : 'R';
-        buf[5] = toupper(type);
-        buf[6] = '0' + byte / 10;
-        buf[7] = '0' + byte % 10;
-        buf[9] = '0' + bit;
+        str[2] = status ? 'S' : 'R';
+        str[4] = toupper(type);
+        str[5] = '0' + byte / 10;
+        str[6] = '0' + byte % 10;
+        str[8] = '0' + bit;
 
-        bus_send(buf, sizeof(buf));
+        bus_verified_send(str, sizeof(str));
 }

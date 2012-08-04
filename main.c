@@ -77,22 +77,22 @@ void read_input (uint8_t a)
 
         if (leb[0] != peb[a]) {
                 diff = leb[0] ^ peb[a];
+                peb[a] = leb[0];
                 for (uint8_t i = 0; i < 8; i++) {
                         if (diff & (1 << i)) {
-                                bus_send_bit_change(leb[0] & (1 << i), 'E', a, i);
+                                bus_send_bit_change(peb[0] & (1 << i), 'E', a, i);
                         }
                 }
-                peb[a] = leb[0];
         }
 
         if (leb[1] != peb[a + 1]) {
                 diff = leb[1] ^ peb[a + 1];
+                peb[a + 1] = leb[1];
                 for (uint8_t i = 0; i < 8; i++) {
                         if (diff & (1 << i)) {
-                                bus_send_bit_change(leb[1] & (1 << i), 'E', a, i);
+                                bus_send_bit_change(peb[1] & (1 << i), 'E', a, i);
                         }
                 }
-                peb[a + 1] = leb[1];
         }
 
         memcpy(eb, peb, sizeof(eb));
@@ -150,8 +150,7 @@ int main (void) {
         // Interrupts ein
         sei();
 
-        bus_send ("Hallo\n", 6);
-        bus_send_bit_change(1, 'm', 12, 4);
+        bus_send_ready();
 
         while(1) {
                 read_input(adr << 1);
