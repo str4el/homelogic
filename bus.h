@@ -10,6 +10,7 @@
 
 
 typedef enum bus_status_e {
+        rx_start,
         rx_ready,
         tx_start,
         tx_verify

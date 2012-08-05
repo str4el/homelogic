@@ -162,8 +162,7 @@ int main (void) {
 
         while(1) {
                 read_input(adr << 1);
-                ab[1] = eb[0];
-                ab[0] = eb[1];
+                ab[0] = mb[2];
                 write_output(adr << 1);
         }
 

@@ -18,6 +18,9 @@ ISR(USART_RXC_vect) {
         uint8_t in = UDR;
 
         switch (bus.status) {
+        case rx_start:
+                bus.rx_len = 0;
+                bus.status = rx_ready;
         case rx_ready:
                 if (bus.rx_len < BUS_BUFSIZE) {
                         bus.rx_buffer[bus.rx_len] = in;
@@ -29,6 +32,8 @@ ISR(USART_RXC_vect) {
                         bus_decode_message();
                         bus.rx_len = 0;
                 }
+
+                BUS_TX_LOCK(2 + adr * 2);
                 break;
 
         case tx_start:
@@ -80,7 +85,7 @@ void bus_send (const char * data, uint8_t len)
         UCSRA |= (1 << TXC);
         PORTD &= ~(1 << 2);
         BUS_TX_LOCK(35 - adr * 2);
-        bus.status = rx_ready;
+        bus.status = rx_start;
 }
 
 
