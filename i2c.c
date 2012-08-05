@@ -5,14 +5,16 @@
 
 
 
-static inline void i2c_start()
+static inline int8_t i2c_start()
 {
-        while(!I2C_IS_SCL) I2C_SET_SCL;
-        while(!I2C_IS_SDA) I2C_SET_SDA;
+        I2C_SET_SDA;
+        I2C_SET_SCL;
+        if (!I2C_IS_SDA || !I2C_IS_SCL) return -1;
         _delay_us(I2C_T_BUF);
         I2C_CLR_SDA;
         _delay_us(I2C_T_HD_STA);
         I2C_CLR_SCL;
+        return 0;
 }
 
 
@@ -21,8 +23,8 @@ static inline void i2c_start()
 
 static inline void i2c_stop()
 {
-        while(I2C_IS_SDA) I2C_CLR_SDA;
-        while(!I2C_IS_SCL) I2C_SET_SCL;
+        I2C_CLR_SDA;
+        I2C_SET_SCL;
         _delay_us(I2C_T_SU_STO);
         I2C_SET_SDA;
 }
@@ -106,7 +108,11 @@ uint8_t i2c_read_byte(uint8_t ack)
 
 int8_t i2c_write(uint8_t sadr, void *data, uint8_t len)
 {
-        i2c_start();
+        if (i2c_start()) {
+                i2c_stop();
+                return -1;
+        }
+
         if (i2c_write_byte(sadr << 1)) {
                 i2c_stop();
                 return -1;
@@ -128,7 +134,11 @@ int8_t i2c_write(uint8_t sadr, void *data, uint8_t len)
 
 int8_t i2c_pwrite(uint8_t sadr, uint8_t wadr , void *data, uint8_t len)
 {
-        i2c_start();
+        if (i2c_start()) {
+                i2c_stop();
+                return -1;
+        }
+
         if (i2c_write_byte(sadr << 1)) {
                 i2c_stop();
                 return -1;

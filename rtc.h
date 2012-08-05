@@ -57,4 +57,9 @@ static inline int8_t rtc_write_time (rtc_time_t *time)
         return i2c_pwrite(RTC_SLAVE_ADR, RTC_TIME_ADR, time, sizeof(time));
 }
 
+
+
+extern char *rtc_time2str (rtc_time_t *t);
+
+
 #endif // RTC_H

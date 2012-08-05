@@ -59,7 +59,7 @@ ISR(TIMER2_COMP_vect) {
         for (int8_t i = 7; i >= 0; i--) {
                 if (!(PINC & (1 << i))) {
                         intimer[n] = 100;
-                        leb[1] |= (1 << n);
+                        leb[1] |= (1 << n - 8);
                 } else {
                         if (intimer[n]) {
                                 intimer[n]--;
@@ -75,7 +75,7 @@ ISR(TIMER2_COMP_vect) {
 void send_diff (uint8_t in, uint8_t *out, char type, uint8_t byte_address)
 {
         uint8_t diff;
-        if (*out |= in) {
+        if (*out != in) {
                 diff = *out ^ in;
                 *out = in;
                 for (uint8_t i = 0; i < 8; i++) {
@@ -158,10 +158,12 @@ int main (void) {
 
         bus_send_ready();
 
+
+
         while(1) {
                 read_input(adr << 1);
-                ab[0] = mb[2];
-                ab[1] = eb[1];
+                ab[1] = eb[0];
+                ab[0] = eb[1];
                 write_output(adr << 1);
         }
 
