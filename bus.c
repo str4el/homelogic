@@ -1,5 +1,5 @@
 #include "bus.h"
-#include "adr.h"
+#include "main.h"
 
 #include <avr/interrupt.h>
 #include <ctype.h>
@@ -18,6 +18,18 @@ ISR(USART_RXC_vect) {
         uint8_t in = UDR;
 
         switch (bus.status) {
+        case rx_ready:
+                if (bus.rx_len < BUS_BUFSIZE) {
+                        bus.rx_buffer[bus.rx_len] = in;
+                        bus.rx_len++;
+                }
+
+
+                if (in == '\r') {
+                        bus_decode_message();
+                        bus.rx_len = 0;
+                }
+                break;
 
         case tx_start:
                 bus.rx_len = 0;
@@ -68,6 +80,7 @@ void bus_send (const char * data, uint8_t len)
         UCSRA |= (1 << TXC);
         PORTD &= ~(1 << 2);
         BUS_TX_LOCK(35 - adr * 2);
+        bus.status = rx_ready;
 }
 
 
@@ -86,7 +99,7 @@ void bus_verified_send(const char *data, uint8_t len)
 
 void bus_send_ready()
 {
-        char str[] = "RDY 0 \n";
+        char str[] = "RDY 0 \r";
         str[5] = adr < 10 ? '0' + adr : 'A' + adr - 10;
         bus_verified_send(str, sizeof(str));
 }
@@ -96,7 +109,7 @@ void bus_send_ready()
 
 void bus_send_bit_change (uint8_t status, char type, uint8_t byte, uint8_t bit)
 {
-        char str[] = "BC     . \n";
+        char str[] = "BC     . \r";
         if (byte >= 32 || bit >= 8) return;
 
         str[2] = status ? 'S' : 'R';
@@ -107,3 +120,97 @@ void bus_send_bit_change (uint8_t status, char type, uint8_t byte, uint8_t bit)
 
         bus_verified_send(str, sizeof(str));
 }
+
+
+
+
+void bus_decode_message()
+{
+        char *ptr = bus.rx_buffer;
+        char tmp[4];
+        uint8_t len = bus.rx_len;
+
+        while (len > 3) {
+                if (strncasecmp(ptr, "RST", 3) == 0) {
+                        tmp[0] = '0';
+                        tmp[1] = adr < 10 ? '0' + adr : 'A' + adr - 10;
+                        if (strncasecmp(ptr + 4, tmp, 2) == 0) {
+                                reset();
+                        }
+                        return;
+
+                } else  if (strncasecmp(ptr, "BC", 2) == 0) {
+                        if (len >= 10) {
+                                bus_decode_bit_change(ptr + 2);
+                        }
+                        return;
+
+                } else {
+                        ptr++;
+                        len--;
+                }
+        }
+}
+
+
+
+
+void bus_decode_bit_change(char *ptr)
+{
+        uint8_t byte;
+        uint8_t bit;
+        if (isdigit(ptr[3]) && isdigit(ptr[4]) && isdigit(ptr[6])) {
+                byte = (ptr[3] - '0') * 10 + ptr[4] - '0';
+                bit = ptr[6] - '0';
+                if (byte >= 32 || bit >= 8) return;
+        } else {
+                return;
+        }
+
+        switch (ptr[0]) {
+        case 's':
+        case 'S':
+                switch (ptr[2]) {
+                case 'e':
+                case 'E':
+                        peb[byte] |= (1 << bit);
+                        break;
+                case 'a':
+                case 'A':
+                        pab[byte] |= (1 << bit);
+                        break;
+                case 'm':
+                case 'M':
+                        pmb[byte] |= (1 << bit);
+                        break;
+                default:
+                        return;
+                }
+                break;
+
+        case 'r':
+        case 'R':
+                switch (ptr[2]) {
+                case 'e':
+                case 'E':
+                        peb[byte] &= ~(1 << bit);
+                        break;
+                case 'a':
+                case 'A':
+                        pab[byte] &= ~(1 << bit);
+                        break;
+                case 'm':
+                case 'M':
+                        pmb[byte] &= ~(1 << bit);
+                        break;
+                default:
+                        return;
+                }
+                break;
+
+        default:
+                return;
+        }
+
+}
+

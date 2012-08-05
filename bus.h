@@ -10,6 +10,7 @@
 
 
 typedef enum bus_status_e {
+        rx_ready,
         tx_start,
         tx_verify
 } bus_status_t;
@@ -28,10 +29,13 @@ typedef struct bus_s {
 extern bus_t bus;
 
 extern void bus_init (void);
+
 extern void bus_send (const char *data, uint8_t len);
 extern void bus_verified_send(const char *data, uint8_t len);
 extern void bus_send_ready(void);
 extern void bus_send_bit_change (uint8_t status, char type, uint8_t byte, uint8_t bit);
 
+extern void bus_decode_message(void);
+extern void bus_decode_bit_change(char *ptr);
 
 #endif // BUS_H

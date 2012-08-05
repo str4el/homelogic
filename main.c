@@ -1,21 +1,25 @@
+#include "main.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
-
 #include <string.h>
-#include "adr.h"
 #include "i2c.h"
 #include "rtc.h"
 #include "bus.h"
 
 
 
-uint8_t peb[32];
-uint8_t eb [32];
-uint8_t ab [32];
-uint8_t mb [32];
 
-volatile uint8_t leb[2];
+static inline void adr_read(void)
+{
+        adr = 0;
+        if (!(PINB & (1 << 4))) adr |= 1;
+        if (!(PINB & (1 << 6))) adr |= 2;
+        if (!(PINB & (1 << 7))) adr |= 4;
+        if (!(PINB & (1 << 5))) adr |= 8;
+}
+
+
 
 
 /* Initialisierung des 1ms Timer
@@ -68,34 +72,31 @@ ISR(TIMER2_COMP_vect) {
 }
 
 
-
-
-
-void read_input (uint8_t a)
+void send_diff (uint8_t in, uint8_t *out, char type, uint8_t byte_address)
 {
         uint8_t diff;
-
-        if (leb[0] != peb[a]) {
-                diff = leb[0] ^ peb[a];
-                peb[a] = leb[0];
+        if (*out |= in) {
+                diff = *out ^ in;
+                *out = in;
                 for (uint8_t i = 0; i < 8; i++) {
                         if (diff & (1 << i)) {
-                                bus_send_bit_change(peb[0] & (1 << i), 'E', a, i);
+                                bus_send_bit_change(*out & (1 << i), type, byte_address, i);
                         }
                 }
         }
+}
 
-        if (leb[1] != peb[a + 1]) {
-                diff = leb[1] ^ peb[a + 1];
-                peb[a + 1] = leb[1];
-                for (uint8_t i = 0; i < 8; i++) {
-                        if (diff & (1 << i)) {
-                                bus_send_bit_change(peb[1] & (1 << i), 'E', a, i);
-                        }
-                }
-        }
 
+
+
+
+void read_input(uint8_t a)
+{
+        send_diff(leb[0], &peb[a], 'E', a);
+        send_diff(leb[1], &peb[a + 1], 'E', a + 1);
         memcpy(eb, peb, sizeof(eb));
+        memcpy(mb, pmb, sizeof(mb));
+        memcpy(ab, pab, sizeof(ab));
 }
 
 
@@ -104,11 +105,16 @@ void read_input (uint8_t a)
 
 void write_output(uint8_t a)
 {
+        send_diff(ab[a], &pab[a], 'A', a);
+        send_diff(ab[a + 1], &pab[a + 1], 'A', a + 1);
+        send_diff(mb[a], &pmb[a], 'M', a);
+        send_diff(mb[a + 1], &pmb[a + 1], 'M', a + 1);
+
         PORTD &= ~(1 << 5);
 
         for (int8_t i = 15; i >= 0; i--) {
                 PORTD &= ~(1 << 4);
-                if (ab[a + (i >> 3)] & (1 << i % 8)) {
+                if (pab[a + (i >> 3)] & (1 << i % 8)) {
                         PORTD |= (1 << 6);
                 } else {
                         PORTD &= ~(1 << 6);
@@ -154,7 +160,7 @@ int main (void) {
 
         while(1) {
                 read_input(adr << 1);
-                ab[0] = eb[0];
+                ab[0] = mb[2];
                 ab[1] = eb[1];
                 write_output(adr << 1);
         }
