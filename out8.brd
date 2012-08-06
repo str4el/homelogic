@@ -42,7 +42,7 @@
 <layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
-<layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
+<layer number="45" name="Holes" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="46" name="Milling" color="3" fill="1" visible="no" active="yes"/>
 <layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
 <layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
@@ -72,8 +72,11 @@
 <hole x="96.52" y="6.35" drill="3.2"/>
 <hole x="3.81" y="31.75" drill="3.2"/>
 <hole x="96.52" y="31.75" drill="3.2"/>
+<<<<<<< HEAD
 <text x="5.08" y="25.4" size="1.778" layer="16" rot="MR270">STR 7/12</text>
 <text x="97.79" y="26.67" size="1.778" layer="16" rot="MR270">out8 Rev.1</text>
+=======
+>>>>>>> corsair/master
 </plain>
 <libraries>
 <library name="passiv">
