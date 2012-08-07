@@ -134,7 +134,6 @@ int main (void) {
         PORTC = 0xff;
         DDRD = 0xfe;
 
-
         init_timer2();
         bus_init();
 
@@ -157,8 +156,7 @@ int main (void) {
         sei();
 
         bus_send_ready();
-
-
+        bus_send_date_time();
 
         while(1) {
                 read_input(adr << 1);

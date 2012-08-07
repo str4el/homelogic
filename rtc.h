@@ -46,7 +46,7 @@ typedef struct rtc_alarm2_s {
 
 static inline int8_t rtc_read_time (rtc_time_t *time)
 {
-        return i2c_pread(RTC_SLAVE_ADR, RTC_TIME_ADR, time, sizeof(time));
+        return i2c_pread(RTC_SLAVE_ADR, RTC_TIME_ADR, time, sizeof(*time));
 }
 
 
@@ -54,12 +54,12 @@ static inline int8_t rtc_read_time (rtc_time_t *time)
 
 static inline int8_t rtc_write_time (rtc_time_t *time)
 {
-        return i2c_pwrite(RTC_SLAVE_ADR, RTC_TIME_ADR, time, sizeof(time));
+        return i2c_pwrite(RTC_SLAVE_ADR, RTC_TIME_ADR, time, sizeof(*time));
 }
 
 
 
 extern char *rtc_time2str (rtc_time_t *t);
-
+extern int8_t rtc_str2time(const char *str, uint8_t len, rtc_time_t *t);
 
 #endif // RTC_H

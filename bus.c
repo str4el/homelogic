@@ -1,5 +1,6 @@
 #include "bus.h"
 #include "main.h"
+#include "rtc.h"
 
 #include <avr/interrupt.h>
 #include <ctype.h>
@@ -106,7 +107,7 @@ void bus_send_ready()
 {
         char str[] = "RDY 0 \r";
         str[5] = adr < 10 ? '0' + adr : 'A' + adr - 10;
-        bus_verified_send(str, sizeof(str));
+        bus_verified_send(str, strlen(str));
 }
 
 
@@ -129,6 +130,19 @@ void bus_send_bit_change (uint8_t status, char type, uint8_t byte, uint8_t bit)
 
 
 
+void bus_send_date_time()
+{
+        rtc_time_t time;
+        int8_t ret = rtc_read_time(&time);
+        if (ret == 0) {
+                char *str = rtc_time2str(&time);
+                bus_send(str, strlen(str));
+        }
+}
+
+
+
+
 void bus_decode_message()
 {
         char *ptr = bus.rx_buffer;
@@ -144,7 +158,14 @@ void bus_decode_message()
                         }
                         return;
 
-                } else  if (strncasecmp(ptr, "BC", 2) == 0) {
+                } else if (strncasecmp(ptr, "SDT", 3) == 0) {
+                        rtc_time_t time;
+                        if (rtc_str2time(ptr + 4, len - 4, &time) == 0) {
+                                rtc_write_time(&time);
+                        }
+                        return;
+
+                } else if (strncasecmp(ptr, "BC", 2) == 0) {
                         if (len >= 10) {
                                 bus_decode_bit_change(ptr + 2);
                         }

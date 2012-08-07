@@ -2,6 +2,8 @@
 #define I2C_H
 
 #include <stdint.h>
+#include <avr/io.h>
+#include <util/delay.h>
 
 
 
@@ -37,6 +39,34 @@
 #define I2C_IS_SCL (PINB & (1 << 0))
 
 #define I2C_IS_SDA (PINB & (1 << 1))
+
+
+
+static inline int8_t i2c_start()
+{
+        I2C_SET_SDA;
+        I2C_SET_SCL;
+        _delay_us(1);
+        if (!I2C_IS_SDA || !I2C_IS_SCL) return -1;
+        _delay_us(I2C_T_BUF);
+        I2C_CLR_SDA;
+        _delay_us(I2C_T_HD_STA);
+        I2C_CLR_SCL;
+        return 0;
+}
+
+
+
+
+
+static inline void i2c_stop()
+{
+        I2C_CLR_SDA;
+        I2C_SET_SCL;
+        _delay_us(I2C_T_SU_STO);
+        I2C_SET_SDA;
+}
+
 
 
 

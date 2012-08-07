@@ -35,6 +35,7 @@ extern void bus_send (const char *data, uint8_t len);
 extern void bus_verified_send(const char *data, uint8_t len);
 extern void bus_send_ready(void);
 extern void bus_send_bit_change (uint8_t status, char type, uint8_t byte, uint8_t bit);
+extern void bus_send_date_time(void);
 
 extern void bus_decode_message(void);
 extern void bus_decode_bit_change(char *ptr);
