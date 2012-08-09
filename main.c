@@ -2,10 +2,12 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
+#include <avr/wdt.h>
 #include <string.h>
 #include "i2c.h"
 #include "rtc.h"
 #include "bus.h"
+#include "prog.h"
 
 
 
@@ -158,10 +160,13 @@ int main (void) {
         bus_send_ready();
         bus_send_date_time();
 
+        wdt_enable(WDTO_2S);
+
         while(1) {
                 read_input(adr << 1);
-                ab[0] = mb[2];
+                prog_cycle();
                 write_output(adr << 1);
+                wdt_reset();
         }
 
         return 0;
