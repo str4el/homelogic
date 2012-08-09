@@ -65,14 +65,14 @@ int8_t rtc_str2time(const char *str, uint8_t len, rtc_time_t *t)
 
         if (isdigit(str[3]) && isdigit(str[4])) {
                 t->date = ((str[3] - '0') << 4) | (str[4] - '0');
-                if (t->date < 1 || t->date > 31) return -5;
+                if (t->date < 1 || t->date > 0x31) return -5;
         } else {
                 return -5;
         }
 
         if (isdigit(str[6]) && isdigit(str[7])) {
                 t->month = ((str[6] - '0') << 4) | (str[7] - '0');
-                if (t->month < 1 || t->month > 12) return -6;
+                if (t->month < 1 || t->month > 0x12) return -6;
         } else {
                 return -6;
         }
@@ -85,7 +85,7 @@ int8_t rtc_str2time(const char *str, uint8_t len, rtc_time_t *t)
 
         if (isdigit(str[12]) && isdigit(str[13])) {
                 t->hours = ((str[12] - '0') << 4) | (str[13] - '0');
-                if (t->hours > 24) return -8;
+                if (t->hours > 0x24) return -8;
                 t->hours |= (1 << 6);
         } else {
                 return -8;
@@ -93,14 +93,14 @@ int8_t rtc_str2time(const char *str, uint8_t len, rtc_time_t *t)
 
         if (isdigit(str[15]) && isdigit(str[16])) {
                 t->minutes = ((str[15] - '0') << 4) | (str[16] - '0');
-                if (t->minutes > 59) return -9;
+                if (t->minutes > 0x59) return -9;
         } else {
                 return -9;
         }
 
         if (isdigit(str[18]) && isdigit(str[19])) {
                 t->seconds = ((str[18] - '0') << 4) | (str[19] - '0');
-                if (t->seconds > 59) return -10;
+                if (t->seconds > 0x59) return -10;
         } else {
                 return -10;
         }
