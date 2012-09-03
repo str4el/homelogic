@@ -29,11 +29,13 @@ void prog_cycle()
                 case OM:
                         sta = mb[val >> 3] & (1 << (val & 0x07));
                         vke = prog_condition(sta);
+                        break;
 
                 case UA:
                 case OA:
                         sta = ab[val >> 3] & (1 << (val & 0x07));
                         vke = prog_condition(sta);
+                        break;
 
                 case IM:
                         if (vke) {
