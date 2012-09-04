@@ -3,83 +3,116 @@
 #include "eeprom.h"
 
 uint16_t prog_pointer;
-uint8_t sta;
+bool_t sta;
+
+
+uint8_t *prog_get_mem_adr (uint8_t spec, uint8_t byte)
+{
+        uint8_t *ptr;
+
+        if (byte >= 32) return 0;
+
+        switch (spec & 0x30) {
+        case 0x10:
+                ptr = eb;
+                break;
+
+        case 0x20:
+                ptr = ab;
+                break;
+
+        case 0x30:
+                ptr = mb;
+                break;
+
+        default:
+                return 0;
+        }
+
+        return &ptr[byte];
+}
+
+
+
+
+static inline bool_t prog_get_bit(void)
+{
+        uint8_t spec = eep_read_byte(prog_pointer++);
+        uint8_t byte = eep_read_byte(prog_pointer++);
+        uint8_t *ptr = prog_get_mem_adr(spec, byte);
+        if (ptr) {
+                return *ptr & (1 << (spec & 0x0F));
+        } else {
+                return FALSE;
+        }
+}
+
+
+
+
+static inline void prog_set_bit(bool_t s)
+{
+        uint8_t spec = eep_read_byte(prog_pointer++);
+        uint8_t byte = eep_read_byte(prog_pointer++);
+        uint8_t *ptr = prog_get_mem_adr(spec, byte);
+        uint8_t bit = (1 << (spec & 0x0F));
+        if (ptr) *ptr = s ? *ptr | bit : *ptr & ~bit;
+}
+
+
+
+
+static inline void prog_togle_bit(void)
+{
+        uint8_t spec = eep_read_byte(prog_pointer++);
+        uint8_t byte = eep_read_byte(prog_pointer++);
+        uint8_t *ptr = prog_get_mem_adr(spec, byte);
+        if (ptr) *ptr ^= (1 << (spec & 0x0F));
+}
+
 
 
 
 void prog_cycle()
 {
         prog_pointer = 0;
-        sta = 0;
-        uint8_t vke = 0;
+        sta = FALSE;
+        bool_t vke = FALSE;
 
         for (;;) {
-                prog_cmd_t cmd = eep_read_byte(prog_pointer);
-                uint8_t val = eep_read_byte(prog_pointer + 1);
-                prog_pointer += 2;
+                prog_cmd_t cmd = eep_read_byte(prog_pointer++);
 
                 switch (cmd) {
-                case UE:
-                case OE:
-                        sta = eb[val >> 3] & (1 << (val & 0x07));
+                case U:
+                case O:
+                        sta = prog_get_bit();
                         vke = prog_condition(sta);
                         break;
 
-                case UM:
-                case OM:
-                        sta = mb[val >> 3] & (1 << (val & 0x07));
+                case UN:
+                case ON:
+                        sta = !prog_get_bit();
                         vke = prog_condition(sta);
+
+                case I:
+                        prog_set_bit(sta);
                         break;
 
-                case UA:
-                case OA:
-                        sta = ab[val >> 3] & (1 << (val & 0x07));
-                        vke = prog_condition(sta);
+                case S:
+                        if (vke) prog_set_bit(TRUE);
                         break;
 
-                case IM:
-                        if (vke) {
-                                mb[val >> 3] |= (1 << (val & 0x07));
-                        } else {
-                                mb[val >> 3] &= ~(1 << (val & 0x07));
-                        }
+                case R:
+                        if (vke) prog_set_bit(FALSE);
                         break;
 
-                case IA:
-                        if (vke) {
-                                ab[val >> 3] |= (1 << (val & 0x07));
-                        } else {
-                                ab[val >> 3] &= ~(1 << (val & 0x07));
-                        }
-                        break;
-
-                case SM:
-                        if (vke) mb[val >> 3] |= (1 << (val & 0x07));
-                        break;
-
-                case SA:
-                        if (vke) ab[val >> 3] |= (1 << (val & 0x07));
-                        break;
-
-                case RM:
-                        if (vke) mb[val >> 3] &= ~(1 << (val & 0x07));
-                        break;
-
-                case RA:
-                        if (vke) ab[val >> 3] &= ~(1 << (val & 0x07));
-                        break;
-
-                case XM:
-                        if (vke) mb[val >> 3] ^= (1 << (val & 0x07));
-                        break;
-
-                case XA:
-                        if (vke) ab[val >> 3] ^= (1 << (val & 0x07));
+                case X:
+                        if (vke) prog_togle_bit();
                         break;
 
                 case NE:
-                        prog_pointer--;
-                        vke = 0;
+                        sta = FALSE;
+                        vke = FALSE;
                         break;
 
                 default:
@@ -92,108 +125,70 @@ void prog_cycle()
 
 
 
-uint8_t prog_condition(uint8_t vke)
+bool_t prog_condition(bool_t vke)
 {
-        prog_context_t context = AND;
-
         for (;;) {
-                prog_cmd_t cmd = eep_read_byte(prog_pointer);
-                uint8_t val = eep_read_byte(prog_pointer + 1);
+                prog_cmd_t cmd = eep_read_byte(prog_pointer++);
 
                 switch (cmd) {
-                case UE:
-                        if (context == OR) {
-                                vke = vke || prog_condition(sta);
-                        } else {
-                                sta = (eb[val >> 3] & (1 << (val & 0x07)));
-                                vke = vke && sta;
-                        }
-                        context = AND;
+                case U:
+                        sta = prog_get_bit();
+                        vke = vke && sta;
                         break;
 
-                case UM:
-                        if (context == OR) {
-                                vke = vke || prog_condition(sta);
-                        } else {
-                                sta = (mb[val >> 3] & (1 << (val & 0x07)));
-                                vke = vke && sta;
-                        }
-                        context = AND;
+                case UN:
+                        sta = !prog_get_bit();
+                        vke = vke && sta;
                         break;
 
-                case UA:
-                        if (context == OR) {
-                                vke = vke || prog_condition(sta);
-                        } else {
-                                sta = (ab[val >> 3] & (1 << (val & 0x07)));
-                                vke = vke && sta;
-                        }
-                        context = AND;
-                        break;
-
-                case OE:
-                        sta = (eb[val >> 3] & (1 << (val & 0x07)));
+                case O:
+                        sta = prog_get_bit();
                         vke = vke || sta;
-                        context = OR;
                         break;
 
-                case OM:
-                        sta = (mb[val >> 3] & (1 << (val & 0x07)));
+                case ON:
+                        sta = !prog_get_bit();
                         vke = vke || sta;
-                        context = OR;
                         break;
 
-                case OA:
-                        sta = (ab[val >> 3] & (1 << (val & 0x07)));
-                        vke = vke || sta;
-                        context = OR;
-                        break;
-
-                case UB:
-                        prog_pointer++;
-                        vke = vke && prog_condition(vke);
-                        break;
-
-                case BU:
-                        prog_pointer++;
-                        return vke;
-
-                case PM:
+                case P:
                         if (vke) {
-                                if (mb[val >> 3] & (1 << (val & 0x07))) {
-                                        vke = 0;
+                                if (prog_get_bit()) {
+                                        vke = FALSE;
                                 } else {
-                                        vke = 1;
-                                        mb[val >> 3] |= (1 << (val & 0x07));
+                                        vke = TRUE;
+                                        prog_pointer -= 2;
+                                        prog_set_bit(TRUE);
                                 }
                         } else {
-                                vke = 0;
-                                mb[val >> 3] &= ~(1 << (val & 0x07));
+                                vke = FALSE;
+                                prog_set_bit(FALSE);
                         }
                         break;
 
-                case NM:
-                        if (vke) {
-                                vke = 0;
-                                mb[val >> 3] &= ~(1 << (val & 0x07));
-                        } else {
-                                if (mb[val >> 3] & (1 << (val & 0x07))) {
-                                        vke = 0;
+                case N:
+                        if (!vke) {
+                                if (prog_get_bit()) {
+                                        vke = FALSE;
                                 } else {
-                                        vke = 1;
-                                        mb[val >> 3] |= (1 << (val & 0x07));
+                                        vke = TRUE;
+                                        prog_pointer -= 2;
+                                        prog_set_bit(TRUE);
                                 }
+                        } else {
+                                vke = FALSE;
+                                prog_set_bit(FALSE);
                         }
                         break;
 
 
                 default:
+                        prog_pointer--;
                         return vke;
                         break;
 
                 }
 
-                prog_pointer += 2;
         }
 }
 

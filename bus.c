@@ -143,19 +143,55 @@ void bus_send_date_time()
 
 
 
+int16_t bus_get_hex(const char *str)
+{
+        int16_t ret;
+        if (!isxdigit(str[0]) || !isxdigit(str[1])) return -1;
+
+        if (isdigit(str[0])) {
+                ret = (str[0] - '0') << 4;
+        } else {
+                ret = (toupper(str[0]) - 'A' + 10) << 4;
+        }
+
+        if (isdigit(str[1])) {
+                ret |= str[1] - '0';
+        } else {
+                ret |= toupper(str[1]) - 'A' + 10;
+        }
+
+        return ret;
+}
+
+
+
+
 void bus_decode_message()
 {
-        char *ptr = bus.rx_buffer;
-        char tmp[4];
+        uint8_t *ptr = bus.rx_buffer;
         uint8_t len = bus.rx_len;
 
         while (len > 3) {
                 if (strncasecmp(ptr, "RST", 3) == 0) {
-                        tmp[0] = '0';
-                        tmp[1] = adr < 10 ? '0' + adr : 'A' + adr - 10;
-                        if (strncasecmp(ptr + 4, tmp, 2) == 0) {
+                        if (bus_get_hex(ptr + 4) == adr) {
                                 reset();
                         }
+                        return;
+
+                } else if (strncasecmp(ptr, "RUN", 3) == 0) {
+                        if (bus_get_hex(ptr + 4) == adr) {
+                                status = RUN;
+                        }
+                        return;
+
+                } else if (strncasecmp(ptr, "STP", 3) == 0) {
+                        if (bus_get_hex(ptr + 4) == adr) {
+                                status = STOP;
+                        }
+                        return;
+
+                } else if (strncasecmp(ptr, "PRG", 3) == 0) {
+                        bus_decode_prog_message(ptr + 4);
                         return;
 
                 } else if (strncasecmp(ptr, "SDT", 3) == 0) {
@@ -176,6 +212,40 @@ void bus_decode_message()
                         len--;
                 }
         }
+}
+
+
+
+
+void bus_decode_prog_message(char *ptr)
+{
+        int16_t tmp;
+        uint8_t len;
+
+        if (bus_get_hex(ptr) != adr) {
+                return;
+        }
+
+        tmp = bus_get_hex(ptr + 2);
+        if (tmp < 0) return;
+        prog_write.pos = tmp << 8;
+
+        tmp = bus_get_hex(ptr + 4);
+        if (tmp < 0) return;
+        prog_write.pos |= tmp;
+
+        tmp = bus_get_hex(ptr + 6);
+        if (tmp < 0) return;
+        len = tmp;
+
+
+        for (uint8_t i = 0; i < len; i++) {
+                tmp = bus_get_hex(ptr + 8 + i * 2);
+                if (tmp < 0) return;
+                prog_write.data[i] = tmp;
+        }
+
+        prog_write.len = len;
 }
 
 

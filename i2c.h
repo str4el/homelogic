@@ -42,7 +42,7 @@
 
 
 
-static inline int8_t i2c_start()
+static inline int8_t i2c_start(void)
 {
         I2C_SET_SDA;
         I2C_SET_SCL;
@@ -59,7 +59,7 @@ static inline int8_t i2c_start()
 
 
 
-static inline void i2c_stop()
+static inline void i2c_stop(void)
 {
         I2C_CLR_SDA;
         I2C_SET_SCL;

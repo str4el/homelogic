@@ -3,11 +3,13 @@
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
 #include <avr/wdt.h>
+#include <util/atomic.h>
 #include <string.h>
 #include "i2c.h"
 #include "rtc.h"
 #include "bus.h"
 #include "prog.h"
+#include "eeprom.h"
 
 
 
@@ -160,12 +162,24 @@ int main (void) {
         bus_send_ready();
         bus_send_date_time();
 
+        prog_write.len = 0;
+        status = RUN;
         wdt_enable(WDTO_2S);
 
         while(1) {
-                read_input(adr << 1);
-                prog_cycle();
-                write_output(adr << 1);
+                if (prog_write.len && status == STOP) {
+                        ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+                                eep_write(prog_write.pos, prog_write.data, prog_write.len);
+                                prog_write.len = 0;
+                        }
+                        bus_verified_send("POK\r", 4);
+                }
+
+                if (status == RUN) {
+                        read_input(adr << 1);
+                        prog_cycle();
+                        write_output(adr << 1);
+                }
                 wdt_reset();
         }
 
