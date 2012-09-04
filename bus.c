@@ -1,6 +1,7 @@
 #include "bus.h"
 #include "main.h"
 #include "rtc.h"
+#include "str.h"
 
 #include <avr/interrupt.h>
 #include <ctype.h>
@@ -105,8 +106,8 @@ void bus_verified_send(const char *data, uint8_t len)
 
 void bus_send_ready()
 {
-        char str[] = "RDY 0 \r";
-        str[5] = adr < 10 ? '0' + adr : 'A' + adr - 10;
+        char str[] = "RDY   \r";
+        str_to_hex(str + 4, adr);
         bus_verified_send(str, strlen(str));
 }
 
@@ -143,29 +144,6 @@ void bus_send_date_time()
 
 
 
-int16_t bus_get_hex(const char *str)
-{
-        int16_t ret;
-        if (!isxdigit(str[0]) || !isxdigit(str[1])) return -1;
-
-        if (isdigit(str[0])) {
-                ret = (str[0] - '0') << 4;
-        } else {
-                ret = (toupper(str[0]) - 'A' + 10) << 4;
-        }
-
-        if (isdigit(str[1])) {
-                ret |= str[1] - '0';
-        } else {
-                ret |= toupper(str[1]) - 'A' + 10;
-        }
-
-        return ret;
-}
-
-
-
-
 void bus_decode_message()
 {
         uint8_t *ptr = bus.rx_buffer;
@@ -173,19 +151,19 @@ void bus_decode_message()
 
         while (len > 3) {
                 if (strncasecmp(ptr, "RST", 3) == 0) {
-                        if (bus_get_hex(ptr + 4) == adr) {
+                        if (str_from_hex(ptr + 4) == adr) {
                                 reset();
                         }
                         return;
 
                 } else if (strncasecmp(ptr, "RUN", 3) == 0) {
-                        if (bus_get_hex(ptr + 4) == adr) {
+                        if (str_from_hex(ptr + 4) == adr) {
                                 status = RUN;
                         }
                         return;
 
                 } else if (strncasecmp(ptr, "STP", 3) == 0) {
-                        if (bus_get_hex(ptr + 4) == adr) {
+                        if (str_from_hex(ptr + 4) == adr) {
                                 status = STOP;
                         }
                         return;
@@ -222,30 +200,54 @@ void bus_decode_prog_message(char *ptr)
         int16_t tmp;
         uint8_t len;
 
-        if (bus_get_hex(ptr) != adr) {
+        if (str_from_hex(ptr) != adr) {
                 return;
         }
 
-        tmp = bus_get_hex(ptr + 2);
+        tmp = str_from_hex(ptr + 2);
         if (tmp < 0) return;
         prog_write.pos = tmp << 8;
 
-        tmp = bus_get_hex(ptr + 4);
+        tmp = str_from_hex(ptr + 4);
         if (tmp < 0) return;
         prog_write.pos |= tmp;
 
-        tmp = bus_get_hex(ptr + 6);
+        tmp = str_from_hex(ptr + 6);
         if (tmp < 0) return;
         len = tmp;
 
 
         for (uint8_t i = 0; i < len; i++) {
-                tmp = bus_get_hex(ptr + 8 + i * 2);
+                tmp = str_from_hex(ptr + 8 + i * 2);
                 if (tmp < 0) return;
                 prog_write.data[i] = tmp;
         }
 
         prog_write.len = len;
+}
+
+
+
+
+uint8_t bus_encode_prog_message(char *str)
+{
+        uint8_t pos;
+
+        strncpy(str, "VRY ", 4);
+        str_to_hex(str + 4, adr);
+        str_to_hex(str + 6, prog_write.pos >> 8);
+        str_to_hex(str + 8, prog_write.pos & 0xFF);
+        str_to_hex(str + 10, prog_write.len);
+
+        for (uint8_t i = 0; i < prog_write.len; i++) {
+                pos = 12 + i * 2;
+                str_to_hex(str + pos, prog_write.data[i]);
+        }
+
+        pos += 2;
+        str[pos++] = '\r';
+        str[pos++] = 0;
+        return pos;
 }
 
 

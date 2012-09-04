@@ -168,11 +168,16 @@ int main (void) {
 
         while(1) {
                 if (prog_write.len && status == STOP) {
+                        char str[40];
+                        uint8_t len;
+
                         ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
                                 eep_write(prog_write.pos, prog_write.data, prog_write.len);
+                                len = bus_encode_prog_message(str);
                                 prog_write.len = 0;
                         }
-                        bus_verified_send("POK\r", 4);
+
+                        bus_verified_send(str, len);
                 }
 
                 if (status == RUN) {

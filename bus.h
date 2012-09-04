@@ -37,9 +37,11 @@ extern void bus_send_ready(void);
 extern void bus_send_bit_change (uint8_t status, char type, uint8_t byte, uint8_t bit);
 extern void bus_send_date_time(void);
 
-extern int16_t bus_get_hex(const char *ptr);
+extern int16_t str_from_hex(const char *ptr);
+
 extern void bus_decode_message(void);
 extern void bus_decode_prog_message(char *ptr);
+extern uint8_t bus_encode_prog_message(char *str);
 extern void bus_decode_bit_change(char *ptr);
 
 #endif // BUS_H
