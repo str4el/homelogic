@@ -41,7 +41,11 @@ static inline bool_t prog_get_bit(void)
         uint8_t byte = eep_read_byte(prog_pointer++);
         uint8_t *ptr = prog_get_mem_adr(spec, byte);
         if (ptr) {
-                return *ptr & (1 << (spec & 0x0F));
+                if (*ptr & (1 << (spec & 0x0F))) {
+                        return TRUE;
+                } else {
+                        return FALSE;
+                }
         } else {
                 return FALSE;
         }
@@ -93,9 +97,10 @@ void prog_cycle()
                 case ON:
                         sta = !prog_get_bit();
                         vke = prog_condition(sta);
+                        break;
 
                 case I:
-                        prog_set_bit(sta);
+                        prog_set_bit(vke);
                         break;
 
                 case S:
