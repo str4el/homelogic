@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <avr/wdt.h>
 #include "prog.h"
+#include "bool.h"
 
 
 volatile uint8_t leb[2];
@@ -19,7 +20,7 @@ uint8_t mb [32];
 uint8_t adr;
 volatile prog_status_t status;
 volatile prog_write_t prog_write;
-
+volatile bool_t step;
 
 
 static inline void reset(void)

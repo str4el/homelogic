@@ -1,6 +1,7 @@
 #include "prog.h"
 #include "main.h"
 #include "eeprom.h"
+#include "bus.h"
 
 uint16_t prog_pointer;
 bool_t sta;
@@ -84,6 +85,14 @@ void prog_cycle()
         bool_t vke = FALSE;
 
         for (;;) {
+                if (status == DEBUG) {
+                        step = FALSE;
+                        while (step == FALSE);
+                        bus_send_data_16("CIP", prog_pointer);
+                        bus_send_data_8("STA", sta);
+                        bus_send_data_8("VKE", vke);
+                }
+
                 prog_cmd_t cmd = eep_read_byte(prog_pointer++);
 
                 switch (cmd) {
@@ -133,6 +142,14 @@ void prog_cycle()
 bool_t prog_condition(bool_t vke)
 {
         for (;;) {
+                if (status == DEBUG) {
+                        step = FALSE;
+                        while (step == FALSE);
+                        bus_send_data_16("CIP", prog_pointer);
+                        bus_send_data_8("STA", sta);
+                        bus_send_data_8("VKE", vke);
+                }
+
                 prog_cmd_t cmd = eep_read_byte(prog_pointer++);
 
                 switch (cmd) {

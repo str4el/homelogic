@@ -2,6 +2,7 @@
 #include "main.h"
 #include "rtc.h"
 #include "str.h"
+#include "bool.h"
 
 #include <avr/interrupt.h>
 #include <ctype.h>
@@ -104,10 +105,36 @@ void bus_verified_send(const char *data, uint8_t len)
 
 
 
-void bus_send_ready()
+void bus_send_cmd(const char *cmd)
 {
-        char str[] = "RDY   \r";
+        char str[] = "      \r";
+        memcpy (str, cmd, 3);
         str_to_hex(str + 4, adr);
+        bus_verified_send(str, strlen(str));
+}
+
+
+
+
+void bus_send_data_8(const char *cmd, const uint8_t data)
+{
+        char str[] = "         \r";
+        memcpy (str, cmd, 3);
+        str_to_hex(str + 4, adr);
+        str_to_hex(str + 7, data);
+        bus_verified_send(str, strlen(str));
+}
+
+
+
+
+void bus_send_data_16(const char *cmd, const uint16_t data)
+{
+        char str[] = "           \r";
+        memcpy (str, cmd, 3);
+        str_to_hex(str + 4, adr);
+        str_to_hex(str + 7, data >> 8);
+        str_to_hex(str + 9, data & 0xFF);
         bus_verified_send(str, strlen(str));
 }
 
@@ -165,6 +192,18 @@ void bus_decode_message()
                 } else if (strncasecmp(ptr, "STP", 3) == 0) {
                         if (str_from_hex(ptr + 4) == adr) {
                                 status = STOP;
+                        }
+                        return;
+
+                } else if (strncasecmp(ptr, "DBG", 3) == 0) {
+                        if (str_from_hex(ptr + 4) == adr) {
+                                status = DEBUG;
+                        }
+                        return;
+
+                } else if (strncasecmp(ptr, "STE", 3) == 0) {
+                        if (str_from_hex(ptr + 4) == adr) {
+                                step = TRUE;
                         }
                         return;
 

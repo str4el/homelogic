@@ -7,7 +7,8 @@
 
 typedef enum prog_status_e {
         STOP = 0,
-        RUN
+        RUN,
+        DEBUG
 } prog_status_t;
 
 

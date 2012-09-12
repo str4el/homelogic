@@ -159,7 +159,7 @@ int main (void) {
         // Interrupts ein
         sei();
 
-        bus_send_ready();
+        bus_send_cmd("RDY");
         bus_send_date_time();
 
         prog_write.len = 0;
@@ -180,7 +180,7 @@ int main (void) {
                         bus_verified_send(str, len);
                 }
 
-                if (status == RUN) {
+                if (status == RUN || status == DEBUG) {
                         read_input(adr << 1);
                         prog_cycle();
                         write_output(adr << 1);
