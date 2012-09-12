@@ -9,6 +9,11 @@ bool_t sta;
 
 uint8_t *prog_get_mem_adr (uint8_t spec, uint8_t byte)
 {
+        if (status == DEBUG) {
+                bus_send_data_8("SPC", spec);
+                bus_send_data_8("BYT", byte);
+        }
+
         uint8_t *ptr;
 
         if (byte >= 32) return 0;
@@ -87,13 +92,17 @@ void prog_cycle()
         for (;;) {
                 if (status == DEBUG) {
                         step = FALSE;
-                        while (step == FALSE);
                         bus_send_data_16("CIP", prog_pointer);
                         bus_send_data_8("STA", sta);
                         bus_send_data_8("VKE", vke);
+                        while (status == DEBUG && step == FALSE) wdt_reset();
                 }
 
                 prog_cmd_t cmd = eep_read_byte(prog_pointer++);
+                if (status == DEBUG) {
+                        bus_send_data_8("CMD", cmd);
+                }
+
 
                 switch (cmd) {
                 case U:
@@ -113,15 +122,28 @@ void prog_cycle()
                         break;
 
                 case S:
-                        if (vke) prog_set_bit(TRUE);
+                        if (vke) {
+                                prog_set_bit(TRUE);
+                        } else {
+                                prog_pointer += 2;
+                        }
                         break;
 
                 case R:
-                        if (vke) prog_set_bit(FALSE);
+                        if (vke) {
+                                prog_set_bit(FALSE);
+                        } else {
+                                prog_pointer += 2;
+                        }
                         break;
 
                 case X:
-                        if (vke) prog_togle_bit();
+                        if (vke) {
+                                prog_togle_bit();
+                        } else {
+                                prog_pointer += 2;
+                        }
+
                         break;
 
                 case NE:
@@ -144,13 +166,16 @@ bool_t prog_condition(bool_t vke)
         for (;;) {
                 if (status == DEBUG) {
                         step = FALSE;
-                        while (step == FALSE);
                         bus_send_data_16("CIP", prog_pointer);
                         bus_send_data_8("STA", sta);
                         bus_send_data_8("VKE", vke);
+                        while (status == DEBUG && step == FALSE) wdt_reset();
                 }
 
                 prog_cmd_t cmd = eep_read_byte(prog_pointer++);
+                if (status == DEBUG) {
+                        bus_send_data_8("CMD", cmd);
+                }
 
                 switch (cmd) {
                 case U:
