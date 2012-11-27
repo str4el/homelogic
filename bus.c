@@ -171,6 +171,16 @@ void bus_send_date_time()
 
 
 
+void bus_send_identification()
+{
+        char str[] = "IDN    mm16 v0.1.2\r";
+        str_to_hex(str + 4, adr);
+        bus_verified_send(str, strlen(str));
+}
+
+
+
+
 void bus_decode_message()
 {
         uint8_t *ptr = bus.rx_buffer;
@@ -180,6 +190,12 @@ void bus_decode_message()
                 if (strncasecmp(ptr, "RST", 3) == 0) {
                         if (str_from_hex(ptr + 4) == adr) {
                                 reset();
+                        }
+                        return;
+
+                } else if (strncasecmp(ptr, "IDY", 3) == 0) {
+                        if (str_from_hex(ptr + 4) == adr) {
+                                bus_send_identification();
                         }
                         return;
 
