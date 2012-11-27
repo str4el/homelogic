@@ -48,8 +48,11 @@ ISR(TIMER2_COMP_vect) {
 
         for (int8_t i = 0; i < 8; i++) {
                 if (!(PINA & (1 << i))) {
-                        intimer[n] = 100;
-                        leb[0] |= (1 << n);
+                        if (intimer[n] < 200) {
+                                intimer[n] += 4;
+                        } else {
+                                leb[0] |= (1 << n);
+                        }
                 } else {
                         if (intimer[n]) {
                                 intimer[n]--;
@@ -62,8 +65,11 @@ ISR(TIMER2_COMP_vect) {
 
         for (int8_t i = 7; i >= 0; i--) {
                 if (!(PINC & (1 << i))) {
-                        intimer[n] = 100;
-                        leb[1] |= (1 << n - 8);
+                        if (intimer[n] < 200) {
+                                intimer[n] += 4;
+                        } else {
+                                leb[1] |= (1 << n - 8);
+                        }
                 } else {
                         if (intimer[n]) {
                                 intimer[n]--;
