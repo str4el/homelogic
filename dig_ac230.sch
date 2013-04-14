@@ -3104,8 +3104,8 @@ Datasheet: &lt;a href="./eagle/doc/batterie/kzh20pcb-v.pdf"&gt;kzh20pcb-v.pdf&lt
 <wire x1="-1.7643" y1="-1.0082" x2="0" y2="-2.032" width="0.254" layer="21" curve="60.255215"/>
 <wire x1="-2.032" y1="0" x2="-1.7891" y2="0.9634" width="0.254" layer="51" curve="-28.301701"/>
 <wire x1="-2.032" y1="0" x2="-1.7306" y2="-1.065" width="0.254" layer="51" curve="31.60822"/>
-<pad name="A" x="-1.27" y="0" drill="0.8128" diameter="1.6764" shape="long" rot="R90"/>
-<pad name="K" x="1.27" y="0" drill="0.8128" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="A" x="-1.27" y="0" drill="0.8" shape="long" rot="R90"/>
+<pad name="K" x="1.27" y="0" drill="0.8" shape="long" rot="R90"/>
 <text x="1.905" y="0.381" size="1.27" layer="25" ratio="10">&gt;NAME</text>
 <text x="1.905" y="-1.651" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
 </package>
@@ -3121,8 +3121,8 @@ Datasheet: &lt;a href="./eagle/doc/batterie/kzh20pcb-v.pdf"&gt;kzh20pcb-v.pdf&lt
 <wire x1="-2.159" y1="0" x2="0" y2="2.159" width="0.1524" layer="51" curve="-90"/>
 <wire x1="0" y1="-2.159" x2="2.159" y2="0" width="0.1524" layer="51" curve="90"/>
 <circle x="0" y="0" radius="2.54" width="0.1524" layer="21"/>
-<pad name="A" x="-1.27" y="0" drill="0.8128" diameter="1.6764" shape="long" rot="R90"/>
-<pad name="K" x="1.27" y="0" drill="0.8128" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="A" x="-1.27" y="0" drill="0.8" shape="long" rot="R90"/>
+<pad name="K" x="1.27" y="0" drill="0.8" shape="long" rot="R90"/>
 <text x="3.175" y="0.5334" size="1.27" layer="25" ratio="10">&gt;NAME</text>
 <text x="3.2004" y="-1.8034" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
 </package>
