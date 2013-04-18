@@ -2415,6 +2415,33 @@ Datasheet: &lt;a href="./eagle/doc/passiv/ms1v-t1k.pdf"&gt;ms1v-t1k.pdf&lt;/a&gt
 </library>
 <library name="ic-wandler">
 <packages>
+<package name="SOP08_127">
+<wire x1="-2.5" y1="-1.2" x2="2.5" y2="-1.2" width="0.1" layer="21"/>
+<smd name="1" x="-1.905" y="-3" dx="0.7" dy="2" layer="1"/>
+<smd name="2" x="-0.635" y="-3" dx="0.7" dy="2" layer="1"/>
+<smd name="3" x="0.635" y="-3" dx="0.7" dy="2" layer="1"/>
+<smd name="4" x="1.905" y="-3" dx="0.7" dy="2" layer="1"/>
+<smd name="5" x="1.905" y="3" dx="0.7" dy="2" layer="1" rot="R180"/>
+<smd name="6" x="0.635" y="3" dx="0.7" dy="2" layer="1" rot="R180"/>
+<smd name="7" x="-0.635" y="3" dx="0.7" dy="2" layer="1" rot="R180"/>
+<smd name="8" x="-1.905" y="3" dx="0.7" dy="2" layer="1" rot="R180"/>
+<text x="3" y="0" size="1.27" layer="27" rot="R90" align="top-center">&gt;VALUE</text>
+<text x="-3" y="0" size="1.27" layer="25" rot="R90" align="bottom-center">&gt;NAME</text>
+<rectangle x1="1.665" y1="-3.1" x2="2.145" y2="-1.9" layer="51"/>
+<wire x1="-2.5" y1="1.8" x2="2.5" y2="1.8" width="0.2" layer="21"/>
+<wire x1="2.5" y1="1.8" x2="2.5" y2="-1.2" width="0.2" layer="21"/>
+<wire x1="2.5" y1="-1.2" x2="2.5" y2="-1.8" width="0.2" layer="21"/>
+<wire x1="2.5" y1="-1.8" x2="-2.5" y2="-1.8" width="0.2" layer="21"/>
+<wire x1="-2.5" y1="-1.8" x2="-2.5" y2="-1.2" width="0.2" layer="21"/>
+<wire x1="-2.5" y1="-1.2" x2="-2.5" y2="1.8" width="0.2" layer="21"/>
+<rectangle x1="-2.145" y1="1.9" x2="-1.665" y2="3.1" layer="51"/>
+<rectangle x1="0.395" y1="-3.1" x2="0.875" y2="-1.9" layer="51"/>
+<rectangle x1="-0.875" y1="-3.1" x2="-0.395" y2="-1.9" layer="51"/>
+<rectangle x1="-2.145" y1="-3.1" x2="-1.665" y2="-1.9" layer="51"/>
+<rectangle x1="1.665" y1="1.9" x2="2.145" y2="3.1" layer="51" rot="R180"/>
+<rectangle x1="0.395" y1="1.9" x2="0.875" y2="3.1" layer="51" rot="R180"/>
+<rectangle x1="-0.875" y1="1.9" x2="-0.395" y2="3.1" layer="51" rot="R180"/>
+</package>
 <package name="DIP08_254">
 <wire x1="5.08" y1="3.048" x2="-5.08" y2="3.048" width="0.1524" layer="21"/>
 <wire x1="-5.08" y1="-3.048" x2="5.08" y2="-3.048" width="0.1524" layer="21"/>
@@ -2430,35 +2457,8 @@ Datasheet: &lt;a href="./eagle/doc/passiv/ms1v-t1k.pdf"&gt;ms1v-t1k.pdf&lt;/a&gt
 <pad name="4" x="3.81" y="-3.81" drill="0.8" shape="long" rot="R90"/>
 <pad name="6" x="1.27" y="3.81" drill="0.8" shape="long" rot="R270"/>
 <pad name="5" x="3.81" y="3.81" drill="0.8" shape="long" rot="R270"/>
-<text x="-6.35" y="0" size="1.27" layer="25" ratio="10" rot="R90" align="center">&gt;NAME</text>
-<text x="6.35" y="0" size="1.27" layer="27" ratio="10" rot="R270" align="center">&gt;VALUE</text>
-</package>
-<package name="SOP08_127">
-<wire x1="-2.5" y1="-1.2" x2="2.5" y2="-1.2" width="0.1" layer="21"/>
-<smd name="1" x="-1.905" y="-3" dx="0.7" dy="2" layer="1"/>
-<smd name="2" x="-0.635" y="-3" dx="0.7" dy="2" layer="1"/>
-<smd name="3" x="0.635" y="-3" dx="0.7" dy="2" layer="1"/>
-<smd name="4" x="1.905" y="-3" dx="0.7" dy="2" layer="1"/>
-<smd name="5" x="1.905" y="3" dx="0.7" dy="2" layer="1" rot="R180"/>
-<smd name="6" x="0.635" y="3" dx="0.7" dy="2" layer="1" rot="R180"/>
-<smd name="7" x="-0.635" y="3" dx="0.7" dy="2" layer="1" rot="R180"/>
-<smd name="8" x="-1.905" y="3" dx="0.7" dy="2" layer="1" rot="R180"/>
-<text x="3" y="0" size="1.27" layer="27" ratio="10" rot="R90" align="top-center">&gt;VALUE</text>
-<text x="-3" y="0" size="1.27" layer="25" ratio="10" rot="R90" align="bottom-center">&gt;NAME</text>
-<rectangle x1="1.665" y1="-3.1" x2="2.145" y2="-1.9" layer="51"/>
-<wire x1="-2.5" y1="1.8" x2="2.5" y2="1.8" width="0.2" layer="21"/>
-<wire x1="2.5" y1="1.8" x2="2.5" y2="-1.2" width="0.2" layer="21"/>
-<wire x1="2.5" y1="-1.2" x2="2.5" y2="-1.8" width="0.2" layer="21"/>
-<wire x1="2.5" y1="-1.8" x2="-2.5" y2="-1.8" width="0.2" layer="21"/>
-<wire x1="-2.5" y1="-1.8" x2="-2.5" y2="-1.2" width="0.2" layer="21"/>
-<wire x1="-2.5" y1="-1.2" x2="-2.5" y2="1.8" width="0.2" layer="21"/>
-<rectangle x1="-2.145" y1="1.9" x2="-1.665" y2="3.1" layer="51"/>
-<rectangle x1="0.395" y1="-3.1" x2="0.875" y2="-1.9" layer="51"/>
-<rectangle x1="-0.875" y1="-3.1" x2="-0.395" y2="-1.9" layer="51"/>
-<rectangle x1="-2.145" y1="-3.1" x2="-1.665" y2="-1.9" layer="51"/>
-<rectangle x1="1.665" y1="1.9" x2="2.145" y2="3.1" layer="51" rot="R180"/>
-<rectangle x1="0.395" y1="1.9" x2="0.875" y2="3.1" layer="51" rot="R180"/>
-<rectangle x1="-0.875" y1="1.9" x2="-0.395" y2="3.1" layer="51" rot="R180"/>
+<text x="-6.35" y="0" size="1.27" layer="25" rot="R90" align="center">&gt;NAME</text>
+<text x="6.35" y="0" size="1.27" layer="27" rot="R270" align="center">&gt;VALUE</text>
 </package>
 </packages>
 <symbols>
@@ -2783,6 +2783,33 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 </library>
 <library name="ic-controller">
 <packages>
+<package name="SOP08_127">
+<wire x1="-2.5" y1="-1.2" x2="2.5" y2="-1.2" width="0.1" layer="21"/>
+<smd name="1" x="-1.905" y="-3" dx="0.7" dy="2" layer="1"/>
+<smd name="2" x="-0.635" y="-3" dx="0.7" dy="2" layer="1"/>
+<smd name="3" x="0.635" y="-3" dx="0.7" dy="2" layer="1"/>
+<smd name="4" x="1.905" y="-3" dx="0.7" dy="2" layer="1"/>
+<smd name="5" x="1.905" y="3" dx="0.7" dy="2" layer="1" rot="R180"/>
+<smd name="6" x="0.635" y="3" dx="0.7" dy="2" layer="1" rot="R180"/>
+<smd name="7" x="-0.635" y="3" dx="0.7" dy="2" layer="1" rot="R180"/>
+<smd name="8" x="-1.905" y="3" dx="0.7" dy="2" layer="1" rot="R180"/>
+<text x="3" y="0" size="1.27" layer="27" rot="R90" align="top-center">&gt;VALUE</text>
+<text x="-3" y="0" size="1.27" layer="25" rot="R90" align="bottom-center">&gt;NAME</text>
+<rectangle x1="1.665" y1="-3.1" x2="2.145" y2="-1.9" layer="51"/>
+<wire x1="-2.5" y1="1.8" x2="2.5" y2="1.8" width="0.2" layer="21"/>
+<wire x1="2.5" y1="1.8" x2="2.5" y2="-1.2" width="0.2" layer="21"/>
+<wire x1="2.5" y1="-1.2" x2="2.5" y2="-1.8" width="0.2" layer="21"/>
+<wire x1="2.5" y1="-1.8" x2="-2.5" y2="-1.8" width="0.2" layer="21"/>
+<wire x1="-2.5" y1="-1.8" x2="-2.5" y2="-1.2" width="0.2" layer="21"/>
+<wire x1="-2.5" y1="-1.2" x2="-2.5" y2="1.8" width="0.2" layer="21"/>
+<rectangle x1="-2.145" y1="1.9" x2="-1.665" y2="3.1" layer="51"/>
+<rectangle x1="0.395" y1="-3.1" x2="0.875" y2="-1.9" layer="51"/>
+<rectangle x1="-0.875" y1="-3.1" x2="-0.395" y2="-1.9" layer="51"/>
+<rectangle x1="-2.145" y1="-3.1" x2="-1.665" y2="-1.9" layer="51"/>
+<rectangle x1="1.665" y1="1.9" x2="2.145" y2="3.1" layer="51" rot="R180"/>
+<rectangle x1="0.395" y1="1.9" x2="0.875" y2="3.1" layer="51" rot="R180"/>
+<rectangle x1="-0.875" y1="1.9" x2="-0.395" y2="3.1" layer="51" rot="R180"/>
+</package>
 <package name="DIP08_254">
 <wire x1="5.08" y1="3.048" x2="-5.08" y2="3.048" width="0.1524" layer="21"/>
 <wire x1="-5.08" y1="-3.048" x2="5.08" y2="-3.048" width="0.1524" layer="21"/>
@@ -2798,35 +2825,8 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 <pad name="4" x="3.81" y="-3.81" drill="0.8" shape="long" rot="R90"/>
 <pad name="6" x="1.27" y="3.81" drill="0.8" shape="long" rot="R270"/>
 <pad name="5" x="3.81" y="3.81" drill="0.8" shape="long" rot="R270"/>
-<text x="-6.35" y="0" size="1.27" layer="25" ratio="10" rot="R90" align="center">&gt;NAME</text>
-<text x="6.35" y="0" size="1.27" layer="27" ratio="10" rot="R270" align="center">&gt;VALUE</text>
-</package>
-<package name="SOP08_127">
-<wire x1="-2.5" y1="-1.2" x2="2.5" y2="-1.2" width="0.1" layer="21"/>
-<smd name="1" x="-1.905" y="-3" dx="0.7" dy="2" layer="1"/>
-<smd name="2" x="-0.635" y="-3" dx="0.7" dy="2" layer="1"/>
-<smd name="3" x="0.635" y="-3" dx="0.7" dy="2" layer="1"/>
-<smd name="4" x="1.905" y="-3" dx="0.7" dy="2" layer="1"/>
-<smd name="5" x="1.905" y="3" dx="0.7" dy="2" layer="1" rot="R180"/>
-<smd name="6" x="0.635" y="3" dx="0.7" dy="2" layer="1" rot="R180"/>
-<smd name="7" x="-0.635" y="3" dx="0.7" dy="2" layer="1" rot="R180"/>
-<smd name="8" x="-1.905" y="3" dx="0.7" dy="2" layer="1" rot="R180"/>
-<text x="3" y="0" size="1.27" layer="27" ratio="10" rot="R90" align="top-center">&gt;VALUE</text>
-<text x="-3" y="0" size="1.27" layer="25" ratio="10" rot="R90" align="bottom-center">&gt;NAME</text>
-<rectangle x1="1.665" y1="-3.1" x2="2.145" y2="-1.9" layer="51"/>
-<wire x1="-2.5" y1="1.8" x2="2.5" y2="1.8" width="0.2" layer="21"/>
-<wire x1="2.5" y1="1.8" x2="2.5" y2="-1.2" width="0.2" layer="21"/>
-<wire x1="2.5" y1="-1.2" x2="2.5" y2="-1.8" width="0.2" layer="21"/>
-<wire x1="2.5" y1="-1.8" x2="-2.5" y2="-1.8" width="0.2" layer="21"/>
-<wire x1="-2.5" y1="-1.8" x2="-2.5" y2="-1.2" width="0.2" layer="21"/>
-<wire x1="-2.5" y1="-1.2" x2="-2.5" y2="1.8" width="0.2" layer="21"/>
-<rectangle x1="-2.145" y1="1.9" x2="-1.665" y2="3.1" layer="51"/>
-<rectangle x1="0.395" y1="-3.1" x2="0.875" y2="-1.9" layer="51"/>
-<rectangle x1="-0.875" y1="-3.1" x2="-0.395" y2="-1.9" layer="51"/>
-<rectangle x1="-2.145" y1="-3.1" x2="-1.665" y2="-1.9" layer="51"/>
-<rectangle x1="1.665" y1="1.9" x2="2.145" y2="3.1" layer="51" rot="R180"/>
-<rectangle x1="0.395" y1="1.9" x2="0.875" y2="3.1" layer="51" rot="R180"/>
-<rectangle x1="-0.875" y1="1.9" x2="-0.395" y2="3.1" layer="51" rot="R180"/>
+<text x="-6.35" y="0" size="1.27" layer="25" rot="R90" align="center">&gt;NAME</text>
+<text x="6.35" y="0" size="1.27" layer="27" rot="R270" align="center">&gt;VALUE</text>
 </package>
 </packages>
 <symbols>
@@ -2914,6 +2914,8 @@ Datasheet: &lt;a href="./eagle/doc/ic-controller/ds1337.pdf"&gt;ds1337.pdf&lt;/a
 <circle x="-2.54" y="0" radius="1.4" width="0.127" layer="51"/>
 <wire x1="-3.665834375" y1="-0.65" x2="-1.414165625" y2="0.65" width="0.3048" layer="51"/>
 <wire x1="-5.08" y1="-2.5" x2="5.08" y2="-2.5" width="0.127" layer="21"/>
+<text x="0" y="4" size="1.27" layer="25" align="bottom-center">&gt;NAME</text>
+<text x="0" y="-5" size="1.27" layer="27" align="bottom-center">&gt;VALUE</text>
 </package>
 </packages>
 <symbols>
@@ -3254,8 +3256,8 @@ Datasheet: &lt;a href="./eagle/doc/sicherung/194600.pdf"&gt;194600.pdf&lt;/a&gt;
 <pad name="2" x="-2.54" y="0" drill="1" shape="long" rot="R90"/>
 <pad name="3" x="5.08" y="0" drill="1" shape="long" rot="R90"/>
 <pad name="4" x="7.62" y="0" drill="1" shape="long" rot="R90"/>
-<text x="-8.89" y="-5.715" size="1.27" layer="25">&gt;NAME</text>
-<text x="-3.175" y="-5.715" size="1.27" layer="27">&gt;VALUE</text>
+<text x="-8.255" y="-3.175" size="1.27" layer="25">&gt;NAME</text>
+<text x="2.54" y="-3.175" size="1.27" layer="27">&gt;VALUE</text>
 </package>
 </packages>
 <symbols>
@@ -3505,8 +3507,8 @@ Datasheet: &lt;a href="./eagle/doc/sicherung/194600.pdf"&gt;194600.pdf&lt;/a&gt;
 <smd name="42" x="-2.4" y="5.8" dx="0.5" dy="1.5" layer="1"/>
 <smd name="43" x="-3.2" y="5.8" dx="0.5" dy="1.5" layer="1"/>
 <smd name="44" x="-4" y="5.8" dx="0.5" dy="1.5" layer="1"/>
-<text x="0" y="7" size="1.778" layer="25" align="bottom-center">&gt;NAME</text>
-<text x="0" y="-7" size="1.778" layer="27" align="top-center">&gt;VALUE</text>
+<text x="0" y="1" size="1.27" layer="25" align="bottom-center">&gt;NAME</text>
+<text x="0" y="-1" size="1.27" layer="27" align="top-center">&gt;VALUE</text>
 <rectangle x1="-6.1" y1="3.8" x2="-4.9" y2="4.2" layer="51"/>
 <rectangle x1="-6.1" y1="3" x2="-4.9" y2="3.4" layer="51"/>
 <rectangle x1="-6.1" y1="2.2" x2="-4.9" y2="2.6" layer="51"/>
@@ -3750,8 +3752,8 @@ Datasheet: &lt;a href="./eagle/doc/sicherung/194600.pdf"&gt;194600.pdf&lt;/a&gt;
 <smd name="10" x="3.175" y="3" dx="0.7" dy="2" layer="1"/>
 <smd name="8" x="4.445" y="-3" dx="0.7" dy="2" layer="1"/>
 <smd name="9" x="4.445" y="3" dx="0.7" dy="2" layer="1"/>
-<text x="0" y="0" size="1.27" layer="27" ratio="10" align="center">&gt;VALUE</text>
-<text x="-5.5" y="0" size="1.27" layer="25" ratio="10" rot="R90" align="bottom-center">&gt;NAME</text>
+<text x="0" y="0" size="1.27" layer="27" align="center">&gt;VALUE</text>
+<text x="-5.5" y="0" size="1.27" layer="25" rot="R90" align="bottom-center">&gt;NAME</text>
 <rectangle x1="-0.875" y1="-3.1" x2="-0.395" y2="-1.9" layer="51"/>
 <rectangle x1="1.665" y1="1.9" x2="2.145" y2="3.1" layer="51"/>
 <wire x1="-5.2" y1="1.8" x2="5.2" y2="1.8" width="0.2" layer="21"/>
@@ -3798,8 +3800,8 @@ Datasheet: &lt;a href="./eagle/doc/sicherung/194600.pdf"&gt;194600.pdf&lt;/a&gt;
 <pad name="12" x="1.27" y="3.81" drill="0.8" shape="long" rot="R90"/>
 <pad name="13" x="-1.27" y="3.81" drill="0.8" shape="long" rot="R90"/>
 <pad name="14" x="-3.81" y="3.81" drill="0.8" shape="long" rot="R90"/>
-<text x="-11.43" y="0" size="1.27" layer="25" ratio="10" rot="R90" align="center">&gt;NAME</text>
-<text x="0" y="0" size="1.27" layer="27" ratio="10" align="center">&gt;VALUE</text>
+<text x="-11.43" y="0" size="1.27" layer="25" rot="R90" align="center">&gt;NAME</text>
+<text x="0" y="0" size="1.27" layer="27" align="center">&gt;VALUE</text>
 <pad name="15" x="-6.35" y="3.81" drill="0.8" shape="long" rot="R90"/>
 <pad name="16" x="-8.89" y="3.81" drill="0.8" shape="long" rot="R90"/>
 </package>
@@ -3957,7 +3959,7 @@ Datasheet: &lt;a href="./eagle/doc/ic-logik/m74hc595.pdf"&gt;m74hc595.pdf&lt;/a&
 </device>
 </devices>
 </deviceset>
-<deviceset name="74*166">
+<deviceset name="74*166" prefix="IC">
 <description>&lt;b&gt;8Bit Schiberegister PISO&lt;/b&gt;&lt;p&gt;
 
 Datasheet: &lt;a href="./eagle/doc/ic-logik/m74hc166.pdf"&gt;m74hc166.pdf&lt;/a&gt;&lt;br&gt;
@@ -6411,7 +6413,7 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <wire x1="218.44" y1="86.36" x2="218.44" y2="83.82" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N" class="0">
+<net name="GNDIO" class="0">
 <segment>
 <pinref part="R308" gate="G$1" pin="1"/>
 <pinref part="GND12" gate="G$1" pin="GNDIO"/>
@@ -6898,11 +6900,12 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 </sheets>
 <errors>
 <approved hash="104,1,124.46,101.6,IC203P,VCC,+5V,,,"/>
-<approved hash="104,1,193.04,101.6,IC202P,VCC,N$64,,,"/>
+<approved hash="104,1,198.12,101.6,IC202P,VCC,N$64,,,"/>
 <approved hash="104,1,170.18,101.6,IC401P,VCC,+5V,,,"/>
 <approved hash="104,2,71.12,106.68,IC201,AVCC,+5V,,,"/>
 <approved hash="104,2,71.12,111.76,IC201,VCC,+5V,,,"/>
 <approved hash="104,1,147.32,101.6,IC204P,VCC,+5V,,,"/>
+<approved hash="115,2,175.26,135.691,S201,,,,,"/>
 </errors>
 </schematic>
 </drawing>
