@@ -800,6 +800,10 @@ Package DO-213AB = http://www.diotec.com/pdf/sm4001.pdf</description>
 <classes>
 <class number="0" name="default" width="0" drill="0">
 </class>
+<class number="1" name="netz" width="0" drill="0">
+<clearance class="0" value="3"/>
+<clearance class="1" value="0.75"/>
+</class>
 </classes>
 <designrules>
 <description language="de">&lt;p&gt;
@@ -2251,7 +2255,7 @@ Your Eurocircuits Team</description>
 <wire x1="33.29" y1="77.47" x2="33.29" y2="78.375" width="0.3048" layer="1"/>
 <wire x1="33.29" y1="78.375" x2="34.29" y2="79.375" width="0.3048" layer="1"/>
 </signal>
-<signal name="N$1">
+<signal name="N$1" class="1">
 <contactref element="D301" pad="K"/>
 <contactref element="IC301" pad="1"/>
 <contactref element="D302" pad="K"/>
@@ -2262,7 +2266,7 @@ Your Eurocircuits Team</description>
 <wire x1="56.515" y1="66.045" x2="57.785" y2="67.315" width="0.3048" layer="16"/>
 <wire x1="56.515" y1="67.885" x2="56.515" y2="66.04" width="0.3048" layer="1"/>
 </signal>
-<signal name="N$2">
+<signal name="N$2" class="1">
 <contactref element="R301" pad="2"/>
 <contactref element="IC301" pad="2"/>
 <contactref element="D302" pad="A"/>
@@ -2275,7 +2279,7 @@ Your Eurocircuits Team</description>
 <wire x1="57.785" y1="71.115" x2="55.595" y2="71.115" width="0.3048" layer="16"/>
 <wire x1="55.595" y1="71.115" x2="54.965" y2="70.485" width="0.3048" layer="16"/>
 </signal>
-<signal name="N$3">
+<signal name="N$3" class="1">
 <contactref element="D303" pad="K"/>
 <contactref element="IC302" pad="1"/>
 <contactref element="D304" pad="K"/>
@@ -2286,7 +2290,7 @@ Your Eurocircuits Team</description>
 <wire x1="61.595" y1="66.045" x2="62.865" y2="67.315" width="0.3048" layer="16"/>
 <wire x1="61.595" y1="67.885" x2="61.595" y2="66.04" width="0.3048" layer="1"/>
 </signal>
-<signal name="N$4">
+<signal name="N$4" class="1">
 <contactref element="R304" pad="2"/>
 <contactref element="IC302" pad="2"/>
 <contactref element="D304" pad="A"/>
@@ -2299,7 +2303,7 @@ Your Eurocircuits Team</description>
 <wire x1="62.865" y1="71.115" x2="60.675" y2="71.115" width="0.3048" layer="16"/>
 <wire x1="60.675" y1="71.115" x2="60.045" y2="70.485" width="0.3048" layer="16"/>
 </signal>
-<signal name="N$5">
+<signal name="N$5" class="1">
 <contactref element="D305" pad="K"/>
 <contactref element="IC303" pad="1"/>
 <contactref element="D306" pad="K"/>
@@ -2310,7 +2314,7 @@ Your Eurocircuits Team</description>
 <wire x1="66.675" y1="66.045" x2="67.945" y2="67.315" width="0.3048" layer="16"/>
 <wire x1="66.675" y1="67.885" x2="66.675" y2="66.04" width="0.3048" layer="1"/>
 </signal>
-<signal name="N$6">
+<signal name="N$6" class="1">
 <contactref element="R307" pad="2"/>
 <contactref element="IC303" pad="2"/>
 <contactref element="D306" pad="A"/>
@@ -2323,7 +2327,7 @@ Your Eurocircuits Team</description>
 <wire x1="67.945" y1="71.115" x2="65.755" y2="71.115" width="0.3048" layer="16"/>
 <wire x1="65.755" y1="71.115" x2="65.125" y2="70.485" width="0.3048" layer="16"/>
 </signal>
-<signal name="N$7">
+<signal name="N$7" class="1">
 <contactref element="D307" pad="K"/>
 <contactref element="IC304" pad="1"/>
 <contactref element="D308" pad="K"/>
@@ -2334,7 +2338,7 @@ Your Eurocircuits Team</description>
 <wire x1="71.755" y1="66.045" x2="73.025" y2="67.315" width="0.3048" layer="16"/>
 <wire x1="71.755" y1="67.885" x2="71.755" y2="66.04" width="0.3048" layer="1"/>
 </signal>
-<signal name="N$8">
+<signal name="N$8" class="1">
 <contactref element="R310" pad="2"/>
 <contactref element="IC304" pad="2"/>
 <contactref element="D308" pad="A"/>
@@ -2347,7 +2351,7 @@ Your Eurocircuits Team</description>
 <wire x1="73.025" y1="71.115" x2="70.835" y2="71.115" width="0.3048" layer="16"/>
 <wire x1="70.835" y1="71.115" x2="70.205" y2="70.485" width="0.3048" layer="16"/>
 </signal>
-<signal name="N$9">
+<signal name="N$9" class="1">
 <contactref element="D309" pad="K"/>
 <contactref element="IC305" pad="1"/>
 <contactref element="D310" pad="K"/>
@@ -2358,7 +2362,7 @@ Your Eurocircuits Team</description>
 <wire x1="78.105" y1="65.48" x2="77.395" y2="65.48" width="0.3048" layer="1"/>
 <wire x1="77.395" y1="65.48" x2="76.835" y2="66.04" width="0.3048" layer="1"/>
 </signal>
-<signal name="N$10">
+<signal name="N$10" class="1">
 <contactref element="R313" pad="2"/>
 <contactref element="IC305" pad="2"/>
 <contactref element="D310" pad="A"/>
@@ -2371,7 +2375,7 @@ Your Eurocircuits Team</description>
 <wire x1="78.105" y1="71.115" x2="75.915" y2="71.115" width="0.3048" layer="16"/>
 <wire x1="75.915" y1="71.115" x2="75.285" y2="70.485" width="0.3048" layer="16"/>
 </signal>
-<signal name="N$11">
+<signal name="N$11" class="1">
 <contactref element="D311" pad="K"/>
 <contactref element="IC306" pad="1"/>
 <contactref element="D312" pad="K"/>
@@ -2382,7 +2386,7 @@ Your Eurocircuits Team</description>
 <wire x1="81.915" y1="66.045" x2="83.185" y2="67.315" width="0.3048" layer="16"/>
 <wire x1="81.915" y1="67.885" x2="81.915" y2="66.04" width="0.3048" layer="1"/>
 </signal>
-<signal name="N$12">
+<signal name="N$12" class="1">
 <contactref element="R316" pad="2"/>
 <contactref element="IC306" pad="2"/>
 <contactref element="D312" pad="A"/>
@@ -2395,7 +2399,7 @@ Your Eurocircuits Team</description>
 <wire x1="83.185" y1="71.115" x2="80.995" y2="71.115" width="0.3048" layer="16"/>
 <wire x1="80.995" y1="71.115" x2="80.365" y2="70.485" width="0.3048" layer="16"/>
 </signal>
-<signal name="N$13">
+<signal name="N$13" class="1">
 <contactref element="D313" pad="K"/>
 <contactref element="IC307" pad="1"/>
 <contactref element="D314" pad="K"/>
@@ -2406,7 +2410,7 @@ Your Eurocircuits Team</description>
 <wire x1="86.995" y1="66.045" x2="88.265" y2="67.315" width="0.3048" layer="16"/>
 <wire x1="86.995" y1="67.885" x2="86.995" y2="66.04" width="0.3048" layer="1"/>
 </signal>
-<signal name="N$14">
+<signal name="N$14" class="1">
 <contactref element="R319" pad="2"/>
 <contactref element="IC307" pad="2"/>
 <contactref element="D314" pad="A"/>
@@ -2419,7 +2423,7 @@ Your Eurocircuits Team</description>
 <wire x1="88.265" y1="71.115" x2="86.075" y2="71.115" width="0.3048" layer="16"/>
 <wire x1="86.075" y1="71.115" x2="85.445" y2="70.485" width="0.3048" layer="16"/>
 </signal>
-<signal name="N$15">
+<signal name="N$15" class="1">
 <contactref element="D315" pad="K"/>
 <contactref element="IC308" pad="1"/>
 <contactref element="D316" pad="K"/>
@@ -2430,7 +2434,7 @@ Your Eurocircuits Team</description>
 <wire x1="92.075" y1="66.045" x2="93.345" y2="67.315" width="0.3048" layer="16"/>
 <wire x1="92.075" y1="67.885" x2="92.075" y2="66.04" width="0.3048" layer="1"/>
 </signal>
-<signal name="N$16">
+<signal name="N$16" class="1">
 <contactref element="R322" pad="2"/>
 <contactref element="IC308" pad="2"/>
 <contactref element="D316" pad="A"/>
@@ -2805,95 +2809,95 @@ Your Eurocircuits Team</description>
 <wire x1="93.345" y1="58.98" x2="93.345" y2="57.3" width="0.3048" layer="1"/>
 <wire x1="93.345" y1="57.3" x2="93.025" y2="56.98" width="0.3048" layer="1"/>
 </signal>
-<signal name="N$35">
+<signal name="N$35" class="1">
 <contactref element="R301" pad="1"/>
 <contactref element="R302" pad="2"/>
 <wire x1="58.065" y1="76.2" x2="58.065" y2="73.66" width="0.3048" layer="16"/>
 </signal>
-<signal name="N$37">
+<signal name="N$37" class="1">
 <contactref element="R304" pad="1"/>
 <contactref element="R305" pad="2"/>
 <wire x1="63.145" y1="76.2" x2="63.145" y2="73.66" width="0.3048" layer="16"/>
 </signal>
-<signal name="N$39">
+<signal name="N$39" class="1">
 <contactref element="R307" pad="1"/>
 <contactref element="R308" pad="2"/>
 <wire x1="68.225" y1="76.2" x2="68.225" y2="73.66" width="0.3048" layer="16"/>
 </signal>
-<signal name="N$50">
+<signal name="N$50" class="1">
 <contactref element="R310" pad="1"/>
 <contactref element="R311" pad="2"/>
 <wire x1="73.305" y1="76.2" x2="73.305" y2="73.66" width="0.3048" layer="16"/>
 </signal>
-<signal name="N$57">
+<signal name="N$57" class="1">
 <contactref element="R313" pad="1"/>
 <contactref element="R314" pad="2"/>
 <wire x1="78.385" y1="76.2" x2="78.385" y2="73.66" width="0.3048" layer="16"/>
 </signal>
-<signal name="N$67">
+<signal name="N$67" class="1">
 <contactref element="R316" pad="1"/>
 <contactref element="R317" pad="2"/>
 <wire x1="83.465" y1="76.2" x2="83.465" y2="73.66" width="0.3048" layer="16"/>
 </signal>
-<signal name="N$71">
+<signal name="N$71" class="1">
 <contactref element="R319" pad="1"/>
 <contactref element="R320" pad="2"/>
 <wire x1="88.545" y1="76.2" x2="88.545" y2="73.66" width="0.3048" layer="16"/>
 </signal>
-<signal name="N$79">
+<signal name="N$79" class="1">
 <contactref element="R322" pad="1"/>
 <contactref element="R323" pad="2"/>
 <wire x1="93.625" y1="76.2" x2="93.625" y2="73.66" width="0.3048" layer="16"/>
 </signal>
-<signal name="N$86">
+<signal name="N$86" class="1">
 <contactref element="D301" pad="A"/>
 <contactref element="X302" pad="2"/>
 <wire x1="56.515" y1="73.085" x2="56.515" y2="77.47" width="0.6096" layer="1"/>
 <wire x1="56.515" y1="77.47" x2="59.69" y2="80.645" width="0.6096" layer="1"/>
 </signal>
-<signal name="N$87">
+<signal name="N$87" class="1">
 <contactref element="D303" pad="A"/>
 <contactref element="X302" pad="1"/>
 <wire x1="61.595" y1="73.085" x2="61.595" y2="77.47" width="0.6096" layer="1"/>
 <wire x1="61.595" y1="77.47" x2="64.77" y2="80.645" width="0.6096" layer="1"/>
 </signal>
-<signal name="N$88">
+<signal name="N$88" class="1">
 <contactref element="D305" pad="A"/>
 <contactref element="X303" pad="2"/>
 <wire x1="66.675" y1="73.085" x2="66.675" y2="77.47" width="0.6096" layer="1"/>
 <wire x1="66.675" y1="77.47" x2="69.85" y2="80.645" width="0.6096" layer="1"/>
 </signal>
-<signal name="N$91">
+<signal name="N$91" class="1">
 <contactref element="D307" pad="A"/>
 <contactref element="X303" pad="1"/>
 <wire x1="71.755" y1="73.085" x2="71.755" y2="77.47" width="0.6096" layer="1"/>
 <wire x1="71.755" y1="77.47" x2="74.93" y2="80.645" width="0.6096" layer="1"/>
 </signal>
-<signal name="N$94">
+<signal name="N$94" class="1">
 <contactref element="D309" pad="A"/>
 <contactref element="X304" pad="2"/>
 <wire x1="76.835" y1="73.085" x2="76.835" y2="77.47" width="0.6096" layer="1"/>
 <wire x1="76.835" y1="77.47" x2="80.01" y2="80.645" width="0.6096" layer="1"/>
 </signal>
-<signal name="N$97">
+<signal name="N$97" class="1">
 <contactref element="D311" pad="A"/>
 <contactref element="X304" pad="1"/>
 <wire x1="81.915" y1="73.085" x2="81.915" y2="77.47" width="0.6096" layer="1"/>
 <wire x1="81.915" y1="77.47" x2="85.09" y2="80.645" width="0.6096" layer="1"/>
 </signal>
-<signal name="N$100">
+<signal name="N$100" class="1">
 <contactref element="D313" pad="A"/>
 <contactref element="X305" pad="2"/>
 <wire x1="86.995" y1="73.085" x2="86.995" y2="77.47" width="0.6096" layer="1"/>
 <wire x1="86.995" y1="77.47" x2="90.17" y2="80.645" width="0.6096" layer="1"/>
 </signal>
-<signal name="N$101">
+<signal name="N$101" class="1">
 <contactref element="D315" pad="A"/>
 <contactref element="X305" pad="1"/>
 <wire x1="92.075" y1="73.085" x2="92.075" y2="77.47" width="0.6096" layer="1"/>
 <wire x1="92.075" y1="77.47" x2="95.25" y2="80.645" width="0.6096" layer="1"/>
 </signal>
-<signal name="N$68">
+<signal name="N$68" class="1">
 <contactref element="X402" pad="1"/>
 <contactref element="K401" pad="1"/>
 <wire x1="48.26" y1="14.605" x2="57.785" y2="5.08" width="1.27" layer="16"/>
@@ -2901,7 +2905,7 @@ Your Eurocircuits Team</description>
 <wire x1="48.26" y1="14.605" x2="57.785" y2="5.08" width="1.27" layer="1"/>
 <wire x1="57.785" y1="5.08" x2="58.42" y2="5.08" width="1.27" layer="1"/>
 </signal>
-<signal name="N$72">
+<signal name="N$72" class="1">
 <contactref element="X402" pad="2"/>
 <contactref element="K402" pad="1"/>
 <wire x1="54.61" y1="14.605" x2="63.5" y2="5.715" width="1.27" layer="16"/>
@@ -2909,7 +2913,7 @@ Your Eurocircuits Team</description>
 <wire x1="54.61" y1="14.605" x2="63.5" y2="5.715" width="1.27" layer="1"/>
 <wire x1="63.5" y1="5.715" x2="63.5" y2="5.08" width="1.27" layer="1"/>
 </signal>
-<signal name="N$74">
+<signal name="N$74" class="1">
 <contactref element="X403" pad="1"/>
 <contactref element="K403" pad="1"/>
 <wire x1="60.96" y1="14.605" x2="68.58" y2="6.985" width="1.27" layer="16"/>
@@ -2917,7 +2921,7 @@ Your Eurocircuits Team</description>
 <wire x1="60.96" y1="14.605" x2="68.58" y2="6.985" width="1.27" layer="1"/>
 <wire x1="68.58" y1="6.985" x2="68.58" y2="5.08" width="1.27" layer="1"/>
 </signal>
-<signal name="N$76">
+<signal name="N$76" class="1">
 <contactref element="X403" pad="2"/>
 <contactref element="K404" pad="1"/>
 <wire x1="67.31" y1="14.605" x2="73.66" y2="8.255" width="1.27" layer="16"/>
@@ -2925,7 +2929,7 @@ Your Eurocircuits Team</description>
 <wire x1="67.31" y1="14.605" x2="73.66" y2="8.255" width="1.27" layer="1"/>
 <wire x1="73.66" y1="8.255" x2="73.66" y2="5.08" width="1.27" layer="1"/>
 </signal>
-<signal name="N$78">
+<signal name="N$78" class="1">
 <contactref element="X404" pad="1"/>
 <contactref element="K405" pad="1"/>
 <wire x1="73.66" y1="14.605" x2="78.74" y2="9.525" width="1.27" layer="16"/>
@@ -2933,7 +2937,7 @@ Your Eurocircuits Team</description>
 <wire x1="73.66" y1="14.605" x2="78.74" y2="9.525" width="1.27" layer="1"/>
 <wire x1="78.74" y1="9.525" x2="78.74" y2="5.08" width="1.27" layer="1"/>
 </signal>
-<signal name="N$82">
+<signal name="N$82" class="1">
 <contactref element="X404" pad="2"/>
 <contactref element="K406" pad="1"/>
 <wire x1="80.01" y1="14.605" x2="83.82" y2="10.795" width="1.27" layer="16"/>
@@ -2941,7 +2945,7 @@ Your Eurocircuits Team</description>
 <wire x1="80.01" y1="14.605" x2="83.82" y2="10.795" width="1.27" layer="1"/>
 <wire x1="83.82" y1="10.795" x2="83.82" y2="5.08" width="1.27" layer="1"/>
 </signal>
-<signal name="N$84">
+<signal name="N$84" class="1">
 <contactref element="X405" pad="1"/>
 <contactref element="K407" pad="1"/>
 <wire x1="86.36" y1="14.605" x2="88.9" y2="12.065" width="1.27" layer="16"/>
@@ -2949,7 +2953,7 @@ Your Eurocircuits Team</description>
 <wire x1="86.36" y1="14.605" x2="88.9" y2="12.065" width="1.27" layer="1"/>
 <wire x1="88.9" y1="12.065" x2="88.9" y2="5.08" width="1.27" layer="1"/>
 </signal>
-<signal name="N$89">
+<signal name="N$89" class="1">
 <contactref element="X405" pad="2"/>
 <contactref element="K408" pad="1"/>
 <wire x1="92.71" y1="14.605" x2="93.98" y2="13.335" width="1.27" layer="16"/>
@@ -2957,7 +2961,7 @@ Your Eurocircuits Team</description>
 <wire x1="92.71" y1="14.605" x2="93.98" y2="13.335" width="1.27" layer="1"/>
 <wire x1="93.98" y1="13.335" x2="93.98" y2="5.08" width="1.27" layer="1"/>
 </signal>
-<signal name="L">
+<signal name="L" class="1">
 <contactref element="X401" pad="1"/>
 <contactref element="X401" pad="2"/>
 <contactref element="K401" pad="2"/>
@@ -3057,7 +3061,7 @@ Your Eurocircuits Team</description>
 <wire x1="23.495" y1="36.195" x2="22.225" y2="34.925" width="0.3048" layer="1"/>
 <wire x1="22.225" y1="34.925" x2="22.225" y2="32.845" width="0.3048" layer="1"/>
 </signal>
-<signal name="GNDIO">
+<signal name="GNDIO" class="1">
 <contactref element="R308" pad="1"/>
 <contactref element="R302" pad="1"/>
 <contactref element="R305" pad="1"/>

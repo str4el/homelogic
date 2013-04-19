@@ -4443,6 +4443,10 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <classes>
 <class number="0" name="default" width="0" drill="0">
 </class>
+<class number="1" name="netz" width="0" drill="0">
+<clearance class="0" value="3"/>
+<clearance class="1" value="0.75"/>
+</class>
 </classes>
 <parts>
 <part name="D301" library="diode" deviceset="DIODE" device="-MELF" value="DL4007"/>
@@ -5809,7 +5813,7 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 </bus>
 </busses>
 <nets>
-<net name="N$1" class="0">
+<net name="N$1" class="1">
 <segment>
 <pinref part="D301" gate="A" pin="K"/>
 <wire x1="43.18" y1="149.86" x2="43.18" y2="147.32" width="0.1524" layer="91"/>
@@ -5819,7 +5823,7 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <junction x="43.18" y="147.32"/>
 </segment>
 </net>
-<net name="N$2" class="0">
+<net name="N$2" class="1">
 <segment>
 <pinref part="R301" gate="G$1" pin="2"/>
 <wire x1="43.18" y1="139.7" x2="43.18" y2="142.24" width="0.1524" layer="91"/>
@@ -5829,7 +5833,7 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <junction x="43.18" y="142.24"/>
 </segment>
 </net>
-<net name="N$3" class="0">
+<net name="N$3" class="1">
 <segment>
 <pinref part="D303" gate="A" pin="K"/>
 <wire x1="101.6" y1="149.86" x2="101.6" y2="147.32" width="0.1524" layer="91"/>
@@ -5839,7 +5843,7 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <junction x="101.6" y="147.32"/>
 </segment>
 </net>
-<net name="N$4" class="0">
+<net name="N$4" class="1">
 <segment>
 <pinref part="R304" gate="G$1" pin="2"/>
 <wire x1="101.6" y1="139.7" x2="101.6" y2="142.24" width="0.1524" layer="91"/>
@@ -5849,7 +5853,7 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <junction x="101.6" y="142.24"/>
 </segment>
 </net>
-<net name="N$5" class="0">
+<net name="N$5" class="1">
 <segment>
 <pinref part="D305" gate="A" pin="K"/>
 <wire x1="160.02" y1="149.86" x2="160.02" y2="147.32" width="0.1524" layer="91"/>
@@ -5859,7 +5863,7 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <junction x="160.02" y="147.32"/>
 </segment>
 </net>
-<net name="N$6" class="0">
+<net name="N$6" class="1">
 <segment>
 <pinref part="R307" gate="G$1" pin="2"/>
 <wire x1="160.02" y1="139.7" x2="160.02" y2="142.24" width="0.1524" layer="91"/>
@@ -5869,7 +5873,7 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <junction x="160.02" y="142.24"/>
 </segment>
 </net>
-<net name="N$7" class="0">
+<net name="N$7" class="1">
 <segment>
 <pinref part="D307" gate="A" pin="K"/>
 <wire x1="218.44" y1="149.86" x2="218.44" y2="147.32" width="0.1524" layer="91"/>
@@ -5879,7 +5883,7 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <junction x="218.44" y="147.32"/>
 </segment>
 </net>
-<net name="N$8" class="0">
+<net name="N$8" class="1">
 <segment>
 <pinref part="R310" gate="G$1" pin="2"/>
 <wire x1="218.44" y1="139.7" x2="218.44" y2="142.24" width="0.1524" layer="91"/>
@@ -5889,7 +5893,7 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <junction x="218.44" y="142.24"/>
 </segment>
 </net>
-<net name="N$9" class="0">
+<net name="N$9" class="1">
 <segment>
 <pinref part="D309" gate="A" pin="K"/>
 <wire x1="43.18" y1="78.74" x2="43.18" y2="76.2" width="0.1524" layer="91"/>
@@ -5899,7 +5903,7 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <junction x="43.18" y="76.2"/>
 </segment>
 </net>
-<net name="N$10" class="0">
+<net name="N$10" class="1">
 <segment>
 <pinref part="R313" gate="G$1" pin="2"/>
 <wire x1="43.18" y1="68.58" x2="43.18" y2="71.12" width="0.1524" layer="91"/>
@@ -5909,7 +5913,7 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <junction x="43.18" y="71.12"/>
 </segment>
 </net>
-<net name="N$11" class="0">
+<net name="N$11" class="1">
 <segment>
 <pinref part="D311" gate="A" pin="K"/>
 <wire x1="101.6" y1="78.74" x2="101.6" y2="76.2" width="0.1524" layer="91"/>
@@ -5919,7 +5923,7 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <junction x="101.6" y="76.2"/>
 </segment>
 </net>
-<net name="N$12" class="0">
+<net name="N$12" class="1">
 <segment>
 <pinref part="R316" gate="G$1" pin="2"/>
 <wire x1="101.6" y1="68.58" x2="101.6" y2="71.12" width="0.1524" layer="91"/>
@@ -5929,7 +5933,7 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <junction x="101.6" y="71.12"/>
 </segment>
 </net>
-<net name="N$13" class="0">
+<net name="N$13" class="1">
 <segment>
 <pinref part="D313" gate="A" pin="K"/>
 <wire x1="160.02" y1="78.74" x2="160.02" y2="76.2" width="0.1524" layer="91"/>
@@ -5939,7 +5943,7 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <junction x="160.02" y="76.2"/>
 </segment>
 </net>
-<net name="N$14" class="0">
+<net name="N$14" class="1">
 <segment>
 <pinref part="R319" gate="G$1" pin="2"/>
 <wire x1="160.02" y1="68.58" x2="160.02" y2="71.12" width="0.1524" layer="91"/>
@@ -5949,7 +5953,7 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <junction x="160.02" y="71.12"/>
 </segment>
 </net>
-<net name="N$15" class="0">
+<net name="N$15" class="1">
 <segment>
 <pinref part="D315" gate="A" pin="K"/>
 <wire x1="218.44" y1="78.74" x2="218.44" y2="76.2" width="0.1524" layer="91"/>
@@ -5959,7 +5963,7 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <junction x="218.44" y="76.2"/>
 </segment>
 </net>
-<net name="N$16" class="0">
+<net name="N$16" class="1">
 <segment>
 <pinref part="R322" gate="G$1" pin="2"/>
 <wire x1="218.44" y1="68.58" x2="218.44" y2="71.12" width="0.1524" layer="91"/>
@@ -6301,119 +6305,119 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <label x="256.54" y="68.58" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$35" class="0">
+<net name="N$35" class="1">
 <segment>
 <pinref part="R301" gate="G$1" pin="1"/>
 <pinref part="R302" gate="G$1" pin="2"/>
 <wire x1="43.18" y1="129.54" x2="43.18" y2="127" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$37" class="0">
+<net name="N$37" class="1">
 <segment>
 <pinref part="R304" gate="G$1" pin="1"/>
 <pinref part="R305" gate="G$1" pin="2"/>
 <wire x1="101.6" y1="129.54" x2="101.6" y2="127" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$39" class="0">
+<net name="N$39" class="1">
 <segment>
 <pinref part="R307" gate="G$1" pin="1"/>
 <pinref part="R308" gate="G$1" pin="2"/>
 <wire x1="160.02" y1="129.54" x2="160.02" y2="127" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$50" class="0">
+<net name="N$50" class="1">
 <segment>
 <pinref part="R310" gate="G$1" pin="1"/>
 <pinref part="R311" gate="G$1" pin="2"/>
 <wire x1="218.44" y1="129.54" x2="218.44" y2="127" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$57" class="0">
+<net name="N$57" class="1">
 <segment>
 <pinref part="R313" gate="G$1" pin="1"/>
 <pinref part="R314" gate="G$1" pin="2"/>
 <wire x1="43.18" y1="58.42" x2="43.18" y2="55.88" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$67" class="0">
+<net name="N$67" class="1">
 <segment>
 <pinref part="R316" gate="G$1" pin="1"/>
 <pinref part="R317" gate="G$1" pin="2"/>
 <wire x1="101.6" y1="58.42" x2="101.6" y2="55.88" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$71" class="0">
+<net name="N$71" class="1">
 <segment>
 <pinref part="R319" gate="G$1" pin="1"/>
 <pinref part="R320" gate="G$1" pin="2"/>
 <wire x1="160.02" y1="58.42" x2="160.02" y2="55.88" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$79" class="0">
+<net name="N$79" class="1">
 <segment>
 <pinref part="R322" gate="G$1" pin="1"/>
 <pinref part="R323" gate="G$1" pin="2"/>
 <wire x1="218.44" y1="58.42" x2="218.44" y2="55.88" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$86" class="0">
+<net name="N$86" class="1">
 <segment>
 <pinref part="D301" gate="A" pin="A"/>
 <pinref part="X302" gate=".2" pin="A"/>
 <wire x1="43.18" y1="157.48" x2="43.18" y2="154.94" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$87" class="0">
+<net name="N$87" class="1">
 <segment>
 <pinref part="D303" gate="A" pin="A"/>
 <pinref part="X302" gate=".1" pin="A"/>
 <wire x1="101.6" y1="157.48" x2="101.6" y2="154.94" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$88" class="0">
+<net name="N$88" class="1">
 <segment>
 <pinref part="D305" gate="A" pin="A"/>
 <pinref part="X303" gate=".2" pin="A"/>
 <wire x1="160.02" y1="157.48" x2="160.02" y2="154.94" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$91" class="0">
+<net name="N$91" class="1">
 <segment>
 <pinref part="D307" gate="A" pin="A"/>
 <pinref part="X303" gate=".1" pin="A"/>
 <wire x1="218.44" y1="157.48" x2="218.44" y2="154.94" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$94" class="0">
+<net name="N$94" class="1">
 <segment>
 <pinref part="D309" gate="A" pin="A"/>
 <pinref part="X304" gate=".2" pin="A"/>
 <wire x1="43.18" y1="86.36" x2="43.18" y2="83.82" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$97" class="0">
+<net name="N$97" class="1">
 <segment>
 <pinref part="D311" gate="A" pin="A"/>
 <pinref part="X304" gate=".1" pin="A"/>
 <wire x1="101.6" y1="86.36" x2="101.6" y2="83.82" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$100" class="0">
+<net name="N$100" class="1">
 <segment>
 <pinref part="D313" gate="A" pin="A"/>
 <pinref part="X305" gate=".2" pin="A"/>
 <wire x1="160.02" y1="86.36" x2="160.02" y2="83.82" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$101" class="0">
+<net name="N$101" class="1">
 <segment>
 <pinref part="D315" gate="A" pin="A"/>
 <pinref part="X305" gate=".1" pin="A"/>
 <wire x1="218.44" y1="86.36" x2="218.44" y2="83.82" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="GNDIO" class="0">
+<net name="GNDIO" class="1">
 <segment>
 <pinref part="R308" gate="G$1" pin="1"/>
 <pinref part="GND12" gate="G$1" pin="GNDIO"/>
@@ -6799,63 +6803,63 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <wire x1="78.74" y1="104.14" x2="76.2" y2="101.6" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$68" class="0">
+<net name="N$68" class="1">
 <segment>
 <pinref part="X402" gate=".1" pin="A"/>
 <pinref part="K401" gate="G$1" pin="DS1"/>
 <wire x1="187.96" y1="172.72" x2="175.26" y2="172.72" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$72" class="0">
+<net name="N$72" class="1">
 <segment>
 <pinref part="X402" gate=".2" pin="A"/>
 <pinref part="K402" gate="G$1" pin="DS1"/>
 <wire x1="187.96" y1="152.4" x2="175.26" y2="152.4" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$74" class="0">
+<net name="N$74" class="1">
 <segment>
 <pinref part="X403" gate=".1" pin="A"/>
 <pinref part="K403" gate="G$1" pin="DS1"/>
 <wire x1="187.96" y1="132.08" x2="175.26" y2="132.08" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$76" class="0">
+<net name="N$76" class="1">
 <segment>
 <pinref part="X403" gate=".2" pin="A"/>
 <pinref part="K404" gate="G$1" pin="DS1"/>
 <wire x1="187.96" y1="111.76" x2="175.26" y2="111.76" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$78" class="0">
+<net name="N$78" class="1">
 <segment>
 <pinref part="X404" gate=".1" pin="A"/>
 <pinref part="K405" gate="G$1" pin="DS1"/>
 <wire x1="187.96" y1="91.44" x2="175.26" y2="91.44" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$82" class="0">
+<net name="N$82" class="1">
 <segment>
 <pinref part="X404" gate=".2" pin="A"/>
 <pinref part="K406" gate="G$1" pin="DS1"/>
 <wire x1="187.96" y1="71.12" x2="175.26" y2="71.12" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$84" class="0">
+<net name="N$84" class="1">
 <segment>
 <pinref part="X405" gate=".1" pin="A"/>
 <pinref part="K407" gate="G$1" pin="DS1"/>
 <wire x1="187.96" y1="50.8" x2="175.26" y2="50.8" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$89" class="0">
+<net name="N$89" class="1">
 <segment>
 <pinref part="X405" gate=".2" pin="A"/>
 <pinref part="K408" gate="G$1" pin="DS1"/>
 <wire x1="187.96" y1="30.48" x2="175.26" y2="30.48" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="L" class="0">
+<net name="L" class="1">
 <segment>
 <pinref part="X401" gate=".1" pin="A"/>
 <pinref part="X401" gate=".2" pin="A"/>
