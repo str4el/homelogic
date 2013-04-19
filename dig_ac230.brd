@@ -879,7 +879,7 @@ Your Eurocircuits Team</description>
 <param name="mlMaxStopFrame" value="0.2mm"/>
 <param name="mlMinCreamFrame" value="0mil"/>
 <param name="mlMaxCreamFrame" value="0.2mm"/>
-<param name="mlViaStopLimit" value="0mil"/>
+<param name="mlViaStopLimit" value="0.4mm"/>
 <param name="srRoundness" value="0"/>
 <param name="srMinRoundness" value="0mil"/>
 <param name="srMaxRoundness" value="0mil"/>
@@ -2568,7 +2568,7 @@ Your Eurocircuits Team</description>
 <contactref element="R401" pad="2"/>
 <wire x1="45.72" y1="32.655" x2="45.99" y2="32.655" width="0.3048" layer="1"/>
 <wire x1="45.99" y1="32.655" x2="48.26" y2="34.925" width="0.3048" layer="1"/>
-<wire x1="48.26" y1="34.925" x2="48.895" y2="34.925" width="0" layer="19" extent="1-1"/>
+<wire x1="48.26" y1="34.925" x2="48.895" y2="34.925" width="0.3048" layer="1"/>
 </signal>
 <signal name="N$104">
 <contactref element="L402" pad="A"/>
