@@ -4520,7 +4520,7 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <attribute name="OC_FARNELL" value="1007547"/>
 <attribute name="OC_NEWARK" value="51R5329"/>
 </part>
-<part name="D101" library="diode" deviceset="SHOTKY-DIODE" device="-MELF" value="TMBAT49"/>
+<part name="D101" library="diode" deviceset="SHOTKY-DIODE" device="-MELF" value="LL5819"/>
 <part name="D102" library="led" deviceset="LED" device="3MM" value="GN"/>
 <part name="R101" library="passiv" deviceset="R_" device="0805" value="390Ω"/>
 <part name="F101" library="sicherung" deviceset="194600-*" device="" technology="020"/>
