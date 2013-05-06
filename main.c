@@ -157,7 +157,7 @@ void write_output(uint8_t a)
 
 
 
-int main (void) {
+void __attribute__ ((OS_main)) main () {
         PORTA = 0xff;
         PORTB = 0xff;
         PORTC = 0xff;
@@ -212,7 +212,5 @@ int main (void) {
                 }
                 wdt_reset();
         }
-
-        return 0;
 }
 
