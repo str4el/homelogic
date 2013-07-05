@@ -203,7 +203,7 @@ void bus_send_identification()
 
 void bus_decode_message()
 {
-        uint8_t *ptr = bus.rx_buffer;
+        char *ptr = bus.rx_buffer;
         uint8_t len = bus.rx_len;
 
         while (len > 3) {
@@ -306,7 +306,7 @@ void bus_decode_prog_message(char *ptr)
 
 uint8_t bus_encode_prog_message(char *str)
 {
-        uint8_t pos;
+        uint8_t pos = 0;
 
         strncpy(str, "VRY ", 4);
         str_to_hex(str + 4, adr);

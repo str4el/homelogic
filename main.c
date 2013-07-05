@@ -137,12 +137,12 @@ void send_diff (uint8_t in, uint8_t *out, char type, uint8_t byte_address)
 void read_input(uint8_t a)
 {
         for (uint8_t i = 0; i < REACH; i++) {
-                send_diff(leb[i], &peb[a + i], 'E', a + i);
+                send_diff(leb[i], (uint8_t *) &peb[a + i], 'E', a + i);
         }
 
-        memcpy(eb, peb, sizeof(eb));
-        memcpy(mb, pmb, sizeof(mb));
-        memcpy(ab, pab, sizeof(ab));
+        memcpy((void *) eb, (const void *) peb, sizeof(eb));
+        memcpy((void *) mb, (const void *) pmb, sizeof(mb));
+        memcpy((void *) ab, (const void *) pab, sizeof(ab));
 }
 
 
@@ -152,8 +152,8 @@ void read_input(uint8_t a)
 void write_output(uint8_t a)
 {
         for (uint8_t i = 0; i < REACH; i++) {
-                send_diff(ab[a + i], &pab[a + i], 'A', a + i);
-                send_diff(mb[a + i], &pmb[a + i], 'M', a + i);
+                send_diff(ab[a + i], (uint8_t *) &pab[a + i], 'A', a + i);
+                send_diff(mb[a + i], (uint8_t *) &pmb[a + i], 'M', a + i);
         }
 
         CLR_C2;
@@ -174,7 +174,7 @@ void write_output(uint8_t a)
 
 
 
-void __attribute__ ((OS_main)) main () {
+int __attribute__ ((OS_main)) main (void) {
         DDRA = INIT_DDRA;
         DDRB = INIT_DDRB;
         DDRC = INIT_DDRC;
@@ -223,7 +223,7 @@ void __attribute__ ((OS_main)) main () {
                         uint8_t len;
 
                         ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-                                eep_write(prog_write.pos, prog_write.data, prog_write.len);
+                                eep_write(prog_write.pos, (void *) prog_write.data, prog_write.len);
                                 len = bus_encode_prog_message(str);
                                 prog_write.len = 0;
                         }

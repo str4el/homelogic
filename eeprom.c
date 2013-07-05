@@ -36,7 +36,7 @@ void eep_write_byte(uint16_t address, uint8_t byte)
 
 
 
-volatile uint8_t eep_read_byte(uint16_t address)
+uint8_t eep_read_byte(uint16_t address)
 {
         while (EECR & (1 << EEWE));
 
@@ -50,7 +50,7 @@ volatile uint8_t eep_read_byte(uint16_t address)
 
 void eep_write(uint16_t pos, void *d, size_t size)
 {
-        char *data = d;
+        uint8_t *data = d;
         for (uint16_t i = pos; i < pos + size; i++)
         {
                 eep_write_byte(i, *data++);

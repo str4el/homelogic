@@ -41,7 +41,7 @@ typedef enum bus_status_e {
 typedef struct bus_s {
         volatile bus_status_t status;
         volatile uint8_t tx_lock;
-        uint8_t rx_buffer[BUS_BUFSIZE];
+        char rx_buffer[BUS_BUFSIZE];
         uint8_t rx_len;
 } bus_t;
 
