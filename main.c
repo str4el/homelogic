@@ -174,7 +174,7 @@ void write_output(uint8_t a)
 
 
 
-int main (void) {
+void __attribute__ ((OS_main)) main () {
         DDRA = INIT_DDRA;
         DDRB = INIT_DDRB;
         DDRC = INIT_DDRC;
@@ -240,7 +240,5 @@ int main (void) {
                 CLR_LED_YE;
                 wdt_reset();
         }
-
-        return 0;
 }
 
