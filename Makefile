@@ -1,87 +1,24 @@
 # Hey Emacs, this is a -*- makefile -*-
-#
-# WinAVR makefile written by Eric B. Weddington, Jörg Wunsch, et al.
-# Released to the Public Domain
-# Please read the make user manual!
-#
-# Additional material for this makefile was submitted by:
-#  Tim Henigan
-#  Peter Fleury
-#  Reiner Patommel
-#  Sander Pool
-#  Frederik Rouleau
-#  Markus Pfaff
-#
-# On command line:
-#
-# make all = Make software.
-#
-# make clean = Clean out built project files.
-#
-# make coff = Convert ELF to AVR COFF (for use with AVR Studio 3.x or VMLAB).
-#
-# make extcoff = Convert ELF to AVR Extended COFF (for use with AVR Studio
-#                4.07 or greater).
-#
-# make program = Download the hex file to the device, using avrdude.  Please
-#                customize the avrdude settings below first!
-#
-# make filename.s = Just compile filename.c into the assembler code only
-#
-# To rebuild project do "make clean" then "make all".
-#
 
-# mth 2004/09 
-# Differences from WinAVR 20040720 sample:
-# - DEPFLAGS according to Eric Weddingtion's fix (avrfreaks/gcc-forum)
-# - F_OSC Define in CFLAGS and AFLAGS
+# AVR-GCC Makefile template, derived from the WinAVR template (which
+# is public domain), believed to be neutral to any flavor of "make"
+# (GNU make, BSD make, SysV make)
 
 
-# MCU name
 MCU = atmega32
-
-# Main Oscillator Frequency
-# This is only used to define F_OSC in all assembler and c-sources.
-F_OSC = 8000000
-F_CPU = 8000000UL
-
-# Output format. (can be srec, ihex, binary)
 FORMAT = ihex
-
-# Target file name (without extension).
-TARGET = main
-
-
-# List C source files here. (C dependencies are automatically generated.)
-SRC = $(TARGET).c i2c.c bus.c rtc.c eeprom.c prog.c str.c
-
-
-# List Assembler source files here.
-# Make them always end in a capital .S.  Files ending in a lowercase .s
-# will not be considered source files but generated files (assembler
-# output from the compiler), and will be deleted upon "make clean"!
-# Even though the DOS/Win* filesystem matches both .s and .S the same,
-# it will preserve the spelling of the filenames, and gcc itself does
-# care about how the name is spelled on its command-line.
+TARGET = homelogic
+SRC = main.c bus.c eeprom.c i2c.c prog.c rtc.c str.c
 ASRC = 
-
-
-
-# Optimization level, can be [0, 1, 2, 3, s]. 
-# 0 = turn off optimization. s = optimize for size.
-# (Note: 3 is not always the best optimization level. See avr-libc FAQ.)
 OPT = s
+
+# Name of this Makefile (used for "make depend").
+MAKEFILE = Makefile
 
 # Debugging format.
 # Native formats for AVR-GCC's -g are stabs [default], or dwarf-2.
 # AVR (extended) COFF requires stabs, plus an avr-objcopy run.
-#DEBUG = stabs
-DEBUG = dwarf-2
-
-# List any extra directories to look for include files here.
-#     Each directory must be seperated by a space.
-EXTRAINCDIRS = 
-
+DEBUG = stabs
 
 # Compiler flag to set the C Standard level.
 # c89   - "ANSI" C
@@ -97,34 +34,14 @@ CDEFS =
 CINCS =
 
 
-# Compiler flags.
-#  -g*:          generate debugging information
-#  -O*:          optimization level
-#  -f...:        tuning, see GCC manual and avr-libc documentation
-#  -Wall...:     warning level
-#  -Wa,...:      tell GCC to pass this to the assembler.
-#    -adhlns...: create assembler listing
-CFLAGS = -g$(DEBUG)
-CFLAGS += $(CDEFS) $(CINCS)
-CFLAGS += -O$(OPT)
-CFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
-CFLAGS += -Wall -Wstrict-prototypes
-CFLAGS += -Wa,-adhlns=$(<:.c=.lst)
-CFLAGS += $(patsubst %,-I%,$(EXTRAINCDIRS))
-CFLAGS += $(CSTANDARD)
-CFLAGS += -DF_OSC=$(F_OSC) -DF_CPU=$(F_CPU)
+CDEBUG = -g$(DEBUG)
+CWARN = -Wall -Wstrict-prototypes
+CTUNING = -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
+#CEXTRA = -Wa,-adhlns=$(<:.c=.lst)
+CFLAGS = $(CDEBUG) $(CDEFS) $(CINCS) -O$(OPT) $(CWARN) $(CSTANDARD) $(CEXTRA)
 
 
-
-# Assembler flags.
-#  -Wa,...:   tell GCC to pass this to the assembler.
-#  -ahlms:    create listing
-#  -gstabs:   have the assembler create line number information; note that
-#             for use in COFF files, additional information about filenames
-#             and function names needs to be present in the assembler source
-#             files -- see avr-libc docs [FIXME: not yet described there]
-ASFLAGS = -Wa,-adhlns=$(<:.S=.lst),-gstabs 
-ASFLAGS += -DF_OSC=$(F_OSC)
+#ASFLAGS = -Wa,-adhlns=$(<:.S=.lst),-gstabs 
 
 
 #Additional libraries.
@@ -151,7 +68,7 @@ MATH_LIB = -lm
 
 # 64 KB of external RAM, starting after internal RAM (ATmega128!),
 # used for variables (.data/.bss) and heap (malloc()).
-#EXTMEMOPTS = -Wl,-Tdata=0x801100,--defsym=__heap_end=0x80ffff
+#EXTMEMOPTS = -Wl,--section-start,.data=0x801100,--defsym=__heap_end=0x80ffff
 
 # 64 KB of external RAM, starting after internal RAM (ATmega128!),
 # only used for heap (malloc()).
@@ -159,32 +76,22 @@ MATH_LIB = -lm
 
 EXTMEMOPTS =
 
-# Linker flags.
-#  -Wl,...:     tell GCC to pass this to linker.
-#    -Map:      create map file
-#    --cref:    add cross reference to  map file
-LDFLAGS = -Wl,-Map=$(TARGET).map,--cref
-LDFLAGS += $(EXTMEMOPTS)
-LDFLAGS += $(PRINTF_LIB) $(SCANF_LIB) $(MATH_LIB)
-
+#LDMAP = $(LDFLAGS) -Wl,-Map=$(TARGET).map,--cref
+LDFLAGS = $(EXTMEMOPTS) $(LDMAP) $(PRINTF_LIB) $(SCANF_LIB) $(MATH_LIB)
 
 
 # Programming support using avrdude. Settings and variables.
 
-# Programming hardware: alf avr910 avrisp bascom bsd 
-# dt006 pavr picoweb pony-stk200 sp12 stk200 stk500
-#
-# Type: avrdude -c ?
-# to get a full listing.
-#
 AVRDUDE_PROGRAMMER = avrispmkii
-
-# com1 = serial port. Use lpt1 to connect to parallel port.
-AVRDUDE_PORT = usb    # programmer connected to serial device
+AVRDUDE_PORT = usb
 
 AVRDUDE_WRITE_FLASH = -U flash:w:$(TARGET).hex
 #AVRDUDE_WRITE_EEPROM = -U eeprom:w:$(TARGET).eep
 
+AVRDUDE_LFUSE = $(shell $(OBJDUMP) -s -j .fuse $(TARGET).elf | sed -ne '/8000f4/s/\s\+\w\+\s\+\(\w\w\)\(\w\w\).*/\1/p')
+AVRDUDE_HFUSE = $(shell $(OBJDUMP) -s -j .fuse $(TARGET).elf | sed -ne '/8000f4/s/\s\+\w\+\s\+\(\w\w\)\(\w\w\).*/\2/p')
+
+AVRDUDE_WRITE_FUSE = -U lfuse:w:0x$(AVRDUDE_LFUSE):m -U hfuse:w:0x$(AVRDUDE_HFUSE):m
 
 # Uncomment the following if you want avrdude's erase cycle counter.
 # Note that this counter needs to be initialized first using -Yn,
@@ -200,25 +107,10 @@ AVRDUDE_WRITE_FLASH = -U flash:w:$(TARGET).hex
 # to submit bug reports.
 #AVRDUDE_VERBOSE = -v -v
 
-AVRDUDE_FLAGS = -p $(MCU) -P $(AVRDUDE_PORT) -c $(AVRDUDE_PROGRAMMER)
-AVRDUDE_FLAGS += $(AVRDUDE_NO_VERIFY)
-AVRDUDE_FLAGS += $(AVRDUDE_VERBOSE)
-AVRDUDE_FLAGS += $(AVRDUDE_ERASE_COUNTER)
+AVRDUDE_BASIC = -p $(MCU) -P $(AVRDUDE_PORT) -c $(AVRDUDE_PROGRAMMER)
+AVRDUDE_FLAGS = $(AVRDUDE_BASIC) $(AVRDUDE_NO_VERIFY) $(AVRDUDE_VERBOSE) $(AVRDUDE_ERASE_COUNTER)
 
 
-
-# ---------------------------------------------------------------------------
-
-# Define directories, if needed.
-DIRAVR = c:/winavr
-DIRAVRBIN = $(DIRAVR)/bin
-DIRAVRUTILS = $(DIRAVR)/utils/bin
-DIRINC = .
-DIRLIB = $(DIRAVR)/avr/lib
-
-
-# Define programs and commands.
-SHELL = sh
 CC = avr-gcc
 OBJCOPY = avr-objcopy
 OBJDUMP = avr-objdump
@@ -226,31 +118,7 @@ SIZE = avr-size
 NM = avr-nm
 AVRDUDE = avrdude
 REMOVE = rm -f
-COPY = cp
-
-
-
-
-# Define Messages
-# English
-MSG_ERRORS_NONE = Errors: none
-MSG_BEGIN = -------- begin --------
-MSG_END = --------  end  --------
-MSG_SIZE_BEFORE = Size before: 
-MSG_SIZE_AFTER = Size after:
-MSG_COFF = Converting to AVR COFF:
-MSG_EXTENDED_COFF = Converting to AVR Extended COFF:
-MSG_FLASH = Creating load file for Flash:
-MSG_EEPROM = Creating load file for EEPROM:
-MSG_EXTENDED_LISTING = Creating Extended Listing:
-MSG_SYMBOL_TABLE = Creating Symbol Table:
-MSG_LINKING = Linking:
-MSG_COMPILING = Compiling:
-MSG_ASSEMBLING = Assembling:
-MSG_CLEANING = Cleaning project:
-
-
-
+MV = mv -f
 
 # Define all object files.
 OBJ = $(SRC:.c=.o) $(ASRC:.S=.o) 
@@ -258,24 +126,24 @@ OBJ = $(SRC:.c=.o) $(ASRC:.S=.o)
 # Define all listing files.
 LST = $(ASRC:.S=.lst) $(SRC:.c=.lst)
 
-
-# Compiler flags to generate dependency files.
-### GENDEPFLAGS = -Wp,-M,-MP,-MT,$(*F).o,-MF,.dep/$(@F).d
-GENDEPFLAGS = -MD -MP -MF .dep/$(@F).d
-
 # Combine all necessary flags and optional flags.
 # Add target processor to flags.
-ALL_CFLAGS = -mmcu=$(MCU) -I. $(CFLAGS) $(GENDEPFLAGS)
+ALL_CFLAGS = -mmcu=$(MCU) -I. $(CFLAGS)
 ALL_ASFLAGS = -mmcu=$(MCU) -I. -x assembler-with-cpp $(ASFLAGS)
 
 
-
-
-
 # Default target.
-all: begin gccversion sizebefore build sizeafter finished end
+all: build
 
-build: elf hex eep lss sym
+# Hardware specific targets.
+prototype: 
+	echo -e '#ifndef CONFIG_H\n#define CONFIG_H\n#define HW_PROTOTYPE\n#endif' > config.h
+
+dig_ac230:
+	echo -e '#ifndef CONFIG_H\n#define CONFIG_H\n#define HW_DIG_AC230\n#endif' > config.h
+
+
+build: elf hex eep
 
 elf: $(TARGET).elf
 hex: $(TARGET).hex
@@ -284,44 +152,12 @@ lss: $(TARGET).lss
 sym: $(TARGET).sym
 
 
-
-# Eye candy.
-# AVR Studio 3.x does not check make's exit code but relies on
-# the following magic strings to be generated by the compile job.
-begin:
-	@echo
-	@echo $(MSG_BEGIN)
-
-finished:
-	@echo $(MSG_ERRORS_NONE)
-
-end:
-	@echo $(MSG_END)
-	@echo
-
-
-# Display size of file.
-HEXSIZE = $(SIZE) --target=$(FORMAT) $(TARGET).hex
-ELFSIZE = $(SIZE) -A $(TARGET).elf
-sizebefore:
-	@if [ -f $(TARGET).elf ]; then echo; echo $(MSG_SIZE_BEFORE); $(ELFSIZE); echo; fi
-
-sizeafter:
-	@if [ -f $(TARGET).elf ]; then echo; echo $(MSG_SIZE_AFTER); $(ELFSIZE); echo; fi
-
-
-
-# Display compiler version information.
-gccversion : 
-	@$(CC) --version
-
-
-
 # Program the device.  
 program: $(TARGET).hex $(TARGET).eep
 	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH) $(AVRDUDE_WRITE_EEPROM)
 
-
+fuse: $(TARGET).elf
+	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FUSE)
 
 
 # Convert ELF to COFF for use in debugging / simulating in AVR Studio or VMLAB.
@@ -333,104 +169,212 @@ COFFCONVERT=$(OBJCOPY) --debugging \
 
 
 coff: $(TARGET).elf
-	@echo
-	@echo $(MSG_COFF) $(TARGET).cof
-	$(COFFCONVERT) -O coff-avr $< $(TARGET).cof
+	$(COFFCONVERT) -O coff-avr $(TARGET).elf $(TARGET).cof
 
 
 extcoff: $(TARGET).elf
-	@echo
-	@echo $(MSG_EXTENDED_COFF) $(TARGET).cof
-	$(COFFCONVERT) -O coff-ext-avr $< $(TARGET).cof
+	$(COFFCONVERT) -O coff-ext-avr $(TARGET).elf $(TARGET).cof
 
 
+.SUFFIXES: .elf .hex .eep .lss .sym
 
-# Create final output files (.hex, .eep) from ELF output file.
-%.hex: %.elf
-	@echo
-	@echo $(MSG_FLASH) $@
+.elf.hex:
 	$(OBJCOPY) -O $(FORMAT) -R .eeprom $< $@
 
-%.eep: %.elf
-	@echo
-	@echo $(MSG_EEPROM) $@
+.elf.eep:
 	-$(OBJCOPY) -j .eeprom --set-section-flags=.eeprom="alloc,load" \
 	--change-section-lma .eeprom=0 -O $(FORMAT) $< $@
 
 # Create extended listing file from ELF output file.
-%.lss: %.elf
-	@echo
-	@echo $(MSG_EXTENDED_LISTING) $@
+.elf.lss:
 	$(OBJDUMP) -h -S $< > $@
 
 # Create a symbol table from ELF output file.
-%.sym: %.elf
-	@echo
-	@echo $(MSG_SYMBOL_TABLE) $@
+.elf.sym:
 	$(NM) -n $< > $@
 
 
 
 # Link: create ELF output file from object files.
-.SECONDARY : $(TARGET).elf
-.PRECIOUS : $(OBJ)
-%.elf: $(OBJ)
-	@echo
-	@echo $(MSG_LINKING) $@
+$(TARGET).elf: $(OBJ)
 	$(CC) $(ALL_CFLAGS) $(OBJ) --output $@ $(LDFLAGS)
 
 
 # Compile: create object files from C source files.
-%.o : %.c
-	@echo
-	@echo $(MSG_COMPILING) $<
+.c.o:
 	$(CC) -c $(ALL_CFLAGS) $< -o $@ 
 
 
 # Compile: create assembler files from C source files.
-%.s : %.c
+.c.s:
 	$(CC) -S $(ALL_CFLAGS) $< -o $@
 
 
 # Assemble: create object files from assembler source files.
-%.o : %.S
-	@echo
-	@echo $(MSG_ASSEMBLING) $<
+.S.o:
 	$(CC) -c $(ALL_ASFLAGS) $< -o $@
 
 
 
 # Target: clean project.
-clean: begin clean_list finished end
+clean:
+	$(REMOVE) $(TARGET).hex $(TARGET).eep $(TARGET).cof $(TARGET).elf \
+	$(TARGET).map $(TARGET).sym $(TARGET).lss \
+	$(OBJ) $(LST) $(SRC:.c=.s) $(SRC:.c=.d) \
+	config.h
 
-clean_list :
-	@echo
-	@echo $(MSG_CLEANING)
-	$(REMOVE) $(TARGET).hex
-	$(REMOVE) $(TARGET).eep
-	$(REMOVE) $(TARGET).obj
-	$(REMOVE) $(TARGET).cof
-	$(REMOVE) $(TARGET).elf
-	$(REMOVE) $(TARGET).map
-	$(REMOVE) $(TARGET).obj
-	$(REMOVE) $(TARGET).a90
-	$(REMOVE) $(TARGET).sym
-	$(REMOVE) $(TARGET).lnk
-	$(REMOVE) $(TARGET).lss
-	$(REMOVE) $(OBJ)
-	$(REMOVE) $(LST)
-	$(REMOVE) $(SRC:.c=.s)
-	$(REMOVE) $(SRC:.c=.d)
-	$(REMOVE) .dep/*
+depend:
+	if grep '^# DO NOT DELETE' $(MAKEFILE) >/dev/null; \
+	then \
+		sed -e '/^# DO NOT DELETE/,$$d' $(MAKEFILE) > \
+			$(MAKEFILE).$$$$ && \
+		$(MV) $(MAKEFILE).$$$$ $(MAKEFILE); \
+	fi
+	echo '# DO NOT DELETE THIS LINE -- make depend depends on it.' \
+		>> $(MAKEFILE); \
+	$(CC) -M -mmcu=$(MCU) $(CDEFS) $(CINCS) $(SRC) $(ASRC) >> $(MAKEFILE)
 
-
-
-# Include the dependency files.
--include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
-
-
-# Listing of phony targets.
-.PHONY : all begin finish end sizebefore sizeafter gccversion \
-build elf hex eep lss sym coff extcoff \
-clean clean_list program
-
+.PHONY:	all build elf hex eep lss sym program coff extcoff clean depend
+# DO NOT DELETE THIS LINE -- make depend depends on it.
+main.o: main.c /usr/lib/gcc/avr/4.6.2/../../../../avr/include/string.h \
+ /usr/lib/gcc/avr/4.6.2/include/stddef.h main.h \
+ /usr/lib/gcc/avr/4.6.2/include/stdint.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/stdint.h hardware.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/io.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/sfr_defs.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/inttypes.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/iom32.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/portpins.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/common.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/version.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/fuse.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/lock.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/interrupt.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/sleep.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/wdt.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/pgmspace.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/setbaud.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/math.h config.h \
+ hardware/prototype.h prog.h bool.h i2c.h rtc.h bus.h eeprom.h
+bus.o: bus.c /usr/lib/gcc/avr/4.6.2/../../../../avr/include/ctype.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/string.h \
+ /usr/lib/gcc/avr/4.6.2/include/stddef.h bus.h \
+ /usr/lib/gcc/avr/4.6.2/include/stdint.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/stdint.h hardware.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/io.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/sfr_defs.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/inttypes.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/iom32.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/portpins.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/common.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/version.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/fuse.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/lock.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/interrupt.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/sleep.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/wdt.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/pgmspace.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/setbaud.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/math.h config.h \
+ hardware/prototype.h main.h prog.h bool.h rtc.h i2c.h str.h
+eeprom.o: eeprom.c hardware.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/io.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/sfr_defs.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/inttypes.h \
+ /usr/lib/gcc/avr/4.6.2/include/stdint.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/stdint.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/iom32.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/portpins.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/common.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/version.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/fuse.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/lock.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/interrupt.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/sleep.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/wdt.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/pgmspace.h \
+ /usr/lib/gcc/avr/4.6.2/include/stddef.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/setbaud.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/math.h config.h \
+ hardware/prototype.h eeprom.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/string.h
+i2c.o: i2c.c i2c.h /usr/lib/gcc/avr/4.6.2/include/stdint.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/stdint.h hardware.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/io.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/sfr_defs.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/inttypes.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/iom32.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/portpins.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/common.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/version.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/fuse.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/lock.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/interrupt.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/sleep.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/wdt.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/pgmspace.h \
+ /usr/lib/gcc/avr/4.6.2/include/stddef.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/setbaud.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/math.h config.h \
+ hardware/prototype.h
+prog.o: prog.c prog.h /usr/lib/gcc/avr/4.6.2/include/stdint.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/stdint.h bool.h main.h \
+ hardware.h /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/io.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/sfr_defs.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/inttypes.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/iom32.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/portpins.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/common.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/version.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/fuse.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/lock.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/interrupt.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/sleep.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/wdt.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/pgmspace.h \
+ /usr/lib/gcc/avr/4.6.2/include/stddef.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/setbaud.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/math.h config.h \
+ hardware/prototype.h eeprom.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/string.h bus.h
+rtc.o: rtc.c /usr/lib/gcc/avr/4.6.2/../../../../avr/include/ctype.h \
+ hardware.h /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/io.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/sfr_defs.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/inttypes.h \
+ /usr/lib/gcc/avr/4.6.2/include/stdint.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/stdint.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/iom32.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/portpins.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/common.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/version.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/fuse.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/lock.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/interrupt.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/sleep.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/wdt.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/pgmspace.h \
+ /usr/lib/gcc/avr/4.6.2/include/stddef.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/setbaud.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/math.h config.h \
+ hardware/prototype.h rtc.h i2c.h
+str.o: str.c /usr/lib/gcc/avr/4.6.2/../../../../avr/include/ctype.h str.h \
+ /usr/lib/gcc/avr/4.6.2/include/stdint.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/stdint.h

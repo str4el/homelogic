@@ -17,10 +17,8 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hardware.h"
 #include "eeprom.h"
-
-#include <avr/io.h>
-#include <util/atomic.h>
 
 
 void eep_write_byte(uint16_t address, uint8_t byte)

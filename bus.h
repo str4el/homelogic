@@ -21,7 +21,7 @@
 #define BUS_H
 
 #include <stdint.h>
-#include <avr/io.h>
+#include "hardware.h"
 
 #define BUS_BUFSIZE 64
 

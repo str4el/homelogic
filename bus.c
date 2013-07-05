@@ -17,18 +17,16 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <ctype.h>
+#include <string.h>
+
 #include "bus.h"
 #include "main.h"
 #include "rtc.h"
 #include "str.h"
 #include "bool.h"
 
-#include <avr/interrupt.h>
-#include <ctype.h>
-#include <string.h>
 
-#define BAUD 9600
-#include <util/setbaud.h>
 
 
 bus_t bus;
@@ -55,7 +53,7 @@ ISR(USART_RXC_vect) {
                         bus.rx_len = 0;
                 }
 
-                BUS_TX_LOCK(2 + adr * 2);
+                BUS_TX_LOCK(2 + adr);
                 break;
 
         case tx_start:
@@ -69,7 +67,7 @@ ISR(USART_RXC_vect) {
                 break;
 
         default:
-                BUS_TX_LOCK(2 + adr * 2);
+                BUS_TX_LOCK(2 + adr);
         }
 
 }
@@ -85,6 +83,9 @@ void bus_init(void)
         UCSRB |= (1 << TXEN) | (1 << RXEN) | (1 << RXCIE);
         UBRRH = UBRRH_VALUE;
         UBRRL = UBRRL_VALUE;
+
+        bus.status = rx_start;
+        CLR_RE;
 }
 
 
@@ -94,7 +95,7 @@ void bus_send (const char * data, uint8_t len)
 {
         while (bus.tx_lock);
         bus.status = tx_start;
-        PORTD |= (1 << 2);
+        SET_TE;
 
 
         for (uint8_t i = 0; i < len; i++) {
@@ -105,8 +106,8 @@ void bus_send (const char * data, uint8_t len)
 
         while (!(UCSRA & (1 << TXC)));
         UCSRA |= (1 << TXC);
-        PORTD &= ~(1 << 2);
-        BUS_TX_LOCK(35 - adr * 2);
+        CLR_TE;
+        BUS_TX_LOCK(MEMSIZE + 3 - adr);
         bus.status = rx_start;
 }
 

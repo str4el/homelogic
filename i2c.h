@@ -21,43 +21,8 @@
 #define I2C_H
 
 #include <stdint.h>
-#include <avr/io.h>
-#include <util/delay.h>
+#include "hardware.h"
 
-
-
-#define I2C_T_BUF    5
-#define I2C_T_HD_STA 4
-#define I2C_T_LOW    5
-#define I2C_T_HIGH   4
-#define I2C_T_SU_STA 5
-#define I2C_T_HD_DAT 0
-#define I2C_T_SU_DAT 1
-#define I2C_T_SU_STO 4
-
-#define I2C_ACK 1
-#define I2C_NACK 0
-
-
-#define I2C_SET_SCL \
-        DDRB &= ~(1 << 0); \
-        PORTB |= (1 << 0)
-
-#define I2C_CLR_SCL \
-        PORTB &= ~(1 << 0); \
-        DDRB |= (1 << 0)
-
-#define I2C_SET_SDA \
-        DDRB &= ~(1 << 1); \
-        PORTB |= (1 << 1)
-
-#define I2C_CLR_SDA \
-        PORTB &= ~(1 << 1); \
-        DDRB |= (1 << 1);
-
-#define I2C_IS_SCL (PINB & (1 << 0))
-
-#define I2C_IS_SDA (PINB & (1 << 1))
 
 
 

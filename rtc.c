@@ -17,11 +17,10 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "rtc.h"
 
-#include <avr/pgmspace.h>
 #include <ctype.h>
-
+#include "hardware.h"
+#include "rtc.h"
 
 const char day[][2] PROGMEM = {
         {'S', 'o'},
