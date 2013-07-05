@@ -24,6 +24,8 @@
 #include "hardware.h"
 
 #define BUS_BUFSIZE 64
+#define BUS_CMD_MAX_LEN 3
+#define BUS_DATA_MAX_LEN 38
 
 #define BUS_TX_LOCK(x) if (bus.tx_lock < (x)) bus.tx_lock = (x)
 
@@ -46,6 +48,26 @@ typedef struct bus_s {
 } bus_t;
 
 
+
+
+
+/* Kommando verarbeitungstabelle
+ * Funktion bekommt Absenderadresse, zusätzliche Daten und deren länge übermittelt
+ */
+typedef void (*bus_command_function_t) (uint8_t, char *);
+
+typedef struct bus_command_table_s {
+        char command [BUS_CMD_MAX_LEN];
+        uint8_t cmd_len;
+        //void (function) (uint8_t, char *, uint8_t);
+        bus_command_function_t function;
+        uint8_t min_data;
+        uint8_t max_data;
+} bus_command_table_t;
+
+
+
+
 extern bus_t bus;
 
 extern void bus_init (void);
@@ -60,11 +82,21 @@ extern void bus_send_bit_change (uint8_t status, char type, uint8_t byte, uint8_
 extern void bus_send_date_time(void);
 extern void bus_send_identification(void);
 
-extern int16_t str_from_hex(const char *ptr);
+extern uint8_t bus_encode_prog_message(char *str, uint8_t len);
 
-extern void bus_decode_message(void);
-extern void bus_decode_prog_message(char *ptr);
-extern uint8_t bus_encode_prog_message(char *str);
-extern void bus_decode_bit_change(char *ptr);
+extern void bus_command (void);
+extern void bus_command_reset (uint8_t sender, char *data);
+extern void bus_command_identify (uint8_t sender, char *data);
+extern void bus_command_run (uint8_t sender, char *data);
+extern void bus_command_stop (uint8_t sender, char *data);
+extern void bus_command_debug (uint8_t sender, char *data);
+extern void bus_command_step (uint8_t sender, char *data);
+extern void bus_command_program (uint8_t sender, char *data);
+extern void bus_command_set_date_time (uint8_t sender, char *data);
+extern void bus_command_reset_bit (uint8_t sender, char *data);
+extern void bus_command_set_bit (uint8_t sender, char *data);
+
+
+
 
 #endif // BUS_H

@@ -25,6 +25,9 @@
 #include "prog.h"
 #include "bool.h"
 
+#define _TOSTR(x) #x
+#define TOSTR(x) _TOSTR(x)
+
 
 volatile uint8_t leb[REACH];
 

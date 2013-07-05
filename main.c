@@ -208,6 +208,7 @@ int __attribute__ ((OS_main)) main (void) {
         sei();
 
         bus_send_cmd("RDY");
+        bus_send_identification();
         bus_send_date_time();
 
 
@@ -224,7 +225,7 @@ int __attribute__ ((OS_main)) main (void) {
 
                         ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
                                 eep_write(prog_write.pos, (void *) prog_write.data, prog_write.len);
-                                len = bus_encode_prog_message(str);
+                                len = bus_encode_prog_message(str, sizeof(str));
                                 prog_write.len = 0;
                         }
 

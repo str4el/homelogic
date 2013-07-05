@@ -19,13 +19,26 @@
 
 #include <ctype.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "bus.h"
 #include "main.h"
 #include "rtc.h"
-#include "str.h"
 #include "bool.h"
 
+
+const bus_command_table_t bus_command_table [] PROGMEM = {
+        { "RST", 3, bus_command_reset,          0,  0},
+        { "IDY", 3, bus_command_identify,       0,  0},
+        { "RUN", 3, bus_command_run,            0,  0},
+        { "STP", 3, bus_command_stop,           0,  0},
+        { "DBG", 3, bus_command_debug,          0,  0},
+        { "STE", 3, bus_command_step,           0,  0},
+        { "PRG", 3, bus_command_program,        8, BUS_DATA_MAX_LEN},
+        { "STD", 3, bus_command_set_date_time, 20, 20},
+        { "BCR", 3, bus_command_reset_bit,      4,  6},
+        { "BCS", 3, bus_command_set_bit,        4,  6},
+};
 
 
 
@@ -49,7 +62,9 @@ ISR(USART_RXC_vect) {
 
 
                 if (in == '\r') {
-                        bus_decode_message();
+                        bus.rx_buffer[bus.rx_len] = 0;
+                        //bus_decode_message();
+                        bus_command();
                         bus.rx_len = 0;
                 }
 
@@ -85,6 +100,25 @@ void bus_init(void)
         UBRRL = UBRRL_VALUE;
 
         bus.status = rx_start;
+        CLR_RE;
+}
+
+
+
+
+void bus_diag (const char * data, uint8_t len)
+{
+        SET_RE;
+        SET_TE;
+
+        for (uint8_t i = 0; i < len; i++) {
+                while(!(UCSRA & (1 << UDRE)));
+                UDR = data[i];
+        }
+
+        while (!(UCSRA & (1 << TXC)));
+        UCSRA |= (1 << TXC);
+        CLR_TE;
         CLR_RE;
 }
 
@@ -127,9 +161,8 @@ void bus_verified_send(const char *data, uint8_t len)
 
 void bus_send_cmd(const char *cmd)
 {
-        char str[] = "      \r";
-        memcpy (str, cmd, 3);
-        str_to_hex(str + 4, adr);
+        char str[12];
+        snprintf(str, sizeof(str), "%s %02X FF\r", cmd, adr);
         bus_verified_send(str, strlen(str));
 }
 
@@ -138,10 +171,8 @@ void bus_send_cmd(const char *cmd)
 
 void bus_send_data_8(const char *cmd, const uint8_t data)
 {
-        char str[] = "         \r";
-        memcpy (str, cmd, 3);
-        str_to_hex(str + 4, adr);
-        str_to_hex(str + 7, data);
+        char str[16];
+        snprintf(str, sizeof(str), "%s %02X FF %02X\r", cmd, adr, data);
         bus_verified_send(str, strlen(str));
 }
 
@@ -150,11 +181,8 @@ void bus_send_data_8(const char *cmd, const uint8_t data)
 
 void bus_send_data_16(const char *cmd, const uint16_t data)
 {
-        char str[] = "           \r";
-        memcpy (str, cmd, 3);
-        str_to_hex(str + 4, adr);
-        str_to_hex(str + 7, data >> 8);
-        str_to_hex(str + 9, data & 0xFF);
+        char str[20];
+        snprintf(str, sizeof(str), "%s %02X FF %04X\r", cmd, adr, data);
         bus_verified_send(str, strlen(str));
 }
 
@@ -163,15 +191,9 @@ void bus_send_data_16(const char *cmd, const uint16_t data)
 
 void bus_send_bit_change (uint8_t status, char type, uint8_t byte, uint8_t bit)
 {
-        char str[] = "BC     . \r";
-        if (byte >= 32 || bit >= 8) return;
-
-        str[2] = status ? 'S' : 'R';
-        str[4] = toupper(type);
-        str[5] = '0' + byte / 10;
-        str[6] = '0' + byte % 10;
-        str[8] = '0' + bit;
-
+        char str[18];
+        if (byte >= 128 || bit >= 8) return;
+        snprintf (str, sizeof(str), "BC%c %02X FF %c%u.%u\r", status ? 'S' : 'R', adr, toupper(type), byte, bit);
         bus_verified_send(str, sizeof(str));
 }
 
@@ -193,133 +215,26 @@ void bus_send_date_time()
 
 void bus_send_identification()
 {
-        char str[] = "IDN    mm16 v0.1.2\r";
-        str_to_hex(str + 4, adr);
+        char str[30];
+        snprintf(str, sizeof(str), "IDN %02X FF " HARDWARE_NAME " " FIRMWARE_VERSION "\r", adr);
         bus_verified_send(str, strlen(str));
 }
 
 
 
 
-void bus_decode_message()
+uint8_t bus_encode_prog_message(char *str, uint8_t len)
 {
-        char *ptr = bus.rx_buffer;
-        uint8_t len = bus.rx_len;
+        snprintf(str, len, "VRY %02X FF %04X%02X", adr, prog_write.pos, prog_write.len);
 
-        while (len > 3) {
-                if (strncasecmp(ptr, "RST", 3) == 0) {
-                        if (str_from_hex(ptr + 4) == adr) {
-                                reset();
-                        }
-                        return;
-
-                } else if (strncasecmp(ptr, "IDY", 3) == 0) {
-                        if (str_from_hex(ptr + 4) == adr) {
-                                bus_send_identification();
-                        }
-                        return;
-
-                } else if (strncasecmp(ptr, "RUN", 3) == 0) {
-                        if (str_from_hex(ptr + 4) == adr) {
-                                status = RUN;
-                        }
-                        return;
-
-                } else if (strncasecmp(ptr, "STP", 3) == 0) {
-                        if (str_from_hex(ptr + 4) == adr) {
-                                status = STOP;
-                        }
-                        return;
-
-                } else if (strncasecmp(ptr, "DBG", 3) == 0) {
-                        if (str_from_hex(ptr + 4) == adr) {
-                                status = DEBUG;
-                        }
-                        return;
-
-                } else if (strncasecmp(ptr, "STE", 3) == 0) {
-                        if (str_from_hex(ptr + 4) == adr) {
-                                step = TRUE;
-                        }
-                        return;
-
-                } else if (strncasecmp(ptr, "PRG", 3) == 0) {
-                        bus_decode_prog_message(ptr + 4);
-                        return;
-
-                } else if (strncasecmp(ptr, "SDT", 3) == 0) {
-                        rtc_time_t time;
-                        if (rtc_str2time(ptr + 4, len - 4, &time) == 0) {
-                                rtc_write_time(&time);
-                        }
-                        return;
-
-                } else if (strncasecmp(ptr, "BC", 2) == 0) {
-                        if (len >= 10) {
-                                bus_decode_bit_change(ptr + 2);
-                        }
-                        return;
-
-                } else {
-                        ptr++;
-                        len--;
-                }
-        }
-}
-
-
-
-
-void bus_decode_prog_message(char *ptr)
-{
-        int16_t tmp;
-        uint8_t len;
-
-        if (str_from_hex(ptr) != adr) {
-                return;
-        }
-
-        tmp = str_from_hex(ptr + 2);
-        if (tmp < 0) return;
-        prog_write.pos = tmp << 8;
-
-        tmp = str_from_hex(ptr + 4);
-        if (tmp < 0) return;
-        prog_write.pos |= tmp;
-
-        tmp = str_from_hex(ptr + 6);
-        if (tmp < 0) return;
-        len = tmp;
-
-
-        for (uint8_t i = 0; i < len; i++) {
-                tmp = str_from_hex(ptr + 8 + i * 2);
-                if (tmp < 0) return;
-                prog_write.data[i] = tmp;
-        }
-
-        prog_write.len = len;
-}
-
-
-
-
-uint8_t bus_encode_prog_message(char *str)
-{
         uint8_t pos = 0;
 
-        strncpy(str, "VRY ", 4);
-        str_to_hex(str + 4, adr);
-        str_to_hex(str + 6, prog_write.pos >> 8);
-        str_to_hex(str + 8, prog_write.pos & 0xFF);
-        str_to_hex(str + 10, prog_write.len);
-
         for (uint8_t i = 0; i < prog_write.len; i++) {
-                pos = 12 + i * 2;
-                str_to_hex(str + pos, prog_write.data[i]);
+                pos = strlen(str);
+                snprintf(str + pos, len - pos, "%02X", prog_write.data[i]);
         }
 
-        pos += 2;
+        pos = strlen(str);
         str[pos++] = '\r';
         str[pos++] = 0;
         return pos;
@@ -328,42 +243,133 @@ uint8_t bus_encode_prog_message(char *str)
 
 
 
-void bus_decode_bit_change(char *ptr)
-{
-        uint8_t byte;
-        uint8_t bit;
-        if (isdigit(ptr[3]) && isdigit(ptr[4]) && isdigit(ptr[6])) {
-                byte = (ptr[3] - '0') * 10 + ptr[4] - '0';
-                bit = ptr[6] - '0';
-                if (byte >= 32 || bit >= 8) return;
-        } else {
-                return;
-        }
 
-        switch (ptr[0]) {
-        case 's':
-        case 'S':
-                switch (ptr[2]) {
-                case 'e':
-                case 'E':
-                        peb[byte] |= (1 << bit);
-                        break;
-                case 'a':
-                case 'A':
-                        pab[byte] |= (1 << bit);
-                        break;
-                case 'm':
-                case 'M':
-                        pmb[byte] |= (1 << bit);
-                        break;
-                default:
+
+
+
+/* Überprüft ob innerhalb der empangenen Zeichenkette ein Befehl aus
+ * der bus_command_table gefunden wurde und die Nutzdaten die richtige
+ * länge aufweisen.
+ * Ist das der Fall wird die entsprechende Funktion aus der Tabelle
+ * aufgerufen
+ */
+void bus_command ()
+{
+        char cmd[BUS_CMD_MAX_LEN];
+        char data[BUS_DATA_MAX_LEN];
+        unsigned char src;
+        unsigned char dst;
+
+        int ret = sscanf (bus.rx_buffer, "%" TOSTR(BUS_CMD_MAX_LEN) "s %2hhx %2hhx %" TOSTR(BUS_DATA_MAX_LEN) "s", cmd, &src, &dst, data);
+        if (ret < 3) return;
+
+        for (uint8_t i = 0; i < sizeof(bus_command_table) / sizeof(*bus_command_table); i++) {
+                uint8_t command_len = pgm_read_byte(&bus_command_table[i].cmd_len);
+                if (strncasecmp_P(cmd, bus_command_table[i].command, command_len) == 0) {
+                        if (dst != adr && dst != 0xFF)return;
+
+                        uint8_t min_data = pgm_read_byte(&bus_command_table[i].min_data);
+                        uint8_t max_data = pgm_read_byte(&bus_command_table[i].max_data);
+
+                        if (min_data > 0 && ret < 4) return;
+
+                        uint8_t len = strlen(data);
+                        if (!(min_data <= len && len <= max_data)) return;
+
+                        bus_command_function_t function = (bus_command_function_t) pgm_read_word(&bus_command_table[i].function);
+                        if (function) function(src, data);
+
                         return;
                 }
-                break;
+        }
 
-        case 'r':
-        case 'R':
-                switch (ptr[2]) {
+}
+
+
+
+
+void bus_command_reset (uint8_t sender, char *data)
+{
+        reset();
+}
+
+
+
+
+void bus_command_identify (uint8_t sender, char *data)
+{
+
+}
+
+
+
+
+void bus_command_run (uint8_t sender, char *data)
+{
+        status = RUN;
+}
+
+
+
+
+void bus_command_stop (uint8_t sender, char *data)
+{
+        status = STOP;
+}
+
+
+
+
+void bus_command_debug (uint8_t sender, char *data)
+{
+        status = DEBUG;
+}
+
+
+
+
+void bus_command_step (uint8_t sender, char *data)
+{
+        step = TRUE;
+}
+
+
+
+
+void bus_command_program (uint8_t sender, char *data)
+{
+        uint8_t len;
+        if (sscanf(data, "%4hx%2hhx", (short unsigned int *)&prog_write.pos, &len) != 2) return;
+        if (len > 10) return;
+
+        data += 6;
+        for (uint8_t i = 0; i < len; i++) {
+                if (sscanf(data, "%2hhx", &prog_write.data[i]) != 1) return;
+                data += 2;
+        }
+
+        prog_write.len = len;
+}
+
+
+
+
+void bus_command_set_date_time (uint8_t sender, char *data)
+{
+
+}
+
+
+
+
+void bus_command_reset_bit (uint8_t sender, char *data)
+{
+        char ident[2];
+        uint8_t byte;
+        uint8_t bit;
+
+        if (sscanf(data, "%1s%hhi.%hhi", ident, &byte, &bit) == 3) {
+                switch (ident[0]) {
                 case 'e':
                 case 'E':
                         peb[byte] &= ~(1 << bit);
@@ -379,11 +385,35 @@ void bus_decode_bit_change(char *ptr)
                 default:
                         return;
                 }
-                break;
-
-        default:
-                return;
         }
 
 }
 
+
+
+
+void bus_command_set_bit (uint8_t sender, char *data)
+{
+        char ident[2];
+        uint8_t byte;
+        uint8_t bit;
+
+        if (sscanf(data, "%1s%hhu.%hhu", ident, &byte, &bit) == 3) {
+                switch (ident[0]) {
+                case 'e':
+                case 'E':
+                        peb[byte] |= (1 << bit);
+                        break;
+                case 'a':
+                case 'A':
+                        pab[byte] |= (1 << bit);
+                        break;
+                case 'm':
+                case 'M':
+                        pmb[byte] |= (1 << bit);
+                        break;
+                default:
+                        return;
+                }
+        }
+}

@@ -6,6 +6,11 @@
 
 
 
+#define HARDWARE_NAME "dig_ac230"
+
+
+
+
 /* Zustängigkeitsbereich in Byte
  */
 #define REACH 1

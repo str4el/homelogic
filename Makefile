@@ -8,9 +8,10 @@
 MCU = atmega32
 FORMAT = ihex
 TARGET = homelogic
-SRC = main.c bus.c eeprom.c i2c.c prog.c rtc.c str.c
+SRC = main.c bus.c eeprom.c i2c.c prog.c rtc.c 
 ASRC = 
 OPT = s
+VERSION = $(shell git tag)
 
 # Name of this Makefile (used for "make depend").
 MAKEFILE = Makefile
@@ -137,10 +138,10 @@ all: build
 
 # Hardware specific targets.
 prototype: 
-	echo -e '#ifndef CONFIG_H\n#define CONFIG_H\n#define HW_PROTOTYPE\n#endif' > config.h
+	echo -e '#ifndef CONFIG_H\n#define CONFIG_H\n#define HW_PROTOTYPE\n#define FIRMWARE_VERSION "$(VERSION)"\n#endif' > config.h
 
 dig_ac230:
-	echo -e '#ifndef CONFIG_H\n#define CONFIG_H\n#define HW_DIG_AC230\n#endif' > config.h
+	echo -e '#ifndef CONFIG_H\n#define CONFIG_H\n#define HW_DIG_AC230\n#define FIRMWARE_VERSION "$(VERSION)"\n#endif' > config.h
 
 
 build: elf hex eep
@@ -258,15 +259,17 @@ main.o: main.c /usr/lib/gcc/avr/4.6.2/../../../../avr/include/string.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/math.h config.h \
- hardware/prototype.h prog.h bool.h i2c.h rtc.h bus.h eeprom.h
+ hardware/dig_ac230.h prog.h bool.h i2c.h rtc.h bus.h eeprom.h
 bus.o: bus.c /usr/lib/gcc/avr/4.6.2/../../../../avr/include/ctype.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/string.h \
- /usr/lib/gcc/avr/4.6.2/include/stddef.h bus.h \
+ /usr/lib/gcc/avr/4.6.2/include/stddef.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/stdio.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/inttypes.h \
  /usr/lib/gcc/avr/4.6.2/include/stdint.h \
- /usr/lib/gcc/avr/4.6.2/../../../../avr/include/stdint.h hardware.h \
+ /usr/lib/gcc/avr/4.6.2/../../../../avr/include/stdint.h \
+ /usr/lib/gcc/avr/4.6.2/include/stdarg.h bus.h hardware.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/io.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/sfr_defs.h \
- /usr/lib/gcc/avr/4.6.2/../../../../avr/include/inttypes.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/iom32.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/portpins.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/common.h \
@@ -282,7 +285,7 @@ bus.o: bus.c /usr/lib/gcc/avr/4.6.2/../../../../avr/include/ctype.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/math.h config.h \
- hardware/prototype.h main.h prog.h bool.h rtc.h i2c.h str.h
+ hardware/dig_ac230.h main.h prog.h bool.h rtc.h i2c.h
 eeprom.o: eeprom.c hardware.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/io.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/sfr_defs.h \
@@ -305,7 +308,7 @@ eeprom.o: eeprom.c hardware.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/math.h config.h \
- hardware/prototype.h eeprom.h \
+ hardware/dig_ac230.h eeprom.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/string.h
 i2c.o: i2c.c i2c.h /usr/lib/gcc/avr/4.6.2/include/stdint.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/stdint.h hardware.h \
@@ -328,7 +331,7 @@ i2c.o: i2c.c i2c.h /usr/lib/gcc/avr/4.6.2/include/stdint.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/math.h config.h \
- hardware/prototype.h
+ hardware/dig_ac230.h
 prog.o: prog.c prog.h /usr/lib/gcc/avr/4.6.2/include/stdint.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/stdint.h bool.h main.h \
  hardware.h /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/io.h \
@@ -350,7 +353,7 @@ prog.o: prog.c prog.h /usr/lib/gcc/avr/4.6.2/include/stdint.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/math.h config.h \
- hardware/prototype.h eeprom.h \
+ hardware/dig_ac230.h eeprom.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/string.h bus.h
 rtc.o: rtc.c /usr/lib/gcc/avr/4.6.2/../../../../avr/include/ctype.h \
  hardware.h /usr/lib/gcc/avr/4.6.2/../../../../avr/include/avr/io.h \
@@ -374,7 +377,4 @@ rtc.o: rtc.c /usr/lib/gcc/avr/4.6.2/../../../../avr/include/ctype.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h \
  /usr/lib/gcc/avr/4.6.2/../../../../avr/include/math.h config.h \
- hardware/prototype.h rtc.h i2c.h
-str.o: str.c /usr/lib/gcc/avr/4.6.2/../../../../avr/include/ctype.h str.h \
- /usr/lib/gcc/avr/4.6.2/include/stdint.h \
- /usr/lib/gcc/avr/4.6.2/../../../../avr/include/stdint.h
+ hardware/dig_ac230.h rtc.h i2c.h

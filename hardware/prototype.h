@@ -6,6 +6,11 @@
 
 
 
+#define HARDWARE_NAME "mm16"
+
+
+
+
 /* Zustängigkeitsbereich in Byte
  */
 #define REACH 2
