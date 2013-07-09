@@ -17,7 +17,7 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <string.h>
+#include <stdlib.h>
 #include "main.h"
 #include "i2c.h"
 #include "rtc.h"
@@ -34,6 +34,7 @@ FUSES = {
         .extended = EFUSE,
 #endif
 };
+
 
 
 

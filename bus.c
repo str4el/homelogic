@@ -26,6 +26,7 @@
 #include "main.h"
 #include "rtc.h"
 #include "bool.h"
+#include "memory.h"
 
 
 
@@ -54,6 +55,7 @@ const bus_command_table_t bus_command_table [] PROGMEM = {
         { "STD", 3, bus_command_set_date_time, 20, 20},
         { "BCR", 3, bus_command_reset_bit,      4,  6},
         { "BCS", 3, bus_command_set_bit,        4,  6},
+        { "MEM", 3, bus_command_memory,       0,  0},
 };
 
 
@@ -444,3 +446,18 @@ void bus_command_set_bit (uint8_t sender, char *data)
                 }
         }
 }
+
+
+
+
+void bus_command_memory(uint8_t sender, char *data)
+{
+        char str[20];
+        snprintf(str, sizeof(str), "STACK %02X %02X %ub\r", adr, sender, mem_used_stack());
+        bus_buffered_send(str, strlen(str));
+        snprintf(str, sizeof(str), "HEAP %02X %02X %ub\r", adr, sender, mem_used_heap());
+        bus_buffered_send(str, strlen(str));
+        snprintf(str, sizeof(str), "RAM %02X %02X %ub\r", adr, sender, mem_free_ram());
+        bus_buffered_send(str, strlen(str));
+}
+
