@@ -22,6 +22,7 @@
 
 #include <stdint.h>
 #include "hardware.h"
+#include "bool.h"
 
 #define BUS_BUFSIZE 64
 #define BUS_CMD_MAX_LEN 3
@@ -40,11 +41,21 @@ typedef enum bus_status_e {
 
 
 
+typedef struct bus_data_list_s {
+        struct bus_data_list_s *next;
+        uint8_t len;
+        char data;
+} bus_data_list_t;
+
+
+
+
 typedef struct bus_s {
         volatile bus_status_t status;
         volatile uint8_t tx_lock;
         char rx_buffer[BUS_BUFSIZE];
         uint8_t rx_len;
+        bus_data_list_t *tx_list;
 } bus_t;
 
 
@@ -74,6 +85,8 @@ extern void bus_init (void);
 
 extern void bus_send (const char *data, uint8_t len);
 extern void bus_verified_send(const char *data, uint8_t len);
+extern bool_t bus_buffered_send(const char *data, uint8_t len);
+extern void bus_flush_send_buffer (void);
 
 extern void bus_send_cmd(const char *cmd);
 extern void bus_send_data_8(const char *cmd, const uint8_t data);

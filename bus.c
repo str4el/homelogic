@@ -20,11 +20,27 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "bus.h"
 #include "main.h"
 #include "rtc.h"
 #include "bool.h"
+
+
+
+
+bus_t bus = {
+        .status = rx_start,
+
+        .rx_buffer = "",
+        .rx_len = 0,
+
+        .tx_lock = 0,
+        .tx_list = NULL,
+};
+
+
 
 
 const bus_command_table_t bus_command_table [] PROGMEM = {
@@ -40,9 +56,6 @@ const bus_command_table_t bus_command_table [] PROGMEM = {
         { "BCS", 3, bus_command_set_bit,        4,  6},
 };
 
-
-
-bus_t bus;
 
 
 
@@ -92,33 +105,11 @@ ISR(USART_RXC_vect) {
 
 void bus_init(void)
 {
-        memset(&bus, 0, sizeof(bus));
-
         UCSRC |= (1 << UCSZ1) | (1 << UCSZ0);
         UCSRB |= (1 << TXEN) | (1 << RXEN) | (1 << RXCIE);
         UBRRH = UBRRH_VALUE;
         UBRRL = UBRRL_VALUE;
 
-        bus.status = rx_start;
-        CLR_RE;
-}
-
-
-
-
-void bus_diag (const char * data, uint8_t len)
-{
-        SET_RE;
-        SET_TE;
-
-        for (uint8_t i = 0; i < len; i++) {
-                while(!(UCSRA & (1 << UDRE)));
-                UDR = data[i];
-        }
-
-        while (!(UCSRA & (1 << TXC)));
-        UCSRA |= (1 << TXC);
-        CLR_TE;
         CLR_RE;
 }
 
@@ -153,6 +144,42 @@ void bus_verified_send(const char *data, uint8_t len)
         bus_send(data, len);
         while (!(len == bus.rx_len && memcmp(data, bus.rx_buffer, len) == 0)) {
                 bus_send(data, len);
+        }
+}
+
+
+
+
+bool_t bus_buffered_send(const char *data, uint8_t len)
+{
+        bus_data_list_t *new = malloc(sizeof(*new) + len);
+        if (!new) return FALSE;
+
+        new->next = NULL;
+        new->len = len;
+        memcpy(&new->data, data, len);
+
+        if (bus.tx_list) {
+                bus_data_list_t *last = bus.tx_list;
+                while (last->next) last = last->next;
+                last->next = new;
+        } else {
+                bus.tx_list = new;
+        }
+
+        return TRUE;
+}
+
+
+
+
+void bus_flush_send_buffer ()
+{
+        while (bus.tx_list) {
+                bus_data_list_t *next = bus.tx_list->next;
+                bus_verified_send(&bus.tx_list->data, bus.tx_list->len);
+                free(bus.tx_list);
+                bus.tx_list = next;
         }
 }
 
@@ -217,7 +244,7 @@ void bus_send_identification()
 {
         char str[30];
         snprintf(str, sizeof(str), "IDN %02X FF " HARDWARE_NAME " " FIRMWARE_VERSION "\r", adr);
-        bus_verified_send(str, strlen(str));
+        bus_buffered_send(str, strlen(str));
 }
 
 
@@ -298,7 +325,7 @@ void bus_command_reset (uint8_t sender, char *data)
 
 void bus_command_identify (uint8_t sender, char *data)
 {
-
+        bus_send_identification();
 }
 
 

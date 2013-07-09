@@ -219,6 +219,8 @@ int __attribute__ ((OS_main)) main (void) {
         CLR_LED_RD;
 
         while(1) {
+                bus_flush_send_buffer();
+
                 if (prog_write.len && status == STOP) {
                         char str[40];
                         uint8_t len;
