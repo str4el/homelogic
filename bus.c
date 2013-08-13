@@ -21,6 +21,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
 #include "bus.h"
 #include "main.h"
@@ -52,7 +53,7 @@ const bus_command_table_t bus_command_table [] PROGMEM = {
         { "DBG", 3, bus_command_debug,          0,  0},
         { "STE", 3, bus_command_step,           0,  0},
         { "PRG", 3, bus_command_program,        8, BUS_DATA_MAX_LEN},
-        { "STD", 3, bus_command_set_date_time, 20, 20},
+        { "SDT", 3, bus_command_set_date_time, 20, 20},
         { "BCR", 3, bus_command_reset_bit,      4,  6},
         { "BCS", 3, bus_command_set_bit,        4,  6},
         { "MEM", 3, bus_command_memory,       0,  0},
@@ -78,7 +79,6 @@ ISR(USART_RXC_vect) {
 
                 if (in == '\r') {
                         bus.rx_buffer[bus.rx_len] = 0;
-                        //bus_decode_message();
                         bus_command();
                         bus.rx_len = 0;
                 }
@@ -118,7 +118,7 @@ void bus_init(void)
 
 
 
-void bus_send (const char * data, uint8_t len)
+void bus_transmit_data (const char * data, uint8_t len)
 {
         while (bus.tx_lock);
         bus.status = tx_start;
@@ -141,18 +141,21 @@ void bus_send (const char * data, uint8_t len)
 
 
 
-void bus_verified_send(const char *data, uint8_t len)
+bool_t bus_send_raw_sync(const char *data, uint8_t len)
 {
-        bus_send(data, len);
+        uint8_t count = 0;
+        bus_transmit_data(data, len);
         while (!(len == bus.rx_len && memcmp(data, bus.rx_buffer, len) == 0)) {
-                bus_send(data, len);
+                if (++count > BUS_MAX_RETRY) return FALSE;
+                bus_transmit_data(data, len);
         }
+        return TRUE;
 }
 
 
 
 
-bool_t bus_buffered_send(const char *data, uint8_t len)
+bool_t bus_send_raw_async(const char *data, uint8_t len)
 {
         bus_data_list_t *new = malloc(sizeof(*new) + len);
         if (!new) return FALSE;
@@ -175,14 +178,64 @@ bool_t bus_buffered_send(const char *data, uint8_t len)
 
 
 
-void bus_flush_send_buffer ()
+void bus_flush_send_buffer()
 {
         while (bus.tx_list) {
                 bus_data_list_t *next = bus.tx_list->next;
-                bus_verified_send(&bus.tx_list->data, bus.tx_list->len);
+                bus_send_raw_sync(&bus.tx_list->data, bus.tx_list->len);
                 free(bus.tx_list);
                 bus.tx_list = next;
         }
+}
+
+
+
+
+/* Erstellt eine Mitteilung im Standardformat und kopiert sie in den Sendepuffer
+ */
+bool_t bus_send_message_async(const char *cmd, uint8_t dst, const char *format, ...)
+{
+        char str[BUS_BUFSIZE];
+        uint8_t len;
+
+        len = snprintf(str, sizeof(str), "%s %02X %02X ", cmd, adr, dst);
+        if (len >= sizeof(str) - 1) return FALSE;
+
+        if (format) {
+                va_list args;
+                va_start(args, format);
+                len += vsnprintf(str + len, sizeof(str) - len, format, args);
+                va_end(args);
+                if (len >= sizeof(str) - 1) return FALSE;
+        }
+
+        str[len] = '\r';
+        return bus_send_raw_async(str, len + 1);
+}
+
+
+
+
+/* Erstellt eine Mitteilung im Standardformat und versendet sie
+ */
+bool_t bus_send_message_sync(const char *cmd, uint8_t dst, const char *format, ...)
+{
+        char str[BUS_BUFSIZE];
+        uint8_t len;
+
+        len = snprintf(str, sizeof(str), "%s %02X %02X ", cmd, adr, dst);
+        if (len >= sizeof(str) - 1) return FALSE;
+
+        if (format) {
+                va_list args;
+                va_start(args, format);
+                len += vsnprintf(str + len, sizeof(str) - len, format, args);
+                va_end(args);
+                if (len >= sizeof(str) - 1) return FALSE;
+        }
+
+        str[len] = '\r';
+        return bus_send_raw_sync(str, len + 1);
 }
 
 
@@ -192,7 +245,7 @@ void bus_send_cmd(const char *cmd)
 {
         char str[12];
         snprintf(str, sizeof(str), "%s %02X FF\r", cmd, adr);
-        bus_verified_send(str, strlen(str));
+        bus_send_raw_sync(str, strlen(str));
 }
 
 
@@ -202,7 +255,7 @@ void bus_send_data_8(const char *cmd, const uint8_t data)
 {
         char str[16];
         snprintf(str, sizeof(str), "%s %02X FF %02X\r", cmd, adr, data);
-        bus_verified_send(str, strlen(str));
+        bus_send_raw_sync(str, strlen(str));
 }
 
 
@@ -212,7 +265,7 @@ void bus_send_data_16(const char *cmd, const uint16_t data)
 {
         char str[20];
         snprintf(str, sizeof(str), "%s %02X FF %04X\r", cmd, adr, data);
-        bus_verified_send(str, strlen(str));
+        bus_send_raw_sync(str, strlen(str));
 }
 
 
@@ -223,7 +276,7 @@ void bus_send_bit_change (uint8_t status, char type, uint8_t byte, uint8_t bit)
         char str[18];
         if (byte >= 128 || bit >= 8) return;
         snprintf (str, sizeof(str), "BC%c %02X FF %c%u.%u\r", status ? 'S' : 'R', adr, toupper(type), byte, bit);
-        bus_verified_send(str, sizeof(str));
+        bus_send_raw_sync(str, sizeof(str));
 }
 
 
@@ -235,18 +288,8 @@ void bus_send_date_time()
         int8_t ret = rtc_read_time(&time);
         if (ret == 0) {
                 char *str = rtc_time2str(&time);
-                bus_send(str, strlen(str));
+                bus_send_raw_sync(str, strlen(str));
         }
-}
-
-
-
-
-void bus_send_identification()
-{
-        char str[30];
-        snprintf(str, sizeof(str), "IDN %02X FF " HARDWARE_NAME " " FIRMWARE_VERSION "\r", adr);
-        bus_buffered_send(str, strlen(str));
 }
 
 
@@ -385,7 +428,8 @@ void bus_command_program (uint8_t sender, char *data)
 
 void bus_command_set_date_time (uint8_t sender, char *data)
 {
-
+        bus_send_message_async("TEST1", sender, NULL);
+        bus_send_message_async("TEST2", sender, "data: %s", data);
 }
 
 
@@ -452,12 +496,8 @@ void bus_command_set_bit (uint8_t sender, char *data)
 
 void bus_command_memory(uint8_t sender, char *data)
 {
-        char str[20];
-        snprintf(str, sizeof(str), "STACK %02X %02X %ub\r", adr, sender, mem_used_stack());
-        bus_buffered_send(str, strlen(str));
-        snprintf(str, sizeof(str), "HEAP %02X %02X %ub\r", adr, sender, mem_used_heap());
-        bus_buffered_send(str, strlen(str));
-        snprintf(str, sizeof(str), "RAM %02X %02X %ub\r", adr, sender, mem_free_ram());
-        bus_buffered_send(str, strlen(str));
+        bus_send_message_async("STACK", sender, "%ub", mem_used_stack());
+        bus_send_message_async("HEAP" , sender, "%ub", mem_used_heap());
+        bus_send_message_async("RAM"  , sender, "%ub", mem_free_ram());
 }
 

@@ -27,6 +27,8 @@
 #define BUS_BUFSIZE 64
 #define BUS_CMD_MAX_LEN 3
 #define BUS_DATA_MAX_LEN 38
+#define BUS_MAX_RETRY 5
+
 
 #define BUS_TX_LOCK(x) if (bus.tx_lock < (x)) bus.tx_lock = (x)
 
@@ -83,17 +85,20 @@ extern bus_t bus;
 
 extern void bus_init (void);
 
-extern void bus_send (const char *data, uint8_t len);
-extern void bus_verified_send(const char *data, uint8_t len);
-extern bool_t bus_buffered_send(const char *data, uint8_t len);
+extern void bus_transmit_data (const char *data, uint8_t len);
+extern bool_t bus_send_raw_sync(const char *data, uint8_t len);
+extern bool_t bus_send_raw_async(const char *data, uint8_t len);
 extern void bus_flush_send_buffer (void);
+
+extern bool_t bus_send_message_sync(const char *cmd, uint8_t dst, const char *format, ...);
+extern bool_t bus_send_message_async(const char *cmd, uint8_t dst, const char *format, ...);
 
 extern void bus_send_cmd(const char *cmd);
 extern void bus_send_data_8(const char *cmd, const uint8_t data);
 extern void bus_send_data_16(const char *cmd, const uint16_t data);
 extern void bus_send_bit_change (uint8_t status, char type, uint8_t byte, uint8_t bit);
 extern void bus_send_date_time(void);
-extern void bus_send_identification(void);
+static inline bool_t bus_send_identification(void) { return bus_send_message_async("IDN", 0xFF, "%s", HARDWARE_NAME " " FIRMWARE_VERSION); }
 
 extern uint8_t bus_encode_prog_message(char *str, uint8_t len);
 

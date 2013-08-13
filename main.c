@@ -232,7 +232,7 @@ int __attribute__ ((OS_main)) main (void) {
                                 prog_write.len = 0;
                         }
 
-                        bus_verified_send(str, len);
+                        bus_send_raw_sync(str, len);
                 }
 
                 if (status == RUN || status == DEBUG) {
