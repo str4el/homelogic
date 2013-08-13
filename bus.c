@@ -56,7 +56,7 @@ const bus_command_table_t bus_command_table [] PROGMEM = {
         { "SDT", 3, bus_command_set_date_time, 20, 20},
         { "BCR", 3, bus_command_reset_bit,      4,  6},
         { "BCS", 3, bus_command_set_bit,        4,  6},
-        { "MEM", 3, bus_command_memory,       0,  0},
+        { "MEM", 3, bus_command_memory,         0,  0},
 };
 
 
@@ -241,42 +241,14 @@ bool_t bus_send_message_sync(const char *cmd, uint8_t dst, const char *format, .
 
 
 
-void bus_send_cmd(const char *cmd)
-{
-        char str[12];
-        snprintf(str, sizeof(str), "%s %02X FF\r", cmd, adr);
-        bus_send_raw_sync(str, strlen(str));
-}
-
-
-
-
-void bus_send_data_8(const char *cmd, const uint8_t data)
-{
-        char str[16];
-        snprintf(str, sizeof(str), "%s %02X FF %02X\r", cmd, adr, data);
-        bus_send_raw_sync(str, strlen(str));
-}
-
-
-
-
-void bus_send_data_16(const char *cmd, const uint16_t data)
-{
-        char str[20];
-        snprintf(str, sizeof(str), "%s %02X FF %04X\r", cmd, adr, data);
-        bus_send_raw_sync(str, strlen(str));
-}
-
-
-
-
 void bus_send_bit_change (uint8_t status, char type, uint8_t byte, uint8_t bit)
 {
         char str[18];
+        uint8_t len;
+
         if (byte >= 128 || bit >= 8) return;
-        snprintf (str, sizeof(str), "BC%c %02X FF %c%u.%u\r", status ? 'S' : 'R', adr, toupper(type), byte, bit);
-        bus_send_raw_sync(str, sizeof(str));
+        len = snprintf (str, sizeof(str), "BC%c %02X FF %c%u.%u\r", status ? 'S' : 'R', adr, toupper(type), byte, bit);
+        bus_send_raw_sync(str, len);
 }
 
 

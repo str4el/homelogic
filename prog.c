@@ -29,8 +29,7 @@ bool_t sta;
 uint8_t *prog_get_mem_adr (uint8_t spec, uint8_t byte)
 {
         if (status == DEBUG) {
-                bus_send_data_8("SPC", spec);
-                bus_send_data_8("BYT", byte);
+                bus_send_message_sync("STAT", 0xFF, "Spec: %hhu, Byte: %hhu", spec, byte);
         }
 
         uint8_t *ptr;
@@ -111,15 +110,13 @@ void prog_cycle()
         for (;;) {
                 if (status == DEBUG) {
                         step = FALSE;
-                        bus_send_data_16("CIP", prog_pointer);
-                        bus_send_data_8("STA", sta);
-                        bus_send_data_8("VKE", vke);
+                        bus_send_message_sync("STAT", 0xFF, "IP: %hu, STA: %c, VKE: %c", prog_pointer, sta ? '1' : '0', vke ? '1' : '0');
                         while (status == DEBUG && step == FALSE) wdt_reset();
                 }
 
                 prog_cmd_t cmd = eep_read_byte(prog_pointer++);
                 if (status == DEBUG) {
-                        bus_send_data_8("CMD", cmd);
+                        bus_send_message_sync("STAT", 0xFF, "Command: %02X", cmd);
                 }
 
 
@@ -185,15 +182,13 @@ bool_t prog_condition(bool_t vke)
         for (;;) {
                 if (status == DEBUG) {
                         step = FALSE;
-                        bus_send_data_16("CIP", prog_pointer);
-                        bus_send_data_8("STA", sta);
-                        bus_send_data_8("VKE", vke);
+                        bus_send_message_sync("STAT", 0xFF, "IP: %hu, STA: %c, VKE: %c", prog_pointer, sta ? '1' : '0', vke ? '1' : '0');
                         while (status == DEBUG && step == FALSE) wdt_reset();
                 }
 
                 prog_cmd_t cmd = eep_read_byte(prog_pointer++);
                 if (status == DEBUG) {
-                        bus_send_data_8("CMD", cmd);
+                        bus_send_message_sync("STAT", 0xFF, "Command: %02X", cmd);
                 }
 
                 switch (cmd) {
