@@ -93,7 +93,6 @@ extern void bus_flush_send_buffer (void);
 extern bool_t bus_send_message_sync(const char *cmd, uint8_t dst, const char *format, ...);
 extern bool_t bus_send_message_async(const char *cmd, uint8_t dst, const char *format, ...);
 
-extern void bus_send_bit_change (uint8_t status, char type, uint8_t byte, uint8_t bit);
 extern void bus_send_date_time(void);
 static inline bool_t bus_send_identification(void) { return bus_send_message_async("IDN", 0xFF, "%s", HARDWARE_NAME " " FIRMWARE_VERSION); }
 
@@ -110,6 +109,7 @@ extern void bus_command_program (uint8_t sender, char *data);
 extern void bus_command_set_date_time (uint8_t sender, char *data);
 extern void bus_command_reset_bit (uint8_t sender, char *data);
 extern void bus_command_set_bit (uint8_t sender, char *data);
+extern void bus_command_set_byte (uint8_t sender, char *data);
 extern void bus_command_memory (uint8_t sender, char *data);
 
 

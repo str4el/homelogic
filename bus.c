@@ -56,6 +56,7 @@ const bus_command_table_t bus_command_table [] PROGMEM = {
         { "SDT", 3, bus_command_set_date_time, 20, 20},
         { "BCR", 3, bus_command_reset_bit,      4,  6},
         { "BCS", 3, bus_command_set_bit,        4,  6},
+        { "SET", 3, bus_command_set_byte,       6,  8},
         { "MEM", 3, bus_command_memory,         0,  0},
 };
 
@@ -67,37 +68,37 @@ ISR(USART_RXC_vect) {
         uint8_t in = UDR;
 
         switch (bus.status) {
-        case rx_start:
-                bus.rx_len = 0;
-                bus.status = rx_ready;
-        case rx_ready:
-                if (bus.rx_len < BUS_BUFSIZE) {
-                        bus.rx_buffer[bus.rx_len] = in;
-                        bus.rx_len++;
-                }
-
-
-                if (in == '\r') {
-                        bus.rx_buffer[bus.rx_len] = 0;
-                        bus_command();
+                case rx_start:
                         bus.rx_len = 0;
-                }
+                        bus.status = rx_ready;
+                case rx_ready:
+                        if (bus.rx_len < BUS_BUFSIZE) {
+                                bus.rx_buffer[bus.rx_len] = in;
+                                bus.rx_len++;
+                        }
 
-                BUS_TX_LOCK(2 + adr);
-                break;
 
-        case tx_start:
-                bus.rx_len = 0;
-                bus.status = tx_verify;
-        case tx_verify:
-                if (bus.rx_len < BUS_BUFSIZE) {
-                        bus.rx_buffer[bus.rx_len] = in;
-                        bus.rx_len++;
-                }
-                break;
+                        if (in == '\r') {
+                                bus.rx_buffer[bus.rx_len] = 0;
+                                bus_command();
+                                bus.rx_len = 0;
+                        }
 
-        default:
-                BUS_TX_LOCK(2 + adr);
+                        BUS_TX_LOCK(2 + adr);
+                        break;
+
+                case tx_start:
+                        bus.rx_len = 0;
+                        bus.status = tx_verify;
+                case tx_verify:
+                        if (bus.rx_len < BUS_BUFSIZE) {
+                                bus.rx_buffer[bus.rx_len] = in;
+                                bus.rx_len++;
+                        }
+                        break;
+
+                default:
+                        BUS_TX_LOCK(2 + adr);
         }
 
 }
@@ -236,19 +237,6 @@ bool_t bus_send_message_sync(const char *cmd, uint8_t dst, const char *format, .
 
         str[len] = '\r';
         return bus_send_raw_sync(str, len + 1);
-}
-
-
-
-
-void bus_send_bit_change (uint8_t status, char type, uint8_t byte, uint8_t bit)
-{
-        char str[18];
-        uint8_t len;
-
-        if (byte >= 128 || bit >= 8) return;
-        len = snprintf (str, sizeof(str), "BC%c %02X FF %c%u.%u\r", status ? 'S' : 'R', adr, toupper(type), byte, bit);
-        bus_send_raw_sync(str, len);
 }
 
 
@@ -415,20 +403,20 @@ void bus_command_reset_bit (uint8_t sender, char *data)
 
         if (sscanf(data, "%1s%hhi.%hhi", ident, &byte, &bit) == 3) {
                 switch (ident[0]) {
-                case 'e':
-                case 'E':
-                        peb[byte] &= ~(1 << bit);
-                        break;
-                case 'a':
-                case 'A':
-                        pab[byte] &= ~(1 << bit);
-                        break;
-                case 'm':
-                case 'M':
-                        pmb[byte] &= ~(1 << bit);
-                        break;
-                default:
-                        return;
+                        case 'e':
+                        case 'E':
+                                peb[byte] &= ~(1 << bit);
+                                break;
+                        case 'a':
+                        case 'A':
+                                pab[byte] &= ~(1 << bit);
+                                break;
+                        case 'm':
+                        case 'M':
+                                pmb[byte] &= ~(1 << bit);
+                                break;
+                        default:
+                                return;
                 }
         }
 
@@ -445,20 +433,51 @@ void bus_command_set_bit (uint8_t sender, char *data)
 
         if (sscanf(data, "%1s%hhu.%hhu", ident, &byte, &bit) == 3) {
                 switch (ident[0]) {
-                case 'e':
-                case 'E':
-                        peb[byte] |= (1 << bit);
-                        break;
-                case 'a':
-                case 'A':
-                        pab[byte] |= (1 << bit);
-                        break;
-                case 'm':
-                case 'M':
-                        pmb[byte] |= (1 << bit);
-                        break;
-                default:
-                        return;
+                        case 'e':
+                        case 'E':
+                                peb[byte] |= (1 << bit);
+                                break;
+                        case 'a':
+                        case 'A':
+                                pab[byte] |= (1 << bit);
+                                break;
+                        case 'm':
+                        case 'M':
+                                pmb[byte] |= (1 << bit);
+                                break;
+                        default:
+                                return;
+                }
+        }
+}
+
+
+
+
+void bus_command_set_byte (uint8_t sender, char *data)
+{
+        char type[3];
+        uint8_t byte;
+        uint8_t value;
+
+        if (sscanf(data, "%2s%hhu=%hhx", type, &byte, &value) == 3) {
+                if (type[1] == 'b' || type[1] == 'B') {
+                        switch (type[0]) {
+                                case 'e':
+                                case 'E':
+                                        peb[byte] = value;
+                                        break;
+                                case 'a':
+                                case 'A':
+                                        pab[byte] = value;
+                                        break;
+                                case 'm':
+                                case 'M':
+                                        pmb[byte] = value;
+                                        break;
+                                default:
+                                        return;
+                        }
                 }
         }
 }

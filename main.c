@@ -123,10 +123,20 @@ void send_diff (uint8_t in, uint8_t *out, char type, uint8_t byte_address)
         if (*out != in) {
                 diff = *out ^ in;
                 *out = in;
+
+                uint8_t n = 0;
                 for (uint8_t i = 0; i < 8; i++) {
-                        if (diff & (1 << i)) {
-                                bus_send_bit_change(*out & (1 << i), type, byte_address, i);
+                        if (diff & (1 << i)) n++;
+                }
+
+                if (n <= 2) {
+                        for (uint8_t i = 0; i < 8; i++) {
+                                if (diff & (1 << i)) {
+                                        bus_send_message_async(in & (1 << i) ? "BCS" : "BCR", 0xFF, "%c%hhu.%hhu", type, byte_address, i);
+                                }
                         }
+                } else {
+                        bus_send_message_async("SET", 0xFF, "%cB%hhu=%02X", type, byte_address, in);
                 }
         }
 }
