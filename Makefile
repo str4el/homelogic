@@ -11,10 +11,10 @@ TARGET = homelogic
 SRC = main.c bus.c eeprom.c i2c.c prog.c rtc.c 
 ASRC = 
 OPT = s
-VERSION = $(shell git tag)
+VERSION = $(shell git describe --tags)
 
-# Name of this Makefile (used for "make depend").
-MAKEFILE = Makefile
+# Name of the depending file (used for "make depend").
+DEPFILE = .deps
 
 # Debugging format.
 # Native formats for AVR-GCC's -g are stabs [default], or dwarf-2.
@@ -225,14 +225,9 @@ clean:
 	config.h
 
 depend:
-	if grep '^# DO NOT DELETE' $(MAKEFILE) >/dev/null; \
-	then \
-		sed -e '/^# DO NOT DELETE/,$$d' $(MAKEFILE) > \
-			$(MAKEFILE).$$$$ && \
-		$(MV) $(MAKEFILE).$$$$ $(MAKEFILE); \
-	fi
-	echo '# DO NOT DELETE THIS LINE -- make depend depends on it.' \
-		>> $(MAKEFILE); \
-	$(CC) -M -mmcu=$(MCU) $(CDEFS) $(CINCS) $(SRC) $(ASRC) >> $(MAKEFILE)
+	$(CC) -M -mmcu=$(MCU) $(CDEFS) $(CINCS) $(SRC) $(ASRC) >> $(DEPFILE)
+
+
+-include $(DEPFILE)
 
 .PHONY:	all build elf hex eep lss sym program coff extcoff clean depend

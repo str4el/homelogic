@@ -72,7 +72,6 @@ typedef void (*bus_command_function_t) (uint8_t, char *);
 typedef struct bus_command_table_s {
         char command [BUS_CMD_MAX_LEN];
         uint8_t cmd_len;
-        //void (function) (uint8_t, char *, uint8_t);
         bus_command_function_t function;
         uint8_t min_data;
         uint8_t max_data;
