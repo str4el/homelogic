@@ -1,0 +1,65 @@
+OPCODE(oc_load               , "LD"   , 0x00, DT_ANYADR  , FALSE)
+OPCODE(oc_load_not           , "LDN"  , 0x01, DT_ANYADR  , FALSE)
+
+OPCODE(oc_store              , "ST"   , 0x04, DT_ANYADR  , TRUE )
+OPCODE(oc_store_not          , "STN"  , 0x05, DT_ANYADR  , TRUE )
+
+OPCODE(oc_set                , "S"    , 0x08, DT_BOOL    , TRUE )
+OPCODE(oc_reset              , "R"    , 0x09, DT_BOOL    , TRUE )
+
+OPCODE(oc_and                , "AND"  , 0x10, DT_BOOL    , FALSE)
+OPCODE(oc_and_brace          , "AND(" , 0x11, DT_BOOL    , FALSE)
+OPCODE(oc_and_not            , "ANDN" , 0x12, DT_BOOL    , FALSE)
+OPCODE(oc_and_not_brace      , "ANDN(", 0x13, DT_BOOL    , FALSE)
+
+OPCODE(oc_or                 , "OR"   , 0x16, DT_BOOL    , FALSE)
+OPCODE(oc_or_brace           , "OR("  , 0x17, DT_BOOL    , FALSE)
+OPCODE(oc_or_not             , "ORN"  , 0x18, DT_BOOL    , FALSE)
+OPCODE(oc_or_not_brace       , "ORN(" , 0x19, DT_BOOL    , FALSE)
+
+OPCODE(oc_edge_positive      , "EP"   , 0x20, DT_BOOL    , TRUE )
+OPCODE(oc_edge_negative      , "EN"   , 0x21, DT_BOOL    , TRUE )
+
+OPCODE(oc_add                , "ADD"  , 0x30, DT_WORD    , FALSE)
+OPCODE(oc_add_brace          , "ADD(" , 0x31, DT_WORD    , FALSE)
+
+OPCODE(oc_sub                , "SUB"  , 0x34, DT_WORD    , FALSE)
+OPCODE(oc_sub_brace          , "SUB(" , 0x35, DT_WORD    , FALSE)
+
+OPCODE(oc_mul                , "MUL"  , 0x38, DT_WORD    , FALSE)
+OPCODE(oc_mul_brace          , "MUL(" , 0x39, DT_WORD    , FALSE)
+
+OPCODE(oc_div                , "DIV"  , 0x3C, DT_WORD    , FALSE)
+OPCODE(oc_div_brace          , "DIV(" , 0x3D, DT_WORD    , FALSE)
+
+OPCODE(oc_greater_then       , "GT"   , 0x40, DT_WORD    , FALSE)
+OPCODE(oc_greater_then_brace , "GT("  , 0x41, DT_WORD    , FALSE)
+
+OPCODE(oc_greater_equal      , "GE"   , 0x42, DT_WORD    , FALSE)
+OPCODE(oc_greater_equal_brace, "GE("  , 0x43, DT_WORD    , FALSE)
+
+OPCODE(oc_equal              , "EQ"   , 0x46, DT_WORD    , FALSE)
+OPCODE(oc_equal_brace        , "EQ("  , 0x47, DT_WORD    , FALSE)
+
+OPCODE(oc_not_equal          , "NE"   , 0x48, DT_WORD    , FALSE)
+OPCODE(oc_not_equal_brace    , "NE("  , 0x49, DT_WORD    , FALSE)
+
+OPCODE(oc_less_than          , "LE"   , 0x4C, DT_WORD    , FALSE)
+OPCODE(oc_less_than_brace    , "LE("  , 0x4D, DT_WORD    , FALSE)
+
+OPCODE(oc_jump               , "JMP"  , 0x50, DT_LABEL   , FALSE)
+OPCODE(oc_jump_carry         , "JMPC" , 0x51, DT_LABEL   , FALSE)
+OPCODE(oc_jump_carry_not     , "JMPCN", 0x52, DT_LABEL   , FALSE)
+
+OPCODE(oc_call               , "CAL"  , 0x60, DT_LABEL   , FALSE)
+OPCODE(oc_call_carry         , "CALC" , 0x61, DT_LABEL   , FALSE)
+OPCODE(oc_call_carry_not     , "CALCN", 0x62, DT_LABEL   , FALSE)
+
+OPCODE(oc_return             , "RET"  , 0x68, DT_NONE    , FALSE)
+OPCODE(oc_return_carry       , "RETC" , 0x69, DT_NONE    , FALSE)
+OPCODE(oc_return_carry_not   , "RETCN", 0x6A, DT_NONE    , FALSE)
+
+OPCODE(oc_close_brace        , ")"    , 0x70, DT_NONE    , FALSE)
+
+OPCODE(oc_end_of_network     , "***"  , 0xFE, DT_NONE    , FALSE)
+OPCODE(oc_end_of_program     , "END"  , 0xFF, DT_NONE    , FALSE)
