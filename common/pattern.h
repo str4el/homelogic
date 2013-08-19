@@ -40,7 +40,7 @@ struct command_s {
         uint8_t c_opcode;
         union {
                 struct absolute_address_s c_address;
-                uint16_t label;
+                uint16_t c_label;
         } __attribute__((packed));
 } __attribute__((packed));
 

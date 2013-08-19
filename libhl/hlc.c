@@ -193,6 +193,8 @@ static void hlc_clear_symbol_table (hlc_data_t *data)
                 free(data->d_sym_tab.st_sym[i].s_subst);
         }
         free(data->d_sym_tab.st_sym);
+        data->d_sym_tab.st_size = 0;
+        data->d_sym_tab.st_used = 0;
 }
 
 
@@ -370,6 +372,7 @@ static int hlc_scan_command(FILE *file, hlc_data_t *data, hlc_opcode_t opcode, h
                                 return -1;
                         }
 
+                        data->d_device[current_device].dd_status = dd_populated;
                         current_device = -1;
                         hlc_clear_address_map(am);
                         hlc_clear_command_block(cb);
@@ -457,6 +460,107 @@ int EXPORT hlc_scan_file (FILE* file, hlc_data_t *data)
 
         hlc_clear_address_map(&am);
         hlc_clear_command_block(&cb);
+        return ret;
+}
+
+
+
+
+int EXPORT hlc_compile (hlc_data_t *data)
+{
+        int ret = 0;
+
+        for (int i = 0; i < sizeof(data->d_device) / sizeof(*data->d_device); i++) {
+                hlc_device_data_t *d = &data->d_device[i];
+                if (d->dd_status != dd_populated) continue;
+
+                struct program_header_s ph;
+                struct address_map_s am;
+                struct command_s co;
+
+                size_t ph_size = sizeof(ph);
+                size_t am_size = sizeof(am) * d->dd_am.am_used;
+                size_t cb_size = sizeof(co) * d->dd_cb.cb_used;
+                size_t size = ph_size + am_size + cb_size;
+
+                if (size > HLC_PROGMEM_SIZE) {
+                        hlc_set_error(data, e_not_enough_progmem, NULL);
+                        return -1;
+                }
+
+                free(d->dd_program);
+                d->dd_program = malloc(HLC_PROGMEM_SIZE);
+
+                if (!d->dd_program) {
+                        hlc_set_error(data, e_out_of_memory, NULL);
+                        return -1;
+                }
+
+                memset (d->dd_program, 0xFF, HLC_PROGMEM_SIZE);
+                char *ptr = d->dd_program;
+
+                ph.ph_address_map_offset = ph_size;
+                ph.ph_address_map_size = d->dd_am.am_used;
+                ph.ph_program_offset = ph_size + am_size;
+                ph.ph_program_size = d->dd_cb.cb_used;
+
+                memcpy(ptr, &ph, sizeof(ph));
+                ptr += sizeof(ph);
+
+                for (int i = 0; i < d->dd_am.am_used; i++) {
+                        am.am_device_adr = d->dd_am.am_addresses[i].cd_address.cd_device;
+
+                        switch(d->dd_am.am_addresses[i].cd_address.cd_mem_type) {
+                                case mt_input:   am.am_mem_adr = as_input;   break;
+                                case mt_output:  am.am_mem_adr = as_output;  break;
+                                case mt_memory:  am.am_mem_adr = as_memory;  break;
+                                case mt_timer:   am.am_mem_adr = as_timer;   break;
+                                case mt_counter: am.am_mem_adr = as_counter; break;
+                        }
+
+                        am.am_mem_adr |= d->dd_am.am_addresses[i].cd_address.cd_byte >> 1;
+
+                        memcpy(ptr, &am, sizeof(am));
+                        ptr += sizeof(am);
+                }
+
+
+                for (int i = 0; i < d->dd_cb.cb_used; i++) {
+                        hlc_command_t *ci = &d->dd_cb.cb_commands[i];
+                        memset(&co, 0, sizeof(co));
+
+                        co.c_opcode = ci->c_opcode.oc_num;
+
+                        if (ci->c_data.cd_data_type & dt_anyadr) {
+                                switch (ci->c_data.cd_data_type) {
+                                        case dt_bit:   co.c_address.aa_spec = ci->c_data.cd_address.cd_bit; break;
+                                        case dt_byte:  co.c_address.aa_spec = as_byte;  break;
+                                        case dt_word:  co.c_address.aa_spec = as_word;  break;
+                                        case dt_dword: co.c_address.aa_spec = as_dword; break;
+                                        default: break; // Nur um die Warnug zu verhindern
+                                }
+
+                                switch (ci->c_data.cd_address.cd_mem_type) {
+                                        case mt_input:   co.c_address.aa_spec |= as_input;   break;
+                                        case mt_output:  co.c_address.aa_spec |= as_output;  break;
+                                        case mt_memory:  co.c_address.aa_spec |= as_memory;  break;
+                                        case mt_timer:   co.c_address.aa_spec |= as_timer;   break;
+                                        case mt_counter: co.c_address.aa_spec |= as_counter; break;
+                                }
+
+                                co.c_address.aa_device = ci->c_data.cd_address.cd_device;
+                                co.c_address.aa_byte   = ci->c_data.cd_address.cd_byte;
+                        } else if (ci->c_data.cd_data_type == dt_label) {
+                                co.c_label = ci->c_data.cd_label;
+                        }
+
+                        memcpy(ptr, &co, sizeof(co));
+                        ptr += sizeof(co);
+                }
+
+                data->d_device[i].dd_status = dd_compiled;
+                ret++;
+        }
         return ret;
 }
 

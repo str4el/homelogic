@@ -6,6 +6,8 @@
 
 
 #define HLC_MAX_DEVICES 128
+#define HLC_PROGMEM_SIZE 1024
+
 
 
 
@@ -16,7 +18,8 @@ typedef enum hlc_error_e {
         e_datatype_missmatch,
         e_unclear_authority,
         e_out_of_range,
-        e_unexpected_end
+        e_unexpected_end,
+        e_not_enough_progmem
 } hlc_error_t;
 
 
@@ -101,9 +104,8 @@ typedef struct hlc_address_map_s {
 typedef struct hlc_device_data_s {
         enum {
                 dd_empty = 0,
-                dd_incomplete,
-                dd_corrupt,
-                dd_ready
+                dd_populated,
+                dd_compiled
         } dd_status;
 
         hlc_address_map_t dd_am;
@@ -136,6 +138,7 @@ typedef struct hlc_data_s {
 hlc_data_t *hlc_init_data();
 void hlc_free_data(hlc_data_t *data);
 int hlc_scan_file (FILE* file, hlc_data_t *data);
+int hlc_compile (hlc_data_t *data);
 
 
 #endif // HLC_H
