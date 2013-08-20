@@ -310,7 +310,7 @@ static char *hlc_get_chunk(hlc_data_t *data, FILE *file)
 
 
 
-static int hlc_scan_command(FILE *file, hlc_data_t *data, hlc_opcode_t opcode, hlc_command_block_t *cb, hlc_address_map_t *am)
+static int hlc_scan_command(hlc_data_t *data, FILE *file, hlc_opcode_t opcode, hlc_command_block_t *cb, hlc_address_map_t *am)
 {
         static int current_device = -1;
 
@@ -410,7 +410,7 @@ void EXPORT hlc_free_data(hlc_data_t *data)
 
 
 
-int EXPORT hlc_scan_file (FILE* file, hlc_data_t *data)
+int EXPORT hlc_scan_file (hlc_data_t *data, FILE* file)
 {
         int ret = 0;
         char *chunk;
@@ -442,7 +442,7 @@ int EXPORT hlc_scan_file (FILE* file, hlc_data_t *data)
 
                 int ocn = hlc_get_opcode(chunk);
                 if (ocn >= 0) {
-                        if (hlc_scan_command(file, data, opcodes[ocn], &cb, &am)) {
+                        if (hlc_scan_command(data, file, opcodes[ocn], &cb, &am)) {
                                 hlc_clear_address_map(&am);
                                 hlc_clear_command_block(&cb);
                                 return -1;
@@ -465,7 +465,37 @@ int EXPORT hlc_scan_file (FILE* file, hlc_data_t *data)
 
 
 
+int EXPORT hlc_write_hexfile(hlc_data_t *data, FILE *file)
+{
+        int ret = 0;
 
+        for (uint16_t i = 0; i < sizeof(data->d_device) / sizeof(*data->d_device); i++) {
+                if (data->d_device[i].dd_status != dd_ready) continue;
 
+                uint8_t sum = 0x02 + 0x04 + (i & 0xFF) + (i >> 8);
+                fprintf(file, ":02000004%04X%02X\n", i, (uint8_t) (0 - sum));
 
+                int left = 1024;
+                uint16_t pos = 0;
+                while (left) {
+                        uint8_t len = left > 0x10 ? 0x10 : left;
+                        uint8_t sum = len + (pos & 0xFF) + (pos >> 8);
 
+                        fprintf(file, ":%02X%04X00", len, pos);
+                        for (int j = 0; j < len; j++) {
+                                uint8_t val = data->d_device[i].dd_program[pos + j];
+                                fprintf(file, "%02X", val);
+                                sum += val;
+                        }
+
+                        fprintf(file, "%02X\n", (uint8_t)(0 - sum));
+                        pos += len;
+                        left -= len;
+                }
+
+                ret++;
+        }
+
+        fprintf(file, ":00000001FF\n");
+        return ret;
+}

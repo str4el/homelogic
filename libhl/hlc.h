@@ -135,7 +135,8 @@ typedef struct hlc_data_s {
 
 hlc_data_t *hlc_init_data();
 void hlc_free_data(hlc_data_t *data);
-int hlc_scan_file (FILE* file, hlc_data_t *data);
+int hlc_scan_file (hlc_data_t *data, FILE* file);
+int hlc_write_hexfile(hlc_data_t *data, FILE *file);
 
 
 #endif // HLC_H
