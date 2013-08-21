@@ -11,14 +11,14 @@
 
 
 typedef enum hlc_error_e {
-        e_unknown_chunk,
-        e_out_of_memory,
-        e_opaque_datatype,
-        e_datatype_missmatch,
-        e_unclear_authority,
-        e_out_of_range,
-        e_unexpected_end,
-        e_not_enough_progmem
+        hlc_e_none = 0,
+        hlc_e_unknown_chunk,
+        hlc_e_out_of_memory,
+        hlc_e_opaque_datatype,
+        hlc_e_datatype_missmatch,
+        hlc_e_unclear_authority,
+        hlc_e_out_of_range,
+        hlc_e_unexpected_end
 } hlc_error_t;
 
 
@@ -33,6 +33,7 @@ typedef enum hlc_data_type_e {
         dt_anyadr = 15,
         dt_label  = 32
 } hlc_data_type_t;
+
 
 
 

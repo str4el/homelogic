@@ -3,7 +3,7 @@ CFLAGS = -std=gnu99 -Wall -g -fpic -fvisibility=hidden
 LFLAGS = -Wl -O1 -shared 
 RM = rm -rf
 
-SRC = hlc.c
+SRC = hlc.c hll.c
 OBJ = $(SRC:%.c=%.o)
 TARGET = libhl.so
 

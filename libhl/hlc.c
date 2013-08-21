@@ -323,12 +323,12 @@ static int hlc_scan_command(hlc_data_t *data, FILE *file, hlc_opcode_t opcode, h
         if (opcode.oc_data_type != dt_none) {
                 char *chunk = hlc_get_chunk(data, file);
                 if (!chunk || hlc_get_address(chunk, &command.c_data)) {
-                        hlc_set_error(data, e_opaque_datatype, chunk);
+                        hlc_set_error(data, hlc_e_opaque_datatype, chunk);
                         return -1;
                 }
 
                 if (!(opcode.oc_data_type & command.c_data.cd_data_type)) {
-                        hlc_set_error(data, e_datatype_missmatch, chunk);
+                        hlc_set_error(data, hlc_e_datatype_missmatch, chunk);
                         return -1;
                 }
 
@@ -336,21 +336,21 @@ static int hlc_scan_command(hlc_data_t *data, FILE *file, hlc_opcode_t opcode, h
                         if (current_device < 0) {
                                 current_device = command.c_data.cd_address.cd_device;
                         } else if (current_device != command.c_data.cd_address.cd_device) {
-                                hlc_set_error(data, e_unclear_authority, chunk);
+                                hlc_set_error(data, hlc_e_unclear_authority, chunk);
                                 return -1;
                         }
                 }
 
                 if (command.c_data.cd_data_type & dt_anyadr) {
                         if (hlc_add_to_address_map(am, command.c_data)) {
-                                hlc_set_error(data, e_out_of_memory, NULL);
+                                hlc_set_error(data, hlc_e_out_of_memory, NULL);
                                 return -1;
                         }
                 }
         }
 
         if (hlc_add_to_command_block(cb, command)) {
-                hlc_set_error(data, e_out_of_memory, NULL);
+                hlc_set_error(data, hlc_e_out_of_memory, NULL);
                 return -1;
         }
 
@@ -358,17 +358,17 @@ static int hlc_scan_command(hlc_data_t *data, FILE *file, hlc_opcode_t opcode, h
                 case oc_end_of_network:
                 case oc_end_of_program:
                         if (current_device < 0 || current_device >= HLC_MAX_DEVICES) {
-                                hlc_set_error(data, e_out_of_range, NULL);
+                                hlc_set_error(data, hlc_e_out_of_range, NULL);
                                 return -1;
                         }
 
                         if (hlc_join_address_map(&(data->d_device[current_device].dd_am), am)) {
-                                hlc_set_error(data, e_out_of_memory, NULL);
+                                hlc_set_error(data, hlc_e_out_of_memory, NULL);
                                 return -1;
                         }
 
                         if (hlc_join_command_block(&(data->d_device[current_device].dd_cb), cb)) {
-                                hlc_set_error(data, e_out_of_memory, NULL);
+                                hlc_set_error(data, hlc_e_out_of_memory, NULL);
                                 return -1;
                         }
 
@@ -388,7 +388,7 @@ hlc_data_t EXPORT *hlc_init_data()
 {
         hlc_data_t *data;
 
-        data = malloc(sizeof(hlc_data_t));
+        data = malloc(sizeof(*data));
         if (!data) return NULL;
 
         memset(data, 0, sizeof(data));
@@ -400,7 +400,7 @@ hlc_data_t EXPORT *hlc_init_data()
 
 void EXPORT hlc_free_data(hlc_data_t *data)
 {
-        for (int i = 0; i < sizeof(data) / sizeof(*data); i++) {
+        for (int i = 0; i < sizeof(data->d_device) / sizeof(*data->d_device); i++) {
                 hlc_device_data_t dd = data->d_device[i];
                 hlc_clear_address_map(&dd.dd_am);
                 hlc_clear_command_block(&dd.dd_cb);
@@ -436,7 +436,7 @@ int EXPORT hlc_scan_file (hlc_data_t *data, FILE* file)
                         if (2 == fscanf(file, "%63s %63s", c1, c2)) {
                                 hlc_add_to_symbol_table(data, c1, c2);
                         } else {
-                                hlc_set_error(data, e_unexpected_end, NULL);
+                                hlc_set_error(data, hlc_e_unexpected_end, NULL);
                                 return -1;
                         }
 
@@ -454,7 +454,7 @@ int EXPORT hlc_scan_file (hlc_data_t *data, FILE* file)
         }
 
         if (am.am_used || cb.cb_used) {
-                hlc_set_error(data, e_unexpected_end, NULL);
+                hlc_set_error(data, hlc_e_unexpected_end, NULL);
                 ret = -1;
         }
 
@@ -487,7 +487,7 @@ int EXPORT hlc_compile (hlc_data_t *data)
                 d->dd_program_size = 0;
                 d->dd_program = malloc(size);
                 if (!d->dd_program) {
-                        hlc_set_error(data, e_out_of_memory, NULL);
+                        hlc_set_error(data, hlc_e_out_of_memory, NULL);
                         return -1;
                 }
                 d->dd_program_size = size;
