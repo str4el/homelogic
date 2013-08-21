@@ -483,20 +483,16 @@ int EXPORT hlc_compile (hlc_data_t *data)
                 size_t cb_size = sizeof(co) * d->dd_cb.cb_used;
                 size_t size = ph_size + am_size + cb_size;
 
-                if (size > HLC_PROGMEM_SIZE) {
-                        hlc_set_error(data, e_not_enough_progmem, NULL);
-                        return -1;
-                }
-
                 free(d->dd_program);
-                d->dd_program = malloc(HLC_PROGMEM_SIZE);
-
+                d->dd_program_size = 0;
+                d->dd_program = malloc(size);
                 if (!d->dd_program) {
                         hlc_set_error(data, e_out_of_memory, NULL);
                         return -1;
                 }
+                d->dd_program_size = size;
 
-                memset (d->dd_program, 0xFF, HLC_PROGMEM_SIZE);
+                memset (d->dd_program, 0xFF, size);
                 char *ptr = d->dd_program;
 
                 ph.ph_address_map_offset = ph_size;
@@ -577,11 +573,11 @@ int EXPORT hlc_write_hexfile(hlc_data_t *data, FILE *file)
                 uint8_t sum = 0x02 + 0x04 + (i & 0xFF) + (i >> 8);
                 fprintf(file, ":02000004%04X%02X\n", i, (uint8_t) (0 - sum));
 
-                int left = 1024;
+                int left = data->d_device[i].dd_program_size;
                 uint16_t pos = 0;
                 while (left) {
                         uint8_t len = left > 0x10 ? 0x10 : left;
-                        uint8_t sum = len + (pos & 0xFF) + (pos >> 8);
+                        sum = len + (pos & 0xFF) + (pos >> 8);
 
                         fprintf(file, ":%02X%04X00", len, pos);
                         for (int j = 0; j < len; j++) {

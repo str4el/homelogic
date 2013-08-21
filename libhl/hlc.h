@@ -6,7 +6,6 @@
 
 
 #define HLC_MAX_DEVICES 128
-#define HLC_PROGMEM_SIZE 1024
 
 
 
@@ -111,6 +110,7 @@ typedef struct hlc_device_data_s {
         hlc_address_map_t dd_am;
         hlc_command_block_t dd_cb;
 
+        uint16_t dd_program_size;
         char *dd_program;
 } hlc_device_data_t;
 
