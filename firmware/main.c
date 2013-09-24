@@ -24,9 +24,10 @@
 #include "bus.h"
 #include "prog.h"
 #include "eeprom.h"
+#include "led.h"
 
 
-
+/*
 FUSES = {
         .low = LFUSE,
         .high = HFUSE,
@@ -34,7 +35,7 @@ FUSES = {
         .extended = EFUSE,
 #endif
 };
-
+*/
 
 
 
@@ -54,8 +55,13 @@ static inline void init_timer2(void)
  */
 ISR(TIMER2_COMP_vect) {
         static uint8_t intimer[REACH * 8];
+        static uint16_t timerbase = 0;
 
         if (bus.tx_lock) bus.tx_lock--;
+
+        if (!(timerbase % 250)) led_control();
+        if (!(timerbase % 10000)) timerbase = 0;
+        timerbase++;
 
 
 #ifdef HW_PROTOTYPE
@@ -195,7 +201,9 @@ int __attribute__ ((OS_main)) main (void) {
         PORTC = INIT_PORTC;
         PORTD = INIT_PORTD;
 
-        SET_LED_RD;
+        led.green = ls_off;
+        led.yellow = ls_off;
+        led.red = ls_blink_fast;
 
         init_timer2();
         bus_init();
@@ -227,12 +235,14 @@ int __attribute__ ((OS_main)) main (void) {
         status = RUN;
         wdt_enable(WDTO_2S);
 
-        CLR_LED_RD;
-
+        led.red = ls_off;
         while(1) {
                 bus_flush_send_buffer();
 
                 if (prog_write.len && status == STOP) {
+                        led.yellow = ls_off;
+                        led.red = ls_blink_fast;
+
                         char str[40];
                         uint8_t len;
 
@@ -243,15 +253,17 @@ int __attribute__ ((OS_main)) main (void) {
                         }
 
                         bus_send_raw_sync(str, len);
+                        led.red = ls_off;
                 }
 
                 if (status == RUN || status == DEBUG) {
-                        SET_LED_YE;
+                        led.yellow = (status == RUN) ? ls_on : ls_blink;
                         read_input(adr);
                         prog_cycle();
                         write_output(adr);
+                } else {
+                        led.yellow = ls_off;
                 }
-                CLR_LED_YE;
                 wdt_reset();
         }
 }

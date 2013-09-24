@@ -287,8 +287,8 @@ uint8_t bus_encode_prog_message(char *str, uint8_t len)
  */
 void bus_command ()
 {
-        char cmd[BUS_CMD_MAX_LEN];
-        char data[BUS_DATA_MAX_LEN];
+        char cmd[BUS_CMD_MAX_LEN + 1];
+        char data[BUS_DATA_MAX_LEN + 1] = "";
         unsigned char src;
         unsigned char dst;
 

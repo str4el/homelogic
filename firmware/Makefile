@@ -89,8 +89,8 @@ AVRDUDE_PORT = usb
 AVRDUDE_WRITE_FLASH = -U flash:w:$(TARGET).hex
 #AVRDUDE_WRITE_EEPROM = -U eeprom:w:$(TARGET).eep
 
-AVRDUDE_LFUSE = $(shell $(OBJDUMP) -s -j .fuse $(TARGET).elf | sed -ne '/8000f4/s/\s\+\w\+\s\+\(\w\w\)\(\w\w\).*/\1/p')
-AVRDUDE_HFUSE = $(shell $(OBJDUMP) -s -j .fuse $(TARGET).elf | sed -ne '/8000f4/s/\s\+\w\+\s\+\(\w\w\)\(\w\w\).*/\2/p')
+AVRDUDE_LFUSE = $(shell $(OBJDUMP) -s -j .fuse $(TARGET).elf | sed -ne '/820000/s/\s\+\w\+\s\+\(\w\w\)\(\w\w\).*/\1/p')
+AVRDUDE_HFUSE = $(shell $(OBJDUMP) -s -j .fuse $(TARGET).elf | sed -ne '/820000/s/\s\+\w\+\s\+\(\w\w\)\(\w\w\).*/\2/p')
 
 AVRDUDE_WRITE_FUSE = -U lfuse:w:0x$(AVRDUDE_LFUSE):m -U hfuse:w:0x$(AVRDUDE_HFUSE):m
 
@@ -180,7 +180,7 @@ extcoff: $(TARGET).elf
 .SUFFIXES: .elf .hex .eep .lss .sym
 
 .elf.hex:
-	$(OBJCOPY) -O $(FORMAT) -R .eeprom $< $@
+	$(OBJCOPY) -O $(FORMAT) -R .eeprom -R .fuse -R .lock $< $@
 
 .elf.eep:
 	-$(OBJCOPY) -j .eeprom --set-section-flags=.eeprom="alloc,load" \
