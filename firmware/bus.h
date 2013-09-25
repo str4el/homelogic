@@ -25,7 +25,7 @@
 #include "bool.h"
 
 #define BUS_BUFSIZE 64
-#define BUS_CMD_MAX_LEN 3
+#define BUS_CMD_MAX_LEN 5
 #define BUS_DATA_MAX_LEN 38
 #define BUS_MAX_RETRY 5
 
@@ -93,7 +93,6 @@ extern bool_t bus_send_message_sync(const char *cmd, uint8_t dst, const char *fo
 extern bool_t bus_send_message_async(const char *cmd, uint8_t dst, const char *format, ...);
 
 extern void bus_send_date_time(void);
-static inline bool_t bus_send_identification(void) { return bus_send_message_async("IDN", 0xFF, "%s", HARDWARE_NAME " " FIRMWARE_VERSION); }
 
 extern uint8_t bus_encode_prog_message(char *str, uint8_t len);
 

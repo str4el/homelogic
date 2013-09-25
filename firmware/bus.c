@@ -46,18 +46,18 @@ bus_t bus = {
 
 
 const bus_command_table_t bus_command_table [] PROGMEM = {
-        { "RST", 3, bus_command_reset,          0,  0},
-        { "IDY", 3, bus_command_identify,       0,  0},
-        { "RUN", 3, bus_command_run,            0,  0},
-        { "STP", 3, bus_command_stop,           0,  0},
-        { "DBG", 3, bus_command_debug,          0,  0},
-        { "STE", 3, bus_command_step,           0,  0},
-        { "PRG", 3, bus_command_program,        8, BUS_DATA_MAX_LEN},
-        { "SDT", 3, bus_command_set_date_time, 20, 20},
-        { "BCR", 3, bus_command_reset_bit,      4,  6},
-        { "BCS", 3, bus_command_set_bit,        4,  6},
-        { "SET", 3, bus_command_set_byte,       6,  8},
-        { "MEM", 3, bus_command_memory,         0,  0},
+        { "RESET", 5, bus_command_reset,          0,  0},
+        { "IDY"  , 3, bus_command_identify,       0,  0},
+        { "RUN"  , 3, bus_command_run,            0,  0},
+        { "STOP" , 4, bus_command_stop,           0,  0},
+        { "DEBUG", 5, bus_command_debug,          0,  0},
+        { "STEP" , 4, bus_command_step,           0,  0},
+        { "PROG" , 4, bus_command_program,        8, BUS_DATA_MAX_LEN},
+        { "SDT"  , 3, bus_command_set_date_time, 20, 20},
+        { "BCR"  , 3, bus_command_reset_bit,      4,  6},
+        { "BCS"  , 3, bus_command_set_bit,        4,  6},
+        { "SET"  , 3, bus_command_set_byte,       6,  8},
+        { "MEM"  , 3, bus_command_memory,         0,  0},
 };
 
 
@@ -288,12 +288,13 @@ uint8_t bus_encode_prog_message(char *str, uint8_t len)
 void bus_command ()
 {
         char cmd[BUS_CMD_MAX_LEN + 1];
-        char data[BUS_DATA_MAX_LEN + 1] = "";
+        char data[BUS_DATA_MAX_LEN + 1];
         unsigned char src;
         unsigned char dst;
 
         int ret = sscanf (bus.rx_buffer, "%" TOSTR(BUS_CMD_MAX_LEN) "s %2hhx %2hhx %" TOSTR(BUS_DATA_MAX_LEN) "s", cmd, &src, &dst, data);
         if (ret < 3) return;
+        if (ret < 4) data[0] = 0;
 
         for (uint8_t i = 0; i < sizeof(bus_command_table) / sizeof(*bus_command_table); i++) {
                 uint8_t command_len = pgm_read_byte(&bus_command_table[i].cmd_len);
@@ -309,8 +310,10 @@ void bus_command ()
                         if (!(min_data <= len && len <= max_data)) return;
 
                         bus_command_function_t function = (bus_command_function_t) pgm_read_word(&bus_command_table[i].function);
-                        if (function) function(src, data);
-
+                        if (function) {
+                                //bus_send_message_async("ACK", src, "%s %s", cmd, data);
+                                function(src, data);
+                        }
                         return;
                 }
         }
@@ -330,7 +333,7 @@ void bus_command_reset (uint8_t sender, char *data)
 
 void bus_command_identify (uint8_t sender, char *data)
 {
-        bus_send_identification();
+        bus_send_message_async("IDENT", sender, "%s", HARDWARE_NAME " " FIRMWARE_VERSION);
 }
 
 

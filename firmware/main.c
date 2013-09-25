@@ -226,8 +226,8 @@ int __attribute__ ((OS_main)) main (void) {
         // Interrupts ein
         sei();
 
-        bus_send_message_sync("RDY", 0xFF, NULL);
-        bus_send_identification();
+        bus_send_message_sync("READY", 0xFF, NULL);
+        bus_command_identify(0xFF, NULL);
         bus_send_date_time();
 
 
