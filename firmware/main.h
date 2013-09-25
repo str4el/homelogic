@@ -40,9 +40,14 @@ uint8_t ab [MEMSIZE];
 uint8_t mb [MEMSIZE];
 
 uint8_t adr;
-volatile prog_status_t status;
+
+struct state_s {
+        prog_status_t current;
+        volatile prog_status_t coming;
+        volatile bool_t step;
+} state;
+
 volatile prog_write_t prog_write;
-volatile bool_t step;
 
 
 static inline void reset(void)

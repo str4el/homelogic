@@ -28,7 +28,7 @@ bool_t sta;
 
 uint8_t *prog_get_mem_adr (uint8_t spec, uint8_t byte)
 {
-        if (status == DEBUG) {
+        if (state.current == DEBUG) {
                 bus_send_message_sync("STAT", 0xFF, "Spec: %hhu, Byte: %hhu", spec, byte);
         }
 
@@ -101,6 +101,15 @@ static inline void prog_togle_bit(void)
 
 
 
+static inline void prog_wait_for_step(void)
+{
+        state.step = FALSE;
+        while (state.coming == DEBUG && state.step == FALSE) wdt_reset();
+}
+
+
+
+
 void prog_cycle()
 {
         prog_pointer = 0;
@@ -108,14 +117,13 @@ void prog_cycle()
         bool_t vke = FALSE;
 
         for (;;) {
-                if (status == DEBUG) {
-                        step = FALSE;
+                if (state.current == DEBUG) {
                         bus_send_message_sync("STAT", 0xFF, "IP: %hu, STA: %c, VKE: %c", prog_pointer, sta ? '1' : '0', vke ? '1' : '0');
-                        while (status == DEBUG && step == FALSE) wdt_reset();
+                        prog_wait_for_step();
                 }
 
                 prog_cmd_t cmd = eep_read_byte(prog_pointer++);
-                if (status == DEBUG) {
+                if (state.current == DEBUG) {
                         bus_send_message_sync("STAT", 0xFF, "Command: %02X", cmd);
                 }
 
@@ -180,14 +188,13 @@ void prog_cycle()
 bool_t prog_condition(bool_t vke)
 {
         for (;;) {
-                if (status == DEBUG) {
-                        step = FALSE;
+                if (state.current == DEBUG) {
                         bus_send_message_sync("STAT", 0xFF, "IP: %hu, STA: %c, VKE: %c", prog_pointer, sta ? '1' : '0', vke ? '1' : '0');
-                        while (status == DEBUG && step == FALSE) wdt_reset();
+                        prog_wait_for_step();
                 }
 
                 prog_cmd_t cmd = eep_read_byte(prog_pointer++);
-                if (status == DEBUG) {
+                if (state.current == DEBUG) {
                         bus_send_message_sync("STAT", 0xFF, "Command: %02X", cmd);
                 }
 

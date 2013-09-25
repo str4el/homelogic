@@ -338,7 +338,7 @@ void bus_command_identify (uint8_t sender, char *data)
 
 void bus_command_run (uint8_t sender, char *data)
 {
-        status = RUN;
+        state.coming = RUN;
 }
 
 
@@ -346,7 +346,7 @@ void bus_command_run (uint8_t sender, char *data)
 
 void bus_command_stop (uint8_t sender, char *data)
 {
-        status = STOP;
+        state.coming = STOP;
 }
 
 
@@ -354,7 +354,7 @@ void bus_command_stop (uint8_t sender, char *data)
 
 void bus_command_debug (uint8_t sender, char *data)
 {
-        status = DEBUG;
+        state.coming = DEBUG;
 }
 
 
@@ -362,7 +362,7 @@ void bus_command_debug (uint8_t sender, char *data)
 
 void bus_command_step (uint8_t sender, char *data)
 {
-        step = TRUE;
+        state.step = TRUE;
 }
 
 

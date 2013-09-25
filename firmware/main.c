@@ -203,7 +203,7 @@ int __attribute__ ((OS_main)) main (void) {
 
         led.green = ls_off;
         led.yellow = ls_off;
-        led.red = ls_blink_fast;
+        led.red = ls_on;
 
         init_timer2();
         bus_init();
@@ -232,39 +232,67 @@ int __attribute__ ((OS_main)) main (void) {
 
 
         prog_write.len = 0;
-        status = RUN;
+        state.current = STOP;
+        state.coming = RUN;
+        state.step = FALSE;
         wdt_enable(WDTO_2S);
 
         led.red = ls_off;
         while(1) {
                 bus_flush_send_buffer();
 
-                if (prog_write.len && status == STOP) {
-                        led.yellow = ls_off;
-                        led.red = ls_blink_fast;
+                if (state.current != state.coming) {
+                        switch (state.coming) {
+                        case STOP:
+                                bus_send_message_sync("STAT", 0xFF, "STOP");
+                                led.yellow = ls_off;
+                                break;
 
-                        char str[40];
-                        uint8_t len;
+                        case RUN:
+                                bus_send_message_sync("STAT", 0xFF, "RUN");
+                                led.yellow = ls_on;
+                                break;
 
-                        ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-                                eep_write(prog_write.pos, (void *) prog_write.data, prog_write.len);
-                                len = bus_encode_prog_message(str, sizeof(str));
-                                prog_write.len = 0;
+                        case DEBUG:
+                                bus_send_message_sync("STAT", 0xFF, "DEBUG");
+                                led.yellow = ls_blink;
+                                break;
                         }
-
-                        bus_send_raw_sync(str, len);
-                        led.red = ls_off;
+                        state.current = state.coming;
                 }
 
-                if (status == RUN || status == DEBUG) {
-                        led.yellow = (status == RUN) ? ls_on : ls_blink;
+                switch (state.current) {
+                case STOP:
+                        if (prog_write.len) {
+                                led.red = ls_blink_fast;
+
+                                char str[40];
+                                uint8_t len;
+
+                                ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+                                        eep_write(prog_write.pos, (void *) prog_write.data, prog_write.len);
+                                        len = bus_encode_prog_message(str, sizeof(str));
+                                        prog_write.len = 0;
+                                }
+
+                                bus_send_raw_sync(str, len);
+                                led.red = ls_off;
+                        }
+                        break;
+
+                case RUN:
+                case DEBUG:
                         read_input(adr);
                         prog_cycle();
                         write_output(adr);
-                } else {
-                        led.yellow = ls_off;
+                        break;
+
+                default:
+                        led.yellow = ls_blink;
+                        led.red = ~ls_blink;
+                        break;
                 }
+
                 wdt_reset();
         }
 }
-
