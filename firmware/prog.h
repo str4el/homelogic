@@ -61,6 +61,7 @@ typedef struct prog_write_s {
 
 extern uint16_t prog_pointer;
 
+extern uint8_t prog_check(void);
 extern void prog_cycle (void);
 extern bool_t prog_condition (bool_t vke);
 

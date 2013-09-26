@@ -45,10 +45,10 @@ struct state_s {
         prog_status_t current;
         volatile prog_status_t coming;
         volatile bool_t step;
-} state;
+};
 
-volatile prog_write_t prog_write;
-
+extern struct state_s state;
+extern volatile prog_write_t prog_write;
 
 static inline void reset(void)
 {

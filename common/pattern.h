@@ -20,8 +20,10 @@ enum address_sepc_e {
 struct program_header_s {
         uint16_t ph_address_map_offset;
         uint16_t ph_address_map_size;
+        uint16_t ph_address_map_crc16;
         uint16_t ph_program_offset;
         uint16_t ph_program_size;
+        uint16_t ph_program_crc16;
 } __attribute__((packed));
 
 

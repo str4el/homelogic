@@ -27,7 +27,6 @@
 #include "led.h"
 
 
-/*
 FUSES = {
         .low = LFUSE,
         .high = HFUSE,
@@ -35,7 +34,11 @@ FUSES = {
         .extended = EFUSE,
 #endif
 };
-*/
+
+
+
+struct state_s state;
+volatile prog_write_t prog_write;
 
 
 
@@ -191,6 +194,26 @@ void write_output(uint8_t a)
 
 
 
+bool_t init_program(void)
+{
+        uint8_t ret;
+
+        ret = prog_check();
+
+        if (ret) {
+                bus_send_message_sync("ERROR", 0xFF, "CRC %u", ret);
+                led.red = ls_blink_fast;
+                led.yellow = ~ls_blink_fast;
+                state.coming == STOP;
+                return FALSE;
+        }
+
+        return TRUE;
+}
+
+
+
+
 int __attribute__ ((OS_main)) main (void) {
         DDRA = INIT_DDRA;
         DDRB = INIT_DDRB;
@@ -249,13 +272,17 @@ int __attribute__ ((OS_main)) main (void) {
                                 break;
 
                         case RUN:
-                                bus_send_message_sync("STAT", 0xFF, "RUN");
-                                led.yellow = ls_on;
+                                if (init_program()) {
+                                        bus_send_message_sync("STAT", 0xFF, "RUN");
+                                        led.yellow = ls_on;
+                                }
                                 break;
 
                         case DEBUG:
-                                bus_send_message_sync("STAT", 0xFF, "DEBUG");
-                                led.yellow = ls_blink;
+                                if (init_program()) {
+                                        bus_send_message_sync("STAT", 0xFF, "DEBUG");
+                                        led.yellow = ls_blink;
+                                }
                                 break;
                         }
                         state.current = state.coming;

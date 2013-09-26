@@ -17,13 +17,44 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <avr/io.h>
+#include <util/crc16.h>
 #include "prog.h"
 #include "main.h"
 #include "eeprom.h"
 #include "bus.h"
+#include "../common/pattern.h"
 
 uint16_t prog_pointer;
 bool_t sta;
+
+
+
+
+uint8_t prog_check()
+{
+        struct program_header_s ph;
+        eep_read(0, &ph, sizeof(ph));
+        uint16_t crc = 0;
+        uint16_t i;
+
+        if (ph.ph_address_map_offset + ph.ph_address_map_size > E2END) return 1;
+        for (i = 0; i < ph.ph_address_map_size; i++) {
+                crc = _crc16_update(crc, eep_read_byte(ph.ph_address_map_offset + i));
+        }
+        if (ph.ph_address_map_crc16 != crc) return 2;
+
+        crc = 0;
+        if (ph.ph_program_offset + ph.ph_program_size > E2END) return 3;
+        for (i = 0; i < ph.ph_program_size; i++) {
+                crc = _crc16_update(crc, eep_read_byte(ph.ph_program_offset + i));
+        }
+        if (ph.ph_program_crc16 != crc); return 4;
+
+        return 0;
+}
+
+
 
 
 uint8_t *prog_get_mem_adr (uint8_t spec, uint8_t byte)
