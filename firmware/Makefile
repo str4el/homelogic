@@ -8,7 +8,7 @@
 MCU = atmega32
 FORMAT = ihex
 TARGET = homelogic
-SRC = main.c bus.c eeprom.c i2c.c prog.c rtc.c 
+SRC = main.c bus.c eeprom.c i2c.c prog.c rtc.c error.c
 ASRC = 
 OPT = s
 VERSION = $(shell git describe --tags)
@@ -225,7 +225,7 @@ clean:
 	config.h
 
 depend:
-	$(CC) -M -mmcu=$(MCU) $(CDEFS) $(CINCS) $(SRC) $(ASRC) >> $(DEPFILE)
+	$(CC) -M -mmcu=$(MCU) $(CDEFS) $(CINCS) $(SRC) $(ASRC) > $(DEPFILE)
 
 
 -include $(DEPFILE)

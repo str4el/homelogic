@@ -1,3 +1,22 @@
+/*
+ * Copyright (C) 2013 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+ *
+ * This file is part of Homelogic.
+ *
+ * Homelogic is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Homelogic is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 OPCODE(oc_load               , "LD"   , 0x00, DT_ANYADR  , FALSE)
 OPCODE(oc_load_not           , "LDN"  , 0x01, DT_ANYADR  , FALSE)
 
@@ -47,17 +66,17 @@ OPCODE(oc_not_equal_brace    , "NE("  , 0x49, DT_WORD    , FALSE)
 OPCODE(oc_less_than          , "LE"   , 0x4C, DT_WORD    , FALSE)
 OPCODE(oc_less_than_brace    , "LE("  , 0x4D, DT_WORD    , FALSE)
 
-OPCODE(oc_jump               , "JMP"  , 0x50, DT_LABEL   , FALSE)
-OPCODE(oc_jump_carry         , "JMPC" , 0x51, DT_LABEL   , FALSE)
-OPCODE(oc_jump_carry_not     , "JMPCN", 0x52, DT_LABEL   , FALSE)
+//OPCODE(oc_jump               , "JMP"  , 0x50, DT_LABEL   , FALSE)
+//OPCODE(oc_jump_carry         , "JMPC" , 0x51, DT_LABEL   , FALSE)
+//OPCODE(oc_jump_carry_not     , "JMPCN", 0x52, DT_LABEL   , FALSE)
 
-OPCODE(oc_call               , "CAL"  , 0x60, DT_LABEL   , FALSE)
-OPCODE(oc_call_carry         , "CALC" , 0x61, DT_LABEL   , FALSE)
-OPCODE(oc_call_carry_not     , "CALCN", 0x62, DT_LABEL   , FALSE)
+//OPCODE(oc_call               , "CAL"  , 0x60, DT_LABEL   , FALSE)
+//OPCODE(oc_call_carry         , "CALC" , 0x61, DT_LABEL   , FALSE)
+//OPCODE(oc_call_carry_not     , "CALCN", 0x62, DT_LABEL   , FALSE)
 
-OPCODE(oc_return             , "RET"  , 0x68, DT_NONE    , FALSE)
-OPCODE(oc_return_carry       , "RETC" , 0x69, DT_NONE    , FALSE)
-OPCODE(oc_return_carry_not   , "RETCN", 0x6A, DT_NONE    , FALSE)
+//OPCODE(oc_return             , "RET"  , 0x68, DT_NONE    , FALSE)
+//OPCODE(oc_return_carry       , "RETC" , 0x69, DT_NONE    , FALSE)
+//OPCODE(oc_return_carry_not   , "RETCN", 0x6A, DT_NONE    , FALSE)
 
 OPCODE(oc_close_brace        , ")"    , 0x70, DT_NONE    , FALSE)
 

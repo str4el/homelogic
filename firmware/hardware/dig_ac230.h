@@ -1,3 +1,22 @@
+/*
+ * Copyright (C) 2013 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+ *
+ * This file is part of Homelogic.
+ *
+ * Homelogic is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Homelogic is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef DIG_AC230_H
 #define DIG_AC230_H
 
@@ -13,7 +32,8 @@
 
 /* Zustängigkeitsbereich in Byte
  */
-#define REACH 1
+#define INPUT_REACH 1
+#define OUTPUT_REACH 1
 
 
 
@@ -44,8 +64,8 @@
 #define CLR_DO PORTB &= ~(1 << 4)
 #define IS_DI (PINB & (1 << 3))
 
-#define SET_LED_GE
-#define CLR_LED_GE
+#define SET_LED_GN
+#define CLR_LED_GN
 #define SET_LED_YE PORTA |= (1 << 0)
 #define CLR_LED_YE PORTA &= ~(1 << 0)
 #define SET_LED_RD PORTA |= (1 << 1)

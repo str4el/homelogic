@@ -1,3 +1,22 @@
+/*
+ * Copyright (C) 2013 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+ *
+ * This file is part of Homelogic.
+ *
+ * Homelogic is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Homelogic is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #define _GNU_SOURCE
 #include <stdlib.h>
 #include <string.h>
@@ -10,6 +29,7 @@
 #include <unistd.h>
 #include <termios.h>
 #include <signal.h>
+#include <ctype.h>
 
 #include "hlterm.h"
 #include "private.h"
@@ -86,12 +106,7 @@ static void *hlterm_device_read_thread(void *c)
                                 continue;
                         }
                 } else {
-                        fd_set set;
-                        FD_ZERO(&set);
-                        FD_SET(context->tc_device, &set);
-                        struct timeval tv = { 0, 100000 };
-
-                        if (select(context->tc_device + 1, &set, NULL, NULL, &tv) <= 0) {
+                        if (hl_is_readable(context->tc_device, 100) <= 0) {
                                 continue;
                         }
 
@@ -101,6 +116,11 @@ static void *hlterm_device_read_thread(void *c)
                 }
 
                 hlterm_timer_start(context->tc_lock_timer, 100);
+
+                /* FIXME: Hab noch nicht harausgefunden von woher die 0 beim
+                 *        programmieren kommt.
+                 */
+                if (c == 0) continue;
 
                 if (c == '\r') {
                         line[pos] = '\r';
@@ -114,17 +134,18 @@ static void *hlterm_device_read_thread(void *c)
                 }
 
                 pthread_mutex_lock(&context->tc_mutex);
-                if (context->tc_send_buffer) {
+                if (context->tc_send_len) {
                         if (context->tc_send_len == strlen(line) &&
                             memcmp(context->tc_send_buffer, line, context->tc_send_len) == 0) {
                                 context->tc_send_len = 0;
                         }
+                } else {
+                        char *ptr = strchr(line, '\r');
+                        if (ptr) *ptr = '\n';
+                        write(context->tc_socket, line, strlen(line));
                 }
                 pthread_mutex_unlock(&context->tc_mutex);
 
-                char *ptr = strchr(line, '\r');
-                if (ptr) *ptr = '\n';
-                write(context->tc_socket, line, strlen(line));
         }
 
         return NULL;
@@ -146,12 +167,7 @@ static void *hlterm_device_write_thread (void *c)
                         pthread_mutex_unlock(&context->tc_mutex);
 
                         while (context->tc_run & r_write_thread) {
-                                fd_set set;
-                                FD_ZERO(&set);
-                                FD_SET(context->tc_socket, &set);
-                                struct timeval tv = { 0, 100000 };
-
-                                if (select(context->tc_socket + 1, &set, NULL, NULL, &tv) <= 0) {
+                                if (hl_is_readable(context->tc_socket, 100) <= 0) {
                                         continue;
                                 }
 
@@ -180,21 +196,18 @@ static void *hlterm_device_write_thread (void *c)
                         memcpy(context->tc_send_buffer, line, context->tc_send_len);
                 }
 
+                pthread_mutex_unlock(&context->tc_mutex);
+                hlterm_timer_wait(context->tc_lock_timer);
+                pthread_mutex_lock(&context->tc_mutex);
 
                 if (context->tc_send_len) {
-                        pthread_mutex_unlock(&context->tc_mutex);
-                        hlterm_timer_wait(context->tc_lock_timer);
-                        pthread_mutex_lock(&context->tc_mutex);
-
                         if (context->tc_device == -1) {
                                 ftdi_write_data(&context->tc_ftdi, (unsigned char *)context->tc_send_buffer, context->tc_send_len);
                         } else {
                                 write(context->tc_device, context->tc_send_buffer, context->tc_send_len);
                         }
 
-                        pthread_mutex_unlock(&context->tc_mutex);
                         hlterm_timer_start(context->tc_lock_timer, 10);
-                        pthread_mutex_lock(&context->tc_mutex);
                 }
 
                 pthread_mutex_unlock(&context->tc_mutex);
@@ -345,6 +358,7 @@ void EXPORT hlterm_close(hlterm_t *term)
         if (!term) return;
 
         if (term->t_status & s_mutex) {
+                sleep(1);
                 pthread_mutex_lock(&term->t_thread_context.tc_mutex);
                 term->t_thread_context.tc_run = r_none;
                 pthread_mutex_unlock(&term->t_thread_context.tc_mutex);

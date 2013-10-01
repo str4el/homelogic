@@ -1,3 +1,22 @@
+/*
+ * Copyright (C) 2013 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+ *
+ * This file is part of Homelogic.
+ *
+ * Homelogic is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Homelogic is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -139,4 +158,76 @@ int EXPORT hll_read_hex_file(hll_data_t *data, FILE *file)
                                 return -1;
                 }
         }
+}
+
+
+
+
+static int hll_verify(FILE *stream, uint16_t device, const char *data)
+{
+        char buf[1024], cmd[6], verify[31];
+        unsigned int src, dst;
+        int scan;
+        for (int i = 0; i < 5; i++) {
+                if (hl_is_readable(fileno(stream), 1000) <= 0) {
+                        return -1;
+                }
+
+                fgets(buf, sizeof(buf), stream);
+                scan = sscanf(buf, "%5s %2x %2x %30s", cmd, &src, &dst, verify);
+
+                if (scan >= 3 &&
+                    strcasecmp(cmd, "VRY") == 0 &&
+                    src == device &&
+                    (dst == 0xfe || dst == 0xff)) {
+                        if (scan == 4 &&
+                            strcasecmp(verify, data) == 0) {
+                                return 0;
+                        }
+                        return -1;
+                }
+        }
+
+        return -1;
+}
+
+
+
+
+int EXPORT hll_send_to_device(hll_data_t *data, FILE *stream)
+{
+        char buf[64], *ptr;
+
+        if (!stream) return -1;
+
+        fprintf(stream, "STOP FE FF\n");
+
+        for (uint16_t device = 0; device < sizeof(data->d_device) / sizeof(*data->d_device); device++) {
+                if (data->d_device[device].dd_size == 0) continue;
+                int left = data->d_device[device].dd_size;
+
+                uint16_t pos = 0;
+                while (left) {
+                        uint8_t len = left > 10 ? 10 : left;
+
+                        fprintf(stream, "PROG FE %02X ", device);
+                        ptr = buf;
+                        ptr += sprintf(ptr, "%04X%02X", pos, len);
+                        for (int i = 0; i < len; i++) {
+                                uint8_t val = data->d_device[device].dd_data[pos + i];
+                                ptr += sprintf(ptr, "%02X", val);
+                        }
+                        fprintf(stream, "%s\n", buf);
+                        fflush(stream);
+
+                        if (hll_verify(stream, device, buf) == 0) {
+                                pos += len;
+                                left -= len;
+                        }
+                }
+        }
+
+        fprintf(stream, "RUN FE FF\n");
+        fflush(stream);
+        return 0;
 }

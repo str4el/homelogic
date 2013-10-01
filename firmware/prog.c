@@ -17,39 +17,80 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdlib.h>
 #include <avr/io.h>
 #include <util/crc16.h>
 #include "prog.h"
 #include "main.h"
 #include "eeprom.h"
 #include "bus.h"
-#include "../common/pattern.h"
-
-uint16_t prog_pointer;
-bool_t sta;
+#include "error.h"
+#include "memory.h"
 
 
 
 
-uint8_t prog_check()
+prog_context_t progc = {
+        .valid = FALSE,
+        .periphery = 0,
+        .image = 0
+};
+
+
+
+
+/* Initialisiert das Ablaufprogramm indem es den Programmheader
+ * aus dem EEProm kopiert, die Prüfsummen kontrolliert,
+ * den Speicher für die address_map allociert und den
+ * Insturktionszeiger auf null setzt.
+ */
+uint8_t prog_init()
 {
-        struct program_header_s ph;
-        eep_read(0, &ph, sizeof(ph));
-        uint16_t crc = 0;
+        eep_read(0, &progc.header, sizeof(progc.header));
+        uint16_t crc;
         uint16_t i;
-
-        if (ph.ph_address_map_offset + ph.ph_address_map_size > E2END) return 1;
-        for (i = 0; i < ph.ph_address_map_size; i++) {
-                crc = _crc16_update(crc, eep_read_byte(ph.ph_address_map_offset + i));
-        }
-        if (ph.ph_address_map_crc16 != crc) return 2;
+        uint16_t size;
 
         crc = 0;
-        if (ph.ph_program_offset + ph.ph_program_size > E2END) return 3;
-        for (i = 0; i < ph.ph_program_size; i++) {
-                crc = _crc16_update(crc, eep_read_byte(ph.ph_program_offset + i));
+        size = progc.header.ph_address_map_size * sizeof(struct address_map_s);
+        if (progc.header.ph_address_map_offset + size > E2END) return ERR_EEPROM;
+        for (i = 0; i < size; i++) {
+                crc = _crc16_update(crc, eep_read_byte(progc.header.ph_address_map_offset + i));
         }
-        if (ph.ph_program_crc16 != crc); return 4;
+        if (progc.header.ph_address_map_crc16 != crc) {
+                return ERR_CRC;
+        }
+
+        crc = 0;
+        size = progc.header.ph_program_size * sizeof(struct command_s);
+        if (progc.header.ph_program_offset + size > E2END) return ERR_EEPROM;
+        for (i = 0; i < size; i++) {
+                crc = _crc16_update(crc, eep_read_byte(progc.header.ph_program_offset + i));
+        }
+        if (progc.header.ph_program_crc16 != crc) {
+                return ERR_CRC;
+        }
+
+
+        if (progc.image) free(progc.image);
+        progc.image = malloc(progc.header.ph_address_map_size * sizeof(*progc.image));
+        if (!progc.image) return ERR_NOMEM;
+        memset(progc.image, 0, progc.header.ph_address_map_size * sizeof(*progc.image));
+
+        ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+                if (progc.periphery) free((void *)progc.periphery);
+                progc.periphery = malloc(progc.header.ph_address_map_size * sizeof(*progc.periphery));
+        }
+        if (!progc.periphery) {
+                free(progc.image);
+                return ERR_NOMEM;
+        }
+        ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+                memset((void *)progc.periphery, 0, progc.header.ph_address_map_size * sizeof(*progc.periphery));
+        }
+
+        progc.ip = 0;
+        progc.valid = TRUE;
 
         return 0;
 }
@@ -57,76 +98,100 @@ uint8_t prog_check()
 
 
 
-uint8_t *prog_get_mem_adr (uint8_t spec, uint8_t byte)
+void prog_deinit()
 {
-        if (state.current == DEBUG) {
-                bus_send_message_sync("STAT", 0xFF, "Spec: %hhu, Byte: %hhu", spec, byte);
+        progc.valid = FALSE;
+        ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+                free((void *)progc.periphery);
+                free((void *)progc.image);
         }
+}
 
-        uint8_t *ptr;
 
-        if (byte >= 32) return 0;
 
-        switch (spec & 0x30) {
-        case 0x10:
-                ptr = eb;
-                break;
-
-        case 0x20:
-                ptr = ab;
-                break;
-
-        case 0x30:
-                ptr = mb;
-                break;
-
-        default:
-                return 0;
-        }
-
-        return &ptr[byte];
+static inline void prog_error(uint8_t e)
+{
+        error(e);
+        progc.ip = -1;
+        state.coming = STOP;
+        progc.valid = FALSE;
 }
 
 
 
 
-static inline bool_t prog_get_bit(void)
+int16_t prog_get_periphery_offset(const uint8_t device, const uint8_t spec, const uint8_t adr)
 {
-        uint8_t spec = eep_read_byte(prog_pointer++);
-        uint8_t byte = eep_read_byte(prog_pointer++);
-        uint8_t *ptr = prog_get_mem_adr(spec, byte);
-        if (ptr) {
-                if (*ptr & (1 << (spec & 0x0F))) {
-                        return TRUE;
-                } else {
-                        return FALSE;
+        struct address_map_s am;
+        for (uint16_t i = 0; i < progc.header.ph_address_map_size; i++) {
+                eep_read(progc.header.ph_address_map_offset + i * sizeof(am), &am, sizeof(am));
+                if (am.am_device_adr == device &&
+                    am.am_mem_adr == ((spec & 0xE0) | (adr >> 1))) {
+                        return i;
                 }
-        } else {
-                return FALSE;
         }
+        return -1;
 }
 
 
 
 
-static inline void prog_set_bit(bool_t s)
+/* Synchronisiert das Speicherabbild mit dem tatsächlichen
+ * Perpheriestatus und gibt entsprechende Nachrichten über
+ * den Bus aus
+ */
+void prog_periphry_sync()
 {
-        uint8_t spec = eep_read_byte(prog_pointer++);
-        uint8_t byte = eep_read_byte(prog_pointer++);
-        uint8_t *ptr = prog_get_mem_adr(spec, byte);
-        uint8_t bit = (1 << (spec & 0x0F));
-        if (ptr) *ptr = s ? *ptr | bit : *ptr & ~bit;
-}
+        struct address_map_s am;
+        uint16_t tmp;
 
+        if (!progc.valid) return;
 
+        for (uint16_t i = 0; i < progc.header.ph_address_map_size; i++) {
+                eep_read(progc.header.ph_address_map_offset + i * sizeof(am), &am, sizeof(am));
 
+                if (am.am_device_adr == adr) {
+                        uint8_t byte = (am.am_mem_adr & 0x1F) << 1;
 
-static inline void prog_togle_bit(void)
-{
-        uint8_t spec = eep_read_byte(prog_pointer++);
-        uint8_t byte = eep_read_byte(prog_pointer++);
-        uint8_t *ptr = prog_get_mem_adr(spec, byte);
-        if (ptr) *ptr ^= (1 << (spec & 0x0F));
+                        switch(am.am_mem_adr & 0xE0) {
+                        case as_input:
+                                tmp = byte < INPUT_REACH ? inputs[byte] : 0;
+                                tmp |= (byte + 1) < INPUT_REACH ? (inputs[byte + 1]) : 0;
+
+                                if (tmp != progc.periphery[i]) {
+                                        bus_send_message_async("SET", 0xFF, "%%IW:%u.%u=%04X", adr, byte, tmp);
+                                        progc.periphery[i] = tmp;
+                                }
+
+                                progc.image[i] = progc.periphery[i];
+                                break;
+
+                        case as_output:
+                                if (progc.periphery[i] != progc.image[i]) {
+                                        bus_send_message_async("SET", 0xFF, "%%OW:%u.%u=%04X", adr, byte, progc.image[i]);
+                                        progc.periphery[i] = progc.image[i];
+                                }
+                                if (byte < OUTPUT_REACH) {
+                                        outputs[byte] = progc.periphery[i] & 0xFF;
+                                }
+
+                                if ((byte + 1) < OUTPUT_REACH) {
+                                        outputs[byte + 1] = progc.periphery[i] >> 8;
+                                }
+                                break;
+
+                        case as_memory:
+                                if (progc.periphery[i] != progc.image[i]) {
+                                        bus_send_message_async("SET", 0xFF, "%%MW:%u.%u=%04X", adr, byte, progc.image[i]);
+                                        progc.periphery[i] = progc.image[i];
+                                }
+                                break;
+                        }
+
+                } else {
+                        progc.image[i] = progc.periphery[i];
+                }
+        }
 }
 
 
@@ -141,153 +206,162 @@ static inline void prog_wait_for_step(void)
 
 
 
-void prog_cycle()
+static bool_t prog_get_bit(uint16_t *ptr)
 {
-        prog_pointer = 0;
-        sta = FALSE;
-        bool_t vke = FALSE;
-
-        for (;;) {
-                if (state.current == DEBUG) {
-                        bus_send_message_sync("STAT", 0xFF, "IP: %hu, STA: %c, VKE: %c", prog_pointer, sta ? '1' : '0', vke ? '1' : '0');
-                        prog_wait_for_step();
-                }
-
-                prog_cmd_t cmd = eep_read_byte(prog_pointer++);
-                if (state.current == DEBUG) {
-                        bus_send_message_sync("STAT", 0xFF, "Command: %02X", cmd);
-                }
-
-
-                switch (cmd) {
-                case U:
-                case O:
-                        sta = prog_get_bit();
-                        vke = prog_condition(sta);
-                        break;
-
-                case UN:
-                case ON:
-                        sta = !prog_get_bit();
-                        vke = prog_condition(sta);
-                        break;
-
-                case I:
-                        prog_set_bit(vke);
-                        break;
-
-                case S:
-                        if (vke) {
-                                prog_set_bit(TRUE);
-                        } else {
-                                prog_pointer += 2;
-                        }
-                        break;
-
-                case R:
-                        if (vke) {
-                                prog_set_bit(FALSE);
-                        } else {
-                                prog_pointer += 2;
-                        }
-                        break;
-
-                case X:
-                        if (vke) {
-                                prog_togle_bit();
-                        } else {
-                                prog_pointer += 2;
-                        }
-
-                        break;
-
-                case NE:
-                        sta = FALSE;
-                        vke = FALSE;
-                        break;
-
-                default:
-                        return;
-                }
-        }
-
+        uint16_t mask = ((progc.cmd.c_address.aa_byte & 1) ? 0x0100 : 0x0001) << (progc.cmd.c_address.aa_spec & 0x07);
+        return *ptr & mask;
 }
 
 
 
 
-bool_t prog_condition(bool_t vke)
+static void prog_set_bit(uint16_t *ptr, const bool_t c)
 {
-        for (;;) {
+        uint16_t mask = ((progc.cmd.c_address.aa_byte & 1) ? 0x0100 : 0x0001) << (progc.cmd.c_address.aa_spec & 0x07);
+        if (c) {
+                *ptr |= mask;
+        } else {
+                *ptr &= ~mask;
+        }
+}
+
+
+
+
+static uint8_t prog_get_byte(uint16_t *ptr)
+{
+        if (progc.cmd.c_address.aa_byte & 1) {
+                return *ptr >> 8;
+        } else {
+                return *ptr & 0xff;
+        }
+}
+
+
+
+
+static void prog_set_byte(uint16_t *ptr, const uint8_t a)
+{
+        if (progc.cmd.c_address.aa_byte & 1) {
+                *ptr &= 0x00ff;
+                *ptr |= (uint16_t)a << 8;
+        } else {
+                *ptr &= 0xff00;
+                *ptr |= (uint16_t)a;
+        }
+}
+
+
+
+
+static uint16_t prog_get_word(uint16_t *ptr)
+{
+        return *ptr;
+}
+
+
+
+
+static void prog_set_word(uint16_t *ptr, const uint16_t a)
+{
+        *ptr = a;
+}
+
+
+
+
+/* Hauptprogrammfunktion:
+ * Liest in einer Schleife den aktuellen Befehl und die dazugehörigen
+ * daten, interpretiert sie; Ruft sich bei klammern rekursiv selbst auf.
+ */
+prog_register_t prog_execute(prog_register_t reg)
+{
+        while (progc.valid && progc.ip >= 0) {
                 if (state.current == DEBUG) {
-                        bus_send_message_sync("STAT", 0xFF, "IP: %hu, STA: %c, VKE: %c", prog_pointer, sta ? '1' : '0', vke ? '1' : '0');
+                        bus_send_message_sync("STAT", 0xFF, "IP: %4u A: %04X C: %s", progc.ip, reg.a, reg.c ? "TRUE" : "FALSE");
                         prog_wait_for_step();
                 }
 
-                prog_cmd_t cmd = eep_read_byte(prog_pointer++);
-                if (state.current == DEBUG) {
-                        bus_send_message_sync("STAT", 0xFF, "Command: %02X", cmd);
+                if (mem_free_ram() < 100) {
+                        prog_error(ERR_NOMEM);
+                        break;
                 }
 
-                switch (cmd) {
-                case U:
-                        sta = prog_get_bit();
-                        vke = vke && sta;
-                        break;
+                eep_read(progc.header.ph_program_offset + progc.ip * sizeof(progc.cmd), &progc.cmd, sizeof(progc.cmd));
+                if (state.current == DEBUG) {
+                        bus_send_message_sync("STAT", 0xFF, "CMD: %02X DATA: %02X%02X%02X",
+                                              progc.cmd.c_opcode,
+                                              progc.cmd.c_address.aa_device,
+                                              progc.cmd.c_address.aa_spec,
+                                              progc.cmd.c_address.aa_byte);
+                }
 
-                case UN:
-                        sta = !prog_get_bit();
-                        vke = vke && sta;
-                        break;
+                int16_t peradr = prog_get_periphery_offset(progc.cmd.c_address.aa_device,
+                                                           progc.cmd.c_address.aa_spec,
+                                                           progc.cmd.c_address.aa_byte);
+                //if (peradr < 0 || peradr >= progc.header.ph_address_map_size) {
+                //        prog_error(ERR_PROG);
+                //        break;
+                //}
 
-                case O:
-                        sta = prog_get_bit();
-                        vke = vke || sta;
+                // FIXME: Nicht implementierte funktionalität
+                switch (progc.cmd.c_address.aa_spec & 0xE0) {
+                case as_dword:
+                case as_counter:
+                case as_timer:
+                        prog_error(ERR_FEATURE);
                         break;
+                }
 
-                case ON:
-                        sta = !prog_get_bit();
-                        vke = vke || sta;
-                        break;
+                uint8_t spec = progc.cmd.c_address.aa_spec & 0x1F;
 
-                case P:
-                        if (vke) {
-                                if (prog_get_bit()) {
-                                        vke = FALSE;
-                                } else {
-                                        vke = TRUE;
-                                        prog_pointer -= 2;
-                                        prog_set_bit(TRUE);
-                                }
-                        } else {
-                                vke = FALSE;
-                                prog_set_bit(FALSE);
+                switch (progc.cmd.c_opcode) {
+                case oc_load:
+                        switch (spec) {
+                        case as_word: reg.a = prog_get_word(&(progc.image[peradr])); break;
+                        case as_byte: reg.a = prog_get_byte(&(progc.image[peradr])); break;
+                        default:      reg.c = prog_get_bit(&(progc.image[peradr]));  break;
                         }
                         break;
 
-                case N:
-                        if (!vke) {
-                                if (prog_get_bit()) {
-                                        vke = FALSE;
-                                } else {
-                                        vke = TRUE;
-                                        prog_pointer -= 2;
-                                        prog_set_bit(TRUE);
-                                }
-                        } else {
-                                vke = FALSE;
-                                prog_set_bit(FALSE);
+                case oc_store:
+                        switch (spec) {
+                        case as_word: prog_set_word(&(progc.image[peradr]), reg.a);          break;
+                        case as_byte: prog_set_byte(&(progc.image[peradr]), (uint8_t)reg.a); break;
+                        default:      prog_set_bit(&(progc.image[peradr]), reg.c);           break;
                         }
                         break;
 
+                case oc_and:
+                        switch (spec) {
+                        case as_word: reg.a &= prog_get_word(&(progc.image[peradr])); break;
+                        case as_byte: reg.a &= prog_get_byte(&(progc.image[peradr])); break;
+                        default:      reg.c &= prog_get_bit(&(progc.image[peradr]));  break;
+                        }
+                        break;
+
+                case oc_or:
+                        switch (spec) {
+                        case as_word: reg.a |= prog_get_word(&(progc.image[peradr])); break;
+                        case as_byte: reg.a |= prog_get_byte(&(progc.image[peradr])); break;
+                        default:      reg.c |= prog_get_bit(&(progc.image[peradr]));  break;
+                        }
+                        break;
+
+                case oc_end_of_program:
+                        progc.ip = -1;
+                        return reg;
+                        break;
 
                 default:
-                        prog_pointer--;
-                        return vke;
-                        break;
-
+                        prog_error(ERR_PROG);
+                        return reg;
                 }
 
+                progc.ip++;
         }
+
+        return (prog_register_t) {0, FALSE};
 }
+
 

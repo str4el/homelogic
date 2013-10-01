@@ -17,37 +17,20 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef ERROR_H
+#define ERROR_H
 
 #include <stdint.h>
-#include "hardware.h"
-#include "prog.h"
 #include "bool.h"
 
-#define _TOSTR(x) #x
-#define TOSTR(x) _TOSTR(x)
+#define ERR_NONE 0
+#define ERR_NOMEM 1
+#define ERR_EEPROM 2
+#define ERR_CRC 3
+#define ERR_PROG 4
 
+#define ERR_FEATURE 7
 
-volatile uint8_t inputs[INPUT_REACH];
-uint8_t outputs[OUTPUT_REACH];
+extern bool_t error(uint8_t e);
 
-uint8_t adr;
-
-struct state_s {
-        prog_status_t current;
-        volatile prog_status_t coming;
-        volatile bool_t step;
-};
-
-extern struct state_s state;
-extern volatile prog_write_t prog_write;
-
-static inline void reset(void)
-{
-        wdt_enable(WDTO_500MS);
-        while(1);
-}
-
-
-#endif // MAIN_H
+#endif // ERROR_H

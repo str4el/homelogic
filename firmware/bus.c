@@ -28,6 +28,7 @@
 #include "rtc.h"
 #include "bool.h"
 #include "memory.h"
+#include "prog.h"
 
 
 
@@ -54,9 +55,7 @@ const bus_command_table_t bus_command_table [] PROGMEM = {
         { "STEP" , 4, bus_command_step,           0,  0},
         { "PROG" , 4, bus_command_program,        8, BUS_DATA_MAX_LEN},
         { "SDT"  , 3, bus_command_set_date_time, 20, 20},
-        { "BCR"  , 3, bus_command_reset_bit,      4,  6},
-        { "BCS"  , 3, bus_command_set_bit,        4,  6},
-        { "SET"  , 3, bus_command_set_byte,       6,  8},
+        { "SET"  , 3, bus_command_set_word,      12, 15},
         { "MEM"  , 3, bus_command_memory,         0,  0},
 };
 
@@ -68,37 +67,37 @@ ISR(USART_RXC_vect) {
         uint8_t in = UDR;
 
         switch (bus.status) {
-                case rx_start:
+        case rx_start:
+                bus.rx_len = 0;
+                bus.status = rx_ready;
+        case rx_ready:
+                if (bus.rx_len < BUS_BUFSIZE) {
+                        bus.rx_buffer[bus.rx_len] = in;
+                        bus.rx_len++;
+                }
+
+
+                if (in == '\r') {
+                        bus.rx_buffer[bus.rx_len] = 0;
+                        bus_command();
                         bus.rx_len = 0;
-                        bus.status = rx_ready;
-                case rx_ready:
-                        if (bus.rx_len < BUS_BUFSIZE) {
-                                bus.rx_buffer[bus.rx_len] = in;
-                                bus.rx_len++;
-                        }
+                }
 
+                BUS_TX_LOCK(2 + adr);
+                break;
 
-                        if (in == '\r') {
-                                bus.rx_buffer[bus.rx_len] = 0;
-                                bus_command();
-                                bus.rx_len = 0;
-                        }
+        case tx_start:
+                bus.rx_len = 0;
+                bus.status = tx_verify;
+        case tx_verify:
+                if (bus.rx_len < BUS_BUFSIZE) {
+                        bus.rx_buffer[bus.rx_len] = in;
+                        bus.rx_len++;
+                }
+                break;
 
-                        BUS_TX_LOCK(2 + adr);
-                        break;
-
-                case tx_start:
-                        bus.rx_len = 0;
-                        bus.status = tx_verify;
-                case tx_verify:
-                        if (bus.rx_len < BUS_BUFSIZE) {
-                                bus.rx_buffer[bus.rx_len] = in;
-                                bus.rx_len++;
-                        }
-                        break;
-
-                default:
-                        BUS_TX_LOCK(2 + adr);
+        default:
+                BUS_TX_LOCK(2 + adr);
         }
 
 }
@@ -275,10 +274,6 @@ uint8_t bus_encode_prog_message(char *str, uint8_t len)
 
 
 
-
-
-
-
 /* Überprüft ob innerhalb der empangenen Zeichenkette ein Befehl aus
  * der bus_command_table gefunden wurde und die Nutzdaten die richtige
  * länge aufweisen.
@@ -398,89 +393,48 @@ void bus_command_set_date_time (uint8_t sender, char *data)
 
 
 
-void bus_command_reset_bit (uint8_t sender, char *data)
-{
-        char ident[2];
-        uint8_t byte;
-        uint8_t bit;
-
-        if (sscanf(data, "%1s%hhi.%hhi", ident, &byte, &bit) == 3) {
-                switch (ident[0]) {
-                        case 'e':
-                        case 'E':
-                                peb[byte] &= ~(1 << bit);
-                                break;
-                        case 'a':
-                        case 'A':
-                                pab[byte] &= ~(1 << bit);
-                                break;
-                        case 'm':
-                        case 'M':
-                                pmb[byte] &= ~(1 << bit);
-                                break;
-                        default:
-                                return;
-                }
-        }
-
-}
-
-
-
-
-void bus_command_set_bit (uint8_t sender, char *data)
-{
-        char ident[2];
-        uint8_t byte;
-        uint8_t bit;
-
-        if (sscanf(data, "%1s%hhu.%hhu", ident, &byte, &bit) == 3) {
-                switch (ident[0]) {
-                        case 'e':
-                        case 'E':
-                                peb[byte] |= (1 << bit);
-                                break;
-                        case 'a':
-                        case 'A':
-                                pab[byte] |= (1 << bit);
-                                break;
-                        case 'm':
-                        case 'M':
-                                pmb[byte] |= (1 << bit);
-                                break;
-                        default:
-                                return;
-                }
-        }
-}
-
-
-
-
-void bus_command_set_byte (uint8_t sender, char *data)
+void bus_command_set_word (uint8_t sender, char *data)
 {
         char type[3];
+        uint8_t device;
         uint8_t byte;
-        uint8_t value;
+        uint8_t spec;
+        uint16_t value;
 
-        if (sscanf(data, "%2s%hhu=%hhx", type, &byte, &value) == 3) {
-                if (type[1] == 'b' || type[1] == 'B') {
-                        switch (type[0]) {
-                                case 'e':
-                                case 'E':
-                                        peb[byte] = value;
-                                        break;
-                                case 'a':
-                                case 'A':
-                                        pab[byte] = value;
-                                        break;
-                                case 'm':
-                                case 'M':
-                                        pmb[byte] = value;
-                                        break;
-                                default:
-                                        return;
-                        }
+
+        if (!progc.valid) {
+                return ;
+        }
+
+        if (sscanf(data, "%%%2s:%hhu.%hhu=%hx", type, &device, &byte, (short unsigned int *)&value) != 4) {
+                return;
+        }
+
+        if (byte >= 64) return;
+        if (device == adr) return;
+
+        if (type[1] == 'w' || type[1] == 'W') {
+                switch (type[0]) {
+                case 'i':
+                case 'I':
+                        spec = as_input;
+                        break;
+
+                case 'o':
+                case 'O':
+                        spec = as_output;
+                        break;
+                case 'm':
+                case 'M':
+                        spec = as_memory;
+                        break;
+                default:
+                        return;
+                }
+
+                int16_t n = prog_get_periphery_offset(device, spec, byte);
+                if (n >= 0) {
+                        progc.periphery[n] = value;
                 }
         }
 }

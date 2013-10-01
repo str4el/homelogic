@@ -1,3 +1,22 @@
+/*
+ * Copyright (C) 2013 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+ *
+ * This file is part of Homelogic.
+ *
+ * Homelogic is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Homelogic is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -51,6 +70,27 @@ static inline void hlc_set_error (hlc_data_t *data, hlc_error_t err, const char 
         } else {
                 data->d_errchunk[0] = 0;
         }
+}
+
+
+
+
+/* C equivalent der _crc16_update funktion aus der avr-libc
+ */
+static uint16_t hlc_crc16_update(uint16_t crc, uint8_t data)
+{
+        int i;
+
+        crc ^= data;
+        for (i = 0; i < 8; ++i) {
+                if (crc & 1) {
+                        crc = (crc >> 1) ^ 0xA001;
+                } else {
+                        crc = (crc >> 1);
+                }
+        }
+
+        return crc;
 }
 
 
@@ -493,15 +533,13 @@ int EXPORT hlc_compile (hlc_data_t *data)
                 d->dd_program_size = size;
 
                 memset (d->dd_program, 0xFF, size);
-                char *ptr = d->dd_program;
+                char *ptr = d->dd_program + ph_size;
 
                 ph.ph_address_map_offset = ph_size;
                 ph.ph_address_map_size = d->dd_am.am_used;
                 ph.ph_program_offset = ph_size + am_size;
                 ph.ph_program_size = d->dd_cb.cb_used;
 
-                memcpy(ptr, &ph, sizeof(ph));
-                ptr += sizeof(ph);
 
                 for (int i = 0; i < d->dd_am.am_used; i++) {
                         am.am_device_adr = d->dd_am.am_addresses[i].cd_address.cd_device;
@@ -519,7 +557,6 @@ int EXPORT hlc_compile (hlc_data_t *data)
                         memcpy(ptr, &am, sizeof(am));
                         ptr += sizeof(am);
                 }
-
 
                 for (int i = 0; i < d->dd_cb.cb_used; i++) {
                         hlc_command_t *ci = &d->dd_cb.cb_commands[i];
@@ -554,7 +591,19 @@ int EXPORT hlc_compile (hlc_data_t *data)
                         ptr += sizeof(co);
                 }
 
-                data->d_device[i].dd_status = dd_compiled;
+                ph.ph_address_map_crc16 = 0;
+                for (int i = ph.ph_address_map_offset; i < ph.ph_address_map_offset + am_size; i++) {
+                        ph.ph_address_map_crc16 = hlc_crc16_update(ph.ph_address_map_crc16, d->dd_program[i]);
+                }
+
+                ph.ph_program_crc16 = 0;
+                for (int i = ph.ph_program_offset; i < ph.ph_program_offset + cb_size; i++) {
+                        ph.ph_program_crc16 = hlc_crc16_update(ph.ph_program_crc16, d->dd_program[i]);
+                }
+
+                memcpy(d->dd_program, &ph, ph_size);
+
+                d->dd_status = dd_compiled;
                 ret++;
         }
         return ret;

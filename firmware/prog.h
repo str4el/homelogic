@@ -22,6 +22,8 @@
 
 #include <stdint.h>
 #include "bool.h"
+#include "../common/pattern.h"
+
 
 
 typedef enum prog_status_e {
@@ -31,24 +33,11 @@ typedef enum prog_status_e {
 } prog_status_t;
 
 
-
-
-typedef enum prog_cmd_e {
-        U  = 0x00,
-        UN = 0x01,
-        O  = 0x02,
-        ON = 0x03,
-        P  = 0x10,
-        N  = 0x11,
-        I  = 0x20,
-        S  = 0x21,
-        R  = 0x22,
-        X  = 0x23,
-        L  = 0x80,
-        T  = 0x81,
-        NE = 0xFE,
-        BE = 0xFF
-} prog_cmd_t;
+enum opcode_e {
+#define OPCODE(LABEL, x, NUM, y, z) LABEL = NUM,
+#include "../common/opcodes.def"
+#undef OPCODE
+};
 
 
 
@@ -59,11 +48,34 @@ typedef struct prog_write_s {
 } prog_write_t;
 
 
-extern uint16_t prog_pointer;
 
-extern uint8_t prog_check(void);
-extern void prog_cycle (void);
-extern bool_t prog_condition (bool_t vke);
+typedef struct prog_context_s {
+        volatile bool_t valid;
+        struct program_header_s header;
+        volatile uint16_t *periphery;
+        uint16_t *image;
+        int16_t ip;
+        struct command_s cmd;
+} prog_context_t;
+
+
+
+
+typedef struct prog_register_s {
+        uint16_t a;
+        bool_t c;
+} prog_register_t;
+
+
+
+
+extern prog_context_t progc;
+
+extern uint8_t prog_init(void);
+extern void prog_deinit(void);
+extern void prog_periphry_sync(void);
+extern int16_t prog_get_periphery_offset(const uint8_t device, const uint8_t spec, const uint8_t adr);
+extern prog_register_t prog_execute (prog_register_t reg);
 
 
 #endif // PROG_H

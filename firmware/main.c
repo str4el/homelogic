@@ -25,6 +25,7 @@
 #include "prog.h"
 #include "eeprom.h"
 #include "led.h"
+#include "error.h"
 
 
 FUSES = {
@@ -57,7 +58,7 @@ static inline void init_timer2(void)
 /* Interruptroutine für 1ms Timer
  */
 ISR(TIMER2_COMP_vect) {
-        static uint8_t intimer[REACH * 8];
+        static uint8_t intimer[INPUT_REACH * 8];
         static uint16_t timerbase = 0;
 
         if (bus.tx_lock) bus.tx_lock--;
@@ -75,13 +76,13 @@ ISR(TIMER2_COMP_vect) {
                         if (intimer[n] < 200) {
                                 intimer[n] += 4;
                         } else {
-                                leb[0] |= (1 << n);
+                                inputs[0] |= (1 << n);
                         }
                 } else {
                         if (intimer[n]) {
                                 intimer[n]--;
                         } else {
-                                leb[0] &= ~(1 << n);
+                                inputs[0] &= ~(1 << n);
                         }
                 }
                 n++;
@@ -92,13 +93,13 @@ ISR(TIMER2_COMP_vect) {
                         if (intimer[n] < 200) {
                                 intimer[n] += 4;
                         } else {
-                                leb[1] |= (1 << (n - 8));
+                                inputs[1] |= (1 << (n - 8));
                         }
                 } else {
                         if (intimer[n]) {
                                 intimer[n]--;
                         } else {
-                                leb[1] &= ~(1 << (n - 8));
+                                inputs[1] &= ~(1 << (n - 8));
                         }
                 }
                 n++;
@@ -112,13 +113,13 @@ ISR(TIMER2_COMP_vect) {
                         if (intimer[i] < 20) {
                                 intimer[i]++;
                         } else {
-                                leb[0] |= (1 << i);
+                                inputs[0] |= (1 << i);
                         }
                 } else {
                         if (intimer[i]) {
                                 intimer[i]--;
                         } else {
-                                leb[0] &= ~(1 << i);
+                                inputs[0] &= ~(1 << i);
                         }
                 }
         }
@@ -126,61 +127,15 @@ ISR(TIMER2_COMP_vect) {
 }
 
 
-void send_diff (uint8_t in, uint8_t *out, char type, uint8_t byte_address)
+
+
+void write_outputs(void)
 {
-        uint8_t diff;
-        if (*out != in) {
-                diff = *out ^ in;
-                *out = in;
-
-                uint8_t n = 0;
-                for (uint8_t i = 0; i < 8; i++) {
-                        if (diff & (1 << i)) n++;
-                }
-
-                if (n <= 2) {
-                        for (uint8_t i = 0; i < 8; i++) {
-                                if (diff & (1 << i)) {
-                                        bus_send_message_async(in & (1 << i) ? "BCS" : "BCR", 0xFF, "%c%hhu.%hhu", type, byte_address, i);
-                                }
-                        }
-                } else {
-                        bus_send_message_async("SET", 0xFF, "%cB%hhu=%02X", type, byte_address, in);
-                }
-        }
-}
-
-
-
-
-
-void read_input(uint8_t a)
-{
-        for (uint8_t i = 0; i < REACH; i++) {
-                send_diff(leb[i], (uint8_t *) &peb[a + i], 'E', a + i);
-        }
-
-        memcpy((void *) eb, (const void *) peb, sizeof(eb));
-        memcpy((void *) mb, (const void *) pmb, sizeof(mb));
-        memcpy((void *) ab, (const void *) pab, sizeof(ab));
-}
-
-
-
-
-
-void write_output(uint8_t a)
-{
-        for (uint8_t i = 0; i < REACH; i++) {
-                send_diff(ab[a + i], (uint8_t *) &pab[a + i], 'A', a + i);
-                send_diff(mb[a + i], (uint8_t *) &pmb[a + i], 'M', a + i);
-        }
-
         CLR_C2;
 
-        for (int8_t i = REACH * 8 - 1; i >= 0; i--) {
+        for (int8_t i = OUTPUT_REACH * 8 - 1; i >= 0; i--) {
                 CLR_C1;
-                if (pab[a + (i >> 3)] & (1 << i % 8)) {
+                if (outputs[i >> 3] & (1 << i % 8)) {
                         SET_DO;
                 } else {
                         CLR_DO;
@@ -189,26 +144,6 @@ void write_output(uint8_t a)
         }
 
         SET_C2;
-}
-
-
-
-
-bool_t init_program(void)
-{
-        uint8_t ret;
-
-        ret = prog_check();
-
-        if (ret) {
-                bus_send_message_sync("ERROR", 0xFF, "CRC %u", ret);
-                led.red = ls_blink_fast;
-                led.yellow = ~ls_blink_fast;
-                state.coming == STOP;
-                return FALSE;
-        }
-
-        return TRUE;
 }
 
 
@@ -234,11 +169,6 @@ int __attribute__ ((OS_main)) main (void) {
         // Adressdecodierung wird nur nach dem Reset durchgeführt
         adr = adr_read();
 
-
-        // Prozessabbild auf null setzen
-        memset(eb, 0, sizeof(eb));
-        memset(ab, 0, sizeof(ab));
-        memset(mb, 0, sizeof(mb));
 
         // Reset Shiftregister
         CLR_C2;
@@ -267,19 +197,24 @@ int __attribute__ ((OS_main)) main (void) {
                 if (state.current != state.coming) {
                         switch (state.coming) {
                         case STOP:
+                                prog_deinit();
                                 bus_send_message_sync("STAT", 0xFF, "STOP");
                                 led.yellow = ls_off;
                                 break;
 
                         case RUN:
-                                if (init_program()) {
+                                if (error(prog_init())) {
+                                        state.coming = STOP;
+                                } else {
                                         bus_send_message_sync("STAT", 0xFF, "RUN");
                                         led.yellow = ls_on;
                                 }
                                 break;
 
                         case DEBUG:
-                                if (init_program()) {
+                                if (error(prog_init())) {
+                                        state.coming = STOP;
+                                } else {
                                         bus_send_message_sync("STAT", 0xFF, "DEBUG");
                                         led.yellow = ls_blink;
                                 }
@@ -309,9 +244,10 @@ int __attribute__ ((OS_main)) main (void) {
 
                 case RUN:
                 case DEBUG:
-                        read_input(adr);
-                        prog_cycle();
-                        write_output(adr);
+                        progc.ip = 0;
+                        prog_execute((prog_register_t){0, FALSE});
+                        prog_periphry_sync();
+                        write_outputs();
                         break;
 
                 default:
