@@ -1,14 +1,17 @@
 CC = gcc
+AR = ar
+RM = rm -rf
+
 CFLAGS = -std=gnu99 -Wall -g -fpic -fvisibility=hidden
 LFLAGS = -Wl -O1 -shared 
-RM = rm -rf
 
 SRC = hlc.c hll.c hlterm.c
 OBJ = $(SRC:%.c=%.o)
-TARGET = libhl.so
 
-all: $(TARGET)
+SHARED = libhl.so
+STATIC = libhl.a
 
+all: $(SHARED) $(STATIC)
 
 .deps: $(SRC)
 	$(CC) -MM $(SRC) > .deps
@@ -18,9 +21,11 @@ all: $(TARGET)
 %.o: %.c
 	$(CC) -c $(CFLAGS) $< -o $@
 
-$(TARGET): $(OBJ)
-	$(CC) $(LFLAGS) -o $(TARGET) $(OBJ) 
+$(SHARED): $(OBJ)
+	$(CC) $(LFLAGS) -o $(SHARED) $(OBJ) 
 
+$(STATIC): $(OBJ)
+	$(AR) rc $(STATIC) $(OBJ)
 
 .PHONY: clean
 
