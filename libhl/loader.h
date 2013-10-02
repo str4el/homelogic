@@ -17,8 +17,8 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HLL_H
-#define HLL_H
+#ifndef LOADER_H
+#define LOADER_H
 
 #include <stdint.h>
 

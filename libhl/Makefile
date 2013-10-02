@@ -5,7 +5,7 @@ RM = rm -rf
 CFLAGS = -std=gnu99 -Wall -g -fpic -fvisibility=hidden
 LFLAGS = -Wl -O1 -shared 
 
-SRC = hlc.c hll.c hlterm.c
+SRC = compiler.c terminal.c loader.c
 OBJ = $(SRC:%.c=%.o)
 
 SHARED = libhl.so

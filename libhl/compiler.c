@@ -23,7 +23,7 @@
 
 
 #include "private.h"
-#include "hlc.h"
+#include "compiler.h"
 #include "../common/pattern.h"
 
 

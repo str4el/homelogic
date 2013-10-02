@@ -17,8 +17,8 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HLC_H
-#define HLC_H
+#ifndef COMPILER_H
+#define COMPILER_H
 
 #include <stdint.h>
 #include <stdio.h>

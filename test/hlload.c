@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../libhl/hll.h"
-#include "../libhl/hlterm.h"
+#include "../libhl/loader.h"
+#include "../libhl/terminal.h"
 
 
 int main (void)

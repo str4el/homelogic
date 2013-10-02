@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/time.h>
-#include "../libhl/hlterm.h"
+#include "../libhl/terminal.h"
 
 
 

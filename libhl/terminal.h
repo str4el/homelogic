@@ -17,8 +17,8 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HLTERM_H
-#define HLTERM_H
+#ifndef TERMINAL_H
+#define TERMINAL_H
 
 #include <stdio.h>
 #include <pthread.h>

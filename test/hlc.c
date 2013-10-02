@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "../libhl/hlc.h"
+#include "../libhl/compiler.h"
 
 
 int main (int argc, char *argv[])

@@ -31,7 +31,7 @@
 #include <signal.h>
 #include <ctype.h>
 
-#include "hlterm.h"
+#include "terminal.h"
 #include "private.h"
 
 
