@@ -72,13 +72,13 @@ uint8_t prog_init()
         }
 
 
-        if (progc.image) free(progc.image);
+        free(progc.image);
         progc.image = malloc(progc.header.ph_address_map_size * sizeof(*progc.image));
         if (!progc.image) return ERR_NOMEM;
         memset(progc.image, 0, progc.header.ph_address_map_size * sizeof(*progc.image));
 
         ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-                if (progc.periphery) free((void *)progc.periphery);
+                free((void *)progc.periphery);
                 progc.periphery = malloc(progc.header.ph_address_map_size * sizeof(*progc.periphery));
         }
         if (!progc.periphery) {
@@ -104,6 +104,8 @@ void prog_deinit()
         ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
                 free((void *)progc.periphery);
                 free((void *)progc.image);
+                progc.periphery = 0;
+                progc.image = 0;
         }
 }
 
