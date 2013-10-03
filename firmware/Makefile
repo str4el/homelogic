@@ -8,10 +8,10 @@
 MCU = atmega32
 FORMAT = ihex
 TARGET = homelogic
+CONFIG = config.h
 SRC = main.c bus.c eeprom.c i2c.c prog.c rtc.c error.c
 ASRC = 
 OPT = s
-VERSION = $(shell git describe --tags)
 
 # Name of the depending file (used for "make depend").
 DEPFILE = .deps
@@ -53,7 +53,7 @@ PRINTF_LIB_MIN = -Wl,-u,vfprintf -lprintf_min
 # Floating point printf version (requires MATH_LIB = -lm below)
 PRINTF_LIB_FLOAT = -Wl,-u,vfprintf -lprintf_flt
 
-PRINTF_LIB = 
+PRINTF_LIB = $(PRINTF_LIB_MIN)
 
 # Minimalistic scanf version
 SCANF_LIB_MIN = -Wl,-u,vfscanf -lscanf_min
@@ -61,7 +61,7 @@ SCANF_LIB_MIN = -Wl,-u,vfscanf -lscanf_min
 # Floating point + %[ scanf version (requires MATH_LIB = -lm below)
 SCANF_LIB_FLOAT = -Wl,-u,vfscanf -lscanf_flt
 
-SCANF_LIB = 
+SCANF_LIB = $(SCANF_LIB_MIN)
 
 MATH_LIB = -lm
 
@@ -134,15 +134,9 @@ ALL_ASFLAGS = -mmcu=$(MCU) -I. -x assembler-with-cpp $(ASFLAGS)
 
 
 # Default target.
-all: build
+all: config depend build
 
-# Hardware specific targets.
-prototype: 
-	echo -e '#ifndef CONFIG_H\n#define CONFIG_H\n#define HW_PROTOTYPE\n#define FIRMWARE_VERSION "$(VERSION)"\n#endif' > config.h
-
-dig_ac230:
-	echo -e '#ifndef CONFIG_H\n#define CONFIG_H\n#define HW_DIG_AC230\n#define FIRMWARE_VERSION "$(VERSION)"\n#endif' > config.h
-
+config: $(CONFIG)
 
 build: elf hex eep
 
@@ -152,6 +146,9 @@ eep: $(TARGET).eep
 lss: $(TARGET).lss 
 sym: $(TARGET).sym
 
+# Configure the Program
+$(CONFIG): config.sh
+	./config.sh $(CONFIG)
 
 # Program the device.  
 program: $(TARGET).hex $(TARGET).eep
@@ -224,10 +221,12 @@ clean:
 	$(OBJ) $(LST) $(SRC:.c=.s) $(SRC:.c=.d) \
 	config.h
 
+# Dependency
 depend:
 	$(CC) -M -mmcu=$(MCU) $(CDEFS) $(CINCS) $(SRC) $(ASRC) > $(DEPFILE)
 
 
 -include $(DEPFILE)
 
-.PHONY:	all build elf hex eep lss sym program coff extcoff clean depend
+.PHONY:	all build elf hex eep lss sym program coff extcoff clean depend config
+.NOTPARALLEL: config

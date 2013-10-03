@@ -21,3 +21,9 @@ $(TERMINAL): $(TERMINAL).c
 
 $(LOADER): $(LOADER).c
 	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $@.c $(LIBRARY)
+
+clean:
+	$(RM) $(COMPILER) $(TERMINAL) $(LOADER)
+
+.PHONY: all clean
+
