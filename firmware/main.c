@@ -246,7 +246,7 @@ int __attribute__ ((OS_main)) main (void) {
                 case DEBUG:
                         progc.ip = 0;
                         prog_execute((prog_register_t){0, FALSE});
-                        prog_periphry_sync();
+                        prog_periphery_sync();
                         write_outputs();
                         break;
 

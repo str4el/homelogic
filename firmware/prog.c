@@ -140,7 +140,7 @@ int16_t prog_get_periphery_offset(const uint8_t device, const uint8_t spec, cons
  * Perpheriestatus und gibt entsprechende Nachrichten über
  * den Bus aus
  */
-void prog_periphry_sync()
+void prog_periphery_sync()
 {
         struct map_address_s am;
         uint16_t tmp;
