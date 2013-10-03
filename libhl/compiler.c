@@ -23,7 +23,7 @@
 
 
 #include "private.h"
-#include "compiler.h"
+#include "homelogic.h"
 #include "../common/pattern.h"
 
 
@@ -36,7 +36,7 @@
  * können die benötigeten sturkturen vom Präprozessor erstellt
  * werden.
  */
-static hlc_opcode_t opcodes [] = {
+static hl_opcode_t opcodes [] = {
         #define DT_NONE   dt_none
         #define DT_BOOL   dt_bit
         #define DT_BYTE   dt_byte
@@ -51,16 +51,16 @@ static hlc_opcode_t opcodes [] = {
 
 
 
-typedef enum hlc_opcode_num_e {
+typedef enum hl_opcode_num_e {
 #define OPCODE(LABEL, x, NUM, y, z) LABEL = NUM,
 #include "../common/opcodes.def"
 #undef OPCODE
-} hlc_opcode_num_t;
+} hl_opcode_num_t;
 
 
 
 
-static inline void hlc_set_error (hlc_data_t *data, hlc_error_t err, const char *chunk)
+static inline void hlc_set_error (hlc_t *data, hl_error_t err, const char *chunk)
 {
         if(!data) return;
         data->d_errno = err;
@@ -96,7 +96,7 @@ static uint16_t hlc_crc16_update(uint16_t crc, uint8_t data)
 
 
 
-static int hlc_get_address(const char *chunk, hlc_command_data_t *adr)
+static int hlc_get_address(const char *chunk, hl_command_data_t *adr)
 {
         char type[2];
 
@@ -174,7 +174,7 @@ static inline int hlc_get_opcode(const char *chunk)
 
 
 
-static inline int hlc_convert_to_word_address (hlc_command_data_t *address)
+static inline int hlc_convert_to_word_address (hl_command_data_t *address)
 {
         if (address->cd_data_type & dt_anyadr) {
                 address->cd_address.cd_bit = 0;
@@ -188,7 +188,7 @@ static inline int hlc_convert_to_word_address (hlc_command_data_t *address)
 
 
 
-static int hlc_add_to_symbol_table (hlc_data_t *data, const char *name, const char *subst)
+static int hlc_add_to_symbol_table (hlc_t *data, const char *name, const char *subst)
 {
         int n = data->d_sym_tab.st_used;
         for (int i = 0; i < n; i++) {
@@ -226,7 +226,7 @@ static int hlc_add_to_symbol_table (hlc_data_t *data, const char *name, const ch
 
 
 
-static void hlc_clear_symbol_table (hlc_data_t *data)
+static void hlc_clear_symbol_table (hlc_t *data)
 {
         for (int i = 0; i < data->d_sym_tab.st_used; i++) {
                 free(data->d_sym_tab.st_sym[i].s_name);
@@ -240,7 +240,7 @@ static void hlc_clear_symbol_table (hlc_data_t *data)
 
 
 
-static int hlc_add_to_address_map (hlc_address_map_t *am, hlc_command_data_t address)
+static int hlc_add_to_address_map (hl_address_map_t *am, hl_command_data_t address)
 {
         if (hlc_convert_to_word_address(&address)) {
                 for (int i = 0; i < am->am_used; i++) {
@@ -251,7 +251,7 @@ static int hlc_add_to_address_map (hlc_address_map_t *am, hlc_command_data_t add
         }
 
         if (am->am_used >= am->am_size) {
-                hlc_command_data_t *new = realloc(am->am_addresses, (am->am_size + 10) * sizeof(*new));
+                hl_command_data_t *new = realloc(am->am_addresses, (am->am_size + 10) * sizeof(*new));
                 if (!new) return -1;
                 am->am_addresses = new;
                 am->am_size += 10;
@@ -263,7 +263,7 @@ static int hlc_add_to_address_map (hlc_address_map_t *am, hlc_command_data_t add
 
 
 
-static inline int hlc_join_address_map (hlc_address_map_t *dst, const hlc_address_map_t *src)
+static inline int hlc_join_address_map (hl_address_map_t *dst, const hl_address_map_t *src)
 {
         for (int i = 0; i < src->am_used; i++) {
                 if (hlc_add_to_address_map(dst, src->am_addresses[i])) {
@@ -276,7 +276,7 @@ static inline int hlc_join_address_map (hlc_address_map_t *dst, const hlc_addres
 
 
 
-static inline void hlc_clear_address_map (hlc_address_map_t *am)
+static inline void hlc_clear_address_map (hl_address_map_t *am)
 {
         if (am->am_size) {
                 free (am->am_addresses);
@@ -290,10 +290,10 @@ static inline void hlc_clear_address_map (hlc_address_map_t *am)
 
 
 
-static int hlc_add_to_command_block (hlc_command_block_t *cb, const hlc_command_t command)
+static int hlc_add_to_command_block (hl_command_block_t *cb, const hl_command_t command)
 {
         if (cb->cb_used >= cb->cb_size) {
-                hlc_command_t *new = realloc(cb->cb_commands, (cb->cb_size + 10) * sizeof(*new));
+                hl_command_t *new = realloc(cb->cb_commands, (cb->cb_size + 10) * sizeof(*new));
                 if (!new) return -1;
                 cb->cb_commands = new;
                 cb->cb_size += 10;
@@ -306,7 +306,7 @@ static int hlc_add_to_command_block (hlc_command_block_t *cb, const hlc_command_
 
 
 
-static inline int hlc_join_command_block (hlc_command_block_t *dst, const hlc_command_block_t *src)
+static inline int hlc_join_command_block (hl_command_block_t *dst, const hl_command_block_t *src)
 {
         for (int i = 0; i < src->cb_used; i++) {
                 if (hlc_add_to_command_block(dst, src->cb_commands[i])) {
@@ -319,7 +319,7 @@ static inline int hlc_join_command_block (hlc_command_block_t *dst, const hlc_co
 
 
 
-static inline void hlc_clear_command_block (hlc_command_block_t *cb)
+static inline void hlc_clear_command_block (hl_command_block_t *cb)
 {
         if (cb->cb_size) {
                 free (cb->cb_commands);
@@ -333,7 +333,7 @@ static inline void hlc_clear_command_block (hlc_command_block_t *cb)
 
 
 
-static char *hlc_get_chunk(hlc_data_t *data, FILE *file)
+static char *hlc_get_chunk(hlc_t *data, FILE *file)
 {
         static char chunk[64];
         if (fscanf(file, "%63s", chunk) != 1) {
@@ -352,23 +352,23 @@ static char *hlc_get_chunk(hlc_data_t *data, FILE *file)
 
 
 
-static int hlc_scan_command(hlc_data_t *data, FILE *file, hlc_opcode_t opcode, hlc_command_block_t *cb, hlc_address_map_t *am)
+static int hlc_scan_command(hlc_t *data, FILE *file, hl_opcode_t opcode, hl_command_block_t *cb, hl_address_map_t *am)
 {
         static int current_device = -1;
 
-        hlc_command_t command;
+        hl_command_t command;
         command.c_opcode = opcode;
         command.c_data.cd_data_type = dt_none;
 
         if (opcode.oc_data_type != dt_none) {
                 char *chunk = hlc_get_chunk(data, file);
                 if (!chunk || hlc_get_address(chunk, &command.c_data)) {
-                        hlc_set_error(data, hlc_e_opaque_datatype, chunk);
+                        hlc_set_error(data, hl_e_opaque_datatype, chunk);
                         return -1;
                 }
 
                 if (!(opcode.oc_data_type & command.c_data.cd_data_type)) {
-                        hlc_set_error(data, hlc_e_datatype_missmatch, chunk);
+                        hlc_set_error(data, hl_e_datatype_missmatch, chunk);
                         return -1;
                 }
 
@@ -376,39 +376,39 @@ static int hlc_scan_command(hlc_data_t *data, FILE *file, hlc_opcode_t opcode, h
                         if (current_device < 0) {
                                 current_device = command.c_data.cd_address.cd_device;
                         } else if (current_device != command.c_data.cd_address.cd_device) {
-                                hlc_set_error(data, hlc_e_unclear_authority, chunk);
+                                hlc_set_error(data, hl_e_unclear_authority, chunk);
                                 return -1;
                         }
                 }
 
                 if (command.c_data.cd_data_type & dt_anyadr) {
                         if (hlc_add_to_address_map(am, command.c_data)) {
-                                hlc_set_error(data, hlc_e_out_of_memory, NULL);
+                                hlc_set_error(data, hl_e_out_of_memory, NULL);
                                 return -1;
                         }
                 }
         }
 
         if (hlc_add_to_command_block(cb, command)) {
-                hlc_set_error(data, hlc_e_out_of_memory, NULL);
+                hlc_set_error(data, hl_e_out_of_memory, NULL);
                 return -1;
         }
 
         switch (command.c_opcode.oc_num) {
                 case oc_end_of_network:
                 case oc_end_of_program:
-                        if (current_device < 0 || current_device >= HLC_MAX_DEVICES) {
-                                hlc_set_error(data, hlc_e_out_of_range, NULL);
+                        if (current_device < 0 || current_device >= HL_MAX_DEVICES) {
+                                hlc_set_error(data, hl_e_out_of_range, NULL);
                                 return -1;
                         }
 
                         if (hlc_join_address_map(&(data->d_device[current_device].dd_am), am)) {
-                                hlc_set_error(data, hlc_e_out_of_memory, NULL);
+                                hlc_set_error(data, hl_e_out_of_memory, NULL);
                                 return -1;
                         }
 
                         if (hlc_join_command_block(&(data->d_device[current_device].dd_cb), cb)) {
-                                hlc_set_error(data, hlc_e_out_of_memory, NULL);
+                                hlc_set_error(data, hl_e_out_of_memory, NULL);
                                 return -1;
                         }
 
@@ -424,9 +424,9 @@ static int hlc_scan_command(hlc_data_t *data, FILE *file, hlc_opcode_t opcode, h
 
 
 
-hlc_data_t EXPORT *hlc_init_data()
+hlc_t EXPORT *hl_compiler_init()
 {
-        hlc_data_t *data;
+        hlc_t *data;
 
         data = malloc(sizeof(*data));
         if (!data) return NULL;
@@ -438,10 +438,10 @@ hlc_data_t EXPORT *hlc_init_data()
 
 
 
-void EXPORT hlc_free_data(hlc_data_t *data)
+void EXPORT hl_compiler_destroy(hlc_t *data)
 {
         for (int i = 0; i < sizeof(data->d_device) / sizeof(*data->d_device); i++) {
-                hlc_device_data_t dd = data->d_device[i];
+                hl_device_data_t dd = data->d_device[i];
                 hlc_clear_address_map(&dd.dd_am);
                 hlc_clear_command_block(&dd.dd_cb);
                 if (dd.dd_program) free(dd.dd_program);
@@ -453,18 +453,18 @@ void EXPORT hlc_free_data(hlc_data_t *data)
 
 
 
-int EXPORT hlc_scan_file (hlc_data_t *data, FILE* file)
+int EXPORT hl_scan_instruction_list (hlc_t *data, FILE* file)
 {
         int ret = 0;
         char *chunk;
 
-        hlc_command_block_t cb = {
+        hl_command_block_t cb = {
                 .cb_size = 0,
                 .cb_used = 0,
                 .cb_commands = NULL
         };
 
-        hlc_address_map_t am = {
+        hl_address_map_t am = {
                 .am_size = 0,
                 .am_used = 0,
                 .am_addresses = NULL
@@ -476,7 +476,7 @@ int EXPORT hlc_scan_file (hlc_data_t *data, FILE* file)
                         if (2 == fscanf(file, "%63s %63s", c1, c2)) {
                                 hlc_add_to_symbol_table(data, c1, c2);
                         } else {
-                                hlc_set_error(data, hlc_e_unexpected_end, NULL);
+                                hlc_set_error(data, hl_e_unexpected_end, NULL);
                                 return -1;
                         }
 
@@ -494,7 +494,7 @@ int EXPORT hlc_scan_file (hlc_data_t *data, FILE* file)
         }
 
         if (am.am_used || cb.cb_used) {
-                hlc_set_error(data, hlc_e_unexpected_end, NULL);
+                hlc_set_error(data, hl_e_unexpected_end, NULL);
                 ret = -1;
         }
 
@@ -506,16 +506,16 @@ int EXPORT hlc_scan_file (hlc_data_t *data, FILE* file)
 
 
 
-int EXPORT hlc_compile (hlc_data_t *data)
+int EXPORT hl_compile (hlc_t *data)
 {
         int ret = 0;
 
         for (int i = 0; i < sizeof(data->d_device) / sizeof(*data->d_device); i++) {
-                hlc_device_data_t *d = &data->d_device[i];
+                hl_device_data_t *d = &data->d_device[i];
                 if (d->dd_status != dd_populated) continue;
 
                 struct program_header_s ph;
-                struct address_map_s am;
+                struct map_address_s am;
                 struct command_s co;
 
                 size_t ph_size = sizeof(ph);
@@ -527,7 +527,7 @@ int EXPORT hlc_compile (hlc_data_t *data)
                 d->dd_program_size = 0;
                 d->dd_program = malloc(size);
                 if (!d->dd_program) {
-                        hlc_set_error(data, hlc_e_out_of_memory, NULL);
+                        hlc_set_error(data, hl_e_out_of_memory, NULL);
                         return -1;
                 }
                 d->dd_program_size = size;
@@ -542,24 +542,24 @@ int EXPORT hlc_compile (hlc_data_t *data)
 
 
                 for (int i = 0; i < d->dd_am.am_used; i++) {
-                        am.am_device_adr = d->dd_am.am_addresses[i].cd_address.cd_device;
+                        am.ma_device_adr = d->dd_am.am_addresses[i].cd_address.cd_device;
 
                         switch(d->dd_am.am_addresses[i].cd_address.cd_mem_type) {
-                                case mt_input:   am.am_mem_adr = as_input;   break;
-                                case mt_output:  am.am_mem_adr = as_output;  break;
-                                case mt_memory:  am.am_mem_adr = as_memory;  break;
-                                case mt_timer:   am.am_mem_adr = as_timer;   break;
-                                case mt_counter: am.am_mem_adr = as_counter; break;
+                                case mt_input:   am.ma_mem_adr = as_input;   break;
+                                case mt_output:  am.ma_mem_adr = as_output;  break;
+                                case mt_memory:  am.ma_mem_adr = as_memory;  break;
+                                case mt_timer:   am.ma_mem_adr = as_timer;   break;
+                                case mt_counter: am.ma_mem_adr = as_counter; break;
                         }
 
-                        am.am_mem_adr |= d->dd_am.am_addresses[i].cd_address.cd_byte >> 1;
+                        am.ma_mem_adr |= d->dd_am.am_addresses[i].cd_address.cd_byte >> 1;
 
                         memcpy(ptr, &am, sizeof(am));
                         ptr += sizeof(am);
                 }
 
                 for (int i = 0; i < d->dd_cb.cb_used; i++) {
-                        hlc_command_t *ci = &d->dd_cb.cb_commands[i];
+                        hl_command_t *ci = &d->dd_cb.cb_commands[i];
                         memset(&co, 0, sizeof(co));
 
                         co.c_opcode = ci->c_opcode.oc_num;
@@ -612,7 +612,7 @@ int EXPORT hlc_compile (hlc_data_t *data)
 
 
 
-int EXPORT hlc_write_hexfile(hlc_data_t *data, FILE *file)
+int EXPORT hl_write_intel_hex(hlc_t *data, FILE *file)
 {
         int ret = 0;
 

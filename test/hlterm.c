@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/time.h>
-#include "../libhl/terminal.h"
+#include "../libhl/homelogic.h"
 
 
 
@@ -10,13 +10,13 @@ int main (int argc, char *argv[])
 {
         hlterm_t *term;
 
-        term = hlterm_init();
+        term = hl_terminal_init();
         if (!term) {
                 fprintf(stderr, "e: init\n");
                 return 1;
         }
 
-        if (hlterm_open_ftdi(term, 0x0403, 0x6001) == -1) {
+        if (hl_open_terminal_ftdi(term, 0x0403, 0x6001) == -1) {
         //if (hlterm_open_device(term, "/dev/ttyUSB0") == -1) {
                 fprintf(stderr, "e: open\n");
                 return 1;
@@ -64,8 +64,8 @@ int main (int argc, char *argv[])
                 }
         }
 
-        hlterm_close(term);
-        hlterm_destroy(term);
+        hl_close_terminal(term);
+        hl_terminal_destroy(term);
         return 0;
 }
 

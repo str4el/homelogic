@@ -1,11 +1,11 @@
 #include <stdio.h>
 
-#include "../libhl/compiler.h"
+#include "../libhl/homelogic.h"
 
 
 int main (int argc, char *argv[])
 {
-        hlc_data_t *data;
+        hlc_t *data;
         FILE *in;
         FILE *out;
 
@@ -28,26 +28,26 @@ int main (int argc, char *argv[])
                 }
         }
 
-        data = hlc_init_data();
+        data = hl_compiler_init();
         if (!data) {
                 fclose(in);
                 fclose(out);
                 return 3;
         }
 
-        int ret = hlc_scan_file(data, in);
+        int ret = hl_scan_instruction_list(data, in);
         if (ret == 0) {
-                ret = hlc_compile(data);
+                ret = hl_compile(data);
                 fprintf(stderr, "compile: %i\n", ret);
 
-                ret = hlc_write_hexfile(data, out);
+                ret = hl_write_intel_hex(data, out);
                 fprintf(stderr, "write: %i\n", ret);
         } else {
                 fprintf(stderr, "scan: %i %s\n", data->d_errno, data->d_errchunk);
         }
 
 
-        hlc_free_data(data);
+        hl_compiler_destroy(data);
         fclose(in);
         fclose(out);
         return 0;

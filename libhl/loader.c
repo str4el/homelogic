@@ -17,28 +17,36 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "private.h"
-#include "loader.h"
+#include "homelogic.h"
 
 
 
 
-hll_data_t EXPORT *hll_init_data()
+hlload_t EXPORT *hl_loader_init()
 {
-        hll_data_t *ret = malloc(sizeof(*ret));
+        hlload_t *ret = malloc(sizeof(*ret));
         if (!ret) return NULL;
         memset(ret, 0, sizeof(*ret));
         return ret;
 }
 
 
+typedef struct hl_data_block_s {
+        uint16_t db_size;
+        uint16_t db_pos;
+        char *db_data;
+} hl_data_block_t;
 
 
 
-void EXPORT hll_free_data(hll_data_t *data)
+
+
+
+
+void EXPORT hl_loader_destroy(hlload_t *data)
 {
         for (int i = 0; i < sizeof(data->d_device) / sizeof(*data->d_device); i++) {
                 if (data->d_device[i].dd_size) {
@@ -52,7 +60,7 @@ void EXPORT hll_free_data(hll_data_t *data)
 
 
 
-static inline int hll_expand_device_data(hll_device_data_t *dd, uint16_t size)
+static inline int hll_expand_device_data(hl_device_memory_t *dd, uint16_t size)
 {
         if (size <= dd->dd_size) return 0;
         char *new = realloc(dd->dd_data, size);
@@ -66,15 +74,15 @@ static inline int hll_expand_device_data(hll_device_data_t *dd, uint16_t size)
 
 
 
-int EXPORT hll_insert_device_data(hll_data_t *data, hll_data_block_t *db, uint8_t device)
+static int hl_insert_device_data(hlload_t *data, hl_data_block_t *db, uint8_t device)
 {
-        if (device >= HLL_MAX_DEVICES) {
-                data->d_errno = hll_e_unreachable_device;
+        if (device >= HL_MAX_DEVICES) {
+                data->d_errno = hl_e_unreachable_device;
                 return -1;
         }
 
         if (hll_expand_device_data(&data->d_device[device], db->db_pos + db->db_size)) {
-                data->d_errno = hll_e_out_of_memory;
+                data->d_errno = hl_e_out_of_memory;
                 return -1;
         }
 
@@ -85,7 +93,7 @@ int EXPORT hll_insert_device_data(hll_data_t *data, hll_data_block_t *db, uint8_
 
 
 
-static int hll_scan_hex_file_line(FILE *file, hll_data_block_t *db)
+static int hll_scan_hex_file_line(FILE *file, hl_data_block_t *db)
 {
         static char buf[64];
         int type;
@@ -124,22 +132,22 @@ static int hll_scan_hex_file_line(FILE *file, hll_data_block_t *db)
 
 
 
-int EXPORT hll_read_hex_file(hll_data_t *data, FILE *file)
+int EXPORT hl_read_intel_hex(hlload_t *data, FILE *file)
 {
-        hll_data_block_t line;
+        hl_data_block_t line;
         int current_device = 0;
 
         while(1) {
                 switch (hll_scan_hex_file_line(file, &line)) {
                         case 0x00:
-                                if (hll_insert_device_data(data, &line, current_device)) {
+                                if (hl_insert_device_data(data, &line, current_device)) {
                                         return -1;
                                 }
                                 break;
 
                         case 0x01:
                                 if (line.db_size != 0) {
-                                        data->d_errno = hll_e_corrupt_input_file;
+                                        data->d_errno = hl_e_corrupt_input_file;
                                         return -1;
                                 }
                                 return 0;
@@ -147,14 +155,14 @@ int EXPORT hll_read_hex_file(hll_data_t *data, FILE *file)
 
                         case 0x04:
                                 if (line.db_pos != 0 || line.db_size != 2 || line.db_data[0] != 0) {
-                                        data->d_errno = hll_e_corrupt_input_file;
+                                        data->d_errno = hl_e_corrupt_input_file;
                                         return -1;
                                 }
                                 current_device = line.db_data[1];
                                 break;
 
                         default:
-                                data->d_errno = hll_e_corrupt_input_file;
+                                data->d_errno = hl_e_corrupt_input_file;
                                 return -1;
                 }
         }
@@ -194,7 +202,7 @@ static int hll_verify(FILE *stream, uint16_t device, const char *data)
 
 
 
-int EXPORT hll_send_to_device(hll_data_t *data, FILE *stream)
+int EXPORT hl_download(hlload_t *data, FILE *stream)
 {
         char buf[64], *ptr;
 

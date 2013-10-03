@@ -31,7 +31,7 @@
 #include <signal.h>
 #include <ctype.h>
 
-#include "terminal.h"
+#include "homelogic.h"
 #include "private.h"
 
 
@@ -93,8 +93,8 @@ static void hlterm_timer_wait(timer_t timer)
 
 static void *hlterm_device_read_thread(void *c)
 {
-        hlterm_thread_context_t *context = c;
-        char line[HLTERM_LINE_LEN];
+        hl_terminal_thread_context_t *context = c;
+        char line[HL_MAX_LINE_LEN];
         int pos = 0;
 
         while (context->tc_run & r_read_thread) {
@@ -156,8 +156,8 @@ static void *hlterm_device_read_thread(void *c)
 
 static void *hlterm_device_write_thread (void *c)
 {
-        hlterm_thread_context_t *context = c;
-        char line[HLTERM_LINE_LEN];
+        hl_terminal_thread_context_t *context = c;
+        char line[HL_MAX_LINE_LEN];
         int pos = 0;
 
         while (context->tc_run & r_write_thread) {
@@ -252,7 +252,7 @@ static int hlterm_init_threads(hlterm_t *term) {
 
 
 
-hlterm_t EXPORT *hlterm_init()
+hlterm_t EXPORT *hl_terminal_init()
 {
         hlterm_t *term = malloc(sizeof(*term));
         if (!term) return NULL;
@@ -277,7 +277,7 @@ hlterm_t EXPORT *hlterm_init()
 
 
 
-void EXPORT hlterm_destroy(hlterm_t *term)
+void EXPORT hl_terminal_destroy(hlterm_t *term)
 {
         if (!term) return;
 
@@ -293,7 +293,7 @@ void EXPORT hlterm_destroy(hlterm_t *term)
 
 
 
-int EXPORT hlterm_open_device(hlterm_t *term, const char *filename)
+int EXPORT hl_open_terminal_device(hlterm_t *term, const char *filename)
 {
         if (term->t_status > s_socket) return -1;
 
@@ -304,12 +304,12 @@ int EXPORT hlterm_open_device(hlterm_t *term, const char *filename)
         term->t_status |= s_device;
 
         if (hlterm_setup_device(term->t_thread_context.tc_device) == -1) {
-                hlterm_close(term);
+                hl_close_terminal(term);
                 return -1;
         }
 
         if (hlterm_init_threads(term) == -1) {
-                hlterm_close(term);
+                hl_close_terminal(term);
                 return -1;
         }
 
@@ -319,7 +319,7 @@ int EXPORT hlterm_open_device(hlterm_t *term, const char *filename)
 
 
 
-int EXPORT hlterm_open_ftdi(hlterm_t *term, int vid, int pid)
+int EXPORT hl_open_terminal_ftdi(hlterm_t *term, int vid, int pid)
 {
         if (term->t_status > s_socket) return -1;
 
@@ -343,7 +343,7 @@ int EXPORT hlterm_open_ftdi(hlterm_t *term, int vid, int pid)
         term->t_thread_context.tc_device = -1;
 
         if (hlterm_init_threads(term) == -1) {
-                hlterm_close(term);
+                hl_close_terminal(term);
                 return -1;
         }
 
@@ -353,7 +353,7 @@ int EXPORT hlterm_open_ftdi(hlterm_t *term, int vid, int pid)
 
 
 
-void EXPORT hlterm_close(hlterm_t *term)
+void EXPORT hl_close_terminal(hlterm_t *term)
 {
         if (!term) return;
 

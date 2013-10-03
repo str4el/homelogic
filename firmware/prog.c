@@ -52,7 +52,7 @@ uint8_t prog_init()
         uint16_t size;
 
         crc = 0;
-        size = progc.header.ph_address_map_size * sizeof(struct address_map_s);
+        size = progc.header.ph_address_map_size * sizeof(struct map_address_s);
         if (progc.header.ph_address_map_offset + size > E2END) return ERR_EEPROM;
         for (i = 0; i < size; i++) {
                 crc = _crc16_update(crc, eep_read_byte(progc.header.ph_address_map_offset + i));
@@ -122,11 +122,11 @@ static inline void prog_error(uint8_t e)
 
 int16_t prog_get_periphery_offset(const uint8_t device, const uint8_t spec, const uint8_t adr)
 {
-        struct address_map_s am;
+        struct map_address_s am;
         for (uint16_t i = 0; i < progc.header.ph_address_map_size; i++) {
                 eep_read(progc.header.ph_address_map_offset + i * sizeof(am), &am, sizeof(am));
-                if (am.am_device_adr == device &&
-                    am.am_mem_adr == ((spec & 0xE0) | (adr >> 1))) {
+                if (am.ma_device_adr == device &&
+                    am.ma_mem_adr == ((spec & 0xE0) | (adr >> 1))) {
                         return i;
                 }
         }
@@ -142,7 +142,7 @@ int16_t prog_get_periphery_offset(const uint8_t device, const uint8_t spec, cons
  */
 void prog_periphry_sync()
 {
-        struct address_map_s am;
+        struct map_address_s am;
         uint16_t tmp;
 
         if (!progc.valid) return;
@@ -150,10 +150,10 @@ void prog_periphry_sync()
         for (uint16_t i = 0; i < progc.header.ph_address_map_size; i++) {
                 eep_read(progc.header.ph_address_map_offset + i * sizeof(am), &am, sizeof(am));
 
-                if (am.am_device_adr == adr) {
-                        uint8_t byte = (am.am_mem_adr & 0x1F) << 1;
+                if (am.ma_device_adr == adr) {
+                        uint8_t byte = (am.ma_mem_adr & 0x1F) << 1;
 
-                        switch(am.am_mem_adr & 0xE0) {
+                        switch(am.ma_mem_adr & 0xE0) {
                         case as_input:
                                 tmp = byte < INPUT_REACH ? inputs[byte] : 0;
                                 tmp |= (byte + 1) < INPUT_REACH ? (inputs[byte + 1]) : 0;

@@ -68,9 +68,9 @@ struct command_s {
 
 
 
-struct address_map_s {
-        uint8_t am_device_adr;
-        uint8_t am_mem_adr;
+struct map_address_s {
+        uint8_t ma_device_adr;
+        uint8_t ma_mem_adr;
 } __attribute__((packed));
 
 #endif // PATTERN_H

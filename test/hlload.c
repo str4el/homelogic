@@ -1,60 +1,59 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../libhl/loader.h"
-#include "../libhl/terminal.h"
+#include "../libhl/homelogic.h"
 
 
 int main (void)
 {
 
-        hll_data_t *ld = hll_init_data();
+        hlload_t *ld = hl_loader_init();
         if (!ld) {
                 fprintf(stderr, "ld init\n");
                 exit(1);
         }
 
 
-        if (hll_read_hex_file(ld, stdin)) {
+        if (hl_read_intel_hex(ld, stdin)) {
                 fprintf(stderr, "ld read\n");
                 exit(2);
         }
 
 
-        hlterm_t *term = hlterm_init();
+        hlterm_t *term = hl_terminal_init();
         if (!term) {
-                hll_free_data(ld);
+                hl_loader_destroy(ld);
                 fprintf(stderr, "term init\n");
                 exit(3);
         }
 
-        if (hlterm_open_ftdi(term, 0x0403, 0x6001) == -1) {
-        //if (hlterm_open_device(term, "/dev/ttyUSB0") == -1) {
-                hlterm_close(term);
-                hlterm_destroy(term);
-                hll_free_data(ld);
+        if (hl_open_terminal_ftdi(term, 0x0403, 0x6001) == -1) {
+        //if (hl_open_terminal_device(term, "/dev/ttyUSB0") == -1) {
+                hl_close_terminal(term);
+                hl_terminal_destroy(term);
+                hl_loader_destroy(ld);
                 fprintf(stderr, "term open\n");
                 exit(4);
         }
 
         FILE *stream = fdopen(term->t_fd, "r+");
         if (!stream) {
-                hlterm_close(term);
-                hlterm_destroy(term);
-                hll_free_data(ld);
+                hl_close_terminal(term);
+                hl_terminal_destroy(term);
+                hl_loader_destroy(ld);
                 fprintf(stderr, "fdopen");
                 exit(5);
         }
 
-        if (hll_send_to_device(ld, stream)) {
+        if (hl_download(ld, stream)) {
                 fprintf(stderr, "ld send\n");
         }
 
         fprintf(stderr, "vor ende\n");
 
         fclose(stream);
-        hlterm_close(term);
-        hlterm_destroy(term);
-        hll_free_data(ld);
+        hl_close_terminal(term);
+        hl_terminal_destroy(term);
+        hl_loader_destroy(ld);
 
         fprintf(stderr, "ende\n");
         return 0;
