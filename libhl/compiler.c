@@ -444,7 +444,7 @@ void EXPORT hl_compiler_destroy(hlc_t *data)
                 hl_device_data_t dd = data->d_device[i];
                 hlc_clear_address_map(&dd.dd_am);
                 hlc_clear_command_block(&dd.dd_cb);
-                if (dd.dd_program) free(dd.dd_program);
+                if (dd.dd_program_memory) free(dd.dd_program_memory);
         }
         hlc_clear_symbol_table(data);
         free(data);
@@ -523,17 +523,17 @@ int EXPORT hl_compile (hlc_t *data)
                 size_t cb_size = sizeof(co) * d->dd_cb.cb_used;
                 size_t size = ph_size + am_size + cb_size;
 
-                free(d->dd_program);
+                free(d->dd_program_memory);
                 d->dd_program_size = 0;
-                d->dd_program = malloc(size);
-                if (!d->dd_program) {
+                d->dd_program_memory = malloc(size);
+                if (!d->dd_program_memory) {
                         hlc_set_error(data, hl_e_out_of_memory, NULL);
                         return -1;
                 }
                 d->dd_program_size = size;
 
-                memset (d->dd_program, 0xFF, size);
-                char *ptr = d->dd_program + ph_size;
+                memset (d->dd_program_memory, 0xFF, size);
+                char *ptr = d->dd_program_memory + ph_size;
 
                 ph.ph_address_map_offset = ph_size;
                 ph.ph_address_map_size = d->dd_am.am_used;
@@ -593,15 +593,15 @@ int EXPORT hl_compile (hlc_t *data)
 
                 ph.ph_address_map_crc16 = 0;
                 for (int i = ph.ph_address_map_offset; i < ph.ph_address_map_offset + am_size; i++) {
-                        ph.ph_address_map_crc16 = hlc_crc16_update(ph.ph_address_map_crc16, d->dd_program[i]);
+                        ph.ph_address_map_crc16 = hlc_crc16_update(ph.ph_address_map_crc16, d->dd_program_memory[i]);
                 }
 
                 ph.ph_program_crc16 = 0;
                 for (int i = ph.ph_program_offset; i < ph.ph_program_offset + cb_size; i++) {
-                        ph.ph_program_crc16 = hlc_crc16_update(ph.ph_program_crc16, d->dd_program[i]);
+                        ph.ph_program_crc16 = hlc_crc16_update(ph.ph_program_crc16, d->dd_program_memory[i]);
                 }
 
-                memcpy(d->dd_program, &ph, ph_size);
+                memcpy(d->dd_program_memory, &ph, ph_size);
 
                 d->dd_status = dd_compiled;
                 ret++;
@@ -630,7 +630,7 @@ int EXPORT hl_write_intel_hex(hlc_t *data, FILE *file)
 
                         fprintf(file, ":%02X%04X00", len, pos);
                         for (int j = 0; j < len; j++) {
-                                uint8_t val = data->d_device[i].dd_program[pos + j];
+                                uint8_t val = data->d_device[i].dd_program_memory[pos + j];
                                 fprintf(file, "%02X", val);
                                 sum += val;
                         }

@@ -139,7 +139,7 @@ typedef struct hl_device_data_s {
         hl_command_block_t dd_cb;
 
         uint16_t dd_program_size;
-        char *dd_program;
+        char *dd_program_memory;
 } hl_device_data_t;
 
 
@@ -190,26 +190,13 @@ typedef struct hlterm_s {
 
 
 
-typedef struct hl_device_memory_s {
-        uint16_t dd_size;
-        char *dd_data;
-} hl_device_memory_t;
-
-
-
-
-typedef struct hlload_s {
-        hl_device_memory_t d_device[HL_MAX_DEVICES];
-
-        int d_errno;
-} hlload_t;
-
-
 extern hlc_t *hl_compiler_init();
 extern void hl_compiler_destroy(hlc_t *data);
 extern int hl_scan_instruction_list (hlc_t *data, FILE* file);
 extern int hl_compile (hlc_t *data);
 extern int hl_write_intel_hex(hlc_t *data, FILE *file);
+extern int hl_read_intel_hex(hlc_t *data, FILE *file);
+extern int hl_download(hlc_t *data, FILE *stream);
 
 extern hlterm_t *hl_terminal_init(void);
 extern void hl_terminal_destroy(hlterm_t *term);
@@ -217,10 +204,6 @@ extern int hl_open_terminal_device(hlterm_t *term, const char *filename);
 extern int hl_open_terminal_ftdi(hlterm_t *term, int vid, int pid);
 extern void hl_close_terminal(hlterm_t *term);
 
-extern hlload_t *hl_loader_init();
-extern void hl_loader_destroy(hlload_t *data);
-extern int hl_read_intel_hex(hlload_t *data, FILE *file);
-extern int hl_download(hlload_t *data, FILE *stream);
 
 
 

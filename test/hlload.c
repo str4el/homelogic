@@ -6,7 +6,7 @@
 int main (void)
 {
 
-        hlload_t *ld = hl_loader_init();
+        hlc_t *ld = hl_compiler_init();
         if (!ld) {
                 fprintf(stderr, "ld init\n");
                 exit(1);
@@ -21,7 +21,7 @@ int main (void)
 
         hlterm_t *term = hl_terminal_init();
         if (!term) {
-                hl_loader_destroy(ld);
+                hl_compiler_destroy(ld);
                 fprintf(stderr, "term init\n");
                 exit(3);
         }
@@ -30,7 +30,7 @@ int main (void)
         //if (hl_open_terminal_device(term, "/dev/ttyUSB0") == -1) {
                 hl_close_terminal(term);
                 hl_terminal_destroy(term);
-                hl_loader_destroy(ld);
+                hl_compiler_destroy(ld);
                 fprintf(stderr, "term open\n");
                 exit(4);
         }
@@ -39,7 +39,7 @@ int main (void)
         if (!stream) {
                 hl_close_terminal(term);
                 hl_terminal_destroy(term);
-                hl_loader_destroy(ld);
+                hl_compiler_destroy(ld);
                 fprintf(stderr, "fdopen");
                 exit(5);
         }
@@ -53,7 +53,7 @@ int main (void)
         fclose(stream);
         hl_close_terminal(term);
         hl_terminal_destroy(term);
-        hl_loader_destroy(ld);
+        hl_compiler_destroy(ld);
 
         fprintf(stderr, "ende\n");
         return 0;
