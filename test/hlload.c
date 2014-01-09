@@ -35,22 +35,12 @@ int main (void)
                 exit(4);
         }
 
-        FILE *stream = fdopen(term->t_fd, "r+");
-        if (!stream) {
-                hl_close_terminal(term);
-                hl_terminal_destroy(term);
-                hl_compiler_destroy(ld);
-                fprintf(stderr, "fdopen");
-                exit(5);
-        }
-
-        if (hl_download(ld, stream)) {
+        if (hl_download(ld, term->t_stream)) {
                 fprintf(stderr, "ld send\n");
         }
 
         fprintf(stderr, "vor ende\n");
 
-        fclose(stream);
         hl_close_terminal(term);
         hl_terminal_destroy(term);
         hl_compiler_destroy(ld);

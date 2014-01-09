@@ -29,38 +29,21 @@ int main (int argc, char *argv[])
         while (1) {
                 FD_ZERO(&fds);
                 FD_SET(0, &fds);
-                FD_SET(term->t_fd, &fds);
+                FD_SET(fileno(term->t_stream), &fds);
 
-                if (select(term->t_fd + 1, &fds, NULL, NULL, NULL) < 0) {
+                if (select(fileno(term->t_stream) + 1, &fds, NULL, NULL, NULL) < 0) {
                         fprintf(stderr, "e: select\n");
                         break;
                 }
 
                 if (FD_ISSET(0, &fds)) {
-                        len = read(0, buf, sizeof(buf));
-                        if (len == -1) {
-                                fprintf(stderr, "e: read stdin\n");
-                                break;
-                        }
-
-                        if (write(term->t_fd, buf, len) != len) {
-                                fprintf(stderr, "e, write term\n");
-                                break;
-                        }
+                        fprintf(term->t_stream, "%s", fgets(buf, sizeof(buf), stdin));
+                        fflush(term->t_stream);
 
                 }
 
-                if (FD_ISSET(term->t_fd, &fds)) {
-                        len = read(term->t_fd, buf, sizeof(buf));
-                        if (len == -1) {
-                                fprintf(stderr, "e: read term\n");
-                                break;
-                        }
-
-                        if (write(1, buf, len) != len) {
-                                fprintf(stderr, "e, write stdout\n");
-                                break;
-                        }
+                if (FD_ISSET(fileno(term->t_stream), &fds)) {
+                        printf("%s", fgets(buf, sizeof(buf), term->t_stream));
                 }
         }
 
