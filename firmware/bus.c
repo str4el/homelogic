@@ -83,7 +83,7 @@ ISR(USART_RXC_vect) {
                         bus.rx_len = 0;
                 }
 
-                BUS_TX_LOCK(2 + adr);
+                BUS_TX_LOCK(2 + adr * 2);
                 break;
 
         case tx_start:
@@ -97,7 +97,7 @@ ISR(USART_RXC_vect) {
                 break;
 
         default:
-                BUS_TX_LOCK(2 + adr);
+                BUS_TX_LOCK(2 + adr * 2);
         }
 
 }
@@ -134,7 +134,7 @@ void bus_transmit_data (const char * data, uint8_t len)
         while (!(UCSRA & (1 << TXC)));
         UCSRA |= (1 << TXC);
         CLR_TE;
-        BUS_TX_LOCK(MEMSIZE + 3 - adr);
+        BUS_TX_LOCK(2 + adr * 2);
         bus.status = rx_start;
 }
 
