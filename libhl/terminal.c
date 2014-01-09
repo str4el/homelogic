@@ -265,9 +265,16 @@ hlterm_t EXPORT *hl_terminal_init()
                 free(term);
                 return NULL;
         }
+        term->t_stream = fdopen(socket[0], "r+");
+        if (!term->t_stream) {
+                free(term);
+                close(socket[0]);
+                close(socket[1]);
+                return NULL;
+        }
+
         term->t_status |= s_socket;
 
-        term->t_fd = socket[0];
         term->t_thread_context.tc_socket = socket[1];
         term->t_thread_context.tc_send_len = 0;
 
@@ -283,7 +290,7 @@ void EXPORT hl_terminal_destroy(hlterm_t *term)
 
         if (term->t_status & s_socket) {
                 close(term->t_thread_context.tc_socket);
-                close(term->t_fd);
+                fclose(term->t_stream);
                 term->t_status &= ~s_socket;
         }
 

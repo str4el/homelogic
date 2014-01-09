@@ -7,7 +7,6 @@
 #include <time.h>
 #include <ftdi.h>
 
-
 #define HL_MAX_DEVICES 128
 #define HL_MAX_LINE_LEN 1024
 
@@ -180,7 +179,7 @@ typedef struct hl_terminal_thread_context_s {
 
 
 typedef struct hlterm_s {
-        int t_fd;
+        FILE *t_stream;
         enum hlterm_status_e t_status;
         pthread_t t_read_thread;
         pthread_t t_write_thread;
@@ -203,8 +202,6 @@ extern void hl_terminal_destroy(hlterm_t *term);
 extern int hl_open_terminal_device(hlterm_t *term, const char *filename);
 extern int hl_open_terminal_ftdi(hlterm_t *term, int vid, int pid);
 extern void hl_close_terminal(hlterm_t *term);
-
-
 
 
 
