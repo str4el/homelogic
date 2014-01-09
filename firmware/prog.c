@@ -326,11 +326,27 @@ prog_register_t prog_execute(prog_register_t reg)
                         }
                         break;
 
+                case oc_load_not:
+                        switch (spec) {
+                        case as_word: reg.a = ~prog_get_word(&(progc.image[peradr])); break;
+                        case as_byte: reg.a = ~prog_get_byte(&(progc.image[peradr])); break;
+                        default:      reg.c = !prog_get_bit(&(progc.image[peradr]));  break;
+                        }
+                        break;
+
                 case oc_store:
                         switch (spec) {
                         case as_word: prog_set_word(&(progc.image[peradr]), reg.a);          break;
                         case as_byte: prog_set_byte(&(progc.image[peradr]), (uint8_t)reg.a); break;
                         default:      prog_set_bit(&(progc.image[peradr]), reg.c);           break;
+                        }
+                        break;
+
+                case oc_store_not:
+                        switch (spec) {
+                        case as_word: prog_set_word(&(progc.image[peradr]), ~reg.a);          break;
+                        case as_byte: prog_set_byte(&(progc.image[peradr]), ~(uint8_t)reg.a); break;
+                        default:      prog_set_bit(&(progc.image[peradr]), !reg.c);           break;
                         }
                         break;
 
@@ -342,12 +358,33 @@ prog_register_t prog_execute(prog_register_t reg)
                         }
                         break;
 
+                case oc_and_not:
+                        switch (spec) {
+                        case as_word: reg.a &= ~prog_get_word(&(progc.image[peradr])); break;
+                        case as_byte: reg.a &= ~prog_get_byte(&(progc.image[peradr])); break;
+                        default:      reg.c &= !prog_get_bit(&(progc.image[peradr]));  break;
+                        }
+                        break;
+
                 case oc_or:
                         switch (spec) {
                         case as_word: reg.a |= prog_get_word(&(progc.image[peradr])); break;
                         case as_byte: reg.a |= prog_get_byte(&(progc.image[peradr])); break;
                         default:      reg.c |= prog_get_bit(&(progc.image[peradr]));  break;
                         }
+                        break;
+
+                case oc_or_not:
+                        switch (spec) {
+                        case as_word: reg.a |= ~prog_get_word(&(progc.image[peradr])); break;
+                        case as_byte: reg.a |= ~prog_get_byte(&(progc.image[peradr])); break;
+                        default:      reg.c |= !prog_get_bit(&(progc.image[peradr]));  break;
+                        }
+                        break;
+
+                case oc_end_of_network:
+                        reg.a = 0;
+                        reg.c = FALSE;
                         break;
 
                 case oc_end_of_program:
