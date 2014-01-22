@@ -38,7 +38,7 @@
 
 
 
-static int hlterm_setup_device(int fd)
+static int setup_device(int fd)
 {
         struct termios termios;
 
@@ -62,7 +62,7 @@ static int hlterm_setup_device(int fd)
 
 
 
-static void hlterm_timer_start(timer_t timer, int ms)
+static void timer_start(timer_t timer, int ms)
 {
         struct itimerspec ts;
 
@@ -77,7 +77,7 @@ static void hlterm_timer_start(timer_t timer, int ms)
 
 
 
-static void hlterm_timer_wait(timer_t timer)
+static void timer_wait(timer_t timer)
 {
         struct itimerspec ts;
 
@@ -91,9 +91,9 @@ static void hlterm_timer_wait(timer_t timer)
 
 
 
-static void *hlterm_device_read_thread(void *c)
+static void *device_read_thread(void *c)
 {
-        hl_terminal_thread_context_t *context = c;
+        hl_connector_thread_context_t *context = c;
         char line[HL_MAX_LINE_LEN];
         int pos = 0;
 
@@ -115,7 +115,7 @@ static void *hlterm_device_read_thread(void *c)
                         }
                 }
 
-                hlterm_timer_start(context->tc_lock_timer, 100);
+                timer_start(context->tc_lock_timer, 100);
 
                 /* FIXME: Hab noch nicht harausgefunden von woher die 0 beim
                  *        programmieren kommt.
@@ -154,9 +154,9 @@ static void *hlterm_device_read_thread(void *c)
 
 
 
-static void *hlterm_device_write_thread (void *c)
+static void *device_write_thread (void *c)
 {
-        hl_terminal_thread_context_t *context = c;
+        hl_connector_thread_context_t *context = c;
         char line[HL_MAX_LINE_LEN];
         int pos = 0;
 
@@ -197,7 +197,7 @@ static void *hlterm_device_write_thread (void *c)
                 }
 
                 pthread_mutex_unlock(&context->tc_mutex);
-                hlterm_timer_wait(context->tc_lock_timer);
+                timer_wait(context->tc_lock_timer);
                 pthread_mutex_lock(&context->tc_mutex);
 
                 if (context->tc_send_len) {
@@ -207,7 +207,7 @@ static void *hlterm_device_write_thread (void *c)
                                 write(context->tc_device, context->tc_send_buffer, context->tc_send_len);
                         }
 
-                        hlterm_timer_start(context->tc_lock_timer, 10);
+                        timer_start(context->tc_lock_timer, 10);
                 }
 
                 pthread_mutex_unlock(&context->tc_mutex);
@@ -219,32 +219,32 @@ static void *hlterm_device_write_thread (void *c)
 
 
 
-static int hlterm_init_threads(hlterm_t *term) {
+static int init_threads(hlcon_t *con) {
         struct sigevent se;
         se.sigev_notify = SIGEV_NONE;
 
-        if (timer_create(CLOCK_MONOTONIC, &se, &term->t_thread_context.tc_lock_timer) == -1) {
+        if (timer_create(CLOCK_MONOTONIC, &se, &con->t_thread_context.tc_lock_timer) == -1) {
                 return -1;
         }
-        term->t_status |= s_timer;
+        con->t_status |= s_timer;
 
-        if (pthread_mutex_init(&term->t_thread_context.tc_mutex, NULL) == -1) {
+        if (pthread_mutex_init(&con->t_thread_context.tc_mutex, NULL) == -1) {
                 return -1;
         }
-        term->t_status |= s_mutex;
+        con->t_status |= s_mutex;
 
 
-        term->t_thread_context.tc_run = r_read_thread | r_write_thread;
+        con->t_thread_context.tc_run = r_read_thread | r_write_thread;
 
-        if (pthread_create(&term->t_read_thread, NULL, hlterm_device_read_thread, &term->t_thread_context)) {
+        if (pthread_create(&con->t_read_thread, NULL, device_read_thread, &con->t_thread_context)) {
                 return -1;
         }
-        term->t_status |= s_read_thread;
+        con->t_status |= s_read_thread;
 
-        if (pthread_create(&term->t_write_thread, NULL, hlterm_device_write_thread, &term->t_thread_context)) {
+        if (pthread_create(&con->t_write_thread, NULL, device_write_thread, &con->t_thread_context)) {
                 return -1;
         }
-        term->t_status |= s_write_thread;
+        con->t_status |= s_write_thread;
 
         return 0;
 }
@@ -252,59 +252,59 @@ static int hlterm_init_threads(hlterm_t *term) {
 
 
 
-hlterm_t EXPORT *hl_terminal_init(const char *name)
+hlcon_t EXPORT *hl_connector_init(const char *name)
 {
-        hlterm_t *term = malloc(sizeof(*term));
-        if (!term) return NULL;
+        hlcon_t *con = malloc(sizeof(*con));
+        if (!con) return NULL;
 
-        term->t_status = s_none;
+        con->t_status = s_none;
 
-        term->t_thread_context.tc_socket = hl_vbus_connect(name);
-        if (term->t_thread_context.tc_socket == -1) {
-                free(term);
+        con->t_thread_context.tc_socket = hl_vbus_connect(name);
+        if (con->t_thread_context.tc_socket == -1) {
+                free(con);
                 return NULL;
         }
-        term->t_status |= s_socket;
-        term->t_thread_context.tc_send_len = 0;
+        con->t_status |= s_socket;
+        con->t_thread_context.tc_send_len = 0;
 
-        return term;
+        return con;
 }
 
 
 
 
-void EXPORT hl_terminal_destroy(hlterm_t *term)
+void EXPORT hl_connector_destroy(hlcon_t *con)
 {
-        if (!term) return;
+        if (!con) return;
 
-        if (term->t_status & s_socket) {
-                hl_vbus_disconnect(term->t_thread_context.tc_socket);
-                term->t_status &= ~s_socket;
+        if (con->t_status & s_socket) {
+                hl_vbus_disconnect(con->t_thread_context.tc_socket);
+                con->t_status &= ~s_socket;
         }
 
-        free(term);
+        free(con);
 }
 
 
 
 
-int EXPORT hl_open_terminal_device(hlterm_t *term, const char *filename)
+int EXPORT hl_connect_device(hlcon_t *con, const char *filename)
 {
-        if (term->t_status > s_socket) return -1;
+        if (con->t_status > s_socket) return -1;
 
-        term->t_thread_context.tc_device = open(filename, O_RDWR);
-        if (term->t_thread_context.tc_device == -1) {
+        con->t_thread_context.tc_device = open(filename, O_RDWR);
+        if (con->t_thread_context.tc_device == -1) {
                 return -1;
         }
-        term->t_status |= s_device;
+        con->t_status |= s_device;
 
-        if (hlterm_setup_device(term->t_thread_context.tc_device) == -1) {
-                hl_close_terminal(term);
+        if (setup_device(con->t_thread_context.tc_device) == -1) {
+                hl_disconnect(con);
                 return -1;
         }
 
-        if (hlterm_init_threads(term) == -1) {
-                hl_close_terminal(term);
+        if (init_threads(con) == -1) {
+                hl_disconnect(con);
                 return -1;
         }
 
@@ -314,31 +314,31 @@ int EXPORT hl_open_terminal_device(hlterm_t *term, const char *filename)
 
 
 
-int EXPORT hl_open_terminal_ftdi(hlterm_t *term, int vid, int pid)
+int EXPORT hl_connect_ftdi(hlcon_t *con, int vid, int pid)
 {
-        if (term->t_status > s_socket) return -1;
+        if (con->t_status > s_socket) return -1;
 
-        if (ftdi_init(&term->t_thread_context.tc_ftdi) < 0) {
+        if (ftdi_init(&con->t_thread_context.tc_ftdi) < 0) {
                 return -1;
         }
 
-        ftdi_set_interface(&term->t_thread_context.tc_ftdi, INTERFACE_ANY);
+        ftdi_set_interface(&con->t_thread_context.tc_ftdi, INTERFACE_ANY);
 
-        if (ftdi_usb_open(&term->t_thread_context.tc_ftdi, vid, pid) < 0) {
-                ftdi_deinit(&term->t_thread_context.tc_ftdi);
+        if (ftdi_usb_open(&con->t_thread_context.tc_ftdi, vid, pid) < 0) {
+                ftdi_deinit(&con->t_thread_context.tc_ftdi);
                 return -1;
         }
 
-        if (ftdi_set_baudrate(&term->t_thread_context.tc_ftdi, 9600) < 0) {
-                ftdi_usb_close(&term->t_thread_context.tc_ftdi);
-                ftdi_deinit(&term->t_thread_context.tc_ftdi);
+        if (ftdi_set_baudrate(&con->t_thread_context.tc_ftdi, 9600) < 0) {
+                ftdi_usb_close(&con->t_thread_context.tc_ftdi);
+                ftdi_deinit(&con->t_thread_context.tc_ftdi);
                 return -1;
         }
-        term->t_status |= s_ftdi;
-        term->t_thread_context.tc_device = -1;
+        con->t_status |= s_ftdi;
+        con->t_thread_context.tc_device = -1;
 
-        if (hlterm_init_threads(term) == -1) {
-                hl_close_terminal(term);
+        if (init_threads(con) == -1) {
+                hl_disconnect(con);
                 return -1;
         }
 
@@ -348,43 +348,43 @@ int EXPORT hl_open_terminal_ftdi(hlterm_t *term, int vid, int pid)
 
 
 
-void EXPORT hl_close_terminal(hlterm_t *term)
+void EXPORT hl_disconnect(hlcon_t *con)
 {
-        if (!term) return;
+        if (!con) return;
 
-        if (term->t_status & s_mutex) {
+        if (con->t_status & s_mutex) {
                 sleep(1);
-                pthread_mutex_lock(&term->t_thread_context.tc_mutex);
-                term->t_thread_context.tc_run = r_none;
-                pthread_mutex_unlock(&term->t_thread_context.tc_mutex);
+                pthread_mutex_lock(&con->t_thread_context.tc_mutex);
+                con->t_thread_context.tc_run = r_none;
+                pthread_mutex_unlock(&con->t_thread_context.tc_mutex);
 
-                if (term->t_status & s_write_thread) {
-                        pthread_join(term->t_write_thread, NULL);
-                        term->t_status &= ~s_write_thread;
+                if (con->t_status & s_write_thread) {
+                        pthread_join(con->t_write_thread, NULL);
+                        con->t_status &= ~s_write_thread;
                 }
 
-                if (term->t_status & s_read_thread) {
-                        pthread_join(term->t_read_thread, NULL);
-                        term->t_status &= ~s_read_thread;
+                if (con->t_status & s_read_thread) {
+                        pthread_join(con->t_read_thread, NULL);
+                        con->t_status &= ~s_read_thread;
                 }
 
-                pthread_mutex_destroy(&term->t_thread_context.tc_mutex);
-                term->t_status &= ~s_mutex;
+                pthread_mutex_destroy(&con->t_thread_context.tc_mutex);
+                con->t_status &= ~s_mutex;
         }
 
-        if (term->t_status & s_timer) {
-                timer_delete(term->t_thread_context.tc_lock_timer);
-                term->t_status &= ~s_timer;
+        if (con->t_status & s_timer) {
+                timer_delete(con->t_thread_context.tc_lock_timer);
+                con->t_status &= ~s_timer;
         }
 
-        if (term->t_status & s_ftdi) {
-                ftdi_usb_close(&term->t_thread_context.tc_ftdi);
-                ftdi_deinit(&term->t_thread_context.tc_ftdi);
-                term->t_status &= ~s_ftdi;
+        if (con->t_status & s_ftdi) {
+                ftdi_usb_close(&con->t_thread_context.tc_ftdi);
+                ftdi_deinit(&con->t_thread_context.tc_ftdi);
+                con->t_status &= ~s_ftdi;
         }
 
-        if (term->t_status & s_device) {
-                close(term->t_thread_context.tc_device);
-                term->t_status &= ~s_device;
+        if (con->t_status & s_device) {
+                close(con->t_thread_context.tc_device);
+                con->t_status &= ~s_device;
         }
 }

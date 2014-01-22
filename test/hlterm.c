@@ -10,15 +10,15 @@ int main (int argc, char *argv[])
 {
         char busname[] = "/tmp/hlvbus";
 
-        hlterm_t *term;
+        hlcon_t *term;
 
-        term = hl_terminal_init(busname);
+        term = hl_connector_init(busname);
         if (!term) {
                 fprintf(stderr, "e: init\n");
                 return 1;
         }
 
-        if (hl_open_terminal_ftdi(term, 0x0403, 0x6001) == -1) {
+        if (hl_connect_ftdi(term, 0x0403, 0x6001) == -1) {
         //if (hlterm_open_device(term, "/dev/ttyUSB0") == -1) {
                 fprintf(stderr, "e: open\n");
                 return 1;
@@ -27,8 +27,8 @@ int main (int argc, char *argv[])
         int bus = hl_vbus_connect(busname);
         if (bus == -1) {
                 fprintf(stderr, "e: bus connect\n");
-                hl_close_terminal(term);
-                hl_terminal_destroy(term);
+                hl_disconnect(term);
+                hl_connector_destroy(term);
                 return 1;
         }
 
@@ -65,8 +65,8 @@ int main (int argc, char *argv[])
                 }
         }
 
-        hl_close_terminal(term);
-        hl_terminal_destroy(term);
+        hl_disconnect(term);
+        hl_connector_destroy(term);
         return 0;
 }
 

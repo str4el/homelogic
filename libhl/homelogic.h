@@ -51,7 +51,7 @@ typedef enum hlc_memory_type_e {
 
 
 
-enum hlterm_status_e {
+enum hlcon_status_e {
         s_none = 0,
         s_socket = 1,
         s_device = 2,
@@ -65,7 +65,7 @@ enum hlterm_status_e {
 
 
 
-enum hlterm_run_e {
+enum hlcon_run_e {
         r_none = 0,
         r_read_thread = 1,
         r_write_thread = 2
@@ -163,27 +163,27 @@ typedef struct hlc_s {
 
 
 
-typedef struct hl_terminal_thread_context_s {
+typedef struct hl_connector_thread_context_s {
         int tc_device;
         struct ftdi_context tc_ftdi;
         int tc_socket;
         timer_t tc_lock_timer;
 
         pthread_mutex_t tc_mutex;
-        enum hlterm_run_e tc_run;
+        enum hlcon_run_e tc_run;
         char tc_send_buffer[HL_MAX_LINE_LEN];
         size_t tc_send_len;
-} hl_terminal_thread_context_t;
+} hl_connector_thread_context_t;
 
 
 
 
-typedef struct hlterm_s {
-        enum hlterm_status_e t_status;
+typedef struct hlcon_s {
+        enum hlcon_status_e t_status;
         pthread_t t_read_thread;
         pthread_t t_write_thread;
-        hl_terminal_thread_context_t t_thread_context;
-} hlterm_t;
+        hl_connector_thread_context_t t_thread_context;
+} hlcon_t;
 
 
 
@@ -196,11 +196,11 @@ extern int hl_write_intel_hex(hlc_t *data, FILE *file);
 extern int hl_read_intel_hex(hlc_t *data, FILE *file);
 extern int hl_download(hlc_t *data, FILE *stream);
 
-extern hlterm_t *hl_terminal_init(const char *name);
-extern void hl_terminal_destroy(hlterm_t *term);
-extern int hl_open_terminal_device(hlterm_t *term, const char *filename);
-extern int hl_open_terminal_ftdi(hlterm_t *term, int vid, int pid);
-extern void hl_close_terminal(hlterm_t *term);
+extern hlcon_t *hl_connector_init(const char *name);
+extern void hl_connector_destroy(hlcon_t *con);
+extern int hl_connect_device(hlcon_t *con, const char *filename);
+extern int hl_connect_ftdi(hlcon_t *con, int vid, int pid);
+extern void hl_disconnect(hlcon_t *con);
 
 extern int hl_start_vbus_server(const char *name);
 extern void hl_stop_vbus_server(void);
