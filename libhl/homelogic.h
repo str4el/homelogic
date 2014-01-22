@@ -203,6 +203,9 @@ extern int hl_open_terminal_device(hlterm_t *term, const char *filename);
 extern int hl_open_terminal_ftdi(hlterm_t *term, int vid, int pid);
 extern void hl_close_terminal(hlterm_t *term);
 
-
+extern int hl_start_vbus_server(const char *name);
+extern void hl_stop_vbus_server(void);
+extern int hl_vbus_connect(const char *name);
+extern void hl_vbus_disconnect(int s);
 
 #endif // HOMELOGIC_H
