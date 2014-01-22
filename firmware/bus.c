@@ -113,6 +113,8 @@ void bus_init(void)
         UBRRL = UBRRL_VALUE;
 
         CLR_RE;
+
+        BUS_TX_LOCK(2 + adr * 2);
 }
 
 

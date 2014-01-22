@@ -164,10 +164,13 @@ int __attribute__ ((OS_main)) main (void) {
         led.red = ls_on;
 
         init_timer2();
-        bus_init();
 
         // Adressdecodierung wird nur nach dem Reset durchgeführt
         adr = adr_read();
+
+        // Für bus_init() muss adr gesetzt sein
+        bus_init();
+
 
 
         // Reset Shiftregister
