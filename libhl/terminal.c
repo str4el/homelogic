@@ -252,30 +252,19 @@ static int hlterm_init_threads(hlterm_t *term) {
 
 
 
-hlterm_t EXPORT *hl_terminal_init()
+hlterm_t EXPORT *hl_terminal_init(const char *name)
 {
         hlterm_t *term = malloc(sizeof(*term));
         if (!term) return NULL;
 
         term->t_status = s_none;
 
-        int socket[2];
-
-        if (socketpair(AF_UNIX, SOCK_STREAM, 0, socket)) {
+        term->t_thread_context.tc_socket = hl_vbus_connect(name);
+        if (term->t_thread_context.tc_socket == -1) {
                 free(term);
                 return NULL;
         }
-        term->t_stream = fdopen(socket[0], "r+");
-        if (!term->t_stream) {
-                free(term);
-                close(socket[0]);
-                close(socket[1]);
-                return NULL;
-        }
-
         term->t_status |= s_socket;
-
-        term->t_thread_context.tc_socket = socket[1];
         term->t_thread_context.tc_send_len = 0;
 
         return term;
@@ -289,8 +278,7 @@ void EXPORT hl_terminal_destroy(hlterm_t *term)
         if (!term) return;
 
         if (term->t_status & s_socket) {
-                close(term->t_thread_context.tc_socket);
-                fclose(term->t_stream);
+                hl_vbus_disconnect(term->t_thread_context.tc_socket);
                 term->t_status &= ~s_socket;
         }
 

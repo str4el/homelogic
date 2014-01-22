@@ -179,7 +179,6 @@ typedef struct hl_terminal_thread_context_s {
 
 
 typedef struct hlterm_s {
-        FILE *t_stream;
         enum hlterm_status_e t_status;
         pthread_t t_read_thread;
         pthread_t t_write_thread;
@@ -197,7 +196,7 @@ extern int hl_write_intel_hex(hlc_t *data, FILE *file);
 extern int hl_read_intel_hex(hlc_t *data, FILE *file);
 extern int hl_download(hlc_t *data, FILE *stream);
 
-extern hlterm_t *hl_terminal_init(void);
+extern hlterm_t *hl_terminal_init(const char *name);
 extern void hl_terminal_destroy(hlterm_t *term);
 extern int hl_open_terminal_device(hlterm_t *term, const char *filename);
 extern int hl_open_terminal_ftdi(hlterm_t *term, int vid, int pid);

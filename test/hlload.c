@@ -1,10 +1,25 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "../libhl/homelogic.h"
 
 
 int main (void)
 {
+        char busname[] = "/tmp/hlvbus";
+
+        int bus = hl_vbus_connect(busname);
+        if (bus == -1) {
+                fprintf(stderr, "bus connect\n");
+                exit(1);
+        }
+
+        FILE *stream = fdopen(bus, "w+");
+        if (!stream) {
+                fprintf(stderr, "stream open\n");
+                exit(1);
+        }
+
 
         hlc_t *ld = hl_compiler_init();
         if (!ld) {
@@ -19,32 +34,15 @@ int main (void)
         }
 
 
-        hlterm_t *term = hl_terminal_init();
-        if (!term) {
-                hl_compiler_destroy(ld);
-                fprintf(stderr, "term init\n");
-                exit(3);
-        }
-
-        if (hl_open_terminal_ftdi(term, 0x0403, 0x6001) == -1) {
-        //if (hl_open_terminal_device(term, "/dev/ttyUSB0") == -1) {
-                hl_close_terminal(term);
-                hl_terminal_destroy(term);
-                hl_compiler_destroy(ld);
-                fprintf(stderr, "term open\n");
-                exit(4);
-        }
-
-        if (hl_download(ld, term->t_stream)) {
+        if (hl_download(ld, stream)) {
                 fprintf(stderr, "ld send\n");
         }
 
         fprintf(stderr, "vor ende\n");
 
-        hl_close_terminal(term);
-        hl_terminal_destroy(term);
         hl_compiler_destroy(ld);
 
+        hl_vbus_disconnect(bus);
         fprintf(stderr, "ende\n");
         return 0;
 }

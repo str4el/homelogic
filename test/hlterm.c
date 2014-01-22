@@ -8,9 +8,11 @@
 
 int main (int argc, char *argv[])
 {
+        char busname[] = "/tmp/hlvbus";
+
         hlterm_t *term;
 
-        term = hl_terminal_init();
+        term = hl_terminal_init(busname);
         if (!term) {
                 fprintf(stderr, "e: init\n");
                 return 1;
@@ -22,6 +24,14 @@ int main (int argc, char *argv[])
                 return 1;
         }
 
+        int bus = hl_vbus_connect(busname);
+        if (bus == -1) {
+                fprintf(stderr, "e: bus connect\n");
+                hl_close_terminal(term);
+                hl_terminal_destroy(term);
+                return 1;
+        }
+
         fd_set fds;
         char buf[1024];
         ssize_t len;
@@ -29,21 +39,29 @@ int main (int argc, char *argv[])
         while (1) {
                 FD_ZERO(&fds);
                 FD_SET(0, &fds);
-                FD_SET(fileno(term->t_stream), &fds);
+                FD_SET(bus, &fds);
 
-                if (select(fileno(term->t_stream) + 1, &fds, NULL, NULL, NULL) < 0) {
+                if (select(bus + 1, &fds, NULL, NULL, NULL) < 0) {
                         fprintf(stderr, "e: select\n");
                         break;
                 }
 
                 if (FD_ISSET(0, &fds)) {
-                        fprintf(term->t_stream, "%s", fgets(buf, sizeof(buf), stdin));
-                        fflush(term->t_stream);
-
+                        len = read(0, buf, sizeof(buf));
+                        if (len <= 0) {
+                                fprintf(stderr, "e: read stdin\n");
+                                break;
+                        }
+                        write(bus, buf, len);
                 }
 
-                if (FD_ISSET(fileno(term->t_stream), &fds)) {
-                        printf("%s", fgets(buf, sizeof(buf), term->t_stream));
+                if (FD_ISSET(bus, &fds)) {
+                        len = read(bus, buf, sizeof(buf));
+                        if (len <= 0) {
+                                fprintf(stderr, "e: read bus\n");
+                                break;
+                        }
+                        write(1, buf, len);
                 }
         }
 
