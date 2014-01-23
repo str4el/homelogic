@@ -395,6 +395,7 @@ prog_register_t prog_execute(prog_register_t reg)
                         break;
 
                 default:
+                        bus_send_message_sync("INFO", 0xff, "Not implementet %02X", progc.cmd.c_opcode);
                         prog_error(ERR_PROG);
                         return reg;
                 }

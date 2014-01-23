@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <avr/eeprom.h>
 
 #include "bus.h"
 #include "main.h"
@@ -53,6 +54,7 @@ const bus_command_table_t bus_command_table [] PROGMEM = {
         { "STOP" , 4, bus_command_stop,           0,  0},
         { "DEBUG", 5, bus_command_debug,          0,  0},
         { "STEP" , 4, bus_command_step,           0,  0},
+        { "DUMP" , 4, bus_command_dump,           0,  0},
         { "PROG" , 4, bus_command_program,        8, BUS_DATA_MAX_LEN},
         { "SDT"  , 3, bus_command_set_date_time, 20, 20},
         { "SET"  , 3, bus_command_set_word,      12, 15},
@@ -363,6 +365,29 @@ void bus_command_debug (uint8_t sender, char *data)
 void bus_command_step (uint8_t sender, char *data)
 {
         state.step = TRUE;
+}
+
+
+
+
+void bus_command_dump (uint8_t sender, char *data)
+{
+        struct map_address_s am;
+        char spec;
+
+        for (uint16_t i = 0; i < progc.header.ph_address_map_size; i++) {
+                eeprom_read_block(&am, (void *)(progc.header.ph_address_map_offset + i * sizeof(am)), sizeof(am));
+                switch(am.ma_mem_adr & 0xE0) {
+                case as_input: spec = 'I'; break;
+                case as_output: spec = 'O'; break;
+                case as_memory: spec = 'M'; break;
+                default: continue;
+                }
+
+                bus_send_message_async("INFO", sender, "%%%cW:%u.%u=%04X", spec, am.ma_device_adr, (am.ma_mem_adr & 0x1F) << 1, progc.image[i]);
+        }
+
+
 }
 
 
