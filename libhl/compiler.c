@@ -386,6 +386,16 @@ static int hlc_scan_command(hlc_t *data, FILE *file, hl_opcode_t opcode, hl_comm
                                 hlc_set_error(data, hl_e_out_of_memory, NULL);
                                 return -1;
                         }
+
+                        /* Verwendete Inputs der address_map des verantwortlichen Modules hinzufügen
+                         */
+                        if (command.c_data.cd_address.cd_mem_type == mt_input) {
+                                uint8_t input_device = command.c_data.cd_address.cd_device;
+                                if (hlc_add_to_address_map(&data->d_device[input_device].dd_am, command.c_data)) {
+                                        hlc_set_error(data, hl_e_out_of_memory, NULL);
+                                        return -1;
+                                }
+                        }
                 }
         }
 
