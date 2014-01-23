@@ -9,7 +9,7 @@ MCU = atmega32
 FORMAT = ihex
 TARGET = homelogic
 CONFIG = config.h
-SRC = main.c bus.c eeprom.c i2c.c prog.c rtc.c error.c
+SRC = main.c bus.c i2c.c prog.c rtc.c error.c
 ASRC = 
 OPT = s
 

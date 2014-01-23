@@ -18,14 +18,15 @@
  */
 
 #include <stdlib.h>
+#include <avr/eeprom.h>
 #include "main.h"
 #include "i2c.h"
 #include "rtc.h"
 #include "bus.h"
 #include "prog.h"
-#include "eeprom.h"
 #include "led.h"
 #include "error.h"
+
 
 
 FUSES = {
@@ -235,7 +236,7 @@ int __attribute__ ((OS_main)) main (void) {
                                 uint8_t len;
 
                                 ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-                                        eep_write(prog_write.pos, (void *) prog_write.data, prog_write.len);
+                                        eeprom_write_block((void *)prog_write.data, (void *)prog_write.pos, prog_write.len);
                                         len = bus_encode_prog_message(str, sizeof(str));
                                         prog_write.len = 0;
                                 }

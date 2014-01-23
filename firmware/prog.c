@@ -17,12 +17,13 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string.h>
 #include <stdlib.h>
 #include <avr/io.h>
+#include <avr/eeprom.h>
 #include <util/crc16.h>
 #include "prog.h"
 #include "main.h"
-#include "eeprom.h"
 #include "bus.h"
 #include "error.h"
 #include "memory.h"
@@ -46,7 +47,8 @@ prog_context_t progc = {
  */
 uint8_t prog_init()
 {
-        eep_read(0, &progc.header, sizeof(progc.header));
+        eeprom_read_block(&progc.header, 0, sizeof(progc.header));
+
         uint16_t crc;
         uint16_t i;
         uint16_t size;
@@ -55,7 +57,7 @@ uint8_t prog_init()
         size = progc.header.ph_address_map_size * sizeof(struct map_address_s);
         if (progc.header.ph_address_map_offset + size > E2END) return ERR_EEPROM;
         for (i = 0; i < size; i++) {
-                crc = _crc16_update(crc, eep_read_byte(progc.header.ph_address_map_offset + i));
+                crc = _crc16_update(crc, eeprom_read_byte((uint8_t *)(progc.header.ph_address_map_offset + i)));
         }
         if (progc.header.ph_address_map_crc16 != crc) {
                 return ERR_CRC;
@@ -65,7 +67,7 @@ uint8_t prog_init()
         size = progc.header.ph_program_size * sizeof(struct command_s);
         if (progc.header.ph_program_offset + size > E2END) return ERR_EEPROM;
         for (i = 0; i < size; i++) {
-                crc = _crc16_update(crc, eep_read_byte(progc.header.ph_program_offset + i));
+                crc = _crc16_update(crc, eeprom_read_byte((uint8_t *)(progc.header.ph_program_offset + i)));
         }
         if (progc.header.ph_program_crc16 != crc) {
                 return ERR_CRC;
@@ -126,7 +128,7 @@ int16_t prog_get_periphery_offset(const uint8_t device, const uint8_t spec, cons
 {
         struct map_address_s am;
         for (uint16_t i = 0; i < progc.header.ph_address_map_size; i++) {
-                eep_read(progc.header.ph_address_map_offset + i * sizeof(am), &am, sizeof(am));
+                eeprom_read_block(&am, (void *)(progc.header.ph_address_map_offset + i * sizeof(am)), sizeof(am));
                 if (am.ma_device_adr == device &&
                     am.ma_mem_adr == ((spec & 0xE0) | (adr >> 1))) {
                         return i;
@@ -150,7 +152,7 @@ void prog_periphery_sync()
         if (!progc.valid) return;
 
         for (uint16_t i = 0; i < progc.header.ph_address_map_size; i++) {
-                eep_read(progc.header.ph_address_map_offset + i * sizeof(am), &am, sizeof(am));
+                eeprom_read_block(&am, (void *)(progc.header.ph_address_map_offset + i * sizeof(am)), sizeof(am));
 
                 if (am.ma_device_adr == adr) {
                         uint8_t byte = (am.ma_mem_adr & 0x1F) << 1;
@@ -289,7 +291,7 @@ prog_register_t prog_execute(prog_register_t reg)
                         break;
                 }
 
-                eep_read(progc.header.ph_program_offset + progc.ip * sizeof(progc.cmd), &progc.cmd, sizeof(progc.cmd));
+                eeprom_read_block(&progc.cmd, (void *)(progc.header.ph_program_offset + progc.ip * sizeof(progc.cmd)), sizeof(progc.cmd));
                 if (state.current == DEBUG) {
                         bus_send_message_sync("STAT", 0xFF, "CMD: %02X DATA: %02X%02X%02X",
                                               progc.cmd.c_opcode,
