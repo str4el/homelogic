@@ -214,7 +214,8 @@ static inline void prog_wait_for_step(void)
 
 static bool prog_get_bit(uint16_t *ptr)
 {
-        uint16_t mask = ((progc.cmd.c_address.aa_byte & 1) ? 0x0100 : 0x0001) << (progc.cmd.c_address.aa_spec & 0x07);
+        uint16_t mask = ((progc.cmd.c_address.aa_byte & 1) ? 0x0100 : 0x0001);
+        mask <<= (progc.cmd.c_address.aa_spec & 0x07);
         return *ptr & mask;
 }
 
@@ -223,7 +224,8 @@ static bool prog_get_bit(uint16_t *ptr)
 
 static void prog_set_bit(uint16_t *ptr, const bool c)
 {
-        uint16_t mask = ((progc.cmd.c_address.aa_byte & 1) ? 0x0100 : 0x0001) << (progc.cmd.c_address.aa_spec & 0x07);
+        uint16_t mask = ((progc.cmd.c_address.aa_byte & 1) ? 0x0100 : 0x0001);
+        mask <<= (progc.cmd.c_address.aa_spec & 0x07);
         if (c) {
                 *ptr |= mask;
         } else {
