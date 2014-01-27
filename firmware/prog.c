@@ -128,7 +128,9 @@ int16_t prog_get_periphery_offset(const uint8_t device, const uint8_t spec, cons
 {
         struct map_address_s am;
         for (uint16_t i = 0; i < progc.header.ph_address_map_size; i++) {
-                eeprom_read_block(&am, (void *)(progc.header.ph_address_map_offset + i * sizeof(am)), sizeof(am));
+                ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+                        eeprom_read_block(&am, (void *)(progc.header.ph_address_map_offset + i * sizeof(am)), sizeof(am));
+                }
                 if (am.ma_device_adr == device &&
                     am.ma_mem_adr == ((spec & 0xE0) | (adr >> 1))) {
                         return i;
@@ -291,7 +293,10 @@ prog_register_t prog_execute(prog_register_t reg)
                         break;
                 }
 
-                eeprom_read_block(&progc.cmd, (void *)(progc.header.ph_program_offset + progc.ip * sizeof(progc.cmd)), sizeof(progc.cmd));
+                ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+                        eeprom_read_block(&progc.cmd, (void *)(progc.header.ph_program_offset + progc.ip * sizeof(progc.cmd)), sizeof(progc.cmd));
+                }
+
                 if (state.current == DEBUG) {
                         bus_send_message_sync("STAT", 0xFF, "CMD: %02X DATA: %02X%02X%02X",
                                               progc.cmd.c_opcode,
