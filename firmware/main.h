@@ -21,9 +21,9 @@
 #define MAIN_H
 
 #include <stdint.h>
+#include <stdbool.h>
 #include "hardware.h"
 #include "prog.h"
-#include "bool.h"
 
 #define _TOSTR(x) #x
 #define TOSTR(x) _TOSTR(x)
@@ -37,7 +37,7 @@ uint8_t adr;
 struct state_s {
         prog_status_t current;
         volatile prog_status_t coming;
-        volatile bool_t step;
+        volatile bool step;
 };
 
 extern struct state_s state;

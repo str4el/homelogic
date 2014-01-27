@@ -32,7 +32,7 @@
 
 
 prog_context_t progc = {
-        .valid = FALSE,
+        .valid = false,
         .periphery = 0,
         .image = 0
 };
@@ -92,7 +92,7 @@ uint8_t prog_init()
         }
 
         progc.ip = 0;
-        progc.valid = TRUE;
+        progc.valid = true;
 
         return 0;
 }
@@ -102,7 +102,7 @@ uint8_t prog_init()
 
 void prog_deinit()
 {
-        progc.valid = FALSE;
+        progc.valid = false;
         ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
                 free((void *)progc.periphery);
                 free((void *)progc.image);
@@ -118,7 +118,7 @@ static inline void prog_error(uint8_t e)
         error(e);
         progc.ip = -1;
         state.coming = STOP;
-        progc.valid = FALSE;
+        progc.valid = false;
 }
 
 
@@ -205,14 +205,14 @@ void prog_periphery_sync()
 
 static inline void prog_wait_for_step(void)
 {
-        state.step = FALSE;
-        while (state.coming == DEBUG && state.step == FALSE) wdt_reset();
+        state.step = false;
+        while (state.coming == DEBUG && state.step == false) wdt_reset();
 }
 
 
 
 
-static bool_t prog_get_bit(uint16_t *ptr)
+static bool prog_get_bit(uint16_t *ptr)
 {
         uint16_t mask = ((progc.cmd.c_address.aa_byte & 1) ? 0x0100 : 0x0001) << (progc.cmd.c_address.aa_spec & 0x07);
         return *ptr & mask;
@@ -221,7 +221,7 @@ static bool_t prog_get_bit(uint16_t *ptr)
 
 
 
-static void prog_set_bit(uint16_t *ptr, const bool_t c)
+static void prog_set_bit(uint16_t *ptr, const bool c)
 {
         uint16_t mask = ((progc.cmd.c_address.aa_byte & 1) ? 0x0100 : 0x0001) << (progc.cmd.c_address.aa_spec & 0x07);
         if (c) {
@@ -391,7 +391,7 @@ prog_register_t prog_execute(prog_register_t reg)
 
                 case oc_end_of_network:
                         reg.a = 0;
-                        reg.c = FALSE;
+                        reg.c = false;
                         break;
 
                 case oc_end_of_program:
@@ -408,7 +408,7 @@ prog_register_t prog_execute(prog_register_t reg)
                 progc.ip++;
         }
 
-        return (prog_register_t) {0, FALSE};
+        return (prog_register_t) {0, false};
 }
 
 

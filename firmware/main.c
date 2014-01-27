@@ -191,7 +191,7 @@ int __attribute__ ((OS_main)) main (void) {
         prog_write.len = 0;
         state.current = STOP;
         state.coming = RUN;
-        state.step = FALSE;
+        state.step = false;
         wdt_enable(WDTO_2S);
 
         led.red = ls_off;
@@ -249,7 +249,7 @@ int __attribute__ ((OS_main)) main (void) {
                 case RUN:
                 case DEBUG:
                         progc.ip = 0;
-                        prog_execute((prog_register_t){0, FALSE});
+                        prog_execute((prog_register_t){0, false});
                         prog_periphery_sync();
                         write_outputs();
                         break;

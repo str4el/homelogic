@@ -22,12 +22,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <stdbool.h>
 #include <avr/eeprom.h>
 
 #include "bus.h"
 #include "main.h"
 #include "rtc.h"
-#include "bool.h"
 #include "memory.h"
 #include "prog.h"
 
@@ -145,24 +145,24 @@ void bus_transmit_data (const char * data, uint8_t len)
 
 
 
-bool_t bus_send_raw_sync(const char *data, uint8_t len)
+bool bus_send_raw_sync(const char *data, uint8_t len)
 {
         uint8_t count = 0;
         bus_transmit_data(data, len);
         while (!(len == bus.rx_len && memcmp(data, bus.rx_buffer, len) == 0)) {
-                if (++count > BUS_MAX_RETRY) return FALSE;
+                if (++count > BUS_MAX_RETRY) return false;
                 bus_transmit_data(data, len);
         }
-        return TRUE;
+        return true;
 }
 
 
 
 
-bool_t bus_send_raw_async(const char *data, uint8_t len)
+bool bus_send_raw_async(const char *data, uint8_t len)
 {
         bus_data_list_t *new = malloc(sizeof(*new) + len);
-        if (!new) return FALSE;
+        if (!new) return false;
 
         new->next = NULL;
         new->len = len;
@@ -176,7 +176,7 @@ bool_t bus_send_raw_async(const char *data, uint8_t len)
                 bus.tx_list = new;
         }
 
-        return TRUE;
+        return true;
 }
 
 
@@ -197,20 +197,20 @@ void bus_flush_send_buffer()
 
 /* Erstellt eine Mitteilung im Standardformat und kopiert sie in den Sendepuffer
  */
-bool_t bus_send_message_async(const char *cmd, uint8_t dst, const char *format, ...)
+bool bus_send_message_async(const char *cmd, uint8_t dst, const char *format, ...)
 {
         char str[BUS_BUFSIZE];
         uint8_t len;
 
         len = snprintf(str, sizeof(str), "%s %02X %02X ", cmd, adr, dst);
-        if (len >= sizeof(str) - 1) return FALSE;
+        if (len >= sizeof(str) - 1) return false;
 
         if (format) {
                 va_list args;
                 va_start(args, format);
                 len += vsnprintf(str + len, sizeof(str) - len, format, args);
                 va_end(args);
-                if (len >= sizeof(str) - 1) return FALSE;
+                if (len >= sizeof(str) - 1) return false;
         }
 
         str[len] = '\r';
@@ -222,20 +222,20 @@ bool_t bus_send_message_async(const char *cmd, uint8_t dst, const char *format, 
 
 /* Erstellt eine Mitteilung im Standardformat und versendet sie
  */
-bool_t bus_send_message_sync(const char *cmd, uint8_t dst, const char *format, ...)
+bool bus_send_message_sync(const char *cmd, uint8_t dst, const char *format, ...)
 {
         char str[BUS_BUFSIZE];
         uint8_t len;
 
         len = snprintf(str, sizeof(str), "%s %02X %02X ", cmd, adr, dst);
-        if (len >= sizeof(str) - 1) return FALSE;
+        if (len >= sizeof(str) - 1) return false;
 
         if (format) {
                 va_list args;
                 va_start(args, format);
                 len += vsnprintf(str + len, sizeof(str) - len, format, args);
                 va_end(args);
-                if (len >= sizeof(str) - 1) return FALSE;
+                if (len >= sizeof(str) - 1) return false;
         }
 
         str[len] = '\r';
@@ -364,7 +364,7 @@ void bus_command_debug (uint8_t sender, char *data)
 
 void bus_command_step (uint8_t sender, char *data)
 {
-        state.step = TRUE;
+        state.step = true;
 }
 
 

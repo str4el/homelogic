@@ -21,8 +21,8 @@
 #define BUS_H
 
 #include <stdint.h>
+#include <stdbool.h>
 #include "hardware.h"
-#include "bool.h"
 
 #define BUS_BUFSIZE 64
 #define BUS_CMD_MAX_LEN 5
@@ -85,12 +85,12 @@ extern bus_t bus;
 extern void bus_init (void);
 
 extern void bus_transmit_data (const char *data, uint8_t len);
-extern bool_t bus_send_raw_sync(const char *data, uint8_t len);
-extern bool_t bus_send_raw_async(const char *data, uint8_t len);
+extern bool bus_send_raw_sync(const char *data, uint8_t len);
+extern bool bus_send_raw_async(const char *data, uint8_t len);
 extern void bus_flush_send_buffer (void);
 
-extern bool_t bus_send_message_sync(const char *cmd, uint8_t dst, const char *format, ...);
-extern bool_t bus_send_message_async(const char *cmd, uint8_t dst, const char *format, ...);
+extern bool bus_send_message_sync(const char *cmd, uint8_t dst, const char *format, ...);
+extern bool bus_send_message_async(const char *cmd, uint8_t dst, const char *format, ...);
 
 extern void bus_send_date_time(void);
 

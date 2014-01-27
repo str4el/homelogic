@@ -21,7 +21,7 @@
 #define ERROR_H
 
 #include <stdint.h>
-#include "bool.h"
+#include <stdbool.h>
 
 #define ERR_NONE 0
 #define ERR_NOMEM 1
@@ -31,6 +31,6 @@
 
 #define ERR_FEATURE 7
 
-extern bool_t error(uint8_t e);
+extern bool error(uint8_t e);
 
 #endif // ERROR_H

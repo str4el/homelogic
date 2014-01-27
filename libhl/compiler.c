@@ -31,7 +31,7 @@
 
 /* Die Opcodes werden zur gemeinsammen Nutzung mit der Firmware
  * in opcodes.def definiert. Jede Zeile in in dieser Datei hat
- * das Format "OPCODE(oc_load, "LD", 0x00, DT_ANYADR, FALSE)".
+ * das Format "OPCODE(oc_load, "LD", 0x00, DT_ANYADR, false)".
  * Durch definieren von OPCODE und includieren der opcodes.def
  * können die benötigeten sturkturen vom Präprozessor erstellt
  * werden.
@@ -372,7 +372,7 @@ static int hlc_scan_command(hlc_t *data, FILE *file, hl_opcode_t opcode, hl_comm
                         return -1;
                 }
 
-                if (opcode.oc_alter == TRUE) {
+                if (opcode.oc_alter) {
                         if (current_device < 0) {
                                 current_device = command.c_data.cd_address.cd_device;
                         } else if (current_device != command.c_data.cd_address.cd_device) {

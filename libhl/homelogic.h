@@ -3,9 +3,15 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include <pthread.h>
 #include <time.h>
 #include <ftdi.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 #define HL_MAX_DEVICES 128
 #define HL_MAX_LINE_LEN 1024
@@ -78,7 +84,7 @@ typedef struct hlc_opcode_s {
         char oc_name[5];
         uint8_t oc_num;
         hl_data_type_t oc_data_type;
-        enum {FALSE = 0, TRUE} oc_alter;
+        bool oc_alter;
 } hl_opcode_t;
 
 
@@ -206,5 +212,10 @@ extern int hl_start_vbus_server(const char *name);
 extern void hl_stop_vbus_server(void);
 extern int hl_vbus_connect(const char *name);
 extern void hl_vbus_disconnect(int s);
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // HOMELOGIC_H

@@ -22,13 +22,13 @@
 #include "led.h"
 #include "bus.h"
 
-bool_t error(uint8_t e)
+bool error(uint8_t e)
 {
         char buf[32] = "\0";
 
         switch (e) {
         case ERR_NONE:
-                return FALSE;
+                return false;
                 break;
 
         case ERR_NOMEM:
@@ -64,6 +64,6 @@ bool_t error(uint8_t e)
         }
 
         bus_send_message_async("ERROR", 0xff, buf);
-        return TRUE;
+        return true;
 }
 

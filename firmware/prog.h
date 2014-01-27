@@ -21,7 +21,7 @@
 #define PROG_H
 
 #include <stdint.h>
-#include "bool.h"
+#include <stdbool.h>
 #include "../common/pattern.h"
 
 
@@ -50,7 +50,7 @@ typedef struct prog_write_s {
 
 
 typedef struct prog_context_s {
-        volatile bool_t valid;
+        volatile bool valid;
         struct program_header_s header;
         volatile uint16_t *periphery;
         uint16_t *image;
@@ -63,7 +63,7 @@ typedef struct prog_context_s {
 
 typedef struct prog_register_s {
         uint16_t a;
-        bool_t c;
+        bool c;
 } prog_register_t;
 
 
