@@ -284,8 +284,6 @@ static void prog_set_word(uint16_t *ptr, const uint16_t a)
  */
 prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
 {
-        prog_register_t tmp = {0, false};
-
         depth++;
 
         while (progc.valid && progc.ip >= 0) {
@@ -330,89 +328,92 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
 
                 uint8_t spec = progc.cmd.c_address.aa_spec & 0x1F;
                 uint8_t opcode = progc.cmd.c_opcode;
+                prog_register_t tmp = {0, false};
 
+
+                // Opcodes bei denen Daten aus dem Speicher geladen werden
                 switch (opcode) {
+                case oc_load:
+                case oc_and:
                 case oc_and_brace:
                 case oc_and_not_brace:
+                case oc_or:
                 case oc_or_brace:
                 case oc_or_not_brace:
-                //case oc_add_brace:
-                //case oc_sub_brace:
-                //case oc_mul_brace:
-                //case oc_div_brace:
-                //case oc_greater_then_brace:
-                //case oc_greater_equal_brace:
-                //case oc_equal_brace:
-                //case oc_not_equal_brace:
-                //case oc_less_than_brace:
                         switch (spec) {
                         case as_word: tmp.a = prog_get_word(&(progc.image[peradr])); break;
                         case as_byte: tmp.a = prog_get_byte(&(progc.image[peradr])); break;
                         default:      tmp.c = prog_get_bit(&(progc.image[peradr]));  break;
                         }
-
-                        progc.ip++;
-                        tmp = prog_execute(tmp, depth);
-
-                        switch (opcode) {
-                        case oc_and_brace:
-                                switch (spec) {
-                                case as_word:
-                                case as_byte: reg.a &= tmp.a; break;
-                                default:      reg.c &= tmp.c; break;
-                                }
-                                break;
-
-
-                        case oc_and_not_brace:
-                                switch (spec) {
-                                case as_word:
-                                case as_byte: reg.a &= ~tmp.a; break;
-                                default:      reg.c &= !tmp.c; break;
-                                }
-                                break;
-
-
-                        case oc_or_brace:
-                                switch (spec) {
-                                case as_word:
-                                case as_byte: reg.a |= tmp.a; break;
-                                default:      reg.c |= tmp.c; break;
-                                }
-                                break;
-
-
-                        case oc_or_not_brace:
-                                switch (spec) {
-                                case as_word:
-                                case as_byte: reg.a |= ~tmp.a; break;
-                                default:      reg.c |= !tmp.c; break;
-                                }
-                                break;
-                        }
-
-                        break;
-
-                case oc_close_brace:
-                        if (depth <= 1) prog_error(ERR_PROG);
-                        return reg;
-                        break;
-
-                case oc_load:
-                        switch (spec) {
-                        case as_word: reg.a = prog_get_word(&(progc.image[peradr])); break;
-                        case as_byte: reg.a = prog_get_byte(&(progc.image[peradr])); break;
-                        default:      reg.c = prog_get_bit(&(progc.image[peradr]));  break;
-                        }
                         break;
 
                 case oc_load_not:
+                case oc_and_not:
+                case oc_or_not:
                         switch (spec) {
-                        case as_word: reg.a = ~prog_get_word(&(progc.image[peradr])); break;
-                        case as_byte: reg.a = ~prog_get_byte(&(progc.image[peradr])); break;
-                        default:      reg.c = !prog_get_bit(&(progc.image[peradr]));  break;
+                        case as_word: tmp.a = ~prog_get_word(&(progc.image[peradr])); break;
+                        case as_byte: tmp.a = ~prog_get_byte(&(progc.image[peradr])); break;
+                        default:      tmp.c = !prog_get_bit(&(progc.image[peradr]));  break;
                         }
                         break;
+
+                }
+
+
+                // Opcodes bei denen eine Klammer geöffnet wird
+                switch (opcode) {
+                case oc_and_brace:
+                case oc_or_brace:
+                        progc.ip++;
+                        tmp = prog_execute(tmp, depth);
+                        break;
+
+                case oc_and_not_brace:
+                case oc_or_not_brace:
+                        progc.ip++;
+                        tmp = prog_execute(tmp, depth);
+                        tmp.a = ~tmp.a;
+                        tmp.c = !tmp.c;
+                        break;
+
+                }
+
+
+                // Berabeitung der Opcodes
+
+                switch (opcode) {
+                case oc_load:
+                case oc_load_not:
+                        switch (spec) {
+                        case as_word:
+                        case as_byte: reg.a = tmp.a; break;
+                        default:      reg.c = tmp.c; break;
+                        }
+                        break;
+
+                case oc_and:
+                case oc_and_brace:
+                case oc_and_not:
+                case oc_and_not_brace:
+                        switch (spec) {
+                        case as_word:
+                        case as_byte: reg.a &= tmp.a; break;
+                        default:      reg.c &= tmp.c; break;
+                        }
+                        break;
+
+                case oc_or:
+                case oc_or_brace:
+                case oc_or_not:
+                case oc_or_not_brace:
+                        switch (spec) {
+                        case as_word:
+                        case as_byte: reg.a |= tmp.a; break;
+                        default:      reg.c |= tmp.c; break;
+                        }
+                        break;
+
+
 
                 case oc_store:
                         switch (spec) {
@@ -430,40 +431,17 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                         }
                         break;
 
-                case oc_and:
-                        switch (spec) {
-                        case as_word: reg.a &= prog_get_word(&(progc.image[peradr])); break;
-                        case as_byte: reg.a &= prog_get_byte(&(progc.image[peradr])); break;
-                        default:      reg.c &= prog_get_bit(&(progc.image[peradr]));  break;
-                        }
-                        break;
-
-                case oc_and_not:
-                        switch (spec) {
-                        case as_word: reg.a &= ~prog_get_word(&(progc.image[peradr])); break;
-                        case as_byte: reg.a &= ~prog_get_byte(&(progc.image[peradr])); break;
-                        default:      reg.c &= !prog_get_bit(&(progc.image[peradr]));  break;
-                        }
-                        break;
-
-                case oc_or:
-                        switch (spec) {
-                        case as_word: reg.a |= prog_get_word(&(progc.image[peradr])); break;
-                        case as_byte: reg.a |= prog_get_byte(&(progc.image[peradr])); break;
-                        default:      reg.c |= prog_get_bit(&(progc.image[peradr]));  break;
-                        }
-                        break;
-
-                case oc_or_not:
-                        switch (spec) {
-                        case as_word: reg.a |= ~prog_get_word(&(progc.image[peradr])); break;
-                        case as_byte: reg.a |= ~prog_get_byte(&(progc.image[peradr])); break;
-                        default:      reg.c |= !prog_get_bit(&(progc.image[peradr]));  break;
-                        }
+                case oc_close_brace:
+                        if (depth <= 1) prog_error(ERR_PROG);
+                        return reg;
                         break;
 
                 case oc_end_of_network:
-                        if (depth > 1) prog_error(ERR_PROG);
+                        if (depth > 1) {
+                                prog_error(ERR_PROG);
+                                return reg;
+                        }
+
                         reg.a = 0;
                         reg.c = false;
                         break;
