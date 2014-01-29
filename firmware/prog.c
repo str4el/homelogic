@@ -340,6 +340,8 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                 case oc_or:
                 case oc_or_brace:
                 case oc_or_not_brace:
+                case oc_edge_positive:
+                case oc_edge_negative:
                         switch (spec) {
                         case as_word: tmp.a = prog_get_word(&(progc.image[peradr])); break;
                         case as_byte: tmp.a = prog_get_byte(&(progc.image[peradr])); break;
@@ -414,6 +416,35 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                         break;
 
 
+                case oc_edge_positive:
+                        if (reg.c) {
+                                if (!tmp.c) {
+                                        reg.c = true;
+                                        prog_set_bit(&(progc.image[peradr]), true);
+                                } else {
+                                        reg.c = false;
+                                }
+                        } else {
+                                reg.c = false;
+                                prog_set_bit(&(progc.image[peradr]), false);
+                        }
+                        break;
+
+                case oc_edge_negative:
+                        if (!reg.c) {
+                                if (!tmp.c) {
+                                        reg.c = true;
+                                        prog_set_bit(&(progc.image[peradr]), true);
+                                } else {
+                                        reg.c = false;
+                                }
+                        } else {
+                                reg.c = false;
+                                prog_set_bit(&(progc.image[peradr]), false);
+                        }
+                        break;
+
+
 
                 case oc_store:
                         switch (spec) {
@@ -430,6 +461,16 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                         default:      prog_set_bit(&(progc.image[peradr]), !reg.c);           break;
                         }
                         break;
+
+                case oc_set:
+                        if (reg.c) prog_set_bit(&(progc.image[peradr]), true);
+                        break;
+
+                case oc_reset:
+                        if (reg.c) prog_set_bit(&(progc.image[peradr]), false);
+                        break;
+
+
 
                 case oc_close_brace:
                         if (depth <= 1) prog_error(ERR_PROG);
