@@ -75,7 +75,7 @@ extern uint8_t prog_init(void);
 extern void prog_deinit(void);
 extern void prog_periphery_sync(void);
 extern int16_t prog_get_periphery_offset(const uint8_t device, const uint8_t spec, const uint8_t adr);
-extern prog_register_t prog_execute (prog_register_t reg);
+extern prog_register_t prog_execute (prog_register_t reg, uint8_t depth);
 
 
 #endif // PROG_H
