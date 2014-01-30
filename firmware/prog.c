@@ -340,6 +340,9 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                 case oc_or:
                 case oc_or_brace:
                 case oc_or_not_brace:
+                case oc_xor:
+                case oc_xor_brace:
+                case oc_xor_not_brace:
                 case oc_edge_positive:
                 case oc_edge_negative:
                         switch (spec) {
@@ -352,6 +355,7 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                 case oc_load_not:
                 case oc_and_not:
                 case oc_or_not:
+                case oc_xor_not:
                         switch (spec) {
                         case as_word: tmp.a = ~prog_get_word(&(progc.image[peradr])); break;
                         case as_byte: tmp.a = ~prog_get_byte(&(progc.image[peradr])); break;
@@ -366,12 +370,14 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                 switch (opcode) {
                 case oc_and_brace:
                 case oc_or_brace:
+                case oc_xor_brace:
                         progc.ip++;
                         tmp = prog_execute(tmp, depth);
                         break;
 
                 case oc_and_not_brace:
                 case oc_or_not_brace:
+                case oc_xor_not_brace:
                         progc.ip++;
                         tmp = prog_execute(tmp, depth);
                         tmp.a = ~tmp.a;
@@ -412,6 +418,18 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                         case as_word:
                         case as_byte: reg.a |= tmp.a; break;
                         default:      reg.c |= tmp.c; break;
+                        }
+                        break;
+
+
+                case oc_xor:
+                case oc_xor_brace:
+                case oc_xor_not:
+                case oc_xor_not_brace:
+                        switch (spec) {
+                        case as_word:
+                        case as_byte: reg.a = reg.a & ~tmp.a | ~reg.a & tmp.a; break;
+                        default:      reg.c = reg.c == tmp.c ? false : true; break;
                         }
                         break;
 

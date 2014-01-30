@@ -36,6 +36,11 @@ OPCODE(oc_or_brace           , "OR("  , 0x17, DT_BOOL    , false)
 OPCODE(oc_or_not             , "ORN"  , 0x18, DT_BOOL    , false)
 OPCODE(oc_or_not_brace       , "ORN(" , 0x19, DT_BOOL    , false)
 
+OPCODE(oc_xor                , "XOR"  , 0x1C, DT_BOOL    , false)
+OPCODE(oc_xor_brace          , "XOR(" , 0x1D, DT_BOOL    , false)
+OPCODE(oc_xor_not            , "XORN" , 0x1E, DT_BOOL    , false)
+OPCODE(oc_xor_not_brace      , "XORN(", 0x1F, DT_BOOL    , false)
+
 OPCODE(oc_edge_positive      , "EP"   , 0x20, DT_BOOL    , true )
 OPCODE(oc_edge_negative      , "EN"   , 0x21, DT_BOOL    , true )
 
