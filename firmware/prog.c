@@ -336,10 +336,20 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                 case as_counter:
                 case as_timer:
                         prog_error(ERR_FEATURE);
+                }
+
+                uint8_t spec = progc.cmd.c_address.aa_spec;
+                switch (spec) {
+                case as_constant:
+                case as_label:
+                        break;
+
+                default:
+                        spec &= 0x1F;
                         break;
                 }
 
-                uint8_t spec = progc.cmd.c_address.aa_spec & 0x1F;
+
                 uint8_t opcode = progc.cmd.c_opcode;
                 prog_register_t tmp = {0, false};
 
@@ -347,16 +357,18 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                 // Opcodes bei denen Daten aus dem Speicher geladen werden
                 switch (opcode) {
                 case oc_load:
-                        if (progc.cmd.c_address.aa_spec == as_constant) {
-                                reg.a = prog_get_data();
-                        }
                 case oc_and:
+                case oc_or:
+                case oc_xor:
+                        if (spec == as_constant) {
+                                tmp.a = prog_get_data();
+                        }
+                        // kein break!
+
                 case oc_and_brace:
                 case oc_and_not_brace:
-                case oc_or:
                 case oc_or_brace:
                 case oc_or_not_brace:
-                case oc_xor:
                 case oc_xor_brace:
                 case oc_xor_not_brace:
                 case oc_edge_positive:
@@ -409,6 +421,7 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                 case oc_load:
                 case oc_load_not:
                         switch (spec) {
+                        case as_constant:
                         case as_word:
                         case as_byte: reg.a = tmp.a; break;
                         default:      reg.c = tmp.c; break;
@@ -420,6 +433,7 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                 case oc_and_not:
                 case oc_and_not_brace:
                         switch (spec) {
+                        case as_constant:
                         case as_word:
                         case as_byte: reg.a &= tmp.a; break;
                         default:      reg.c &= tmp.c; break;
@@ -431,6 +445,7 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                 case oc_or_not:
                 case oc_or_not_brace:
                         switch (spec) {
+                        case as_constant:
                         case as_word:
                         case as_byte: reg.a |= tmp.a; break;
                         default:      reg.c |= tmp.c; break;
@@ -443,8 +458,9 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                 case oc_xor_not:
                 case oc_xor_not_brace:
                         switch (spec) {
+                        case as_constant:
                         case as_word:
-                        case as_byte: reg.a = reg.a & ~tmp.a | ~reg.a & tmp.a; break;
+                        case as_byte: reg.a = (reg.a & ~tmp.a) | (~reg.a & tmp.a); break;
                         default:      reg.c = (reg.c == tmp.c) ? false : true; break;
                         }
                         break;
