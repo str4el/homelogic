@@ -33,26 +33,28 @@ typedef enum hl_error_e {
 
 
 
-typedef enum hlc_data_type_e {
-        dt_none   = 0,
-        dt_bit    = 1,
-        dt_byte   = 2,
-        dt_word   = 4,
-        dt_dword  = 8,
-        dt_anyadr = 15,
-        dt_label  = 32
+typedef enum hl_data_type_e {
+        dt_none      = 0,
+        dt_bit       = 1,
+        dt_byte      = 2,
+        dt_word      = 4,
+        dt_dword     = 8,
+        dt_anyadr    = 15,
+        dt_constant  = 16,
+        dt_any       = 31,
+        dt_label     = 32
 } hl_data_type_t;
 
 
 
 
-typedef enum hlc_memory_type_e {
+typedef enum hl_memory_type_e {
         mt_input,
         mt_output,
         mt_memory,
         mt_timer,
         mt_counter
-} hlc_memory_type_t;
+} hl_memory_type_t;
 
 
 
@@ -80,7 +82,7 @@ enum hlcon_run_e {
 
 
 
-typedef struct hlc_opcode_s {
+typedef struct hl_opcode_s {
         char oc_name[5];
         uint8_t oc_num;
         hl_data_type_t oc_data_type;
@@ -94,12 +96,13 @@ typedef struct hl_command_data_s {
         hl_data_type_t cd_data_type;
         union {
                 struct {
-                        hlc_memory_type_t cd_mem_type;
+                        hl_memory_type_t cd_mem_type;
                         uint8_t cd_device;
                         uint8_t cd_byte;
                         uint8_t cd_bit;
                 } cd_address;
 
+                uint16_t cd_constant;
                 uint16_t cd_label;
         };
 } hl_command_data_t;

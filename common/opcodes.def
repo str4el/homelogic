@@ -17,7 +17,7 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-OPCODE(oc_load               , "LD"   , 0x00, DT_ANYADR  , false)
+OPCODE(oc_load               , "LD"   , 0x00, DT_ANY     , false)
 OPCODE(oc_load_not           , "LDN"  , 0x01, DT_ANYADR  , false)
 
 OPCODE(oc_store              , "ST"   , 0x04, DT_ANYADR  , true )

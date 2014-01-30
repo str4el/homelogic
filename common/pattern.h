@@ -23,14 +23,16 @@
 
 
 enum address_sepc_e {
-        as_byte    = 0x08,
-        as_word    = 0x10,
-        as_dword   = 0x18,
-        as_input   = 0x20,
-        as_output  = 0x40,
-        as_memory  = 0x60,
-        as_timer   = 0x80,
-        as_counter = 0xA0
+        as_byte     = 0x08,
+        as_word     = 0x10,
+        as_dword    = 0x18,
+        as_input    = 0x20,
+        as_output   = 0x40,
+        as_memory   = 0x60,
+        as_timer    = 0x80,
+        as_counter  = 0xA0,
+        as_constant = 0xC0,
+        as_label    = 0xE0
 };
 
 
@@ -59,10 +61,7 @@ struct absolute_address_s {
 
 struct command_s {
         uint8_t c_opcode;
-        union {
-                struct absolute_address_s c_address;
-                uint16_t c_label;
-        } __attribute__((packed));
+        struct absolute_address_s c_address;
 } __attribute__((packed));
 
 

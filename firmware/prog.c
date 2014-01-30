@@ -278,6 +278,19 @@ static void prog_set_word(uint16_t *ptr, const uint16_t a)
 
 
 
+/* Gibt ein Datenwort (Konstante oder Label) zurück dass in device und byte hinterlegt ist.
+ */
+static uint16_t prog_get_data(void)
+{
+        uint16_t ret = progc.cmd.c_address.aa_device;
+        ret <<= 8;
+        ret |= progc.cmd.c_address.aa_byte;
+        return ret;
+}
+
+
+
+
 /* Hauptprogrammfunktion:
  * Liest in einer Schleife den aktuellen Befehl und die dazugehörigen
  * daten, interpretiert sie; Ruft sich bei klammern rekursiv selbst auf.
@@ -334,6 +347,9 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                 // Opcodes bei denen Daten aus dem Speicher geladen werden
                 switch (opcode) {
                 case oc_load:
+                        if (progc.cmd.c_address.aa_spec == as_constant) {
+                                reg.a = prog_get_data();
+                        }
                 case oc_and:
                 case oc_and_brace:
                 case oc_and_not_brace:
@@ -429,7 +445,7 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                         switch (spec) {
                         case as_word:
                         case as_byte: reg.a = reg.a & ~tmp.a | ~reg.a & tmp.a; break;
-                        default:      reg.c = reg.c == tmp.c ? false : true; break;
+                        default:      reg.c = (reg.c == tmp.c) ? false : true; break;
                         }
                         break;
 

@@ -43,6 +43,7 @@ static hl_opcode_t opcodes [] = {
         #define DT_WORD   dt_word
         #define DT_LABEL  dt_label
         #define DT_ANYADR dt_anyadr
+        #define DT_ANY    dt_any
         #define OPCODE(x, NAME, NUM, DATA, ALTER) { NAME, NUM, DATA, ALTER },
         #include "../common/opcodes.def"
         #undef OPCODE
@@ -91,6 +92,28 @@ static uint16_t hlc_crc16_update(uint16_t crc, uint8_t data)
         }
 
         return crc;
+}
+
+
+
+
+static int hlc_get_constant(const char *chunk, hl_command_data_t *data)
+{
+        unsigned int val;
+
+        if (sscanf(chunk, "0x%x", &val) == 1) {
+                data->cd_data_type = dt_constant;
+                data->cd_constant = val;
+                return 0;
+        }
+
+        if (sscanf(chunk, "%u", &val) == 1) {
+                data->cd_data_type = dt_constant;
+                data->cd_constant = val;
+                return 0;
+        }
+
+        return -1;
 }
 
 
@@ -362,7 +385,12 @@ static int hlc_scan_command(hlc_t *data, FILE *file, hl_opcode_t opcode, hl_comm
 
         if (opcode.oc_data_type != dt_none) {
                 char *chunk = hlc_get_chunk(data, file);
-                if (!chunk || hlc_get_address(chunk, &command.c_data)) {
+                if (!chunk) {
+                        hlc_set_error(data, hl_e_opaque_datatype, chunk);
+                        return -1;
+                }
+
+                if (hlc_get_address(chunk, &command.c_data) && hlc_get_constant(chunk, &command.c_data)) {
                         hlc_set_error(data, hl_e_opaque_datatype, chunk);
                         return -1;
                 }
@@ -593,8 +621,16 @@ int EXPORT hl_compile (hlc_t *data)
 
                                 co.c_address.aa_device = ci->c_data.cd_address.cd_device;
                                 co.c_address.aa_byte   = ci->c_data.cd_address.cd_byte;
+
+                        } else if (ci->c_data.cd_data_type == dt_constant) {
+                                co.c_address.aa_spec   = as_constant;
+                                co.c_address.aa_device = ci->c_data.cd_constant >> 8;
+                                co.c_address.aa_byte   = ci->c_data.cd_constant & 0xFF;
+
                         } else if (ci->c_data.cd_data_type == dt_label) {
-                                co.c_label = ci->c_data.cd_label;
+                                co.c_address.aa_spec   = as_label;
+                                co.c_address.aa_device = ci->c_data.cd_label >> 8;
+                                co.c_address.aa_byte   = ci->c_data.cd_label & 0xFF;
                         }
 
                         memcpy(ptr, &co, sizeof(co));
