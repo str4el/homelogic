@@ -19,7 +19,6 @@ extern "C" {
 
 typedef enum hl_error_e {
         hl_e_none = 0,
-        hl_e_unknown_chunk,
         hl_e_out_of_memory,
         hl_e_opaque_datatype,
         hl_e_datatype_missmatch,
@@ -216,6 +215,7 @@ extern void hl_stop_vbus_server(void);
 extern int hl_vbus_connect(const char *name);
 extern void hl_vbus_disconnect(int s);
 
+extern const char *hl_strerror(hl_error_t num);
 
 #ifdef __cplusplus
 }

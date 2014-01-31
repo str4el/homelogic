@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+ * Copyright (C) 2013, 2014 Stephan Reinhard <Stephan-Reinhard@gmx.de>
  *
  * This file is part of Homelogic.
  *
@@ -386,7 +386,7 @@ static int hlc_scan_command(hlc_t *data, FILE *file, hl_opcode_t opcode, hl_comm
         if (opcode.oc_data_type != dt_none) {
                 char *chunk = hlc_get_chunk(data, file);
                 if (!chunk) {
-                        hlc_set_error(data, hl_e_opaque_datatype, chunk);
+                        hlc_set_error(data, hl_e_corrupt_input_file, chunk);
                         return -1;
                 }
 

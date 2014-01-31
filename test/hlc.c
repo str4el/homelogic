@@ -43,7 +43,7 @@ int main (int argc, char *argv[])
                 ret = hl_write_intel_hex(data, out);
                 fprintf(stderr, "write: %i\n", ret);
         } else {
-                fprintf(stderr, "scan: %i %s\n", data->d_errno, data->d_errchunk);
+                fprintf(stderr, "scan: %s: %s\n", hl_strerror(data->d_errno), data->d_errchunk);
         }
 
 
