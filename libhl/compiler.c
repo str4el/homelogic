@@ -600,7 +600,19 @@ int EXPORT hl_compile (hlc_t *data)
                         hl_command_t *ci = &d->dd_cb.cb_commands[i];
                         memset(&co, 0, sizeof(co));
 
-                        co.c_opcode = ci->c_opcode.oc_num;
+                        /* Letztes Netzwerkende wird zu Programmende
+                         * ansonsten wird es nicht gebraucht
+                         */
+                        if (ci->c_opcode.oc_num == oc_end_of_network) {
+                                if (i == (d->dd_cb.cb_used - 1)) {
+                                        co.c_opcode = oc_end_of_program;
+                                } else {
+                                        continue;
+                                }
+                        } else {
+                                co.c_opcode = ci->c_opcode.oc_num;
+                        }
+
 
                         if (ci->c_data.cd_data_type & dt_anyadr) {
                                 switch (ci->c_data.cd_data_type) {
