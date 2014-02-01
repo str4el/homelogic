@@ -202,8 +202,6 @@ extern int hl_scan_instruction_list (hlc_t *data, FILE* file);
 extern int hl_compile (hlc_t *data);
 extern int hl_write_intel_hex(hlc_t *data, FILE *file);
 extern int hl_read_intel_hex(hlc_t *data, FILE *file);
-
-extern int hl_download(hlc_t *data, FILE *stream);
 extern int hl_load_device(hlc_t *data, int bus, int n);
 extern int hl_load_all(hlc_t *data, int bus);
 

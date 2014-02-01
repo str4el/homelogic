@@ -6,28 +6,16 @@ LFLAGS = -lrt -lpthread -lftdi
 
 LIBRARY = ../libhl/libhl.a
 
-COMPILER = hlc
-TERMINAL = hlterm
-LOADER = hlload
 MANAGER = hlm
 
-all: $(COMPILER) $(TERMINAL) $(LOADER) $(MANAGER)
+all: $(MANAGER)
 
-
-$(COMPILER): $(COMPILER).c
-	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $@.c $(LIBRARY)
-
-$(TERMINAL): $(TERMINAL).c
-	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $@.c $(LIBRARY)
-
-$(LOADER): $(LOADER).c
-	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $@.c $(LIBRARY)
 
 $(MANAGER): $(MANAGER).c
 	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $@.c $(LIBRARY)
 
 clean:
-	$(RM) $(COMPILER) $(TERMINAL) $(LOADER) $(MANAGER)
+	$(RM) $(MANAGER)
 
 .PHONY: all clean
 
