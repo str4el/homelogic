@@ -202,7 +202,10 @@ extern int hl_scan_instruction_list (hlc_t *data, FILE* file);
 extern int hl_compile (hlc_t *data);
 extern int hl_write_intel_hex(hlc_t *data, FILE *file);
 extern int hl_read_intel_hex(hlc_t *data, FILE *file);
+
 extern int hl_download(hlc_t *data, FILE *stream);
+extern int hl_load_device(hlc_t *data, int bus, int n);
+extern int hl_load_all(hlc_t *data, int bus);
 
 extern hlcon_t *hl_connector_init(const char *name);
 extern void hl_connector_destroy(hlcon_t *con);

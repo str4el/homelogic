@@ -221,3 +221,119 @@ int EXPORT hl_download(hlc_t *data, FILE *stream)
         fflush(stream);
         return 0;
 }
+
+
+
+
+static int load_verify(int bus, int device, const char *data)
+{
+        char buf[128], cmd[6], verify[64];
+        unsigned int src, dst;
+        int scan;
+
+
+        for (int i = 0; i < 5; i++) {
+                if (hl_is_readable(bus, 1000) <= 0) {
+                        return -1;
+                }
+
+                int len = read(bus, buf, sizeof(buf) - 1);
+                if (len == -1) {
+                        return -1;
+                }
+
+                buf[len] = 0;
+                scan = sscanf(buf, "%5s %2x %2x %30s", cmd, &src, &dst, verify);
+
+                if (scan >= 3 &&
+                    strcasecmp(cmd, "VRY") == 0 &&
+                    src == device &&
+                    (dst == 0xfe || dst == 0xff)) {
+                        if (scan == 4 &&
+                            strcasecmp(verify, data) == 0) {
+                                return 0;
+                        }
+                        return -1;
+                }
+        }
+
+        return -1;
+}
+
+
+
+
+int EXPORT hl_load_device(hlc_t *data, int bus, int n)
+{
+        char buf[128];
+        char vry[64];
+        char *ptr;
+        int retry = 0;
+
+        int left = data->d_device[n].dd_program_size;
+
+        uint16_t pos = 0;
+        while (left) {
+                uint8_t len = left > 10 ? 10 : left;
+
+                ptr = vry;
+                ptr += sprintf(ptr, "%04X%02X", pos, len);
+                for (int i = 0; i < len; i++) {
+                        ptr += sprintf(ptr, "%02X", (uint8_t)data->d_device[n].dd_program_memory[pos + i]);
+                }
+                *ptr = 0;
+
+                sprintf(buf, "PROG FE %02X %s\n", n, vry);
+                if (write(bus, buf, strlen(buf)) == -1) {
+                        return -1;
+                }
+
+                if (load_verify(bus, n, vry) == 0) {
+                        retry = 0;
+                        pos += len;
+                        left -= len;
+                } else {
+                        retry++;
+                        if (retry > 3) {
+                                return -1;
+                        }
+                }
+
+        }
+
+        return data->d_device[n].dd_program_size;
+}
+
+
+
+
+int EXPORT hl_load_all(hlc_t *data, int bus)
+{
+        char buf[64];
+        int bytes = 0;
+        int load;
+
+        sprintf(buf, "STOP FE FF\n");
+        if (write(bus, buf, strlen(buf)) == -1) {
+                return -1;
+        }
+
+        for (uint16_t i = 0; i < sizeof(data->d_device) / sizeof(*data->d_device); i++) {
+                load = hl_load_device(data, bus, i);
+                if (load == -1) {
+                        return -1;
+                }
+                bytes += load;
+        }
+
+        sleep(1);
+
+        sprintf(buf, "RUN FE FF\n");
+        if (write(bus, buf, strlen(buf)) == -1) {
+                return -1;
+        }
+
+        return bytes;
+}
+
+

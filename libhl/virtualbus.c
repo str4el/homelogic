@@ -39,7 +39,7 @@ struct {
         int *c;
         int nc;
         int max;
-} vbus = {
+} hlvbus = {
         .run_server = false,
         .c = NULL,
         .nc = 0,
@@ -121,15 +121,15 @@ static void *server_thread (void *dummy)
         char buf[1024];
         ssize_t size;
 
-        while(vbus.run_server) {
-                int bigfd = vbus.s;
+        while(hlvbus.run_server) {
+                int bigfd = hlvbus.s;
                 struct timeval timeout = { 1, 0 };
 
                 FD_ZERO(&fds);
-                FD_SET(vbus.s, &fds);
-                for (int i = 0; i < vbus.nc; i++) {
-                        FD_SET(vbus.c[i], &fds);
-                        if (vbus.c[i] > bigfd) bigfd = vbus.c[i];
+                FD_SET(hlvbus.s, &fds);
+                for (int i = 0; i < hlvbus.nc; i++) {
+                        FD_SET(hlvbus.c[i], &fds);
+                        if (hlvbus.c[i] > bigfd) bigfd = hlvbus.c[i];
                 }
 
                 if (select(bigfd + 1, &fds, NULL, NULL, &timeout) <= 0) {
@@ -137,52 +137,52 @@ static void *server_thread (void *dummy)
                 }
 
 
-                for (int i = 0; i < vbus.nc; i++) {
-                        if (!FD_ISSET(vbus.c[i], &fds)) continue;
+                for (int i = 0; i < hlvbus.nc; i++) {
+                        if (!FD_ISSET(hlvbus.c[i], &fds)) continue;
 
-                        size = recv(vbus.c[i], buf, sizeof(buf), 0);
+                        size = recv(hlvbus.c[i], buf, sizeof(buf), 0);
                         if (size <= 0) {
-                                close(vbus.c[i]);
-                                vbus.c[i] = vbus.c[--vbus.nc];
+                                close(hlvbus.c[i]);
+                                hlvbus.c[i] = hlvbus.c[--hlvbus.nc];
                                 i--;
                                 continue;
                         }
 
-                        for (int j = 0; j < vbus.nc; j++) {
+                        for (int j = 0; j < hlvbus.nc; j++) {
                                 if (j == i) continue;
-                                send(vbus.c[j], buf, size, 0);
+                                send(hlvbus.c[j], buf, size, 0);
                         }
 
                 }
 
 
-                if (FD_ISSET(vbus.s, &fds)) {
-                        int s2 = accept(vbus.s, NULL, NULL);
+                if (FD_ISSET(hlvbus.s, &fds)) {
+                        int s2 = accept(hlvbus.s, NULL, NULL);
                         if (s2 != -1) {
-                                if (vbus.max <= vbus.nc) {
+                                if (hlvbus.max <= hlvbus.nc) {
 
-                                        int *na = realloc(vbus.c, sizeof(*vbus.c) *  (vbus.max + 10));
+                                        int *na = realloc(hlvbus.c, sizeof(*hlvbus.c) *  (hlvbus.max + 10));
                                         if (na) {
-                                                vbus.max += 10;
-                                                vbus.c = na;
-                                                vbus.c[vbus.nc++] = s2;
+                                                hlvbus.max += 10;
+                                                hlvbus.c = na;
+                                                hlvbus.c[hlvbus.nc++] = s2;
                                         } else {
                                                 close(s2);
                                         }
                                 } else {
-                                        vbus.c[vbus.nc++] = s2;
+                                        hlvbus.c[hlvbus.nc++] = s2;
                                 }
                         }
                 }
         }
 
-        for (int i = 0; i < vbus.nc; i++) {
-                close(vbus.c[i]);
+        for (int i = 0; i < hlvbus.nc; i++) {
+                close(hlvbus.c[i]);
         }
 
-        free(vbus.c);
-        vbus.c = NULL;
-        vbus.max = vbus.nc = 0;
+        free(hlvbus.c);
+        hlvbus.c = NULL;
+        hlvbus.max = hlvbus.nc = 0;
 
         return NULL;
 }
@@ -192,14 +192,14 @@ static void *server_thread (void *dummy)
 
 int EXPORT hl_start_vbus_server(const char *name)
 {
-        vbus.s = create_socket_and_listen(name);
-        if (vbus.s == -1) {
+        hlvbus.s = create_socket_and_listen(name);
+        if (hlvbus.s == -1) {
                 return -1;
         }
 
-        vbus.run_server = true;
-        if (pthread_create(&vbus.thread, NULL, server_thread, NULL)) {
-                close(vbus.s);
+        hlvbus.run_server = true;
+        if (pthread_create(&hlvbus.thread, NULL, server_thread, NULL)) {
+                close(hlvbus.s);
                 return -1;
         }
 
@@ -211,9 +211,9 @@ int EXPORT hl_start_vbus_server(const char *name)
 
 void EXPORT hl_stop_vbus_server()
 {
-        if (vbus.run_server) {
-                vbus.run_server = false;
-                pthread_join(vbus.thread, NULL);
+        if (hlvbus.run_server) {
+                hlvbus.run_server = false;
+                pthread_join(hlvbus.thread, NULL);
         }
 }
 

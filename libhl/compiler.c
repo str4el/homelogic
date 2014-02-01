@@ -478,6 +478,8 @@ hlc_t EXPORT *hl_compiler_init()
 
 void EXPORT hl_compiler_destroy(hlc_t *data)
 {
+        if (!data) return;
+
         for (int i = 0; i < sizeof(data->d_device) / sizeof(*data->d_device); i++) {
                 hl_device_data_t dd = data->d_device[i];
                 hlc_clear_address_map(&dd.dd_am);
