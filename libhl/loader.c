@@ -313,24 +313,25 @@ int EXPORT hl_load_all(hlc_t *data, int bus)
         int bytes = 0;
         int load;
 
-        sprintf(buf, "STOP FE FF\n");
-        if (write(bus, buf, strlen(buf)) == -1) {
-                return -1;
-        }
 
         for (uint16_t i = 0; i < sizeof(data->d_device) / sizeof(*data->d_device); i++) {
+                if (data->d_device[i].dd_program_size == 0) continue;
+
+                sprintf(buf, "STOP FE %02X\n", (uint8_t)i);
+                if (write(bus, buf, strlen(buf)) == -1) {
+                        return -1;
+                }
+
                 load = hl_load_device(data, bus, i);
                 if (load == -1) {
                         return -1;
                 }
                 bytes += load;
-        }
 
-        sleep(1);
-
-        sprintf(buf, "RUN FE FF\n");
-        if (write(bus, buf, strlen(buf)) == -1) {
-                return -1;
+                sprintf(buf, "RUN FE %02X\n", (uint8_t)i);
+                if (write(bus, buf, strlen(buf)) == -1) {
+                        return -1;
+                }
         }
 
         return bytes;

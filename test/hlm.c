@@ -154,7 +154,7 @@ int compile_program (hlc_t *data)
         }
 
         info("Compile ... ");
-        info("for %i devices.\n", hl_compile(data));
+        info("finished for %i devices.\n", hl_compile(data));
 
         if (outfile) {
                 out = fopen(outfile, "w");
@@ -337,6 +337,7 @@ int load_program(hlc_t *data, int bus)
 {
         FILE *in;
         int bytes;
+        char buf[64];
 
         if (compile) {
                 info("Load previously compiled data.\n");
@@ -363,13 +364,30 @@ int load_program(hlc_t *data, int bus)
         }
 
 
-        bytes = hl_load_all(data, bus);
-        if (bytes == -1) {
-                fprintf(stderr, "Couldn't load data into device! Skip loading.\n");
-                return -1;
-        }
+        for (uint16_t i = 0; i < sizeof(data->d_device) / sizeof(*data->d_device); i++) {
+                if (data->d_device[i].dd_program_size == 0) continue;
 
-        info("%i bytes written.\n", bytes);
+                info("Stop device %i.\n", i);
+                sprintf(buf, "STOP FE %02X\n", (uint8_t)i);
+                if (write(bus, buf, strlen(buf)) == -1) {
+                        fprintf(stderr, "Couldn't stop device %i! Skip loading.\n", i);
+                        return -1;
+                }
+
+                bytes = hl_load_device(data, bus, i);
+                if (bytes == -1) {
+                        fprintf(stderr, "Couldn't load data into device %i! Skip loading.\n", i);
+                        return -1;
+                }
+                info("%i bytes written to device %i.\n", bytes, i);
+
+                info("Run device %i.\n", i);
+                sprintf(buf, "RUN FE %02X\n", (uint8_t)i);
+                if (write(bus, buf, strlen(buf)) == -1) {
+                        fprintf(stderr, "Couldn't run device %i! Skip loading.\n", i);
+                        return -1;
+                }
+        }
 
         return 0;
 }
