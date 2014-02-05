@@ -12,7 +12,7 @@ all: $(MANAGER)
 
 
 $(MANAGER): $(MANAGER).c
-	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $@.c $(LIBRARY)
+	$(CC) $(CFLAGS) -o $@ $@.c $(LIBRARY) $(LFLAGS) 
 
 clean:
 	$(RM) $(MANAGER)

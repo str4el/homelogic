@@ -3,7 +3,7 @@ AR = ar
 RM = rm -rf
 
 CFLAGS = -std=gnu99 -Wall -g -fpic -fvisibility=hidden
-LFLAGS = -Wl -O1 -shared 
+LFLAGS = -Wl,-O1 -shared 
 
 SRC = compiler.c connector.c loader.c virtualbus.c error.c
 OBJ = $(SRC:%.c=%.o)
