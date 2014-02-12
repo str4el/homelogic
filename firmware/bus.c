@@ -57,7 +57,7 @@ const bus_command_table_t bus_command_table [] PROGMEM = {
         { "DUMP" , 4, bus_command_dump,           0,  0},
         { "PROG" , 4, bus_command_program,        8, BUS_DATA_MAX_LEN},
         { "SDT"  , 3, bus_command_set_date_time, 20, 20},
-        { "SET"  , 3, bus_command_set_word,      12, 15},
+        { "SET"  , 3, bus_command_set_word,       8, 15},
         { "MEM"  , 3, bus_command_memory,         0,  0},
 };
 
@@ -422,7 +422,7 @@ void bus_command_set_date_time (uint8_t sender, char *data)
 
 void bus_command_set_word (uint8_t sender, char *data)
 {
-        char type[3];
+        char str[4];
         uint8_t device;
         uint8_t byte;
         uint8_t spec;
@@ -433,37 +433,49 @@ void bus_command_set_word (uint8_t sender, char *data)
                 return ;
         }
 
-        if (sscanf(data, "%%%2s:%hhu.%hhu=%hx", type, &device, &byte, (short unsigned int *)&value) != 4) {
+        if (sscanf(data, "%%T:%hhu.%hhu=%3s", &device, &byte, str) == 3) {
+                if (byte >= 64) return;
+                if (device == adr) return;
+
+                spec = as_timer;
+                int16_t n = prog_get_periphery_offset(device, spec, byte);
+                if (n >= 0) {
+                        progc.periphery[n] = ((str[1] == 'N') || (str[1] == 'n')) ? TIMER_STATUS_BIT : 0;
+                }
                 return;
         }
 
-        if (byte >= 64) return;
-        if (device == adr) return;
+        if (sscanf(data, "%%%2s:%hhu.%hhu=%hx", str, &device, &byte, (short unsigned int *)&value) == 4) {
+                if (byte >= 64) return;
+                if (device == adr) return;
 
-        if (type[1] == 'w' || type[1] == 'W') {
-                switch (type[0]) {
-                case 'i':
-                case 'I':
-                        spec = as_input;
-                        break;
+                if (str[1] == 'w' || str[1] == 'W') {
+                        switch (str[0]) {
+                        case 'i':
+                        case 'I':
+                                spec = as_input;
+                                break;
 
-                case 'o':
-                case 'O':
-                        spec = as_output;
-                        break;
-                case 'm':
-                case 'M':
-                        spec = as_memory;
-                        break;
-                default:
-                        return;
+                        case 'o':
+                        case 'O':
+                                spec = as_output;
+                                break;
+                        case 'm':
+                        case 'M':
+                                spec = as_memory;
+                                break;
+                        default:
+                                return;
+                        }
+
+                        int16_t n = prog_get_periphery_offset(device, spec, byte);
+                        if (n >= 0) {
+                                progc.periphery[n] = value;
+                        }
                 }
-
-                int16_t n = prog_get_periphery_offset(device, spec, byte);
-                if (n >= 0) {
-                        progc.periphery[n] = value;
-                }
+                return;
         }
+
 }
 
 

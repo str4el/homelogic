@@ -21,7 +21,6 @@
 #define PATTERN_H
 
 
-
 enum address_sepc_e {
         as_byte     = 0x08,
         as_word     = 0x10,

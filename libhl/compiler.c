@@ -25,6 +25,7 @@
 #include "private.h"
 #include "homelogic.h"
 #include "../common/pattern.h"
+#include "../common/timer.h"
 
 
 
@@ -37,13 +38,15 @@
  * werden.
  */
 static hl_opcode_t opcodes [] = {
-        #define DT_NONE   dt_none
-        #define DT_BOOL   dt_bit
-        #define DT_BYTE   dt_byte
-        #define DT_WORD   dt_word
-        #define DT_LABEL  dt_label
-        #define DT_ANYADR dt_anyadr
-        #define DT_ANY    dt_any
+        #define DT_NONE    dt_none
+        #define DT_BOOL    dt_bit
+        #define DT_BYTE    dt_byte
+        #define DT_WORD    dt_word
+        #define DT_TIMER   dt_timer
+        #define DT_COUNTER dt_counter
+        #define DT_LABEL   dt_label
+        #define DT_ANYADR  dt_anyadr
+        #define DT_ANY     dt_any
         #define OPCODE(x, NAME, NUM, DATA, ALTER) { NAME, NUM, DATA, ALTER },
         #include "../common/opcodes.def"
         #undef OPCODE
@@ -100,11 +103,44 @@ static uint16_t hlc_crc16_update(uint16_t crc, uint8_t data)
 static int hlc_get_constant(const char *chunk, hl_command_data_t *data)
 {
         unsigned int val;
+        double time;
+        char time_base;
 
         if (sscanf(chunk, "0x%x", &val) == 1) {
                 data->cd_data_type = dt_constant;
                 data->cd_constant = val;
                 return 0;
+        }
+
+        if (sscanf(chunk, "%lf%1[ms]", &time, &time_base) == 2) {
+                data->cd_data_type = dt_constant;
+                if (time_base == 'm') time *= 60;
+                val = (unsigned int) (time * 100);
+
+                if (val <= 1000) {
+                        data->cd_constant = val | TIMER_F001;
+                        return 0;
+                }
+
+                val /= 10;
+                if (val <= 1000) {
+                        data->cd_constant = val | TIMER_F01;
+                        return 0;
+                }
+
+                val /= 10;
+                if (val <= 1000) {
+                        data->cd_constant = val | TIMER_F1;
+                        return 0;
+                }
+
+                val /= 10;
+                if (val <= 1000) {
+                        data->cd_constant = val | TIMER_F10;
+                        return 0;
+                }
+
+                return -1;
         }
 
         if (sscanf(chunk, "%u", &val) == 1) {
@@ -114,6 +150,37 @@ static int hlc_get_constant(const char *chunk, hl_command_data_t *data)
         }
 
         return -1;
+}
+
+
+
+
+static int hlc_get_timer_counter(const char *chunk, hl_command_data_t *adr)
+{
+        char type[1];
+        int count = sscanf(chunk, "%%%1[tTcCzZ]:%hhu.%hhu", type, &adr->cd_address.cd_device, &adr->cd_address.cd_byte);
+        if (count != 3) return -1;
+
+        switch(type[0]) {
+        case 't':
+        case 'T':
+                adr->cd_address.cd_mem_type = mt_timer;
+                adr->cd_data_type = dt_timer;
+                break;
+
+        case 'c':
+        case 'C':
+        case 'z':
+        case 'Z':
+                adr->cd_address.cd_mem_type = mt_counter;
+                adr->cd_data_type = dt_counter;
+                break;
+
+        default:
+                return -1;
+        }
+
+        return 0;
 }
 
 
@@ -197,15 +264,13 @@ static inline int hlc_get_opcode(const char *chunk)
 
 
 
-static inline int hlc_convert_to_word_address (hl_command_data_t *address)
+static inline void hlc_convert_to_word_address (hl_command_data_t *address)
 {
-        if (address->cd_data_type & dt_anyadr) {
+        if (address->cd_data_type & (dt_bit | dt_byte | dt_word)) {
                 address->cd_address.cd_bit = 0;
                 address->cd_data_type = dt_word;
                 address->cd_address.cd_byte &= ~1;
-                return 1;
         }
-        return 0;
 }
 
 
@@ -265,11 +330,10 @@ static void hlc_clear_symbol_table (hlc_t *data)
 
 static int hlc_add_to_address_map (hl_address_map_t *am, hl_command_data_t address)
 {
-        if (hlc_convert_to_word_address(&address)) {
-                for (int i = 0; i < am->am_used; i++) {
-                        if (0 == memcmp(&(am->am_addresses[i]), &address, sizeof(address))) {
-                                return 0;
-                        }
+        hlc_convert_to_word_address(&address);
+        for (int i = 0; i < am->am_used; i++) {
+                if (0 == memcmp(&(am->am_addresses[i]), &address, sizeof(address))) {
+                        return 0;
                 }
         }
 
@@ -390,7 +454,9 @@ static int hlc_scan_command(hlc_t *data, FILE *file, hl_opcode_t opcode, hl_comm
                         return -1;
                 }
 
-                if (hlc_get_address(chunk, &command.c_data) && hlc_get_constant(chunk, &command.c_data)) {
+                if (hlc_get_timer_counter(chunk, &command.c_data) &&
+                    hlc_get_address(chunk, &command.c_data) &&
+                    hlc_get_constant(chunk, &command.c_data)) {
                         hlc_set_error(data, hl_e_opaque_datatype, chunk);
                         return -1;
                 }
@@ -583,16 +649,15 @@ int EXPORT hl_compile (hlc_t *data)
 
                 for (int i = 0; i < d->dd_am.am_used; i++) {
                         am.ma_device_adr = d->dd_am.am_addresses[i].cd_address.cd_device;
+                        am.ma_mem_adr = d->dd_am.am_addresses[i].cd_address.cd_byte;
 
                         switch(d->dd_am.am_addresses[i].cd_address.cd_mem_type) {
-                                case mt_input:   am.ma_mem_adr = as_input;   break;
-                                case mt_output:  am.ma_mem_adr = as_output;  break;
-                                case mt_memory:  am.ma_mem_adr = as_memory;  break;
-                                case mt_timer:   am.ma_mem_adr = as_timer;   break;
-                                case mt_counter: am.ma_mem_adr = as_counter; break;
+                                case mt_input:   am.ma_mem_adr = (am.ma_mem_adr >> 1) | as_input;   break;
+                                case mt_output:  am.ma_mem_adr = (am.ma_mem_adr >> 1) | as_output;  break;
+                                case mt_memory:  am.ma_mem_adr = (am.ma_mem_adr >> 1) | as_memory;  break;
+                                case mt_timer:   am.ma_mem_adr |= as_timer;   break;
+                                case mt_counter: am.ma_mem_adr |= as_counter; break;
                         }
-
-                        am.ma_mem_adr |= d->dd_am.am_addresses[i].cd_address.cd_byte >> 1;
 
                         memcpy(ptr, &am, sizeof(am));
                         ptr += sizeof(am);
@@ -633,6 +698,16 @@ int EXPORT hl_compile (hlc_t *data)
                                         case mt_counter: co.c_address.aa_spec |= as_counter; break;
                                 }
 
+                                co.c_address.aa_device = ci->c_data.cd_address.cd_device;
+                                co.c_address.aa_byte   = ci->c_data.cd_address.cd_byte;
+
+                        } else if (ci->c_data.cd_data_type == dt_timer) {
+                                co.c_address.aa_spec   = as_timer;
+                                co.c_address.aa_device = ci->c_data.cd_address.cd_device;
+                                co.c_address.aa_byte   = ci->c_data.cd_address.cd_byte;
+
+                        } else if (ci->c_data.cd_data_type == dt_counter) {
+                                co.c_address.aa_spec   = as_counter;
                                 co.c_address.aa_device = ci->c_data.cd_address.cd_device;
                                 co.c_address.aa_byte   = ci->c_data.cd_address.cd_byte;
 

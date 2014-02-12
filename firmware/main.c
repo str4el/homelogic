@@ -64,6 +64,11 @@ ISR(TIMER2_COMP_vect) {
 
         if (bus.tx_lock) bus.tx_lock--;
 
+        if (!(timerbase % 10)) progc.tick.f001++;
+        if (!(timerbase % 100)) progc.tick.f01++;
+        if (!(timerbase % 1000)) progc.tick.f1++;
+        if (!(timerbase % 10000)) progc.tick.f10++;
+
         if (!(timerbase % 250)) led_control();
         if (!(timerbase % 10000)) timerbase = 0;
         timerbase++;

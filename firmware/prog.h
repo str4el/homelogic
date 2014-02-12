@@ -23,6 +23,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "../common/pattern.h"
+#include "../common/timer.h"
 
 
 
@@ -51,6 +52,7 @@ typedef struct prog_write_s {
 
 typedef struct prog_context_s {
         volatile bool valid;
+        volatile timer_ticks_t tick;
         struct program_header_s header;
         volatile uint16_t *periphery;
         uint16_t *image;

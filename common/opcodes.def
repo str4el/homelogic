@@ -85,5 +85,9 @@ OPCODE(oc_less_than_brace    , "LE("  , 0x4D, DT_WORD    , false)
 
 OPCODE(oc_close_brace        , ")"    , 0x70, DT_NONE    , false)
 
+OPCODE(oc_timer_on           , "TON"  , 0xA0, DT_TIMER   , true)
+OPCODE(oc_timer_off          , "TOFF" , 0xA1, DT_TIMER   , true)
+OPCODE(oc_timer_pulse        , "TP"   , 0xA2, DT_TIMER   , true)
+
 OPCODE(oc_end_of_network     , "***"  , 0xFE, DT_NONE    , false)
 OPCODE(oc_end_of_program     , "END"  , 0xFF, DT_NONE    , false)
