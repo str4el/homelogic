@@ -136,7 +136,6 @@ static void *server_thread (void *dummy)
                         continue;
                 }
 
-
                 for (int i = 0; i < hlvbus.nc; i++) {
                         if (!FD_ISSET(hlvbus.c[i], &fds)) continue;
 
@@ -150,7 +149,8 @@ static void *server_thread (void *dummy)
 
                         for (int j = 0; j < hlvbus.nc; j++) {
                                 if (j == i) continue;
-                                send(hlvbus.c[j], buf, size, 0);
+                                // FIXME: send blockiert manchmal. MSG_DONTWAIT als workaround
+                                send(hlvbus.c[j], buf, size, MSG_DONTWAIT);
                         }
 
                 }
