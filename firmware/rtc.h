@@ -77,8 +77,10 @@ static inline int8_t rtc_write_time (rtc_time_t *time)
 }
 
 
+extern uint8_t rtc_bcd2bin(uint8_t in);
+extern uint8_t rtc_bin2bcd(uint8_t in);
+extern int8_t rtc_daynum(char str[2]);
 
 extern char *rtc_time2str (rtc_time_t *t);
-extern int8_t rtc_str2time(const char *str, uint8_t len, rtc_time_t *t);
 
 #endif // RTC_H

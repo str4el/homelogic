@@ -56,7 +56,7 @@ const bus_command_table_t bus_command_table [] PROGMEM = {
         { "STEP" , 4, bus_command_step,           0,  0},
         { "DUMP" , 4, bus_command_dump,           0,  0},
         { "PROG" , 4, bus_command_program,        8, BUS_DATA_MAX_LEN},
-        { "SDT"  , 3, bus_command_set_date_time, 20, 20},
+        { "SRTC" , 4, bus_command_set_rtc,       20, 20},
         { "SET"  , 3, bus_command_set_word,       8, 15},
         { "MEM"  , 3, bus_command_memory,         0,  0},
 };
@@ -248,11 +248,12 @@ bool bus_send_message_sync(const char *cmd, uint8_t dst, const char *format, ...
 void bus_send_date_time()
 {
         rtc_time_t time;
-        int8_t ret = rtc_read_time(&time);
-        if (ret == 0) {
-                char *str = rtc_time2str(&time);
-                bus_send_raw_sync(str, strlen(str));
+
+        if (rtc_read_time(&time)) {
+                return;
         }
+
+        bus_send_message_async("RTC", 0xFF, "%s", rtc_time2str(&time));
 }
 
 
@@ -411,10 +412,26 @@ void bus_command_program (uint8_t sender, char *data)
 
 
 
-void bus_command_set_date_time (uint8_t sender, char *data)
+void bus_command_set_rtc (uint8_t sender, char *data)
 {
-        bus_send_message_async("TEST1", sender, NULL);
-        bus_send_message_async("TEST2", sender, "data: %s", data);
+        rtc_time_t t;
+        char day[2];
+
+        if (sscanf(data, "%2c-%hhu.%hhu.%hhu-%hhu:%hhu:%hhu", day, &t.date, &t.month, &t.year, &t.hours, &t.minutes, &t.seconds) != 7) {
+                return;
+        }
+
+        t.day     = rtc_daynum(day);
+        if (t.day < 0) return;
+
+        t.date    = rtc_bin2bcd(t.date);
+        t.month   = rtc_bin2bcd(t.month);
+        t.year    = rtc_bin2bcd(t.year);
+        t.hours   = rtc_bin2bcd(t.hours);
+        t.minutes = rtc_bin2bcd(t.minutes);
+        t.seconds = rtc_bin2bcd(t.seconds);
+
+        rtc_write_time(&t);
 }
 
 

@@ -105,7 +105,7 @@ extern void bus_command_debug (uint8_t sender, char *data);
 extern void bus_command_step (uint8_t sender, char *data);
 extern void bus_command_dump (uint8_t sender, char *data);
 extern void bus_command_program (uint8_t sender, char *data);
-extern void bus_command_set_date_time (uint8_t sender, char *data);
+extern void bus_command_set_rtc (uint8_t sender, char *data);
 extern void bus_command_set_word (uint8_t sender, char *data);
 extern void bus_command_memory (uint8_t sender, char *data);
 
