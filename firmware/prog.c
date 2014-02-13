@@ -298,6 +298,8 @@ static inline void prog_wait_for_step(void)
 
 static bool prog_get_bit(uint16_t *ptr)
 {
+        if (!ptr) return false;
+
         uint16_t mask = ((progc.cmd.c_address.aa_byte & 1) ? 0x0100 : 0x0001);
         mask <<= (progc.cmd.c_address.aa_spec & 0x07);
         return *ptr & mask;
@@ -308,6 +310,8 @@ static bool prog_get_bit(uint16_t *ptr)
 
 static void prog_set_bit(uint16_t *ptr, const bool c)
 {
+        if (!ptr) return;
+
         uint16_t mask = ((progc.cmd.c_address.aa_byte & 1) ? 0x0100 : 0x0001);
         mask <<= (progc.cmd.c_address.aa_spec & 0x07);
         if (c) {
@@ -322,6 +326,8 @@ static void prog_set_bit(uint16_t *ptr, const bool c)
 
 static uint8_t prog_get_byte(uint16_t *ptr)
 {
+        if (!ptr) return 0;
+
         if (progc.cmd.c_address.aa_byte & 1) {
                 return *ptr >> 8;
         } else {
@@ -334,6 +340,8 @@ static uint8_t prog_get_byte(uint16_t *ptr)
 
 static void prog_set_byte(uint16_t *ptr, const uint8_t a)
 {
+        if (!ptr) return;
+
         if (progc.cmd.c_address.aa_byte & 1) {
                 *ptr &= 0x00ff;
                 *ptr |= (uint16_t)a << 8;
@@ -348,6 +356,7 @@ static void prog_set_byte(uint16_t *ptr, const uint8_t a)
 
 static inline uint16_t prog_get_word(uint16_t *ptr)
 {
+        if (!ptr) return 0;
         return *ptr;
 }
 
@@ -356,6 +365,7 @@ static inline uint16_t prog_get_word(uint16_t *ptr)
 
 static inline void prog_set_word(uint16_t *ptr, const uint16_t a)
 {
+        if(!ptr) return;
         *ptr = a;
 }
 
@@ -395,7 +405,9 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                 }
 
                 ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-                        eeprom_read_block(&progc.cmd, (void *)(progc.header.ph_program_offset + progc.ip * sizeof(progc.cmd)), sizeof(progc.cmd));
+                        eeprom_read_block(&progc.cmd,
+                                          (void *)(progc.header.ph_program_offset + progc.ip * sizeof(progc.cmd)),
+                                          sizeof(progc.cmd));
                 }
 
                 if (state.current == DEBUG) {
@@ -406,37 +418,41 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                                               progc.cmd.c_address.aa_byte);
                 }
 
-                int16_t peradr = prog_get_periphery_offset(progc.cmd.c_address.aa_device,
-                                                           progc.cmd.c_address.aa_spec,
-                                                           progc.cmd.c_address.aa_byte);
-                //if (peradr < 0 || peradr >= progc.header.ph_address_map_size) {
-                //        prog_error(ERR_PROG);
-                //        break;
-                //}
+                uint8_t opcode = progc.cmd.c_opcode;
+                uint8_t spec = progc.cmd.c_address.aa_spec;
+                int16_t periphery_offset;
+                uint16_t *imageptr = 0;
+                prog_register_t tmp = {0, false};
 
-                // FIXME: Nicht implementierte funktionalität
-                switch (progc.cmd.c_address.aa_spec & 0xE0) {
+
+                /* Vorbereiten der Opcodedaten
+                 */
+                switch (spec & 0xE0) {
                 case as_dword:
                 case as_counter:
+                        // FIXME: Nicht implementierte funktionalität
                         prog_error(ERR_FEATURE);
-                }
-
-                uint8_t spec = progc.cmd.c_address.aa_spec;
-                switch (spec) {
-                case as_constant:
-                case as_label:
-                case as_timer:
-                case as_counter:
                         break;
 
-                default:
+                case as_input:
+                case as_output:
+                case as_memory:
                         spec &= 0x1F;
+                        // kein break!
+
+                case as_timer:
+                        periphery_offset = prog_get_periphery_offset(progc.cmd.c_address.aa_device,
+                                                                   progc.cmd.c_address.aa_spec,
+                                                                   progc.cmd.c_address.aa_byte);
+
+                        if (periphery_offset < 0 || periphery_offset >= progc.header.ph_address_map_size) {
+                                prog_error(ERR_PROG);
+                        } else {
+                                imageptr = &(progc.image[periphery_offset]);
+                        }
                         break;
                 }
 
-
-                uint8_t opcode = progc.cmd.c_opcode;
-                prog_register_t tmp = {0, false};
 
 
                 // Opcodes bei denen Daten aus dem Speicher geladen werden
@@ -459,10 +475,10 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                 case oc_edge_positive:
                 case oc_edge_negative:
                         switch (spec) {
-                        case as_word:  tmp.a = prog_get_word(&(progc.image[peradr])); break;
-                        case as_byte:  tmp.a = prog_get_byte(&(progc.image[peradr])); break;
-                        case as_timer: tmp.c = TIMER_STATUS(progc.image[peradr]);     break;
-                        default:       tmp.c = prog_get_bit(&(progc.image[peradr]));  break;
+                        case as_word:  tmp.a = prog_get_word(imageptr); break;
+                        case as_byte:  tmp.a = prog_get_byte(imageptr); break;
+                        case as_timer: tmp.c = TIMER_STATUS(*imageptr); break;
+                        default:       tmp.c = prog_get_bit(imageptr);  break;
                         }
                         break;
 
@@ -471,10 +487,10 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                 case oc_or_not:
                 case oc_xor_not:
                         switch (spec) {
-                        case as_word:  tmp.a = ~prog_get_word(&(progc.image[peradr])); break;
-                        case as_byte:  tmp.a = ~prog_get_byte(&(progc.image[peradr])); break;
-                        case as_timer: tmp.c = !TIMER_STATUS(progc.image[peradr]);     break;
-                        default:       tmp.c = !prog_get_bit(&(progc.image[peradr]));  break;
+                        case as_word:  tmp.a = ~prog_get_word(imageptr); break;
+                        case as_byte:  tmp.a = ~prog_get_byte(imageptr); break;
+                        case as_timer: tmp.c = !TIMER_STATUS(*imageptr); break;
+                        default:       tmp.c = !prog_get_bit(imageptr);  break;
                         }
                         break;
 
@@ -557,13 +573,13 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                         if (reg.c) {
                                 if (!tmp.c) {
                                         reg.c = true;
-                                        prog_set_bit(&(progc.image[peradr]), true);
+                                        prog_set_bit(imageptr, true);
                                 } else {
                                         reg.c = false;
                                 }
                         } else {
                                 reg.c = false;
-                                prog_set_bit(&(progc.image[peradr]), false);
+                                prog_set_bit(imageptr, false);
                         }
                         break;
 
@@ -571,13 +587,13 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                         if (!reg.c) {
                                 if (!tmp.c) {
                                         reg.c = true;
-                                        prog_set_bit(&(progc.image[peradr]), true);
+                                        prog_set_bit(imageptr, true);
                                 } else {
                                         reg.c = false;
                                 }
                         } else {
                                 reg.c = false;
-                                prog_set_bit(&(progc.image[peradr]), false);
+                                prog_set_bit(imageptr, false);
                         }
                         break;
 
@@ -585,26 +601,26 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
 
                 case oc_store:
                         switch (spec) {
-                        case as_word: prog_set_word(&(progc.image[peradr]), reg.a);          break;
-                        case as_byte: prog_set_byte(&(progc.image[peradr]), (uint8_t)reg.a); break;
-                        default:      prog_set_bit(&(progc.image[peradr]), reg.c);           break;
+                        case as_word: prog_set_word(imageptr, reg.a);          break;
+                        case as_byte: prog_set_byte(imageptr, (uint8_t)reg.a); break;
+                        default:      prog_set_bit(imageptr, reg.c);           break;
                         }
                         break;
 
                 case oc_store_not:
                         switch (spec) {
-                        case as_word: prog_set_word(&(progc.image[peradr]), ~reg.a);          break;
-                        case as_byte: prog_set_byte(&(progc.image[peradr]), ~(uint8_t)reg.a); break;
-                        default:      prog_set_bit(&(progc.image[peradr]), !reg.c);           break;
+                        case as_word: prog_set_word(imageptr, ~reg.a);          break;
+                        case as_byte: prog_set_byte(imageptr, ~(uint8_t)reg.a); break;
+                        default:      prog_set_bit(imageptr, !reg.c);           break;
                         }
                         break;
 
                 case oc_set:
-                        if (reg.c) prog_set_bit(&(progc.image[peradr]), true);
+                        if (reg.c) prog_set_bit(imageptr, true);
                         break;
 
                 case oc_reset:
-                        if (reg.c) prog_set_bit(&(progc.image[peradr]), false);
+                        if (reg.c) prog_set_bit(imageptr, false);
                         break;
 
 
@@ -617,25 +633,25 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
 
                 case oc_timer_on:
                         if (reg.c) {
-                                TIMER_SET_RUNNING(progc.image[peradr]);
+                                TIMER_SET_RUNNING(*imageptr);
                         } else {
-                                progc.image[peradr] = (reg.a & TIMER_TIME_BITS) | TIMER_TON;
+                                *imageptr = (reg.a & TIMER_TIME_BITS) | TIMER_TON;
                         }
                         break;
 
                 case oc_timer_off:
                         if (reg.c) {
-                                progc.image[peradr] = (reg.a & TIMER_TIME_BITS) | TIMER_TOFF | TIMER_STATUS_BIT;
+                                *imageptr = (reg.a & TIMER_TIME_BITS) | TIMER_TOFF | TIMER_STATUS_BIT;
                         } else {
-                                TIMER_SET_RUNNING(progc.image[peradr]);
+                                TIMER_SET_RUNNING(*imageptr);
                         }
                         break;
 
                 case oc_timer_pulse:
                         if (reg.c) {
-                                TIMER_SET_RUNNING(progc.image[peradr]);
+                                TIMER_SET_RUNNING(*imageptr);
                         } else {
-                                progc.image[peradr] = (reg.a & TIMER_TIME_BITS) | TIMER_TP;
+                                *imageptr = (reg.a & TIMER_TIME_BITS) | TIMER_TP;
                         }
                         break;
 
