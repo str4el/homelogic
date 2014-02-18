@@ -46,6 +46,7 @@ static hl_opcode_t opcodes [] = {
         #define DT_COUNTER dt_counter
         #define DT_LABEL   dt_label
         #define DT_ANYADR  dt_anyadr
+        #define DT_ANYWORD dt_anyword
         #define DT_ANY     dt_any
         #define OPCODE(x, NAME, NUM, DATA, ALTER) { NAME, NUM, DATA, ALTER },
         #include "../common/opcodes.def"
@@ -235,10 +236,10 @@ static int hlc_get_address(const char *chunk, hl_command_data_t *adr)
                                 adr->cd_data_type = dt_word;
                                 break;
 
-                        case 'd':
-                        case 'D':
-                                adr->cd_data_type = dt_dword;
-                                break;
+//                        case 'd':
+//                        case 'D':
+//                                adr->cd_data_type = dt_dword;
+//                                break;
 
                         default:
                                 return -2;
@@ -686,7 +687,7 @@ int EXPORT hl_compile (hlc_t *data)
                                         case dt_bit:   co.c_address.aa_spec = ci->c_data.cd_address.cd_bit; break;
                                         case dt_byte:  co.c_address.aa_spec = as_byte;  break;
                                         case dt_word:  co.c_address.aa_spec = as_word;  break;
-                                        case dt_dword: co.c_address.aa_spec = as_dword; break;
+                                        // case dt_dword: co.c_address.aa_spec = as_dword; break;
                                         default: break; // Nur um die Warnug zu verhindern
                                 }
 

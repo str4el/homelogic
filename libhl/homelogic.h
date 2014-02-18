@@ -37,11 +37,12 @@ typedef enum hl_data_type_e {
         dt_bit       = 1,
         dt_byte      = 2,
         dt_word      = 4,
-        dt_dword     = 8,
+//        dt_dword     = 8,
         dt_timer     = 16,
         dt_counter   = 32,
         dt_anyadr    = 63,
         dt_constant  = 64,
+        dt_anyword   = 100, // dt_word | dt_counter | dt_constant
         dt_any       = 127,
         dt_label     = 128
 } hl_data_type_t;

@@ -27,6 +27,7 @@
 #include "bus.h"
 #include "error.h"
 #include "memory.h"
+#include "../common/counter.h"
 
 
 
@@ -395,7 +396,7 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
 
         while (progc.valid && progc.ip >= 0) {
                 if (state.current == DEBUG) {
-                        bus_send_message_sync("STAT", 0xFF, "IP: %4u A: %04X C: %s", progc.ip, reg.a, reg.c ? "TRUE" : "FALSE");
+                        bus_send_message_sync("STAT", 0xFF, "SD: %hhu IP: %4u A: %04X C: %s", depth, progc.ip, reg.a, reg.c ? "TRUE" : "FALSE");
                         prog_wait_for_step();
                 }
 
@@ -429,7 +430,6 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                  */
                 switch (spec & 0xE0) {
                 case as_dword:
-                case as_counter:
                         // FIXME: Nicht implementierte funktionalität
                         prog_error(ERR_FEATURE);
                         break;
@@ -441,6 +441,7 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                         // kein break!
 
                 case as_timer:
+                case as_counter:
                         periphery_offset = prog_get_periphery_offset(progc.cmd.c_address.aa_device,
                                                                    progc.cmd.c_address.aa_spec,
                                                                    progc.cmd.c_address.aa_byte);
@@ -458,27 +459,46 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                 // Opcodes bei denen Daten aus dem Speicher geladen werden
                 switch (opcode) {
                 case oc_load:
+                case oc_load_brace:
+                case oc_load_not_brace:
                 case oc_and:
-                case oc_or:
-                case oc_xor:
-                        if (spec == as_constant) {
-                                tmp.a = prog_get_data();
-                        }
-                        // kein break!
-
                 case oc_and_brace:
                 case oc_and_not_brace:
+                case oc_or:
                 case oc_or_brace:
                 case oc_or_not_brace:
+                case oc_xor:
                 case oc_xor_brace:
                 case oc_xor_not_brace:
                 case oc_edge_positive:
                 case oc_edge_negative:
+                case oc_add:
+                case oc_add_brace:
+                case oc_sub:
+                case oc_sub_brace:
+                case oc_mul:
+                case oc_mul_brace:
+                case oc_div:
+                case oc_div_brace:
+                case oc_greater_then:
+                case oc_greater_then_brace:
+                case oc_greater_equal:
+                case oc_greater_equal_brace:
+                case oc_equal:
+                case oc_equal_brace:
+                case oc_not_equal:
+                case oc_not_equal_brace:
+                case oc_less_than:
+                case oc_less_than_brace:
+                case oc_less_equal:
+                case oc_less_equal_brace:
                         switch (spec) {
-                        case as_word:  tmp.a = prog_get_word(imageptr); break;
-                        case as_byte:  tmp.a = prog_get_byte(imageptr); break;
-                        case as_timer: tmp.c = TIMER_STATUS(*imageptr); break;
-                        default:       tmp.c = prog_get_bit(imageptr);  break;
+                        case as_word:     tmp.a = prog_get_word(imageptr);  break;
+                        case as_byte:     tmp.a = prog_get_byte(imageptr);  break;
+                        case as_timer:    tmp.c = TIMER_STATUS(*imageptr);  break;
+                        case as_counter:  tmp.a = COUNTER_VALUE(*imageptr); break;
+                        case as_constant: tmp.a = prog_get_data();          break;
+                        default:          tmp.c = prog_get_bit(imageptr);   break;
                         }
                         break;
 
@@ -487,10 +507,12 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                 case oc_or_not:
                 case oc_xor_not:
                         switch (spec) {
-                        case as_word:  tmp.a = ~prog_get_word(imageptr); break;
-                        case as_byte:  tmp.a = ~prog_get_byte(imageptr); break;
-                        case as_timer: tmp.c = !TIMER_STATUS(*imageptr); break;
-                        default:       tmp.c = !prog_get_bit(imageptr);  break;
+                        case as_word:     tmp.a = ~prog_get_word(imageptr);  break;
+                        case as_byte:     tmp.a = ~prog_get_byte(imageptr);  break;
+                        case as_timer:    tmp.c = !TIMER_STATUS(*imageptr);  break;
+                        case as_counter:  tmp.a = ~COUNTER_VALUE(*imageptr); break;
+                        case as_constant: tmp.a = ~prog_get_data();          break;
+                        default:          tmp.c = !prog_get_bit(imageptr);   break;
                         }
                         break;
 
@@ -499,13 +521,25 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
 
                 // Opcodes bei denen eine Klammer geöffnet wird
                 switch (opcode) {
+                case oc_load_brace:
                 case oc_and_brace:
                 case oc_or_brace:
                 case oc_xor_brace:
+                case oc_add_brace:
+                case oc_sub_brace:
+                case oc_mul_brace:
+                case oc_div_brace:
+                case oc_greater_then_brace:
+                case oc_greater_equal_brace:
+                case oc_equal_brace:
+                case oc_less_than_brace:
+                case oc_less_equal_brace:
+                case oc_not_equal_brace:
                         progc.ip++;
                         tmp = prog_execute(tmp, depth);
                         break;
 
+                case oc_load_not_brace:
                 case oc_and_not_brace:
                 case oc_or_not_brace:
                 case oc_xor_not_brace:
@@ -522,12 +556,19 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
 
                 switch (opcode) {
                 case oc_load:
+                case oc_load_brace:
                 case oc_load_not:
+                case oc_load_not_brace:
                         switch (spec) {
-                        case as_constant:
+                        case as_byte:
                         case as_word:
-                        case as_byte: reg.a = tmp.a; break;
-                        default:      reg.c = tmp.c; break;
+                        case as_counter:
+                        case as_constant:
+                                reg.a = tmp.a;
+                                break;
+                        default:
+                                reg.c = tmp.c;
+                                break;
                         }
                         break;
 
@@ -536,10 +577,15 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                 case oc_and_not:
                 case oc_and_not_brace:
                         switch (spec) {
-                        case as_constant:
+                        case as_byte:
                         case as_word:
-                        case as_byte: reg.a &= tmp.a; break;
-                        default:      reg.c &= tmp.c; break;
+                        case as_counter:
+                        case as_constant:
+                                reg.a &= tmp.a;
+                                break;
+                        default:
+                                reg.c &= tmp.c;
+                                break;
                         }
                         break;
 
@@ -548,10 +594,15 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                 case oc_or_not:
                 case oc_or_not_brace:
                         switch (spec) {
-                        case as_constant:
+                        case as_byte:
                         case as_word:
-                        case as_byte: reg.a |= tmp.a; break;
-                        default:      reg.c |= tmp.c; break;
+                        case as_counter:
+                        case as_constant:
+                                reg.a |= tmp.a;
+                                break;
+                        default:
+                                reg.c |= tmp.c;
+                                break;
                         }
                         break;
 
@@ -561,11 +612,68 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                 case oc_xor_not:
                 case oc_xor_not_brace:
                         switch (spec) {
-                        case as_constant:
+                        case as_byte:
                         case as_word:
-                        case as_byte: reg.a = (reg.a & ~tmp.a) | (~reg.a & tmp.a); break;
-                        default:      reg.c = (reg.c == tmp.c) ? false : true; break;
+                        case as_counter:
+                        case as_constant:
+                                reg.a = (reg.a & ~tmp.a) | (~reg.a & tmp.a);
+                                break;
+                        default:
+                                reg.c = (reg.c == tmp.c) ? false : true;
+                                break;
                         }
+                        break;
+
+
+                case oc_add:
+                case oc_add_brace:
+                        reg.a += tmp.a;
+                        break;
+
+                case oc_sub:
+                case oc_sub_brace:
+                        reg.a -= tmp.a;
+                        break;
+
+                case oc_mul:
+                case oc_mul_brace:
+                        reg.a *= tmp.a;
+                        break;
+
+                case oc_div:
+                case oc_div_brace:
+                        reg.a /= tmp.a;
+                        break;
+
+
+                case oc_greater_then:
+                case oc_greater_then_brace:
+                        reg.c = (reg.a > tmp.a) ? true : false;
+                        break;
+
+                case oc_greater_equal:
+                case oc_greater_equal_brace:
+                        reg.c = (reg.a >= tmp.a) ? true : false;
+                        break;
+
+                case oc_equal:
+                case oc_equal_brace:
+                        reg.c = (reg.a == tmp.a) ? true : false;
+                        break;
+
+                case oc_not_equal:
+                case oc_not_equal_brace:
+                        reg.c = (reg.a != tmp.a) ? true : false;
+                        break;
+
+                case oc_less_than:
+                case oc_less_than_brace:
+                        reg.c = (reg.a < tmp.a) ? true : false;
+                        break;
+
+                case oc_less_equal:
+                case oc_less_equal_brace:
+                        reg.c = (reg.a <= tmp.a) ? true : false;
                         break;
 
 
@@ -616,11 +724,28 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                         break;
 
                 case oc_set:
-                        if (reg.c) prog_set_bit(imageptr, true);
+                        switch (spec) {
+                        case as_counter:
+                                if (reg.c) {
+                                        COUNTER_RESET(*imageptr);
+                                        *imageptr |= COUNTER_VALUE(reg.a);
+                                }
+                                break;
+                        default:
+                                if (reg.c) prog_set_bit(imageptr, true);
+                                break;
+                        }
                         break;
 
                 case oc_reset:
-                        if (reg.c) prog_set_bit(imageptr, false);
+                        switch (spec) {
+                        case as_counter:
+                                if (reg.c) COUNTER_RESET(*imageptr);
+                                break;
+                        default:
+                                if (reg.c) prog_set_bit(imageptr, false);
+                                break;
+                        }
                         break;
 
 
@@ -652,6 +777,29 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                                 TIMER_SET_RUNNING(*imageptr);
                         } else {
                                 *imageptr = (reg.a & TIMER_TIME_BITS) | TIMER_TP;
+                        }
+                        break;
+
+
+                case oc_counter_up:
+                        if (reg.c) {
+                                if (!COUNTER_IS_EDGE_UP(*imageptr)) {
+                                        COUNTER_SET_EDGE_UP(*imageptr);
+                                        counter_inc(imageptr);
+                                }
+                        } else {
+                                COUNTER_CLR_EDGE_UP(*imageptr);
+                        }
+                        break;
+
+                case oc_counter_down:
+                        if (reg.c) {
+                                if (!COUNTER_IS_EDGE_DOWN(*imageptr)) {
+                                        COUNTER_SET_EDGE_DOWN(*imageptr);
+                                        counter_dec(imageptr);
+                                }
+                        } else {
+                                COUNTER_CLR_EDGE_DOWN(*imageptr);
                         }
                         break;
 
