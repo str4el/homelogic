@@ -2,10 +2,13 @@
 #
 # Konfigurationsscript der Homelogic Firmware
 
+MCUS=( "atmega32" "atmega1284" )
 HARDWARE=( "prototype" "dig_ac230" )
 VERSION=$(git describe 2> /dev/null || echo "unknown")
-CONFIG_HEADER=${1:-config.h}
+PS3="choose: "
 
+CONFIG_HEADER=${1:-config.h}
+CONFIG_MAKEFILE=${2:-config.mf}
 
 function die() {
 	[ -n "$1" ] && echo $1
@@ -30,28 +33,32 @@ function header_define() {
 }
 	
 
+echo "SRC =" *.c > $CONFIG_MAKEFILE
+
+echo
+echo "MCU selection"
+select MCU in ${MCUS[@]}; do
+	if [ -n "$MCU" ]; then
+		echo "MCU = $MCU" >> $CONFIG_MAKEFILE
+		break
+	fi
+done
 
 header_begin
 
 echo
 echo "Harware selection"
-I=0
-for HW in ${HARDWARE[@]}; do
-	printf "\t%4i: %s\n" $((++I)) $HW
+select HW in ${HARDWARE[@]}; do
+	if [ -n "$HW" ]; then
+		header_define "HW_${HW^^*}"
+		break
+	fi
 done
-echo -n "choose 1-${I}: "
-read input
-(( ${input:-0} == 0 )) || (( $input > $I )) && die "wrong input"
-
-HW=${HARDWARE[$((input - 1))]}
-
-header_define "HW_${HW^^*}"
 
 echo
 echo -n "Set version string (${VERSION}): "
 read input
 VERSION=${input:-${VERSION}}
-
 header_define "FIRMWARE_VERSION \"${VERSION}\""
 header_end
 

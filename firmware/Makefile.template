@@ -1,5 +1,3 @@
-SRC = bus.c error.c i2c.c main.c prog.c rtc.c
-MCU = atmega32
 CONFIG_H = config.h
 CONFIG_MF = config.mf
 TEMPLATE_MF = Makefile.template
