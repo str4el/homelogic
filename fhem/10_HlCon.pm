@@ -168,7 +168,8 @@ sub HlCon_Set($@)
 	
 
 	if (defined($args[1]) and $args[1] eq "?") {
-		my $choice = join(" ", keys($hash->{READINGS}));
+		my $choice = "";
+		$choice = join(" ", keys($hash->{READINGS})) if defined($hash->{READINGS});
 		# kleiner trick um die auswertung des ":" zu umgehen
 		$choice =~ s/:/&#58;/g;
 		return $choice;
