@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+ * Copyright (C) 2013, 2014 Stephan Reinhard <Stephan-Reinhard@gmx.de>
  *
  * This file is part of Homelogic.
  *
@@ -44,21 +44,10 @@ volatile prog_write_t prog_write;
 
 
 
-/* Initialisierung des 1ms Timer
- */
-static inline void init_timer2(void)
-{
-        TCCR2 |= (1 << WGM21) | (1 << CS22);
-        OCR2 = 124;
-        TIMSK |= (1 << OCIE2);
-}
-
-
-
 
 /* Interruptroutine für 1ms Timer
  */
-ISR(TIMER2_COMP_vect) {
+ISR(TIMER_MS_vect) {
         static uint8_t intimer[INPUT_REACH * 8];
         static uint16_t timerbase = 0;
 
@@ -169,7 +158,7 @@ int __attribute__ ((OS_main)) main (void) {
         led.yellow = ls_off;
         led.red = ls_on;
 
-        init_timer2();
+        init_timer_ms();
 
         // Adressdecodierung wird nur nach dem Reset durchgeführt
         adr = adr_read();

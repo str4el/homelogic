@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+ * Copyright (C) 2013, 2014 Stephan Reinhard <Stephan-Reinhard@gmx.de>
  *
  * This file is part of Homelogic.
  *
@@ -35,11 +35,15 @@
 #include "config.h"
 
 
-#define MEMSIZE 128
 
 
-#define LFUSE (FUSE_CKSEL0 & FUSE_CKSEL1 & FUSE_CKSEL3 & FUSE_SUT0 & FUSE_SUT1 & FUSE_BODEN & FUSE_BODLEVEL)
-#define HFUSE (FUSE_BOOTSZ0 & FUSE_BOOTSZ1 & FUSE_SPIEN)
+#ifdef MCU_ATMEGA32
+#    include "hardware/atmega32.h"
+#elif defined(MCU_ATMEGA1284P)
+#    include "hardware/atmega1284.h"
+#else
+#    error "No MCU defined"
+#endif
 
 
 #ifdef HW_PROTOTYPE
