@@ -33,6 +33,9 @@ function header_define() {
 }
 	
 
+header_begin
+
+
 echo "SRC =" *.c > $CONFIG_MAKEFILE
 
 echo
@@ -40,11 +43,11 @@ echo "MCU selection"
 select MCU in ${MCUS[@]}; do
 	if [ -n "$MCU" ]; then
 		echo "MCU = $MCU" >> $CONFIG_MAKEFILE
+		header_define "MCU_${MCU^^*}"
 		break
 	fi
 done
 
-header_begin
 
 echo
 echo "Harware selection"

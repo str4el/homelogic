@@ -29,7 +29,7 @@ all: build
 Makefile: $(TEMPLATE_MF) $(CONFIG_MF)
 	$(CAT) $(CONFIG_MF) $(TEMPLATE_MF) > Makefile
 
-$(CONFIG_MF): config.sh
+$(CONFIG_H) $(CONFIG_MF): config.sh
 	./config.sh
 
 build: elf hex
