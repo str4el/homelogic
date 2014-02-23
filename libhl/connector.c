@@ -208,6 +208,10 @@ static void *device_write_thread (void *c)
                         }
 
                         timer_start(context->tc_lock_timer, 10);
+
+                        if (context->tc_flags & HL_NOVERIFY) {
+                                context->tc_send_len = 0;
+                        }
                 }
 
                 pthread_mutex_unlock(&context->tc_mutex);
@@ -252,7 +256,7 @@ static int init_threads(hlcon_t *con) {
 
 
 
-hlcon_t EXPORT *hl_connector_init(const char *name)
+hlcon_t EXPORT *hl_connector_init(const char *name, unsigned int flags)
 {
         hlcon_t *con = malloc(sizeof(*con));
         if (!con) return NULL;
@@ -266,6 +270,7 @@ hlcon_t EXPORT *hl_connector_init(const char *name)
         }
         con->t_status |= s_socket;
         con->t_thread_context.tc_send_len = 0;
+        con->t_thread_context.tc_flags = flags;
 
         return con;
 }

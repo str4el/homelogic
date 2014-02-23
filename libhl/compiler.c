@@ -536,7 +536,7 @@ hlc_t EXPORT *hl_compiler_init()
         data = malloc(sizeof(*data));
         if (!data) return NULL;
 
-        memset(data, 0, sizeof(data));
+        memset(data, 0, sizeof(*data));
         return data;
 }
 
