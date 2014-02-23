@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+ * Copyright (C) 2013, 2014 Stephan Reinhard <Stephan-Reinhard@gmx.de>
  *
  * This file is part of Homelogic.
  *
@@ -65,8 +65,8 @@ const bus_command_table_t bus_command_table [] PROGMEM = {
 
 
 
-ISR(USART_RXC_vect) {
-        uint8_t in = UDR;
+ISR(BUS_RXC_vect) {
+        uint8_t in = BUS_UDR;
 
         switch (bus.status) {
         case rx_start:
@@ -109,10 +109,7 @@ ISR(USART_RXC_vect) {
 
 void bus_init(void)
 {
-        UCSRC |= (1 << UCSZ1) | (1 << UCSZ0);
-        UCSRB |= (1 << TXEN) | (1 << RXEN) | (1 << RXCIE);
-        UBRRH = UBRRH_VALUE;
-        UBRRL = UBRRL_VALUE;
+        uart_init();
 
         CLR_RE;
 
@@ -130,13 +127,12 @@ void bus_transmit_data (const char * data, uint8_t len)
 
 
         for (uint8_t i = 0; i < len; i++) {
-                while(!(UCSRA & (1 << UDRE)));
-                UDR = data[i];
+                while(!BUS_IS_URDE);
+                BUS_UDR = data[i];
         }
 
-
-        while (!(UCSRA & (1 << TXC)));
-        UCSRA |= (1 << TXC);
+        while (!BUS_IS_TXC);
+        BUS_CLEAR_TXC();
         CLR_TE;
         BUS_TX_LOCK(2 + adr * 2);
         bus.status = rx_start;
