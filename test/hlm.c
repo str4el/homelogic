@@ -183,14 +183,26 @@ int compile_program (hlc_t *data)
 hlcon_t *connect_device()
 {
         hlcon_t *con;
-
+        unsigned int flags;
         unsigned int vid;
         unsigned int pid;
+        char *flag;
         char dev[128];
 
         if (!device) return NULL;
 
-        con = hl_connector_init(busfile);
+        flags = 0;
+        strtok(device, ",");
+        while(flag = strtok(NULL, ",")) {
+                if (!strcasecmp(flag, "noverify")) {
+                        flags |= HL_NOVERIFY;
+                } else {
+                        fprintf(stderr, "Unknown flag %s!\n", flag);
+                        return NULL;
+                }
+        }
+
+        con = hl_connector_init(busfile, flags);
         if (!con) {
                 fprintf(stderr, "Couldn't init connector!\n");
                 return NULL;

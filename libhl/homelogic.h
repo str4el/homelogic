@@ -17,6 +17,13 @@ extern "C" {
 #define HL_MAX_LINE_LEN 1024
 
 
+/* Flags für connector
+ */
+#define HL_NOVERIFY 1
+
+
+
+
 typedef enum hl_error_e {
         hl_e_none = 0,
         hl_e_out_of_memory,
@@ -175,6 +182,8 @@ typedef struct hlc_s {
 
 
 typedef struct hl_connector_thread_context_s {
+        unsigned int tc_flags;
+
         int tc_device;
         struct ftdi_context tc_ftdi;
         int tc_socket;
@@ -208,7 +217,7 @@ extern int hl_read_intel_hex(hlc_t *data, FILE *file);
 extern int hl_load_device(hlc_t *data, int bus, int n);
 extern int hl_load_all(hlc_t *data, int bus);
 
-extern hlcon_t *hl_connector_init(const char *name);
+extern hlcon_t *hl_connector_init(const char *name, unsigned int flags);
 extern void hl_connector_destroy(hlcon_t *con);
 extern int hl_connect_device(hlcon_t *con, const char *filename);
 extern int hl_connect_ftdi(hlcon_t *con, int vid, int pid);
