@@ -117,6 +117,18 @@
 
 
 
+/* Hardwareüberwachung
+ */
+#define GET_BATTERIE_CONDITION() get_analog_value(6, 3)
+#define BATTERIE_WARN 580 // ca. 2,9V
+#define BATTERIE_ERROR 400 // ca. 2V
+
+#define GET_TEMPERATURE() get_analog_value(7, 3)
+#define TEMPERATURE_WARN  840 // ca. 50°C
+#define TEMPERATURE_ERROR 880 // ca. 60°C
+
+
+
 /* Liest die eingestellte Adresse über das Shiftgegister ein
  *
  * ACHTUNG: die Funktion überschreibt die Ausgänge mit 0 nur während

@@ -26,6 +26,7 @@
 #include "prog.h"
 #include "led.h"
 #include "error.h"
+#include "adc.h"
 
 
 
@@ -144,6 +145,61 @@ void write_outputs(void)
 
 
 
+/* Überwacht den Batteriestatus und die Temperatur der Ausgänge.
+ * Es wird jeweils ein Fehler beim übergang der Warn- bzw. Fehlerschwelle
+ * angezeigt. Bei Übertemperatur werden die Ausgänge abgeschaltet und erst
+ * wider frei gegeben wenn die Warnschwelle unterschritten wurde.
+ */
+void health_monitor(void)
+{
+        int16_t value;
+
+        value = GET_TEMPERATURE();
+        if (value >= 0) {
+                if (value > TEMPERATURE_ERROR) {
+                        if (!(health & temperature_critical)) {
+                                error(ERR_HITEMP);
+                        }
+
+                        CLR_C2;
+                        CLR_R;
+                        SET_C2;
+
+                        health |= temperature_critical;
+
+                } else if (value > TEMPERATURE_WARN) {
+                        if (!(health & temperature_high)) {
+                                error(ERR_HITEMP);
+                        }
+                        health |= temperature_high;
+
+                } else {
+                        health &= ~(temperature_high | temperature_critical);
+                        SET_R;
+                }
+        }
+
+        value = GET_BATTERIE_CONDITION();
+        if (value >= 0) {
+                if (value < BATTERIE_ERROR) {
+                        if (!(health & batterie_critical)) {
+                                error(ERR_LOWBAT);
+                        }
+                        health |= batterie_critical;
+                } else if (value < BATTERIE_WARN) {
+                        if (!(health & batterie_low)) {
+                                error(ERR_LOWBAT);
+                        }
+                        health |= batterie_low;
+                } else {
+                        health &= ~(batterie_low | batterie_critical);
+                }
+        }
+}
+
+
+
+
 int __attribute__ ((OS_main)) main (void) {
         DDRA = INIT_DDRA;
         DDRB = INIT_DDRB;
@@ -159,14 +215,13 @@ int __attribute__ ((OS_main)) main (void) {
         led.red = ls_on;
 
         init_timer_ms();
+        init_adc();
 
         // Adressdecodierung wird nur nach dem Reset durchgeführt
         adr = adr_read();
 
         // Für bus_init() muss adr gesetzt sein
         bus_init();
-
-
 
         // Reset Shiftregister
         CLR_C2;
@@ -191,6 +246,8 @@ int __attribute__ ((OS_main)) main (void) {
         led.red = ls_off;
         while(1) {
                 bus_flush_send_buffer();
+
+                health_monitor();
 
                 if (state.current != state.coming) {
                         switch (state.coming) {

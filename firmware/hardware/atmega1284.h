@@ -39,7 +39,7 @@
 
 
 
-/* Initialisierung des 1ms Timer
+/* MCU Spezifische Initialisierung des 1ms Timer
  */
 static inline void init_timer_ms(void)
 {
@@ -52,12 +52,25 @@ static inline void init_timer_ms(void)
 
 
 
-static inline void uart_init(void)
+/* MCU Spezifische Initialisierung der EIA-485 Schnittstelle
+ */
+static inline void init_uart(void)
 {
         UCSR0C |= (1 << UCSZ01) | (1 << UCSZ00);
         UCSR0B |= (1 << TXEN0) | (1 << RXEN0) | (1 << RXCIE0);
         UBRR0H = UBRRH_VALUE;
         UBRR0L = UBRRL_VALUE;
+}
+
+
+
+
+/* MCU Spezifische Initialisierung des AD-Wandlers
+*/
+static inline void init_adc(void)
+{
+        ADMUX |= (1 << REFS0) | (1 << REFS1);
+        ADCSRA |= (1 << ADPS1) | (1 << ADPS2);
 }
 
 

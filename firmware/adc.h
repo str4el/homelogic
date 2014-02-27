@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+ * Copyright (C) 2014 Stephan Reinhard <Stephan-Reinhard@gmx.de>
  *
  * This file is part of Homelogic.
  *
@@ -17,21 +17,11 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ERROR_H
-#define ERROR_H
+#ifndef ADC_H
+#define ADC_H
 
 #include <stdint.h>
-#include <stdbool.h>
 
-#define ERR_NONE 0
-#define ERR_NOMEM 1
-#define ERR_EEPROM 2
-#define ERR_CRC 3
-#define ERR_PROG 4
-#define ERR_LOWBAT 5
-#define ERR_HITEMP 6
-#define ERR_FEATURE 7
+extern int16_t get_analog_value(uint8_t in, uint8_t n);
 
-extern bool error(uint8_t e);
-
-#endif // ERROR_H
+#endif // ADC_H

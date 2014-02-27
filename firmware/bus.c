@@ -109,10 +109,8 @@ ISR(BUS_RXC_vect) {
 
 void bus_init(void)
 {
-        uart_init();
-
+        init_uart();
         CLR_RE;
-
         BUS_TX_LOCK(2 + adr * 2);
 }
 

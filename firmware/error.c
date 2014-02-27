@@ -51,6 +51,16 @@ bool error(uint8_t e)
                 strcpy_P(buf, PSTR("Invalid program"));
                 break;
 
+        case ERR_LOWBAT:
+                led.red = ls_blink_5x;
+                strcpy_P(buf, PSTR("Low battery"));
+                break;
+
+        case ERR_HITEMP:
+                led.red = ls_blink_6x;
+                strcpy_P(buf, PSTR("Overtemperature"));
+                break;
+
         case ERR_FEATURE:
                 led.red = ls_blink_7x;
                 strcpy_P(buf, PSTR("Missing feature"));

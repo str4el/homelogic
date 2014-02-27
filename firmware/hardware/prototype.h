@@ -117,6 +117,19 @@
 
 
 
+/* Hardwareüberwachung
+ */
+#define GET_BATTERIE_CONDITION() -1
+#define BATTERIE_WARN 0
+#define BATTERIE_ERROR 0
+
+#define GET_TEMPERATURE() -1
+#define TEMPERATURE_WARN 0
+#define TEMPERATURE_ERROR 0
+
+
+
+
 /* Liest die eingestellte Adresse von dem Hexsteller
  *
  * ACHTUNG: der Hexsteller ist an den SPI Ports angeschlossen;
