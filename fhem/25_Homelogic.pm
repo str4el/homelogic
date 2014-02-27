@@ -15,7 +15,7 @@ sub Homelogic_Initialize($) {
 	$hash->{DefFn}     = "Homelogic_Define";
 	$hash->{NotifyFn}  = "Homelogic_Notify";
 	$hash->{SetFn}     = "Homelogic_Set";
-	$hash->{AttrList}  = $readingFnAttributes;
+	$hash->{AttrList}  = "pulse:on,off " . $readingFnAttributes;
 }
 
 
@@ -26,13 +26,12 @@ sub Homelogic_Define($$)
 	my ($hash, $def) = @_;
 	my @a = split("[ \t][ \t]*", $def);
 
-	return "Wrong syntax: use define <name> Homelogic <address>" if(int(@a) != 3);
+	return "Wrong syntax: use define <name> Homelogic <address> [<output>]" if(int(@a) < 3);
 
-	my $name = $a[0];
     	$hash->{ADDRESS} = uc($a[2]);
+	$hash->{OUTPUT} = uc($a[3]) if defined($a[3]);
 	
 	AssignIoPort($hash);
-
 	return undef;
 }
 
@@ -67,13 +66,15 @@ sub Homelogic_Notify($$)
 sub Homelogic_Set ($@)
 {
 	my ($hash, @args) = @_;
+	my $address = $hash->{ADDRESS};
+	$address = $hash->{OUTPUT} if defined($hash->{OUTPUT});
 
 	return "Argument is missing" if int(@args) < 2;
 	$args[2] = 0 if not defined($args[2]);
 
 	if ($args[1] eq "?") {
 		my $choose = "dez hex bin";
-		$choose = "on off" if $hash->{ADDRESS} =~ m/^%.X.*$/i;
+		$choose = "on off" if $address =~ m/^%.X.*$/i;
 		return "Unknown argument $args[1], choose one of $choose";
 	}		
 
@@ -81,8 +82,26 @@ sub Homelogic_Set ($@)
 	$data = hex($args[2]) if lc($args[1]) eq "hex";
 	$data = int($args[2]) if lc($args[1]) eq "dez";
 	$data = unpack("N", pack("B32", substr("0" x 32 . $args[2], -32))) if lc($args[1]) eq "bin";
-	return DoSet($hash->{IODev}{NAME}, $hash->{ADDRESS}, $data);
+	
+	if (AttrVal($hash->{NAME}, "pulse", "off") eq "on") {
+		InternalTimer(gettimeofday() + 1, "ResetOutput", $hash, 0);
+	}
+
+	return DoSet($hash->{IODev}{NAME}, $address, $data);
 }
+
+
+
+
+sub ResetOutput($)
+{
+	my ($hash) = @_;
+	my $address = $hash->{ADDRESS};
+	$address = $hash->{OUTPUT} if defined($hash->{OUTPUT});
+
+	return DoSet($hash->{IODev}{NAME}, $address, 0);
+}
+
 
 
 
