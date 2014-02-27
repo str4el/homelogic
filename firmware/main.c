@@ -201,6 +201,14 @@ void health_monitor(void)
 
 
 int __attribute__ ((OS_main)) main (void) {
+        /* Bei allen neueren AVRs bleibt der Watchdog auch nach dem Reset aktiv.
+         * Deswegen muss er schnellstmöglich abgeschaltet werden. Die avr-libc
+         * empfiehlt eine Funktion in der Sektion .init3, aber mein bisheriger
+         * Test hat gezeig, dass das hier reicht.
+         */
+        MCUSR = 0; // WDRF muss vorher gelöscht werden
+        wdt_disable();
+
         DDRA = INIT_DDRA;
         DDRB = INIT_DDRB;
         DDRC = INIT_DDRC;
