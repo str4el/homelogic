@@ -30,6 +30,8 @@
 #include "rtc.h"
 #include "memory.h"
 #include "prog.h"
+#include "../common/timer.h"
+#include "../common/counter.h"
 
 
 
@@ -376,6 +378,15 @@ void bus_command_dump (uint8_t sender, char *data)
                 case as_input: spec = 'I'; break;
                 case as_output: spec = 'O'; break;
                 case as_memory: spec = 'M'; break;
+
+                case as_timer:
+                        bus_send_message_async("INFO", sender, "%%T:%u.%u=%s", am.ma_device_adr, am.ma_mem_adr & 0x1F, TIMER_STATUS(progc.image[i]) ? "ON" : "OFF");
+                        continue;
+
+                case as_counter:
+                        bus_send_message_async("INFO", sender, "%%C:%u.%u=%u", am.ma_device_adr, am.ma_mem_adr & 0x1F, COUNTER_VALUE(progc.image[i]));
+                        continue;
+
                 default: continue;
                 }
 
