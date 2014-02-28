@@ -28,6 +28,8 @@
 #define RTC_TIME_ADR 0x00
 #define RTC_ALARM1_ADR 0x07
 #define RTC_ALARM2_ADR 0x0B
+#define RTC_CONTROL_ADR 0x0E
+#define RTC_STATUS_ADR 0x0F
 
 
 
@@ -63,6 +65,15 @@ typedef struct rtc_alarm2_s {
 
 
 
+
+static inline int8_t rtc_write_control (uint8_t data)
+{
+        return i2c_pwrite(RTC_SLAVE_ADR, RTC_CONTROL_ADR, &data, 1);
+}
+
+
+
+
 static inline int8_t rtc_read_time (rtc_time_t *time)
 {
         return i2c_pread(RTC_SLAVE_ADR, RTC_TIME_ADR, time, sizeof(*time));
@@ -77,10 +88,13 @@ static inline int8_t rtc_write_time (rtc_time_t *time)
 }
 
 
+extern rtc_time_t clock;
+
 extern uint8_t rtc_bcd2bin(uint8_t in);
 extern uint8_t rtc_bin2bcd(uint8_t in);
 extern int8_t rtc_daynum(char str[2]);
+extern char *rtc_day (void);
+extern void rtc_update_clock(void);
 
-extern char *rtc_time2str (rtc_time_t *t);
 
 #endif // RTC_H

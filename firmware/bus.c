@@ -241,20 +241,6 @@ bool bus_send_message_sync(const char *cmd, uint8_t dst, const char *format, ...
 
 
 
-void bus_send_date_time()
-{
-        rtc_time_t time;
-
-        if (rtc_read_time(&time)) {
-                return;
-        }
-
-        bus_send_message_async("RTC", 0xFF, "%s", rtc_time2str(&time));
-}
-
-
-
-
 uint8_t bus_encode_prog_message(char *str, uint8_t len)
 {
         snprintf(str, len, "VRY %02X FF %04X%02X", adr, prog_write.pos, prog_write.len);
@@ -271,7 +257,6 @@ uint8_t bus_encode_prog_message(char *str, uint8_t len)
         str[pos++] = 0;
         return pos;
 }
-
 
 
 

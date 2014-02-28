@@ -47,7 +47,7 @@
 #define INIT_PORTA 0x00
 #define INIT_PORTB 0x00
 #define INIT_PORTC 0x00
-#define INIT_PORTD 0x00
+#define INIT_PORTD 0x0C
 
 
 
@@ -76,7 +76,11 @@
 #define SET_RE PORTD |= (1 << 5)
 #define CLR_RE PORTD &= ~(1 << 5)
 
-
+/* Alarmeingänge
+ */
+#define IS_ALARM1 !(PIND & (1 << 2))
+#define IS_ALARM2 !(PIND & (1 << 3))
+#define IS_SQW !IS_ALARM2
 
 
 /* I2C Busdeklarationen

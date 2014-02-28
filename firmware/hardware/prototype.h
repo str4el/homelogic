@@ -76,7 +76,11 @@
 #define SET_RE
 #define CLR_RE
 
-
+/* Alarmeingänge
+ */
+#define IS_ALARM1 !(PINB & (1 << 3))
+#define IS_ALARM2 !(PINB & (1 << 2))
+#define IS_SQW !IS_ALARM2
 
 
 /* I2C Busdeklarationen

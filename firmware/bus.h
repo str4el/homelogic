@@ -92,8 +92,6 @@ extern void bus_flush_send_buffer (void);
 extern bool bus_send_message_sync(const char *cmd, uint8_t dst, const char *format, ...);
 extern bool bus_send_message_async(const char *cmd, uint8_t dst, const char *format, ...);
 
-extern void bus_send_date_time(void);
-
 extern uint8_t bus_encode_prog_message(char *str, uint8_t len);
 
 extern void bus_command (void);

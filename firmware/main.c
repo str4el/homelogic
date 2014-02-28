@@ -240,9 +240,27 @@ int __attribute__ ((OS_main)) main (void) {
         // Interrupts ein
         sei();
 
+        /* RTC Control register einstellen mit
+         * Interrupts an auf ausgang ALARM1
+         * SQW auf 1HZ default 32kHz
+         */
+        rtc_write_control(0);
+        rtc_update_clock();
+
         bus_send_message_sync("READY", 0xFF, NULL);
         bus_command_identify(0xFF, NULL);
-        bus_send_date_time();
+
+
+        // Sende die aktuelle Systemzeit
+        bus_send_message_async("RTC", 0xFF, "%s-%02u.%02u.%02u-%02u:%02u:%02u",
+                               rtc_day(),
+                               clock.date,
+                               clock.month,
+                               clock.year,
+                               clock.hours,
+                               clock.minutes,
+                               clock.seconds
+                               );
 
 
         prog_write.len = 0;
@@ -254,7 +272,7 @@ int __attribute__ ((OS_main)) main (void) {
         led.red = ls_off;
         while(1) {
                 bus_flush_send_buffer();
-
+                rtc_update_clock();
                 health_monitor();
 
                 if (state.current != state.coming) {

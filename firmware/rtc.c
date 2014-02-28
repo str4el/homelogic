@@ -19,8 +19,19 @@
 
 
 #include <ctype.h>
+#include <stdbool.h>
 #include "hardware.h"
 #include "rtc.h"
+
+
+
+
+/* Globale aktuelle Zeit
+ */
+rtc_time_t clock;
+
+
+
 
 const char day[][2] PROGMEM = {
         {'S', 'o'},
@@ -63,31 +74,46 @@ int8_t rtc_daynum(char str[2])
 
 
 
-char *rtc_time2str(rtc_time_t *t)
+
+/* Gibt den Tag der Woche als zweistelligen String zurück
+ */
+char *rtc_day()
 {
-        static char str[] = "Mo-01.01.01-00:00:00";
-
-        str[0] = pgm_read_byte(&day[t->day][0]);
-        str[1] = pgm_read_byte(&day[t->day][1]);
-
-        str[3] = (t->date >> 4) + '0';
-        str[4] = (t->date & 0x0F) + '0';
-
-        str[6] = ((t->month & 0x1F) >> 4) + '0';
-        str[7] = (t->month & 0x0F) + '0';
-
-        str[9] = (t->year >> 4) + '0';
-        str[10] = (t->year & 0x0F) + '0';
-
-        str[12] = ((t->hours & 0x3F) >> 4) + '0';
-        str[13] = (t->hours & 0x0F) + '0';
-
-        str[15] = (t->minutes >> 4) + '0';
-        str[16] = (t->minutes & 0x0F) + '0';
-
-        str[18] = (t->seconds >> 4) + '0';
-        str[19] = (t->seconds & 0x0F) + '0';
-
+        static char str[] = "Mo";
+        str[0] = pgm_read_byte(&day[clock.day][0]);
+        str[1] = pgm_read_byte(&day[clock.day][1]);
         return str;
 }
+
+
+
+
+/* Update der Systemzeit immer wenn von der RTC ein signal
+ * ausgelöst wird.
+ */
+void rtc_update_clock()
+{
+        static bool last_sqw;
+        rtc_time_t time;
+
+        if (IS_SQW != last_sqw) {
+                last_sqw = IS_SQW;
+
+                if (rtc_read_time(&time)) {
+                        return;
+                }
+
+                clock.day     = rtc_bcd2bin(time.day);
+                clock.date    = rtc_bcd2bin(time.date);
+                clock.month   = rtc_bcd2bin(time.month);
+                clock.year    = rtc_bcd2bin(time.year);
+                clock.seconds = rtc_bcd2bin(time.seconds);
+                clock.minutes = rtc_bcd2bin(time.minutes);
+                clock.hours   = rtc_bcd2bin(time.hours);
+        }
+
+}
+
+
+
 

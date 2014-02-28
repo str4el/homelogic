@@ -27,6 +27,7 @@
 #include "bus.h"
 #include "error.h"
 #include "memory.h"
+#include "rtc.h"
 #include "../common/counter.h"
 
 
@@ -195,7 +196,31 @@ void prog_periphery_sync()
                         switch(am.ma_mem_adr & 0xE0) {
                         case as_input:
                                 tmp = byte < INPUT_REACH ? inputs[byte] : 0;
-                                tmp |= (byte + 1) < INPUT_REACH ? (inputs[byte + 1]) : 0;
+                                tmp |= (byte + 1) < INPUT_REACH ? (uint16_t)inputs[byte + 1] << 8 : 0;
+
+                                // Systemzeit auf Eingänge
+                                switch (byte) {
+                                case 8:
+                                        /* Sekunden nicht mit Minuten zusammengelet um sekündliche
+                                         * Busmeldung nur zu melden wenn Sekunden wirklich benutzt
+                                         * werden
+                                         */
+                                        tmp = clock.seconds << 8;
+                                        break;
+                                case 10:
+                                        tmp = clock.minutes;
+                                        tmp |= clock.hours << 8;
+                                        break;
+
+                                case 12:
+                                        tmp = clock.day;
+                                        tmp |= clock.date << 8;
+                                        break;
+                                case 14:
+                                        tmp = clock.month;
+                                        tmp |= clock.year << 8;
+                                        break;
+                                }
 
                                 if (tmp != progc.periphery[i]) {
                                         bus_send_message_async("SET", 0xFF, "%%IW:%u.%u=%04X", adr, byte, tmp);
