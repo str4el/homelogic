@@ -139,11 +139,17 @@ int16_t prog_get_periphery_offset(const uint8_t device, const uint8_t spec, cons
                         eeprom_read_block(&am, (void *)(progc.header.ph_address_map_offset + i * sizeof(am)), sizeof(am));
                 }
 
-                if ((spec & 0xE0) == as_timer) {
+                switch (spec & 0xE0) {
+                case as_timer:
+                case as_counter:
                         byte = adr;
-                } else {
+                        break;
+
+                default:
                         byte = adr >> 1;
+                        break;
                 }
+
 
                 if (am.ma_device_adr == device &&
                     am.ma_mem_adr == ((spec & 0xE0) | byte)) {
@@ -277,7 +283,18 @@ void prog_periphery_sync()
 
 
                                 break;
+
+                        case as_counter:
+                                tmp = COUNTER_VALUE(progc.image[i]);
+                                if (progc.periphery[i] != tmp) {
+                                        bus_send_message_async("SET", 0xFF, "%%C:%u.%u=%u", adr, byte >> 1, tmp);
+                                        progc.periphery[i] = tmp;
+                                }
+                                break;
+
                         }
+
+
 
                 } else {
                         progc.image[i] = progc.periphery[i];

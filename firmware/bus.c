@@ -445,13 +445,25 @@ void bus_command_set_word (uint8_t sender, char *data)
         }
 
         if (sscanf(data, "%%T:%hhu.%hhu=%3s", &device, &byte, str) == 3) {
-                if (byte >= 64) return;
+                if (byte >= 32) return;
                 if (device == adr) return;
 
                 spec = as_timer;
                 int16_t n = prog_get_periphery_offset(device, spec, byte);
                 if (n >= 0) {
                         progc.periphery[n] = ((str[1] == 'N') || (str[1] == 'n')) ? TIMER_STATUS_BIT : 0;
+                }
+                return;
+        }
+
+        if (sscanf(data, "%%C:%hhu.%hhu=%hu", &device, &byte, (short unsigned int *)&value) == 3) {
+                if (byte >= 32) return;
+                if (device == adr) return;
+
+                spec = as_counter;
+                int16_t n = prog_get_periphery_offset(device, spec, byte);
+                if (n >= 0) {
+                        progc.periphery[n] = value;
                 }
                 return;
         }
