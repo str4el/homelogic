@@ -146,7 +146,7 @@ static inline uint8_t adr_read(void)
         if (!(PINB & (1 << 6))) adr |= 2;
         if (!(PINB & (1 << 7))) adr |= 4;
         if (!(PINB & (1 << 5))) adr |= 8;
-        return adr << 1;
+        return adr;
 }
 
 
