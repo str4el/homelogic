@@ -128,8 +128,8 @@
 #define BATTERIE_ERROR 400 // ca. 2V
 
 #define GET_TEMPERATURE() get_analog_value(7, 3)
-#define TEMPERATURE_WARN  840 // ca. 50°C
-#define TEMPERATURE_ERROR 880 // ca. 60°C
+#define TEMPERATURE_WARN  780 // ca. 50°C
+#define TEMPERATURE_ERROR 820 // ca. 60°C
 
 
 

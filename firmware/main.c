@@ -173,7 +173,7 @@ void health_monitor(void)
                         }
                         health |= temperature_high;
 
-                } else {
+                } else if (value < TEMPERATURE_WARN - 5) {
                         health &= ~(temperature_high | temperature_critical);
                         SET_R;
                 }
@@ -191,7 +191,7 @@ void health_monitor(void)
                                 error(ERR_LOWBAT);
                         }
                         health |= batterie_low;
-                } else {
+                } else if (value > BATTERIE_WARN + 5) {
                         health &= ~(batterie_low | batterie_critical);
                 }
         }
