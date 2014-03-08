@@ -39,7 +39,7 @@ int16_t get_analog_value(uint8_t in, uint8_t n)
         if (in > 7) return -1;
 
         n += 3;
-        if (n > 64) n = 64;
+        if (n > 32) n = 32;
 
         ADMUX &= 0xE0;
         ADMUX |= in;
@@ -60,6 +60,6 @@ int16_t get_analog_value(uint8_t in, uint8_t n)
         }
 
         ADCSRA &= ~(1 << ADEN);
-        return (sum - first - max - min) / (n - 3);
+        return (int16_t)(sum - first - max - min) / (n - 3);
 
 }
