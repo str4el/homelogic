@@ -39,11 +39,13 @@ struct {
         int *c;
         int nc;
         int max;
+        int connections;
 } hlvbus = {
         .run_server = false,
         .c = NULL,
         .nc = 0,
-        .max = 0
+        .max = 0,
+        .connections = 0
 };
 
 
@@ -222,11 +224,29 @@ void EXPORT hl_stop_vbus_server()
 
 int EXPORT hl_vbus_connect(const char *name)
 {
-        int s = connect_to_socket(name);
+        int s;
+
+        s = connect_to_socket(name);
         if (s == -1) {
-                hl_start_vbus_server(name);
+                if (hlvbus.connections) {
+                        return -1;
+                }
+
+                if (hl_start_vbus_server(name) == -1) {
+                        return -1;
+                }
+
                 s = connect_to_socket(name);
+                if (s == -1) {
+                        hl_stop_vbus_server();
+                        return -1;
+                } else {
+                        hlvbus.connections = 1;
+                }
+        } else {
+                if (hlvbus.connections) hlvbus.connections++;
         }
+
         return s;
 }
 
@@ -236,5 +256,11 @@ int EXPORT hl_vbus_connect(const char *name)
 void EXPORT hl_vbus_disconnect(int s)
 {
         close(s);
-        hl_stop_vbus_server();
+
+        if (hlvbus.connections) {
+                hlvbus.connections--;
+                if (hlvbus.connections == 0) {
+                        hl_stop_vbus_server();
+                }
+        }
 }
