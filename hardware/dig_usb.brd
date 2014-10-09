@@ -108,8 +108,8 @@
 <wire x1="80.01" y1="13.97" x2="82.55" y2="13.97" width="0" layer="51"/>
 <wire x1="80.01" y1="8.89" x2="82.55" y2="8.89" width="0" layer="51"/>
 <wire x1="80.01" y1="3.81" x2="82.55" y2="3.81" width="0" layer="51"/>
-<rectangle x1="0" y1="-0.508" x2="86.36" y2="2.54" layer="42"/>
-<rectangle x1="0" y1="99.06" x2="86.36" y2="102.108" layer="42"/>
+<rectangle x1="0" y1="-0.508" x2="86.36" y2="2.54" layer="40"/>
+<rectangle x1="0" y1="99.06" x2="86.36" y2="102.108" layer="40"/>
 <rectangle x1="12.7" y1="-0.508" x2="13.97" y2="102.108" layer="39"/>
 <rectangle x1="72.39" y1="-0.508" x2="73.66" y2="102.108" layer="39"/>
 <rectangle x1="0" y1="-0.508" x2="2.54" y2="102.108" layer="40"/>
@@ -140,19 +140,17 @@
 <text x="0" y="-1" size="1" layer="27" align="top-center">&gt;VALUE</text>
 </package>
 <package name="CHIP_0805">
-<wire x1="-0.6" y1="0.55" x2="0.6" y2="0.55" width="0.1" layer="21"/>
-<wire x1="-0.6" y1="-0.55" x2="0.6" y2="-0.55" width="0.1" layer="21"/>
-<wire x1="-1.9" y1="1" x2="1.9" y2="1" width="0.0508" layer="39"/>
-<wire x1="1.9" y1="1" x2="1.9" y2="-1" width="0.0508" layer="39"/>
-<wire x1="1.9" y1="-1" x2="-1.9" y2="-1" width="0.0508" layer="39"/>
-<wire x1="-1.9" y1="-1" x2="-1.9" y2="1" width="0.0508" layer="39"/>
 <smd name="1" x="-1" y="0" dx="1.2" dy="1.4" layer="1"/>
 <smd name="2" x="1" y="0" dx="1.2" dy="1.4" layer="1"/>
-<text x="0" y="1.2" size="1.27" layer="25" align="bottom-center">&gt;NAME</text>
-<text x="0" y="-1.2" size="1.27" layer="27" align="top-center">&gt;VALUE</text>
-<rectangle x1="0.5" y1="-0.6" x2="1" y2="0.6" layer="51"/>
-<rectangle x1="-1" y1="-0.6" x2="-0.5" y2="0.6" layer="51"/>
+<text x="0" y="1" size="1.27" layer="25" align="bottom-center">&gt;NAME</text>
+<text x="0" y="-1" size="1.27" layer="27" align="top-center">&gt;VALUE</text>
 <rectangle x1="-0.2" y1="-0.5" x2="0.2" y2="0.5" layer="35"/>
+<wire x1="-1" y1="0.6" x2="1" y2="0.6" width="0.127" layer="21"/>
+<wire x1="1" y1="0.6" x2="1" y2="-0.6" width="0.127" layer="21"/>
+<wire x1="1" y1="-0.6" x2="-1" y2="-0.6" width="0.127" layer="21"/>
+<wire x1="-1" y1="-0.6" x2="-1" y2="0.6" width="0.127" layer="21"/>
+<rectangle x1="-1" y1="-0.6" x2="-0.5" y2="0.6" layer="21"/>
+<rectangle x1="0.5" y1="-0.6" x2="1" y2="0.6" layer="21"/>
 </package>
 <package name="MS1V-T1K">
 <description>Datasheet: &lt;a href="./eagle/doc/passiv/ms1v-t1k.pdf"&gt;ms1v-t1k.pdf&lt;/a&gt;&lt;br&gt;</description>
@@ -189,19 +187,17 @@
 <wire x1="-1" y1="1" x2="1" y2="1" width="0.1" layer="21"/>
 </package>
 <package name="CHIP_1206">
-<wire x1="-1" y1="0.75" x2="1" y2="0.75" width="0.1" layer="21"/>
-<wire x1="-1" y1="-0.75" x2="1" y2="-0.75" width="0.1" layer="21"/>
-<wire x1="-2.5" y1="1.2" x2="2.5" y2="1.2" width="0.0508" layer="39"/>
-<wire x1="2.5" y1="1.2" x2="2.5" y2="-1.2" width="0.0508" layer="39"/>
-<wire x1="2.5" y1="-1.2" x2="-2.5" y2="-1.2" width="0.0508" layer="39"/>
-<wire x1="-2.5" y1="-1.2" x2="-2.5" y2="1.2" width="0.0508" layer="39"/>
 <smd name="1" x="-1.55" y="0" dx="1.3" dy="1.8" layer="1"/>
 <smd name="2" x="1.55" y="0" dx="1.3" dy="1.8" layer="1"/>
-<text x="0" y="1.4" size="1.27" layer="25" align="bottom-center">&gt;NAME</text>
-<text x="0" y="-1.4" size="1.27" layer="27" align="top-center">&gt;VALUE</text>
-<rectangle x1="1" y1="-0.8" x2="1.6" y2="0.8" layer="51"/>
-<rectangle x1="-1.6" y1="-0.8" x2="-1" y2="0.8" layer="51"/>
+<text x="0" y="1.1" size="1.27" layer="25" align="bottom-center">&gt;NAME</text>
+<text x="0" y="-1.1" size="1.27" layer="27" align="top-center">&gt;VALUE</text>
 <rectangle x1="-0.4" y1="-0.7" x2="0.4" y2="0.7" layer="35"/>
+<wire x1="-1.6" y1="0.8" x2="1.6" y2="0.8" width="0.127" layer="21"/>
+<wire x1="1.6" y1="0.8" x2="1.6" y2="-0.8" width="0.127" layer="21"/>
+<wire x1="1.6" y1="-0.8" x2="-1.6" y2="-0.8" width="0.127" layer="21"/>
+<wire x1="-1.6" y1="-0.8" x2="-1.6" y2="0.8" width="0.127" layer="21"/>
+<rectangle x1="-1.6" y1="-0.8" x2="-1" y2="0.8" layer="21"/>
+<rectangle x1="1" y1="-0.8" x2="1.6" y2="0.8" layer="21"/>
 </package>
 <package name="X22">
 <description>Datasheet: &lt;a href="./eagle/doc/passiv/x22.pdf"&gt;x22.pdf&lt;/a&gt;&lt;br&gt;</description>
@@ -417,24 +413,6 @@ Datasheet: &lt;a href="./eagle/doc/stecker/molex_1051330011.pdf"&gt;molex_105133
 </library>
 <library name="diode">
 <packages>
-<package name="MELF">
-<description>&lt;b&gt;DIODE&lt;/b&gt;&lt;p&gt;
-Package DO-213AB = http://www.diotec.com/pdf/sm4001.pdf</description>
-<wire x1="2.1" y1="1.25" x2="-2.1" y2="1.25" width="0.1" layer="51"/>
-<wire x1="2.1" y1="-1.25" x2="-2.1" y2="-1.25" width="0.1" layer="51"/>
-<wire x1="0.6" y1="1" x2="-0.8" y2="0" width="0.2032" layer="21"/>
-<wire x1="-0.8" y1="0" x2="0.6" y2="-1" width="0.2032" layer="21"/>
-<wire x1="0.6" y1="-1" x2="0.6" y2="1" width="0.2032" layer="21"/>
-<smd name="K" x="-2.6" y="0" dx="1.5" dy="3" layer="1"/>
-<smd name="A" x="2.6" y="0" dx="1.5" dy="3" layer="1"/>
-<text x="0" y="2" size="1.27" layer="25" align="bottom-center">&gt;NAME</text>
-<text x="0" y="-2" size="1.27" layer="27" align="top-center">&gt;VALUE</text>
-<rectangle x1="2.1" y1="-1.3" x2="2.6" y2="1.3" layer="51"/>
-<rectangle x1="-2.6" y1="-1.3" x2="-2.1" y2="1.3" layer="51"/>
-<rectangle x1="-1.5" y1="-1.2" x2="-0.8" y2="1.2" layer="21"/>
-<wire x1="-1.7" y1="-1.25" x2="1.7" y2="-1.25" width="0.1" layer="21"/>
-<wire x1="-1.7" y1="1.25" x2="1.7" y2="1.25" width="0.1" layer="21"/>
-</package>
 <package name="SOD123">
 <description>SOD123</description>
 <smd name="A" x="1.65" y="0" dx="0.9" dy="1.2" layer="1"/>
@@ -541,38 +519,34 @@ Datasheet: &lt;a href="./eagle/doc/package/do214ac.pdf"&gt;do214ac.pdf&lt;/a&gt;
 <library name="led">
 <packages>
 <package name="CHIP_0805">
-<wire x1="-0.6" y1="0.55" x2="0.6" y2="0.55" width="0.1" layer="21"/>
-<wire x1="-0.6" y1="-0.55" x2="0.6" y2="-0.55" width="0.1" layer="21"/>
-<wire x1="-1.9" y1="1" x2="1.9" y2="1" width="0.0508" layer="39"/>
-<wire x1="1.9" y1="1" x2="1.9" y2="-1" width="0.0508" layer="39"/>
-<wire x1="1.9" y1="-1" x2="-1.9" y2="-1" width="0.0508" layer="39"/>
-<wire x1="-1.9" y1="-1" x2="-1.9" y2="1" width="0.0508" layer="39"/>
 <smd name="1" x="-1" y="0" dx="1.2" dy="1.4" layer="1"/>
 <smd name="2" x="1" y="0" dx="1.2" dy="1.4" layer="1"/>
-<text x="0" y="1.2" size="1.27" layer="25" align="bottom-center">&gt;NAME</text>
-<text x="0" y="-1.2" size="1.27" layer="27" align="top-center">&gt;VALUE</text>
-<rectangle x1="0.5" y1="-0.6" x2="1" y2="0.6" layer="51"/>
-<rectangle x1="-1" y1="-0.6" x2="-0.5" y2="0.6" layer="51"/>
+<text x="0" y="1" size="1.27" layer="25" align="bottom-center">&gt;NAME</text>
+<text x="0" y="-1" size="1.27" layer="27" align="top-center">&gt;VALUE</text>
 <rectangle x1="-0.2" y1="-0.5" x2="0.2" y2="0.5" layer="35"/>
+<wire x1="-1" y1="0.6" x2="1" y2="0.6" width="0.127" layer="21"/>
+<wire x1="1" y1="0.6" x2="1" y2="-0.6" width="0.127" layer="21"/>
+<wire x1="1" y1="-0.6" x2="-1" y2="-0.6" width="0.127" layer="21"/>
+<wire x1="-1" y1="-0.6" x2="-1" y2="0.6" width="0.127" layer="21"/>
+<rectangle x1="-1" y1="-0.6" x2="-0.5" y2="0.6" layer="21"/>
+<rectangle x1="0.5" y1="-0.6" x2="1" y2="0.6" layer="21"/>
 </package>
 </packages>
 </library>
 <library name="sicherung">
 <packages>
 <package name="CHIP_1812">
-<wire x1="-1.75" y1="1.55" x2="1.75" y2="1.55" width="0.1" layer="21"/>
-<wire x1="-1.75" y1="-1.55" x2="1.75" y2="-1.55" width="0.1" layer="21"/>
-<wire x1="-3.7" y1="2" x2="3.7" y2="2" width="0.0508" layer="39"/>
-<wire x1="3.7" y1="2" x2="3.7" y2="-2" width="0.0508" layer="39"/>
-<wire x1="3.7" y1="-2" x2="-3.7" y2="-2" width="0.0508" layer="39"/>
-<wire x1="-3.7" y1="-2" x2="-3.7" y2="2" width="0.0508" layer="39"/>
 <smd name="1" x="-2.5" y="0" dx="1.8" dy="3.4" layer="1"/>
 <smd name="2" x="2.5" y="0" dx="1.8" dy="3.4" layer="1"/>
-<text x="0" y="2.3" size="1.27" layer="25" align="bottom-center">&gt;NAME</text>
-<text x="0" y="-2.3" size="1.27" layer="27" align="top-center">&gt;VALUE</text>
-<rectangle x1="1.75" y1="-1.6" x2="2.25" y2="1.6" layer="51"/>
-<rectangle x1="-2.25" y1="-1.6" x2="-1.75" y2="1.6" layer="51"/>
+<text x="0" y="2" size="1.27" layer="25" align="bottom-center">&gt;NAME</text>
+<text x="0" y="-2" size="1.27" layer="27" align="top-center">&gt;VALUE</text>
 <rectangle x1="-1" y1="-1.5" x2="1" y2="1.5" layer="35"/>
+<wire x1="-2.3" y1="1.6" x2="2.3" y2="1.6" width="0.127" layer="21"/>
+<wire x1="2.3" y1="1.6" x2="2.3" y2="-1.6" width="0.127" layer="21"/>
+<wire x1="2.3" y1="-1.6" x2="-2.3" y2="-1.6" width="0.127" layer="21"/>
+<wire x1="-2.3" y1="-1.6" x2="-2.3" y2="1.6" width="0.127" layer="21"/>
+<rectangle x1="-2.3" y1="-1.6" x2="-1.7" y2="1.6" layer="21"/>
+<rectangle x1="1.7" y1="-1.6" x2="2.3" y2="1.6" layer="21"/>
 </package>
 </packages>
 </library>
@@ -1411,7 +1385,7 @@ Your Eurocircuits Team</description>
 <attribute name="MF" value="" x="-3.81" y="132.08" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="OC_FARNELL" value="1007547" x="-3.81" y="132.08" size="1.778" layer="27" rot="R180" display="off"/>
 </element>
-<element name="D101" library="diode" package="MELF" value="LL5819" x="69.85" y="94.615" rot="R270"/>
+<element name="D101" library="diode" package="SOD123" value="SD103" x="69.85" y="92.71"/>
 <element name="D102" library="led" package="CHIP_0805" value="GN" x="99.06" y="97.155" rot="R90"/>
 <element name="F101" library="sicherung" package="CHIP_1812" value="194600-020" x="52.07" y="94.615" rot="R90"/>
 <element name="K401" library="relais" package="SIP4" value="S202S02" x="24.13" y="52.07">
@@ -1969,23 +1943,20 @@ Your Eurocircuits Team</description>
 <signal name="N$23">
 <contactref element="G101" pad="2"/>
 <contactref element="D101" pad="K"/>
-<wire x1="62.23" y1="96.52" x2="62.23" y2="94.615" width="0.8128" layer="1"/>
-<wire x1="62.23" y1="94.615" x2="62.865" y2="93.98" width="0.8128" layer="1"/>
-<wire x1="62.865" y1="93.98" x2="69.215" y2="93.98" width="0.8128" layer="1"/>
-<wire x1="69.215" y1="93.98" x2="69.85" y2="94.615" width="0.8128" layer="1"/>
-<wire x1="69.85" y1="94.615" x2="69.85" y2="97.215" width="0.8128" layer="1"/>
+<wire x1="62.23" y1="96.52" x2="62.23" y2="93.98" width="0.8128" layer="1"/>
+<wire x1="62.23" y1="93.98" x2="63.5" y2="92.71" width="0.8128" layer="1"/>
+<wire x1="63.5" y1="92.71" x2="68.2" y2="92.71" width="0.8128" layer="1"/>
 </signal>
 <signal name="N$24">
 <contactref element="D101" pad="A"/>
 <contactref element="X101" pad="1"/>
-<wire x1="69.85" y1="92.015" x2="70.545" y2="92.71" width="0.8128" layer="1"/>
-<wire x1="70.545" y1="92.71" x2="81.28" y2="92.71" width="0.8128" layer="1"/>
+<wire x1="81.28" y1="92.71" x2="71.5" y2="92.71" width="0.8128" layer="1"/>
 </signal>
 <signal name="N$41">
 <contactref element="G101" pad="4"/>
 <contactref element="F101" pad="2"/>
-<wire x1="52.07" y1="97.115" x2="52.665" y2="96.52" width="0.8128" layer="1"/>
-<wire x1="52.665" y1="96.52" x2="57.15" y2="96.52" width="0.8128" layer="1"/>
+<wire x1="52.07" y1="97.115" x2="56.555" y2="97.115" width="1.27" layer="1"/>
+<wire x1="56.555" y1="97.115" x2="57.15" y2="96.52" width="1.27" layer="1"/>
 </signal>
 <signal name="N$64">
 <contactref element="IC202" pad="8"/>
@@ -3764,15 +3735,9 @@ Your Eurocircuits Team</description>
 <approved hash="7,39,99945f0e30ede581"/>
 <approved hash="7,39,999d9b0e38eddd81"/>
 <approved hash="7,39,e99a1b0074e3a981"/>
-<approved hash="7,39,b27800000076b20e"/>
-<approved hash="7,39,b38c01f401d6b3ae"/>
-<approved hash="7,39,ab8839f03996abee"/>
-<approved hash="7,39,238801f0019623ee"/>
 <approved hash="7,39,f6e501807673793b"/>
-<approved hash="7,39,f6e4df9ea8727933"/>
 <approved hash="7,39,b3dfe027e057b3af"/>
 <approved hash="7,39,e9c561f7161a6603"/>
-<approved hash="7,39,b3dfe027e027b3df"/>
 <approved hash="7,39,f63d2be95c2079d3"/>
 <approved hash="7,39,f645263251c1799b"/>
 <approved hash="7,39,b3ffe007e077b38f"/>
@@ -3791,7 +3756,6 @@ Your Eurocircuits Team</description>
 <approved hash="7,39,b21fe1e7e1dbb223"/>
 <approved hash="7,39,f6456dd21a2179db"/>
 <approved hash="7,39,f6ed438134887903"/>
-<approved hash="7,39,f66cd542a2ce79bb"/>
 <approved hash="7,39,b3ffe007e037b3cf"/>
 <approved hash="7,39,f66559752ef4799b"/>
 <approved hash="7,39,f63d542e23e579d3"/>
@@ -3802,7 +3766,6 @@ Your Eurocircuits Team</description>
 <approved hash="7,39,c0015e7713de63df"/>
 <approved hash="7,39,cc011c7e5dd16fdf"/>
 <approved hash="7,39,ec014dea2c654f9f"/>
-<approved hash="7,39,dc20f552a4827fff"/>
 <approved hash="7,39,cc21794538886fdf"/>
 <approved hash="7,39,e8610be96e644b9f"/>
 <approved hash="7,39,c02137447a8b63ff"/>
@@ -3839,8 +3802,6 @@ Your Eurocircuits Team</description>
 <approved hash="7,39,2dfe000600362dce"/>
 <approved hash="7,39,2dde0026005a2da2"/>
 <approved hash="7,39,2dfe000600c62d3e"/>
-<approved hash="5,1,1dcde466a4d8ce4f"/>
-<approved hash="5,1,30302acbae2bc4dd"/>
 </errors>
 </board>
 </drawing>
