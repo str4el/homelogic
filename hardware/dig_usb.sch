@@ -2526,60 +2526,53 @@ type 0207, grid 7.5 mm</description>
 <rectangle x1="-2.794" y1="-1.524" x2="-2.286" y2="-1.016" layer="51"/>
 <rectangle x1="2.286" y1="-1.524" x2="2.794" y2="-1.016" layer="51"/>
 </package>
-<package name="MOLEX_1051330011">
+<package name="WE651005136421">
 <description>&lt;p&gt;&lt;b&gt;USB Micro B&lt;/b&gt;&lt;/p&gt;
 
-Datasheet: &lt;a href="./eagle/doc/stecker/molex_1051330011.pdf"&gt;molex_1051330011.pdf&lt;/a&gt;</description>
-<pad name="S3" x="2.8" y="0" drill="0.8" diameter="1.4" shape="long" rot="R90"/>
-<pad name="S2" x="-2.8" y="0" drill="0.8" diameter="1.4" shape="long" rot="R90"/>
-<pad name="S1" x="0" y="-2.15" drill="1.2" diameter="1.4" shape="long"/>
-<smd name="1" x="-1.3" y="-0.25" dx="0.45" dy="1.5" layer="1"/>
-<smd name="2" x="-0.65" y="-0.25" dx="0.45" dy="1.5" layer="1"/>
-<smd name="3" x="0" y="-0.25" dx="0.45" dy="1.5" layer="1"/>
-<smd name="4" x="0.65" y="-0.25" dx="0.45" dy="1.5" layer="1"/>
-<smd name="5" x="1.3" y="-0.25" dx="0.45" dy="1.5" layer="1"/>
-<wire x1="-2.63786875" y1="-2.01213125" x2="-3.46213125" y2="-1.18786875" width="0.2" layer="21"/>
-<wire x1="-3.46213125" y1="-1.18786875" x2="-3.55" y2="-0.975734375" width="0.2" layer="21" curve="-45.000597"/>
-<wire x1="-3.55" y1="-0.975734375" x2="-3.55" y2="-0.35" width="0.2" layer="21"/>
-<wire x1="-3.55" y1="-0.35" x2="-3.25" y2="-0.05" width="0.2" layer="21" curve="-90"/>
-<wire x1="-3.25" y1="-0.05" x2="3.25" y2="-0.05" width="0.2" layer="21"/>
-<wire x1="3.25" y1="-0.05" x2="3.55" y2="-0.35" width="0.2" layer="21" curve="-90"/>
-<wire x1="3.55" y1="-0.35" x2="3.55" y2="-0.975734375" width="0.2" layer="21"/>
-<wire x1="3.55" y1="-0.975734375" x2="3.46213125" y2="-1.18786875" width="0.2" layer="21" curve="-45.000422"/>
-<wire x1="3.46213125" y1="-1.18786875" x2="2.63786875" y2="-2.01213125" width="0.2" layer="21"/>
-<wire x1="2.63786875" y1="-2.01213125" x2="2.425734375" y2="-2.1" width="0.2" layer="21" curve="-45.000597"/>
-<wire x1="2.425734375" y1="-2.1" x2="-2.425734375" y2="-2.1" width="0.2" layer="21"/>
-<wire x1="-2.425734375" y1="-2.1" x2="-2.63786875" y2="-2.01213125" width="0.2" layer="21" curve="-45.000422"/>
-<wire x1="-1.6" y1="-0.4" x2="1.6" y2="-0.4" width="0.1" layer="21"/>
-<wire x1="1.6" y1="-0.4" x2="1.7" y2="-0.5" width="0.1" layer="21" curve="-90"/>
-<wire x1="1.7" y1="-0.5" x2="1.7" y2="-0.8" width="0.1" layer="21"/>
-<wire x1="1.7" y1="-0.8" x2="1.6" y2="-0.9" width="0.1" layer="21" curve="-90"/>
-<wire x1="1.6" y1="-0.9" x2="1.55" y2="-0.9" width="0.1" layer="21"/>
-<wire x1="1.55" y1="-0.9" x2="1.55" y2="-0.8" width="0.1" layer="21"/>
-<wire x1="1.55" y1="-0.8" x2="1.05" y2="-0.8" width="0.1" layer="21"/>
-<wire x1="1.05" y1="-0.8" x2="1.05" y2="-0.9" width="0.1" layer="21"/>
-<wire x1="1.05" y1="-0.9" x2="0.9" y2="-0.9" width="0.1" layer="21"/>
-<wire x1="0.9" y1="-0.9" x2="0.9" y2="-0.8" width="0.1" layer="21"/>
-<wire x1="0.9" y1="-0.8" x2="0.4" y2="-0.8" width="0.1" layer="21"/>
-<wire x1="0.4" y1="-0.8" x2="0.4" y2="-0.9" width="0.1" layer="21"/>
-<wire x1="0.4" y1="-0.9" x2="0.25" y2="-0.9" width="0.1" layer="21"/>
-<wire x1="0.25" y1="-0.9" x2="0.25" y2="-0.8" width="0.1" layer="21"/>
-<wire x1="0.25" y1="-0.8" x2="-0.25" y2="-0.8" width="0.1" layer="21"/>
-<wire x1="-0.25" y1="-0.8" x2="-0.25" y2="-0.9" width="0.1" layer="21"/>
-<wire x1="-0.25" y1="-0.9" x2="-0.4" y2="-0.9" width="0.1" layer="21"/>
-<wire x1="-0.4" y1="-0.9" x2="-0.4" y2="-0.8" width="0.1" layer="21"/>
-<wire x1="-0.4" y1="-0.8" x2="-0.9" y2="-0.8" width="0.1" layer="21"/>
-<wire x1="-0.9" y1="-0.8" x2="-0.9" y2="-0.9" width="0.1" layer="21"/>
-<wire x1="-0.9" y1="-0.9" x2="-1.05" y2="-0.9" width="0.1" layer="21"/>
-<wire x1="-1.05" y1="-0.9" x2="-1.05" y2="-0.8" width="0.1" layer="21"/>
-<wire x1="-1.05" y1="-0.8" x2="-1.55" y2="-0.8" width="0.1" layer="21"/>
-<wire x1="-1.55" y1="-0.8" x2="-1.55" y2="-0.9" width="0.1" layer="21"/>
-<wire x1="-1.55" y1="-0.9" x2="-1.6" y2="-0.9" width="0.1" layer="21"/>
-<wire x1="-1.6" y1="-0.9" x2="-1.7" y2="-0.8" width="0.1" layer="21" curve="-90"/>
-<wire x1="-1.7" y1="-0.8" x2="-1.7" y2="-0.5" width="0.1" layer="21"/>
-<wire x1="-1.7" y1="-0.5" x2="-1.6" y2="-0.4" width="0.1" layer="21" curve="-90"/>
-<text x="0" y="1.5" size="1.27" layer="25" align="bottom-center">&gt;NAME</text>
-<text x="0" y="-3" size="1.27" layer="27" align="top-center">&gt;VALUE</text>
+Datasheet: &lt;a href="./eagle/doc/stecker/we651005136421.pdf"&gt;we651005136421.pdf&lt;/a&gt;</description>
+<pad name="1" x="-1.6" y="-1" drill="0.6"/>
+<pad name="2" x="-0.8" y="0.9" drill="0.6"/>
+<pad name="3" x="0" y="-1" drill="0.6"/>
+<pad name="4" x="0.8" y="0.9" drill="0.6"/>
+<pad name="5" x="1.6" y="-1" drill="0.6"/>
+<pad name="S1" x="-4.2" y="0" drill="2" diameter="3"/>
+<pad name="S2" x="4.2" y="0" drill="2" diameter="3"/>
+<wire x1="-3.2" y1="1.6" x2="3.2" y2="1.6" width="0.2" layer="21"/>
+<wire x1="3.2" y1="1.6" x2="3.5" y2="1.3" width="0.2" layer="21" curve="-90"/>
+<wire x1="3.08786875" y1="-0.21213125" x2="3.41213125" y2="0.11213125" width="0.2" layer="21"/>
+<wire x1="3.41213125" y1="0.11213125" x2="3.5" y2="0.324265625" width="0.2" layer="21" curve="45.000597"/>
+<wire x1="3.5" y1="0.324265625" x2="3.5" y2="1.3" width="0.2" layer="21"/>
+<wire x1="-3.2" y1="1.6" x2="-3.5" y2="1.3" width="0.2" layer="21" curve="90"/>
+<wire x1="-3.5" y1="1.3" x2="-3.5" y2="0.324265625" width="0.2" layer="21"/>
+<wire x1="-3.5" y1="0.324265625" x2="-3.41213125" y2="0.11213125" width="0.2" layer="21" curve="45.000422"/>
+<wire x1="-3.41213125" y1="0.11213125" x2="-3.08786875" y2="-0.21213125" width="0.2" layer="21"/>
+<wire x1="-3.08786875" y1="-0.21213125" x2="-3" y2="-0.424265625" width="0.2" layer="21" curve="-45.000597"/>
+<wire x1="-3" y1="-0.424265625" x2="-3" y2="-1.3" width="0.2" layer="21"/>
+<wire x1="3" y1="-1.3" x2="3" y2="-0.424265625" width="0.2" layer="21"/>
+<wire x1="3" y1="-0.424265625" x2="3.08786875" y2="-0.21213125" width="0.2" layer="21" curve="-45.000422"/>
+<wire x1="-3" y1="-1.3" x2="-2.7" y2="-1.6" width="0.2" layer="21" curve="90"/>
+<wire x1="-2.7" y1="-1.6" x2="2.7" y2="-1.6" width="0.2" layer="21"/>
+<wire x1="2.7" y1="-1.6" x2="3" y2="-1.3" width="0.2" layer="21" curve="90"/>
+<wire x1="-2" y1="0.1" x2="2" y2="0.1" width="0.2" layer="21"/>
+<wire x1="2" y1="0.1" x2="2" y2="-0.5" width="0.2" layer="21"/>
+<wire x1="2" y1="-0.5" x2="1.7" y2="-0.8" width="0.2" layer="21"/>
+<wire x1="1.7" y1="-0.8" x2="-1.7" y2="-0.8" width="0.2" layer="21"/>
+<wire x1="-1.7" y1="-0.8" x2="-2" y2="-0.5" width="0.2" layer="21"/>
+<wire x1="-2" y1="-0.5" x2="-2" y2="0.1" width="0.2" layer="21"/>
+<rectangle x1="-1.8" y1="-0.7" x2="1.8" y2="-0.5" layer="21"/>
+<rectangle x1="-1.4" y1="-0.7" x2="-1" y2="0.1" layer="21"/>
+<rectangle x1="-0.6" y1="-0.7" x2="-0.2" y2="0.1" layer="21"/>
+<rectangle x1="0.2" y1="-0.7" x2="0.6" y2="0.1" layer="21"/>
+<rectangle x1="1" y1="-0.7" x2="1.4" y2="0.1" layer="21"/>
+<rectangle x1="1.8" y1="-0.6" x2="2" y2="0.1" layer="21"/>
+<rectangle x1="-2" y1="-0.6" x2="-1.8" y2="0.1" layer="21"/>
+<rectangle x1="-2" y1="-0.1" x2="2" y2="0.1" layer="21"/>
+<wire x1="-3.5" y1="0.324265625" x2="-3.5" y2="-1.5" width="0.2" layer="21"/>
+<wire x1="3.5" y1="0.3" x2="3.5" y2="-1.5" width="0.2" layer="21"/>
+<rectangle x1="3.5" y1="-0.9" x2="4.6" y2="0.9" layer="21"/>
+<rectangle x1="-4.6" y1="-0.9" x2="-3.5" y2="0.9" layer="21"/>
+<text x="0" y="2" size="1.27" layer="25" align="bottom-center">&gt;NAME</text>
+<text x="0" y="-2" size="1.27" layer="27" align="top-center">&gt;VALUE</text>
 </package>
 <package name="ML6L">
 <description>&lt;b&gt;HARTING&lt;/b&gt;</description>
@@ -2645,6 +2638,46 @@ Datasheet: &lt;a href="./eagle/doc/stecker/molex_1051330011.pdf"&gt;molex_105133
 <rectangle x1="2.286" y1="0.381" x2="2.794" y2="2.032" layer="51"/>
 <rectangle x1="2.286" y1="-0.381" x2="2.794" y2="0.381" layer="21"/>
 <rectangle x1="2.286" y1="-1.524" x2="2.794" y2="-0.381" layer="51"/>
+</package>
+<package name="LUMBERG_2486_01">
+<description>&lt;p&gt;&lt;b&gt;USB Mini&lt;/b&gt;&lt;/p&gt;
+
+Datasheet: &lt;a href="./eagle/doc/stecker/lumberg_2486_01.pdf"&gt;lumberg_2486_01.pdf&lt;/a&gt;</description>
+<smd name="S2" x="4.45" y="2.7" dx="2" dy="2.5" layer="1"/>
+<smd name="S1" x="-4.45" y="2.7" dx="2" dy="2.5" layer="1"/>
+<smd name="S3" x="-4.45" y="-2.75" dx="2" dy="2.5" layer="1"/>
+<smd name="S4" x="4.45" y="-2.75" dx="2" dy="2.5" layer="1"/>
+<smd name="3" x="0" y="2.7" dx="0.5" dy="2.25" layer="1"/>
+<smd name="4" x="0.8" y="2.7" dx="0.5" dy="2.25" layer="1"/>
+<smd name="5" x="1.6" y="2.7" dx="0.5" dy="2.25" layer="1"/>
+<smd name="1" x="-1.6" y="2.7" dx="0.5" dy="2.25" layer="1"/>
+<smd name="2" x="-0.8" y="2.7" dx="0.5" dy="2.25" layer="1"/>
+<hole x="2.2" y="0" drill="1"/>
+<hole x="-2.2" y="0" drill="1"/>
+<wire x1="-3.8" y1="3.3" x2="3.8" y2="3.3" width="0.1" layer="21"/>
+<wire x1="3.8" y1="3.3" x2="3.8" y2="2" width="0.1" layer="21"/>
+<wire x1="3.8" y1="2" x2="3.8" y2="-2.2" width="0.1" layer="21"/>
+<wire x1="3.8" y1="-2.2" x2="3.8" y2="-3.5" width="0.1" layer="21"/>
+<wire x1="3.8" y1="-3.5" x2="3.8" y2="-6" width="0.1" layer="21"/>
+<wire x1="3.8" y1="-6" x2="-3.8" y2="-6" width="0.1" layer="21"/>
+<wire x1="-3.8" y1="-6" x2="-3.8" y2="-3.5" width="0.1" layer="21"/>
+<wire x1="-3.8" y1="-3.5" x2="-3.8" y2="-2.2" width="0.1" layer="21"/>
+<wire x1="-3.8" y1="-2.2" x2="-3.8" y2="2" width="0.1" layer="21"/>
+<wire x1="-3.8" y1="2" x2="-3.8" y2="3.3" width="0.1" layer="21"/>
+<wire x1="3.8" y1="3.3" x2="4.9" y2="3.3" width="0.1" layer="21"/>
+<wire x1="4.9" y1="3.3" x2="4.9" y2="2" width="0.1" layer="21"/>
+<wire x1="4.9" y1="2" x2="3.8" y2="2" width="0.1" layer="21"/>
+<wire x1="-3.8" y1="3.3" x2="-4.9" y2="3.3" width="0.1" layer="21"/>
+<wire x1="-4.9" y1="3.3" x2="-4.9" y2="2" width="0.1" layer="21"/>
+<wire x1="-4.9" y1="2" x2="-3.8" y2="2" width="0.1" layer="21"/>
+<wire x1="-3.8" y1="-2.2" x2="-4.9" y2="-2.2" width="0.1" layer="21"/>
+<wire x1="-4.9" y1="-2.2" x2="-4.9" y2="-3.5" width="0.1" layer="21"/>
+<wire x1="-4.9" y1="-3.5" x2="-3.8" y2="-3.5" width="0.1" layer="21"/>
+<wire x1="3.8" y1="-2.2" x2="4.9" y2="-2.2" width="0.1" layer="21"/>
+<wire x1="4.9" y1="-2.2" x2="4.9" y2="-3.5" width="0.1" layer="21"/>
+<wire x1="4.9" y1="-3.5" x2="3.8" y2="-3.5" width="0.1" layer="21"/>
+<text x="0" y="-2" size="1" layer="25" align="center">&gt;NAME</text>
+<text x="0" y="-4" size="1" layer="27" align="center">&gt;VALUE</text>
 </package>
 </packages>
 <symbols>
@@ -2726,18 +2759,31 @@ Datasheet: &lt;a href="./eagle/doc/stecker/molex_1051330011.pdf"&gt;molex_105133
 </device>
 </devices>
 </deviceset>
-<deviceset name="USB-MICRO" prefix="X" uservalue="yes">
+<deviceset name="USB-MINI" prefix="X" uservalue="yes">
 <gates>
 <gate name="G$1" symbol="USB" x="0" y="0"/>
 </gates>
 <devices>
-<device name="-SMD-V" package="MOLEX_1051330011">
+<device name="-SMD-H" package="LUMBERG_2486_01">
 <connects>
 <connect gate="G$1" pin="D+" pad="3"/>
 <connect gate="G$1" pin="D-" pad="2"/>
 <connect gate="G$1" pin="GND" pad="5"/>
 <connect gate="G$1" pin="ID" pad="4"/>
-<connect gate="G$1" pin="SHIELD" pad="S1 S2 S3" route="any"/>
+<connect gate="G$1" pin="SHIELD" pad="S1 S2 S3 S4" route="any"/>
+<connect gate="G$1" pin="VBUS" pad="1"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="-V" package="WE651005136421">
+<connects>
+<connect gate="G$1" pin="D+" pad="3"/>
+<connect gate="G$1" pin="D-" pad="2"/>
+<connect gate="G$1" pin="GND" pad="5"/>
+<connect gate="G$1" pin="ID" pad="4"/>
+<connect gate="G$1" pin="SHIELD" pad="S1 S2" route="any"/>
 <connect gate="G$1" pin="VBUS" pad="1"/>
 </connects>
 <technologies>
@@ -6188,7 +6234,7 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <part name="P+9" library="versorgung" deviceset="+5V" device=""/>
 <part name="C9" library="passiv" deviceset="C_" device="0805" value="1μF"/>
 <part name="GND67" library="versorgung" deviceset="GND" device=""/>
-<part name="X101" library="stecker" deviceset="USB-MICRO" device="-SMD-V"/>
+<part name="X101" library="stecker" deviceset="USB-MINI" device="-V"/>
 <part name="R30" library="passiv" deviceset="R_" device="0805" value="22Ω"/>
 <part name="R31" library="passiv" deviceset="R_" device="0805" value="22Ω"/>
 <part name="GND68" library="versorgung" deviceset="GND" device=""/>
