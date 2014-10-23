@@ -6340,6 +6340,11 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <clearance class="0" value="3"/>
 <clearance class="1" value="1"/>
 </class>
+<class number="2" name="buspower" width="0" drill="0">
+<clearance class="0" value="0.5"/>
+<clearance class="1" value="3"/>
+<clearance class="2" value="0.5"/>
+</class>
 </classes>
 <parts>
 <part name="GND1" library="versorgung" deviceset="GND" device=""/>
@@ -9680,7 +9685,7 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <junction x="104.14" y="106.68"/>
 </segment>
 </net>
-<net name="N$23" class="0">
+<net name="N$23" class="2">
 <segment>
 <pinref part="G401" gate="G$1" pin="+VIN"/>
 <pinref part="D101" gate="A" pin="K"/>
@@ -9694,7 +9699,7 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <pinref part="F101" gate="G$1" pin="2"/>
 </segment>
 </net>
-<net name="V+" class="0">
+<net name="V+" class="2">
 <segment>
 <pinref part="D101" gate="A" pin="A"/>
 <wire x1="35.56" y1="172.72" x2="38.1" y2="172.72" width="0.1524" layer="91"/>
@@ -9730,7 +9735,7 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <junction x="53.34" y="93.98"/>
 </segment>
 </net>
-<net name="V-" class="0">
+<net name="V-" class="2">
 <segment>
 <pinref part="G401" gate="G$1" pin="-VIN"/>
 <wire x1="35.56" y1="167.64" x2="38.1" y2="167.64" width="0.1524" layer="91"/>
