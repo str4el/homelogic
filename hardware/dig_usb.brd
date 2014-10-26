@@ -24,8 +24,8 @@
 <layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
-<layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
@@ -64,9 +64,11 @@
 <plain>
 <wire x1="0" y1="-0.508" x2="0" y2="102.108" width="0" layer="20"/>
 <wire x1="0" y1="102.108" x2="86.36" y2="102.108" width="0" layer="20"/>
-<wire x1="86.36" y1="102.108" x2="86.36" y2="-0.508" width="0" layer="20"/>
+<wire x1="86.36" y1="102.108" x2="86.36" y2="88.9" width="0" layer="20"/>
+<wire x1="86.36" y1="12.7" x2="86.36" y2="-0.508" width="0" layer="20"/>
 <wire x1="86.36" y1="-0.508" x2="0" y2="-0.508" width="0" layer="20"/>
-<wire x1="88.9" y1="102.108" x2="88.9" y2="-0.508" width="0" layer="20"/>
+<wire x1="88.9" y1="102.108" x2="88.9" y2="88.9" width="0" layer="20"/>
+<wire x1="88.9" y1="12.7" x2="88.9" y2="-0.508" width="0" layer="20"/>
 <wire x1="88.9" y1="-0.508" x2="146.05" y2="-0.508" width="0" layer="20"/>
 <wire x1="146.05" y1="-0.508" x2="146.05" y2="102.108" width="0" layer="20"/>
 <wire x1="146.05" y1="102.108" x2="88.9" y2="102.108" width="0" layer="20"/>
@@ -129,6 +131,15 @@
 <text x="48.26" y="60.325" size="1.778" layer="25">IO Dig AC 230</text>
 <text x="48.26" y="57.15" size="1.778" layer="25">Rev 1.0</text>
 <text x="140.97" y="52.07" size="1.778" layer="25" rot="R90">Rev 1.0</text>
+<wire x1="86.36" y1="12.7" x2="88.9" y2="12.7" width="0" layer="20"/>
+<wire x1="86.36" y1="88.9" x2="88.9" y2="88.9" width="0" layer="20"/>
+<hole x="87.63" y="15.24" drill="2.5"/>
+<hole x="87.63" y="19.05" drill="2.5"/>
+<hole x="87.63" y="22.86" drill="2.5"/>
+<hole x="87.63" y="86.36" drill="2.5"/>
+<hole x="87.63" y="82.55" drill="2.5"/>
+<hole x="87.63" y="78.74" drill="2.5"/>
+<rectangle x1="86.36" y1="25.4" x2="88.9" y2="76.2" layer="46"/>
 </plain>
 <libraries>
 <library name="passiv">
@@ -1274,7 +1285,7 @@ Datasheet: &lt;a href="./eagle/doc/package/do214ac.pdf"&gt;do214ac.pdf&lt;/a&gt;
 <clearance class="2" value="0.5"/>
 </class>
 </classes>
-<designrules name="eC-PCB_proto-2-layer">
+<designrules name="eC-PCB_proto-2-layer *">
 <description language="de">&lt;p&gt;
 &lt;b&gt;EAGLE design rules for the Eurocircuits STANDARD pool service 2-layer&lt;/b&gt;
 &lt;p&gt;
@@ -1352,7 +1363,7 @@ Your Eurocircuits Team</description>
 <param name="mlMaxStopFrame" value="0.2mm"/>
 <param name="mlMinCreamFrame" value="0mil"/>
 <param name="mlMaxCreamFrame" value="0.2mm"/>
-<param name="mlViaStopLimit" value="0mil"/>
+<param name="mlViaStopLimit" value="0.5mm"/>
 <param name="srRoundness" value="0"/>
 <param name="srMinRoundness" value="0mil"/>
 <param name="srMaxRoundness" value="0mil"/>
