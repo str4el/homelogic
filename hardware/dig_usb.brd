@@ -24,8 +24,8 @@
 <layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
@@ -123,6 +123,12 @@
 <dimension x1="0" y1="102.108" x2="86.36" y2="102.108" x3="43.18" y3="106.68" textsize="1.778" layer="51"/>
 <dimension x1="146.05" y1="102.108" x2="88.9" y2="102.108" x3="117.475" y3="106.68" textsize="1.778" layer="51"/>
 <rectangle x1="137.16" y1="-0.508" x2="146.05" y2="102.108" layer="39"/>
+<text x="134.62" y="52.07" size="2.54" layer="25" rot="R90">Homelogic</text>
+<text x="137.795" y="52.07" size="1.778" layer="25" rot="R90">CPU USB</text>
+<text x="48.26" y="63.5" size="2.54" layer="25">Homelogic</text>
+<text x="48.26" y="60.325" size="1.778" layer="25">IO Dig AC 230</text>
+<text x="48.26" y="57.15" size="1.778" layer="25">Rev 1.0</text>
+<text x="140.97" y="52.07" size="1.778" layer="25" rot="R90">Rev 1.0</text>
 </plain>
 <libraries>
 <library name="passiv">
@@ -827,6 +833,8 @@ Datasheet: &lt;a href="./eagle/doc/package/do214ac.pdf"&gt;do214ac.pdf&lt;/a&gt;
 <wire x1="-21" y1="-10" x2="-21" y2="-7" width="0.127" layer="21"/>
 <wire x1="-21" y1="-7" x2="-21" y2="2" width="0.127" layer="21"/>
 <wire x1="-21" y1="-7" x2="21" y2="-7" width="0.127" layer="21"/>
+<text x="-10" y="3" size="1.27" layer="25" align="center">&gt;NAME</text>
+<text x="10" y="3" size="1.27" layer="27" align="center">&gt;VALUE</text>
 </package>
 <package name="AKL_230-02">
 <pad name="P$1" x="-2.54" y="0" drill="1.4" shape="long" rot="R90"/>
@@ -1049,7 +1057,7 @@ Datasheet: &lt;a href="./eagle/doc/package/do214ac.pdf"&gt;do214ac.pdf&lt;/a&gt;
 <rectangle x1="-0.6" y1="-0.8" x2="-0.2" y2="-0.4" layer="21"/>
 <rectangle x1="0.2" y1="-0.8" x2="0.6" y2="-0.4" layer="21"/>
 <rectangle x1="1" y1="-0.8" x2="1.4" y2="-0.4" layer="21"/>
-<text x="-2.54" y="0" size="1.27" layer="26" rot="R90" align="center">&gt;NAME</text>
+<text x="-2.54" y="0" size="1.27" layer="25" rot="R90" align="center">&gt;NAME</text>
 <text x="2.54" y="0" size="1.27" layer="27" rot="R90" align="center">&gt;VALUE</text>
 </package>
 </packages>
@@ -1126,8 +1134,8 @@ Datasheet: &lt;a href="./eagle/doc/package/do214ac.pdf"&gt;do214ac.pdf&lt;/a&gt;
 <smd name="14" x="-7.8" y="-4.4" dx="0.5" dy="1.5" layer="1" rot="R270"/>
 <smd name="15" x="-7.8" y="-5.2" dx="0.5" dy="1.5" layer="1" rot="R270"/>
 <smd name="16" x="-7.8" y="-6" dx="0.5" dy="1.5" layer="1" rot="R270"/>
-<text x="0" y="1" size="0.8128" layer="25" align="bottom-center">&gt;NAME</text>
-<text x="0" y="-1" size="0.8128" layer="27" align="top-center">&gt;VALUE</text>
+<text x="0" y="1" size="1.27" layer="25" align="bottom-center">&gt;NAME</text>
+<text x="0" y="-1" size="1.27" layer="27" align="top-center">&gt;VALUE</text>
 <wire x1="6.9" y1="6.9" x2="-6.4" y2="6.9" width="0.2" layer="21"/>
 <wire x1="-6.4" y1="6.9" x2="-6.9" y2="6.4" width="0.2" layer="21"/>
 <wire x1="-6.9" y1="6.4" x2="-6.9" y2="-6.9" width="0.2" layer="21"/>
@@ -1454,16 +1462,43 @@ Your Eurocircuits Team</description>
 </autorouter>
 <elements>
 <element name="X102" library="stecker" package="ML6" value="ISP" x="104.14" y="76.2" rot="R90"/>
-<element name="R103" library="passiv" package="CHIP_0805" value="10k" x="99.06" y="65.405" rot="R180"/>
-<element name="IC102" library="ic-wandler" package="SOP08_127" value="MAX487CSA" x="127" y="20.955"/>
-<element name="C105" library="passiv" package="CHIP_0603" value="100nF" x="120.65" y="64.77" rot="R270"/>
-<element name="C101" library="passiv" package="CHIP_0603" value="100nF" x="99.695" y="62.23" rot="R270"/>
-<element name="C111" library="passiv" package="CHIP_0603" value="100nF" x="123.19" y="20.955" rot="R270"/>
-<element name="IC401" library="ic-controller" package="SOP08_127" value="DS1337S" x="24.13" y="93.98" rot="R90"/>
+<element name="R103" library="passiv" package="CHIP_0805" value="10k" x="99.06" y="65.405" smashed="yes" rot="R180">
+<attribute name="NAME" x="99.06" y="66.405" size="1.27" layer="25" align="bottom-center"/>
+<attribute name="VALUE" x="99.06" y="66.405" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="IC102" library="ic-wandler" package="SOP08_127" value="MAX487CSA" x="127" y="20.955" smashed="yes">
+<attribute name="VALUE" x="130" y="20.955" size="1.27" layer="27" rot="R90" align="top-center"/>
+<attribute name="NAME" x="130" y="20.955" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+</element>
+<element name="C105" library="passiv" package="CHIP_0603" value="100nF" x="120.65" y="64.77" smashed="yes" rot="R270">
+<attribute name="NAME" x="122.285" y="64.77" size="1" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="119.65" y="64.77" size="1" layer="27" rot="R270" align="top-center"/>
+</element>
+<element name="C101" library="passiv" package="CHIP_0603" value="100nF" x="99.695" y="62.23" smashed="yes" rot="R270">
+<attribute name="NAME" x="100.06" y="59.055" size="1" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="98.695" y="62.23" size="1" layer="27" rot="R270" align="top-center"/>
+</element>
+<element name="C111" library="passiv" package="CHIP_0603" value="100nF" x="123.19" y="20.955" smashed="yes" rot="R270">
+<attribute name="NAME" x="123.46" y="24.765" size="1" layer="25" rot="R90" align="bottom-center"/>
+<attribute name="VALUE" x="122.19" y="20.955" size="1" layer="27" rot="R270" align="top-center"/>
+</element>
+<element name="IC401" library="ic-controller" package="SOP08_127" value="DS1337S" x="24.13" y="93.98" smashed="yes" rot="R90">
+<attribute name="VALUE" x="24.13" y="96.98" size="1.27" layer="27" rot="R180" align="top-center"/>
+<attribute name="NAME" x="24.13" y="96.98" size="1.27" layer="25" align="bottom-center"/>
+</element>
 <element name="Q401" library="passiv" package="MS1V-T1K" value="32,768kHz" x="31.75" y="93.98" rot="R270"/>
-<element name="C401" library="passiv" package="CHIP_0603" value="100nF" x="24.13" y="90.17"/>
-<element name="D402" library="diode" package="SOD123" value="1N4148" x="22.86" y="85.09" rot="R270"/>
-<element name="D403" library="diode" package="SOD123" value="1N4148" x="25.4" y="85.09" rot="R270"/>
+<element name="C401" library="passiv" package="CHIP_0603" value="100nF" x="24.13" y="90.17" smashed="yes">
+<attribute name="NAME" x="24.13" y="89.17" size="1" layer="25" rot="R180" align="bottom-center"/>
+<attribute name="VALUE" x="24.13" y="89.17" size="1" layer="27" align="top-center"/>
+</element>
+<element name="D402" library="diode" package="SOD123" value="1N4148" x="22.86" y="85.09" smashed="yes" rot="R270">
+<attribute name="NAME" x="21.86" y="85.09" size="1.27" layer="25" rot="R90" align="bottom-center"/>
+<attribute name="VALUE" x="21.86" y="85.09" size="1.27" layer="27" rot="R270" align="top-center"/>
+</element>
+<element name="D403" library="diode" package="SOD123" value="1N4148" x="25.4" y="85.09" smashed="yes" rot="R270">
+<attribute name="NAME" x="26.4" y="85.09" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="24.4" y="85.09" size="1.27" layer="27" rot="R270" align="top-center"/>
+</element>
 <element name="R112" library="passiv" package="CHIP_0805" value="120Ω" x="133.35" y="10.16" rot="R270"/>
 <element name="G101" library="batterie" package="KHZ20SMD-2" value="KZH20SMD-2" x="121.92" y="88.9"/>
 <element name="V401" library="schaltregler" package="TME-24V" value="TME2405S" x="60.96" y="96.52" rot="R180">
@@ -1473,7 +1508,10 @@ Your Eurocircuits Team</description>
 <attribute name="OC_FARNELL" value="1007547" x="-3.81" y="132.08" size="1.778" layer="27" rot="R180" display="off"/>
 </element>
 <element name="D401" library="diode" package="SOD123" value="SD103" x="69.85" y="91.44"/>
-<element name="LED104" library="led" package="CHIP_0805" value="GN" x="99.06" y="97.155" rot="R90"/>
+<element name="D105" library="led" package="CHIP_0805" value="GN" x="99.06" y="97.155" smashed="yes" rot="R90">
+<attribute name="NAME" x="92.345" y="95.25" size="1.27" layer="25" rot="R90" align="bottom-center"/>
+<attribute name="VALUE" x="100.06" y="97.155" size="1.27" layer="27" rot="R90" align="top-center"/>
+</element>
 <element name="F401" library="sicherung" package="CHIP_1812" value="194600-020" x="52.07" y="94.615" rot="R90"/>
 <element name="K401" library="relais" package="SIP4" value="S202S02" x="26.67" y="52.07">
 <attribute name="VDRM" value="600" x="49.53" y="-20.32" size="1.778" layer="27" display="off"/>
@@ -1499,7 +1537,10 @@ Your Eurocircuits Team</description>
 <element name="K408" library="relais" package="SIP4" value="S202S02" x="26.67" y="7.62">
 <attribute name="VDRM" value="600" x="106.68" y="-71.12" size="1.778" layer="27" display="off"/>
 </element>
-<element name="C107" library="passiv" package="CHIP_0603" value="100nF" x="121.285" y="62.23"/>
+<element name="C107" library="passiv" package="CHIP_0603" value="100nF" x="121.285" y="62.23" smashed="yes">
+<attribute name="NAME" x="121.285" y="61.23" size="1" layer="25" rot="R180" align="bottom-center"/>
+<attribute name="VALUE" x="121.285" y="61.23" size="1" layer="27" align="top-center"/>
+</element>
 <element name="IC301" library="ic-optokoppler" package="SOP04_254" value="LTV-356T" x="50.8" y="50.8" rot="R90"/>
 <element name="IC303" library="ic-optokoppler" package="SOP04_254" value="LTV-356T" x="50.8" y="44.45" rot="R90"/>
 <element name="IC305" library="ic-optokoppler" package="SOP04_254" value="LTV-356T" x="50.8" y="38.1" rot="R90"/>
@@ -1508,12 +1549,30 @@ Your Eurocircuits Team</description>
 <element name="IC304" library="ic-optokoppler" package="SOP04_254" value="LTV-356T" x="50.8" y="19.05" rot="R90"/>
 <element name="IC306" library="ic-optokoppler" package="SOP04_254" value="LTV-356T" x="50.8" y="12.7" rot="R90"/>
 <element name="IC308" library="ic-optokoppler" package="SOP04_254" value="LTV-356T" x="50.8" y="6.35" rot="R90"/>
-<element name="X401" library="anschluss" package="RIA-73-02" value="" x="81.28" y="95.25" rot="R90"/>
-<element name="X402" library="anschluss" package="RIA-73-02" value="" x="81.28" y="85.09" rot="R90"/>
-<element name="S103" library="schalter" package="DIP08_SMD" value="" x="116.84" y="10.16"/>
-<element name="IC103" library="ic-logik" package="SOP16_127" value="74HC166D" x="113.03" y="20.955"/>
-<element name="C104" library="passiv" package="CHIP_0603" value="100nF" x="120.65" y="55.88" rot="R90"/>
-<element name="C110" library="passiv" package="CHIP_0603" value="100nF" x="106.68" y="20.955" rot="R270"/>
+<element name="X401" library="anschluss" package="RIA-73-02" value="" x="81.28" y="95.25" smashed="yes" rot="R90">
+<attribute name="NAME" x="73.47" y="95.25" size="1.27" layer="25" rot="R90" align="bottom-center"/>
+<attribute name="VALUE" x="86.28" y="95.25" size="1.27" layer="27" rot="R90" align="bottom-center"/>
+</element>
+<element name="X402" library="anschluss" package="RIA-73-02" value="" x="81.28" y="85.09" smashed="yes" rot="R90">
+<attribute name="NAME" x="73.47" y="85.09" size="1.27" layer="25" rot="R90" align="bottom-center"/>
+<attribute name="VALUE" x="86.28" y="85.09" size="1.27" layer="27" rot="R90" align="bottom-center"/>
+</element>
+<element name="S103" library="schalter" package="DIP08_SMD" value="" x="116.84" y="10.16" smashed="yes">
+<attribute name="NAME" x="116.84" y="4.445" size="1.778" layer="25" rot="R180" align="bottom-center"/>
+<attribute name="VALUE" x="128.27" y="10.16" size="1.778" layer="27" rot="R90" align="top-center"/>
+</element>
+<element name="IC103" library="ic-logik" package="SOP16_127" value="74HC166D" x="113.03" y="20.955" smashed="yes">
+<attribute name="VALUE" x="113.03" y="20.955" size="1.27" layer="27" align="center"/>
+<attribute name="NAME" x="118.53" y="20.955" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+</element>
+<element name="C104" library="passiv" package="CHIP_0603" value="100nF" x="120.65" y="55.88" smashed="yes" rot="R90">
+<attribute name="NAME" x="122.285" y="55.88" size="1" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="121.65" y="55.88" size="1" layer="27" rot="R90" align="top-center"/>
+</element>
+<element name="C110" library="passiv" package="CHIP_0603" value="100nF" x="106.68" y="20.955" smashed="yes" rot="R270">
+<attribute name="NAME" x="106.95" y="24.765" size="1" layer="25" rot="R90" align="bottom-center"/>
+<attribute name="VALUE" x="105.68" y="20.955" size="1" layer="27" rot="R270" align="top-center"/>
+</element>
 <element name="Q307" library="transistor" package="SOT23" value="BCR191" x="44.45" y="31.75" rot="R90"/>
 <element name="Q305" library="transistor" package="SOT23" value="BCR191" x="44.45" y="38.1" rot="R90"/>
 <element name="Q303" library="transistor" package="SOT23" value="BCR191" x="44.45" y="44.45" rot="R90"/>
@@ -1522,146 +1581,403 @@ Your Eurocircuits Team</description>
 <element name="Q304" library="transistor" package="SOT23" value="BCR191" x="44.45" y="19.05" rot="R90"/>
 <element name="Q306" library="transistor" package="SOT23" value="BCR191" x="44.45" y="12.7" rot="R90"/>
 <element name="Q308" library="transistor" package="SOT23" value="BCR191" x="44.45" y="6.35" rot="R90"/>
-<element name="X304" library="anschluss" package="RIA-73-02" value="" x="81.28" y="41.91" rot="R90"/>
-<element name="X306" library="anschluss" package="RIA-73-02" value="" x="81.28" y="31.75" rot="R90"/>
-<element name="X305" library="anschluss" package="RIA-73-02" value="" x="81.28" y="21.59" rot="R90"/>
-<element name="X307" library="anschluss" package="RIA-73-02" value="" x="81.28" y="11.43" rot="R90"/>
-<element name="X302" library="anschluss" package="RIA-73-02" value="" x="81.28" y="59.69" rot="R90"/>
-<element name="X407" library="anschluss" package="RIA-73-02" value="" x="5.08" y="41.91" rot="R270"/>
-<element name="X410" library="anschluss" package="RIA-73-02" value="" x="5.08" y="31.75" rot="R270"/>
-<element name="X411" library="anschluss" package="RIA-73-02" value="" x="5.08" y="21.59" rot="R270"/>
-<element name="X412" library="anschluss" package="RIA-73-02" value="" x="5.08" y="11.43" rot="R270"/>
-<element name="X408" library="anschluss" package="RIA-73-02" value="" x="5.08" y="59.69" rot="R270"/>
+<element name="X304" library="anschluss" package="RIA-73-02" value="" x="81.28" y="41.91" smashed="yes" rot="R90">
+<attribute name="NAME" x="73.47" y="41.91" size="1.27" layer="25" rot="R90" align="bottom-center"/>
+<attribute name="VALUE" x="86.28" y="41.91" size="1.27" layer="27" rot="R90" align="bottom-center"/>
+</element>
+<element name="X306" library="anschluss" package="RIA-73-02" value="" x="81.28" y="31.75" smashed="yes" rot="R90">
+<attribute name="NAME" x="73.47" y="31.115" size="1.27" layer="25" rot="R90" align="bottom-center"/>
+<attribute name="VALUE" x="86.28" y="31.75" size="1.27" layer="27" rot="R90" align="bottom-center"/>
+</element>
+<element name="X305" library="anschluss" package="RIA-73-02" value="" x="81.28" y="21.59" smashed="yes" rot="R90">
+<attribute name="NAME" x="73.47" y="21.59" size="1.27" layer="25" rot="R90" align="bottom-center"/>
+<attribute name="VALUE" x="86.28" y="21.59" size="1.27" layer="27" rot="R90" align="bottom-center"/>
+</element>
+<element name="X307" library="anschluss" package="RIA-73-02" value="" x="81.28" y="11.43" smashed="yes" rot="R90">
+<attribute name="NAME" x="73.47" y="11.43" size="1.27" layer="25" rot="R90" align="bottom-center"/>
+<attribute name="VALUE" x="86.28" y="11.43" size="1.27" layer="27" rot="R90" align="bottom-center"/>
+</element>
+<element name="X302" library="anschluss" package="RIA-73-02" value="" x="81.28" y="59.69" smashed="yes" rot="R90">
+<attribute name="NAME" x="81.28" y="54.42" size="1.27" layer="25" rot="R180" align="bottom-center"/>
+<attribute name="VALUE" x="86.28" y="59.69" size="1.27" layer="27" rot="R90" align="bottom-center"/>
+</element>
+<element name="X407" library="anschluss" package="RIA-73-02" value="" x="5.08" y="41.91" smashed="yes" rot="R270">
+<attribute name="NAME" x="12.255" y="41.91" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="0.08" y="41.91" size="1.27" layer="27" rot="R270" align="bottom-center"/>
+</element>
+<element name="X410" library="anschluss" package="RIA-73-02" value="" x="5.08" y="31.75" smashed="yes" rot="R270">
+<attribute name="NAME" x="12.255" y="31.75" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="0.08" y="31.75" size="1.27" layer="27" rot="R270" align="bottom-center"/>
+</element>
+<element name="X411" library="anschluss" package="RIA-73-02" value="" x="5.08" y="21.59" smashed="yes" rot="R270">
+<attribute name="NAME" x="12.255" y="21.59" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="0.08" y="21.59" size="1.27" layer="27" rot="R270" align="bottom-center"/>
+</element>
+<element name="X412" library="anschluss" package="RIA-73-02" value="" x="5.08" y="11.43" smashed="yes" rot="R270">
+<attribute name="NAME" x="12.255" y="11.43" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="0.08" y="11.43" size="1.27" layer="27" rot="R270" align="bottom-center"/>
+</element>
+<element name="X408" library="anschluss" package="RIA-73-02" value="" x="5.08" y="59.69" smashed="yes" rot="R270">
+<attribute name="NAME" x="5.08" y="54.42" size="1.27" layer="25" rot="R180" align="bottom-center"/>
+<attribute name="VALUE" x="0.08" y="59.69" size="1.27" layer="27" rot="R270" align="bottom-center"/>
+</element>
 <element name="R402" library="sensor" package="TO92" value="KTY81-210" x="33.02" y="56.515"/>
 <element name="R401" library="passiv" package="CHIP_0805" value="3,3kΩ" x="33.02" y="63.5" rot="R180"/>
-<element name="LED101" library="led" package="CHIP_0805" value="GN" x="106.68" y="97.155" rot="R90"/>
-<element name="LED102" library="led" package="CHIP_0805" value="GE" x="104.14" y="97.155" rot="R90"/>
-<element name="R106" library="passiv" package="CHIP_0805" value="1MΩ" x="120.015" y="71.755" rot="R180"/>
+<element name="D102" library="led" package="CHIP_0805" value="GN" x="106.68" y="97.155" smashed="yes" rot="R90">
+<attribute name="NAME" x="98.06" y="95.25" size="1.27" layer="25" rot="R90" align="bottom-center"/>
+<attribute name="VALUE" x="107.68" y="97.155" size="1.27" layer="27" rot="R90" align="top-center"/>
+</element>
+<element name="D103" library="led" package="CHIP_0805" value="GE" x="104.14" y="97.155" smashed="yes" rot="R90">
+<attribute name="NAME" x="96.155" y="95.25" size="1.27" layer="25" rot="R90" align="bottom-center"/>
+<attribute name="VALUE" x="105.14" y="97.155" size="1.27" layer="27" rot="R90" align="top-center"/>
+</element>
+<element name="R106" library="passiv" package="CHIP_0805" value="1MΩ" x="120.015" y="71.755" smashed="yes" rot="R180">
+<attribute name="NAME" x="120.015" y="73.93" size="1.27" layer="25" rot="R180" align="bottom-center"/>
+<attribute name="VALUE" x="120.015" y="72.755" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
 <element name="R302" library="passiv" package="CHIP_1206" value="47kΩ" x="64.77" y="50.8" rot="MR180"/>
 <element name="R301" library="passiv" package="CHIP_1206" value="47kΩ" x="69.85" y="50.8" rot="MR180"/>
 <element name="R305" library="passiv" package="CHIP_1206" value="47kΩ" x="55.88" y="50.8" rot="MR180"/>
-<element name="C301" library="passiv" package="CHIP_1206" value="1μF" x="57.15" y="50.8" rot="R90"/>
-<element name="D302" library="diode" package="SOD123" value="91V" x="59.69" y="50.8" rot="R90"/>
+<element name="C301" library="passiv" package="CHIP_1206" value="1μF" x="57.15" y="50.8" smashed="yes" rot="R90">
+<attribute name="NAME" x="60.79" y="50.8" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="58.25" y="50.8" size="1.27" layer="27" rot="R90" align="top-center"/>
+</element>
+<element name="D302" library="diode" package="SOD123" value="91V" x="59.69" y="50.8" smashed="yes" rot="R90">
+<attribute name="NAME" x="62.595" y="50.8" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="60.69" y="50.8" size="1.27" layer="27" rot="R90" align="top-center"/>
+</element>
 <element name="D301" library="diode" package="DO214AC" value="MRA4007" x="67.31" y="50.8"/>
 <element name="R308" library="passiv" package="CHIP_1206" value="47kΩ" x="64.77" y="44.45" rot="MR180"/>
 <element name="R307" library="passiv" package="CHIP_1206" value="47kΩ" x="69.85" y="44.45" rot="MR180"/>
 <element name="R311" library="passiv" package="CHIP_1206" value="47kΩ" x="55.88" y="44.45" rot="MR180"/>
-<element name="C303" library="passiv" package="CHIP_1206" value="1μF" x="57.15" y="44.45" rot="R90"/>
-<element name="D306" library="diode" package="SOD123" value="91V" x="59.69" y="44.45" rot="R90"/>
+<element name="C303" library="passiv" package="CHIP_1206" value="1μF" x="57.15" y="44.45" smashed="yes" rot="R90">
+<attribute name="NAME" x="60.79" y="44.45" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="58.25" y="44.45" size="1.27" layer="27" rot="R90" align="top-center"/>
+</element>
+<element name="D306" library="diode" package="SOD123" value="91V" x="59.69" y="44.45" smashed="yes" rot="R90">
+<attribute name="NAME" x="62.595" y="44.45" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="60.69" y="44.45" size="1.27" layer="27" rot="R90" align="top-center"/>
+</element>
 <element name="D305" library="diode" package="DO214AC" value="MRA4007" x="67.31" y="44.45"/>
 <element name="R314" library="passiv" package="CHIP_1206" value="47kΩ" x="64.77" y="38.1" rot="MR180"/>
 <element name="R313" library="passiv" package="CHIP_1206" value="47kΩ" x="69.85" y="38.1" rot="MR180"/>
 <element name="R317" library="passiv" package="CHIP_1206" value="47kΩ" x="55.88" y="38.1" rot="MR180"/>
-<element name="C305" library="passiv" package="CHIP_1206" value="1μF" x="57.15" y="38.1" rot="R90"/>
-<element name="D310" library="diode" package="SOD123" value="91V" x="59.69" y="38.1" rot="R90"/>
+<element name="C305" library="passiv" package="CHIP_1206" value="1μF" x="57.15" y="38.1" smashed="yes" rot="R90">
+<attribute name="NAME" x="60.79" y="38.1" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="58.25" y="38.1" size="1.27" layer="27" rot="R90" align="top-center"/>
+</element>
+<element name="D310" library="diode" package="SOD123" value="91V" x="59.69" y="38.1" smashed="yes" rot="R90">
+<attribute name="NAME" x="62.595" y="38.1" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="60.69" y="38.1" size="1.27" layer="27" rot="R90" align="top-center"/>
+</element>
 <element name="D309" library="diode" package="DO214AC" value="MRA4007" x="67.31" y="38.1"/>
 <element name="R320" library="passiv" package="CHIP_1206" value="47kΩ" x="64.77" y="31.75" rot="MR180"/>
 <element name="R319" library="passiv" package="CHIP_1206" value="47kΩ" x="69.85" y="31.75" rot="MR180"/>
 <element name="R323" library="passiv" package="CHIP_1206" value="47kΩ" x="55.88" y="31.75" rot="MR180"/>
-<element name="C307" library="passiv" package="CHIP_1206" value="1μF" x="57.15" y="31.75" rot="R90"/>
-<element name="D314" library="diode" package="SOD123" value="91V" x="59.69" y="31.75" rot="R90"/>
+<element name="C307" library="passiv" package="CHIP_1206" value="1μF" x="57.15" y="31.75" smashed="yes" rot="R90">
+<attribute name="NAME" x="60.79" y="31.75" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="58.25" y="31.75" size="1.27" layer="27" rot="R90" align="top-center"/>
+</element>
+<element name="D314" library="diode" package="SOD123" value="91V" x="59.69" y="31.75" smashed="yes" rot="R90">
+<attribute name="NAME" x="62.595" y="31.75" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="60.69" y="31.75" size="1.27" layer="27" rot="R90" align="top-center"/>
+</element>
 <element name="D313" library="diode" package="DO214AC" value="MRA4007" x="67.31" y="31.75"/>
 <element name="R304" library="passiv" package="CHIP_1206" value="47kΩ" x="64.77" y="25.4" rot="MR180"/>
 <element name="R303" library="passiv" package="CHIP_1206" value="47kΩ" x="69.85" y="25.4" rot="MR180"/>
 <element name="R306" library="passiv" package="CHIP_1206" value="47kΩ" x="55.88" y="25.4" rot="MR180"/>
-<element name="C302" library="passiv" package="CHIP_1206" value="1μF" x="57.15" y="25.4" rot="R90"/>
-<element name="D304" library="diode" package="SOD123" value="91V" x="59.69" y="25.4" rot="R90"/>
+<element name="C302" library="passiv" package="CHIP_1206" value="1μF" x="57.15" y="25.4" smashed="yes" rot="R90">
+<attribute name="NAME" x="60.79" y="25.4" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="58.25" y="25.4" size="1.27" layer="27" rot="R90" align="top-center"/>
+</element>
+<element name="D304" library="diode" package="SOD123" value="91V" x="59.69" y="25.4" smashed="yes" rot="R90">
+<attribute name="NAME" x="62.595" y="25.4" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="60.69" y="25.4" size="1.27" layer="27" rot="R90" align="top-center"/>
+</element>
 <element name="D303" library="diode" package="DO214AC" value="MRA4007" x="67.31" y="25.4"/>
 <element name="R310" library="passiv" package="CHIP_1206" value="47kΩ" x="64.77" y="19.05" rot="MR180"/>
 <element name="R309" library="passiv" package="CHIP_1206" value="47kΩ" x="69.85" y="19.05" rot="MR180"/>
 <element name="R312" library="passiv" package="CHIP_1206" value="47kΩ" x="55.88" y="19.05" rot="MR180"/>
-<element name="C304" library="passiv" package="CHIP_1206" value="1μF" x="57.15" y="19.05" rot="R90"/>
-<element name="D308" library="diode" package="SOD123" value="91V" x="59.69" y="19.05" rot="R90"/>
+<element name="C304" library="passiv" package="CHIP_1206" value="1μF" x="57.15" y="19.05" smashed="yes" rot="R90">
+<attribute name="NAME" x="60.79" y="19.05" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="58.25" y="19.05" size="1.27" layer="27" rot="R90" align="top-center"/>
+</element>
+<element name="D308" library="diode" package="SOD123" value="91V" x="59.69" y="19.05" smashed="yes" rot="R90">
+<attribute name="NAME" x="62.595" y="19.05" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="60.69" y="19.05" size="1.27" layer="27" rot="R90" align="top-center"/>
+</element>
 <element name="D307" library="diode" package="DO214AC" value="MRA4007" x="67.31" y="19.05"/>
 <element name="R316" library="passiv" package="CHIP_1206" value="47kΩ" x="64.77" y="12.7" rot="MR180"/>
 <element name="R315" library="passiv" package="CHIP_1206" value="47kΩ" x="69.85" y="12.7" rot="MR180"/>
 <element name="R318" library="passiv" package="CHIP_1206" value="47kΩ" x="55.88" y="12.7" rot="MR180"/>
-<element name="C306" library="passiv" package="CHIP_1206" value="1μF" x="57.15" y="12.7" rot="R90"/>
-<element name="D312" library="diode" package="SOD123" value="91V" x="59.69" y="12.7" rot="R90"/>
+<element name="C306" library="passiv" package="CHIP_1206" value="1μF" x="57.15" y="12.7" smashed="yes" rot="R90">
+<attribute name="NAME" x="60.79" y="12.7" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="58.25" y="12.7" size="1.27" layer="27" rot="R90" align="top-center"/>
+</element>
+<element name="D312" library="diode" package="SOD123" value="91V" x="59.69" y="12.7" smashed="yes" rot="R90">
+<attribute name="NAME" x="62.595" y="12.7" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="60.69" y="12.7" size="1.27" layer="27" rot="R90" align="top-center"/>
+</element>
 <element name="D311" library="diode" package="DO214AC" value="MRA4007" x="67.31" y="12.7"/>
 <element name="R322" library="passiv" package="CHIP_1206" value="47kΩ" x="64.77" y="6.35" rot="MR180"/>
 <element name="R321" library="passiv" package="CHIP_1206" value="47kΩ" x="69.85" y="6.35" rot="MR180"/>
 <element name="R324" library="passiv" package="CHIP_1206" value="47kΩ" x="55.88" y="6.35" rot="MR180"/>
-<element name="C308" library="passiv" package="CHIP_1206" value="1μF" x="57.15" y="6.35" rot="R90"/>
-<element name="D316" library="diode" package="SOD123" value="91V" x="59.69" y="6.35" rot="R90"/>
+<element name="C308" library="passiv" package="CHIP_1206" value="1μF" x="57.15" y="6.35" smashed="yes" rot="R90">
+<attribute name="NAME" x="60.79" y="6.35" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="58.25" y="6.35" size="1.27" layer="27" rot="R90" align="top-center"/>
+</element>
+<element name="D316" library="diode" package="SOD123" value="91V" x="59.69" y="6.35" smashed="yes" rot="R90">
+<attribute name="NAME" x="62.595" y="6.35" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="60.69" y="6.35" size="1.27" layer="27" rot="R90" align="top-center"/>
+</element>
 <element name="D315" library="diode" package="DO214AC" value="MRA4007" x="67.31" y="6.35"/>
-<element name="R107" library="widerstandsnetzwerk" package="1206" value="22kΩ" x="102.87" y="10.16" rot="R270"/>
-<element name="R108" library="widerstandsnetzwerk" package="1206" value="22kΩ" x="130.81" y="10.16" rot="R90"/>
-<element name="LED103" library="led" package="CHIP_0805" value="RT" x="101.6" y="97.155" rot="R90"/>
-<element name="IC101" library="ic-mcu" package="QFP64_08" value="AT90USB1287-AU" x="110.49" y="59.055" rot="R270"/>
-<element name="R403" library="passiv" package="CHIP_0805" value="470Ω" x="33.02" y="48.895" rot="R180"/>
-<element name="R404" library="passiv" package="CHIP_0805" value="470Ω" x="33.02" y="42.545" rot="R180"/>
-<element name="R405" library="passiv" package="CHIP_0805" value="470Ω" x="33.02" y="36.195" rot="R180"/>
-<element name="R406" library="passiv" package="CHIP_0805" value="470Ω" x="33.02" y="29.845" rot="R180"/>
-<element name="R407" library="passiv" package="CHIP_0805" value="470Ω" x="33.02" y="23.495" rot="R180"/>
-<element name="R408" library="passiv" package="CHIP_0805" value="470Ω" x="33.02" y="17.145" rot="R180"/>
-<element name="R409" library="passiv" package="CHIP_0805" value="470Ω" x="33.02" y="10.795" rot="R180"/>
-<element name="R410" library="passiv" package="CHIP_0805" value="470Ω" x="33.02" y="4.445" rot="R180"/>
-<element name="LED201" library="led" package="CHIP_0805" value="GN" x="134.62" y="46.99"/>
-<element name="LED202" library="led" package="CHIP_0805" value="GN" x="134.62" y="44.45"/>
-<element name="LED203" library="led" package="CHIP_0805" value="GN" x="134.62" y="41.91"/>
-<element name="LED204" library="led" package="CHIP_0805" value="GN" x="134.62" y="39.37"/>
-<element name="LED205" library="led" package="CHIP_0805" value="GN" x="134.62" y="36.83"/>
-<element name="LED206" library="led" package="CHIP_0805" value="GN" x="134.62" y="34.29"/>
-<element name="LED207" library="led" package="CHIP_0805" value="GN" x="134.62" y="31.75"/>
-<element name="LED208" library="led" package="CHIP_0805" value="GN" x="134.62" y="29.21"/>
-<element name="LED209" library="led" package="CHIP_0805" value="GN" x="100.33" y="46.99" rot="R180"/>
-<element name="LED210" library="led" package="CHIP_0805" value="GN" x="100.33" y="44.45" rot="R180"/>
-<element name="LED211" library="led" package="CHIP_0805" value="GN" x="100.33" y="41.91" rot="R180"/>
-<element name="LED212" library="led" package="CHIP_0805" value="GN" x="100.33" y="39.37" rot="R180"/>
-<element name="LED213" library="led" package="CHIP_0805" value="GN" x="100.33" y="36.83" rot="R180"/>
-<element name="LED214" library="led" package="CHIP_0805" value="GN" x="100.33" y="34.29" rot="R180"/>
-<element name="LED215" library="led" package="CHIP_0805" value="GN" x="100.33" y="31.75" rot="R180"/>
-<element name="LED216" library="led" package="CHIP_0805" value="GN" x="100.33" y="29.21" rot="R180"/>
-<element name="C109" library="passiv" package="CHIP_0805" value="1μF" x="111.76" y="69.85"/>
-<element name="X101" library="stecker" package="WE651005136421" value="" x="114.3" y="76.835" rot="R180"/>
-<element name="R102" library="passiv" package="CHIP_0805" value="22Ω" x="113.665" y="73.025" rot="R270"/>
-<element name="R101" library="passiv" package="CHIP_0805" value="22Ω" x="115.57" y="73.025" rot="R270"/>
-<element name="C106" library="passiv" package="CHIP_0805" value="10μF" x="114.3" y="79.375" rot="R180"/>
+<element name="R107" library="widerstandsnetzwerk" package="1206" value="22kΩ" x="102.87" y="10.16" smashed="yes" rot="R270">
+<attribute name="NAME" x="102.87" y="12.7" size="1.27" layer="25" align="center"/>
+<attribute name="VALUE" x="102.87" y="7.62" size="1.27" layer="27" align="center"/>
+</element>
+<element name="R108" library="widerstandsnetzwerk" package="1206" value="22kΩ" x="130.81" y="10.16" smashed="yes" rot="R90">
+<attribute name="NAME" x="130.81" y="12.7" size="1.27" layer="25" rot="R180" align="center"/>
+<attribute name="VALUE" x="130.81" y="12.7" size="1.27" layer="27" rot="R180" align="center"/>
+</element>
+<element name="D104" library="led" package="CHIP_0805" value="RT" x="101.6" y="97.155" smashed="yes" rot="R90">
+<attribute name="NAME" x="94.25" y="95.25" size="1.27" layer="25" rot="R90" align="bottom-center"/>
+<attribute name="VALUE" x="102.6" y="97.155" size="1.27" layer="27" rot="R90" align="top-center"/>
+</element>
+<element name="IC101" library="ic-mcu" package="QFP64_08" value="AT90USB1287-AU" x="110.49" y="59.055" smashed="yes" rot="R270">
+<attribute name="NAME" x="110.49" y="49.8" size="1.27" layer="25" rot="R180" align="bottom-center"/>
+<attribute name="VALUE" x="109.49" y="59.055" size="1.27" layer="27" rot="R270" align="top-center"/>
+</element>
+<element name="R403" library="passiv" package="CHIP_0805" value="470Ω" x="33.02" y="48.895" smashed="yes" rot="R180">
+<attribute name="NAME" x="36.56" y="48.895" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="33.02" y="49.895" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="R404" library="passiv" package="CHIP_0805" value="470Ω" x="33.02" y="42.545" smashed="yes" rot="R180">
+<attribute name="NAME" x="36.56" y="42.545" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="33.02" y="43.545" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="R405" library="passiv" package="CHIP_0805" value="470Ω" x="33.02" y="36.195" smashed="yes" rot="R180">
+<attribute name="NAME" x="36.56" y="36.195" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="33.02" y="37.195" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="R406" library="passiv" package="CHIP_0805" value="470Ω" x="33.02" y="29.845" smashed="yes" rot="R180">
+<attribute name="NAME" x="36.56" y="29.845" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="33.02" y="30.845" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="R407" library="passiv" package="CHIP_0805" value="470Ω" x="33.02" y="23.495" smashed="yes" rot="R180">
+<attribute name="NAME" x="36.56" y="23.495" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="33.02" y="24.495" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="R408" library="passiv" package="CHIP_0805" value="470Ω" x="33.02" y="17.145" smashed="yes" rot="R180">
+<attribute name="NAME" x="36.56" y="17.145" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="33.02" y="18.145" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="R409" library="passiv" package="CHIP_0805" value="470Ω" x="33.02" y="10.795" smashed="yes" rot="R180">
+<attribute name="NAME" x="36.56" y="10.795" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="33.02" y="11.795" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="R410" library="passiv" package="CHIP_0805" value="470Ω" x="33.02" y="4.445" smashed="yes" rot="R180">
+<attribute name="NAME" x="36.56" y="4.445" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="33.02" y="5.445" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="D201" library="led" package="CHIP_0805" value="GN" x="134.62" y="46.99" smashed="yes">
+<attribute name="NAME" x="133.985" y="47.99" size="1.27" layer="25" align="bottom-center"/>
+<attribute name="VALUE" x="134.62" y="45.99" size="1.27" layer="27" align="top-center"/>
+</element>
+<element name="D202" library="led" package="CHIP_0805" value="GN" x="134.62" y="44.45" smashed="yes">
+<attribute name="VALUE" x="134.62" y="43.45" size="1.27" layer="27" align="top-center"/>
+</element>
+<element name="D203" library="led" package="CHIP_0805" value="GN" x="134.62" y="41.91" smashed="yes">
+<attribute name="VALUE" x="134.62" y="40.91" size="1.27" layer="27" align="top-center"/>
+</element>
+<element name="D204" library="led" package="CHIP_0805" value="GN" x="134.62" y="39.37" smashed="yes">
+<attribute name="VALUE" x="134.62" y="38.37" size="1.27" layer="27" align="top-center"/>
+</element>
+<element name="D205" library="led" package="CHIP_0805" value="GN" x="134.62" y="36.83" smashed="yes">
+<attribute name="VALUE" x="134.62" y="35.83" size="1.27" layer="27" align="top-center"/>
+</element>
+<element name="D206" library="led" package="CHIP_0805" value="GN" x="134.62" y="34.29" smashed="yes">
+<attribute name="VALUE" x="134.62" y="33.29" size="1.27" layer="27" align="top-center"/>
+</element>
+<element name="D207" library="led" package="CHIP_0805" value="GN" x="134.62" y="31.75" smashed="yes">
+<attribute name="VALUE" x="134.62" y="30.75" size="1.27" layer="27" align="top-center"/>
+</element>
+<element name="D208" library="led" package="CHIP_0805" value="GN" x="134.62" y="29.21" smashed="yes">
+<attribute name="NAME" x="133.985" y="28.21" size="1.27" layer="25" rot="R180" align="bottom-center"/>
+<attribute name="VALUE" x="134.62" y="28.21" size="1.27" layer="27" align="top-center"/>
+</element>
+<element name="D209" library="led" package="CHIP_0805" value="GN" x="100.33" y="46.99" smashed="yes" rot="R180">
+<attribute name="NAME" x="100.965" y="47.99" size="1.27" layer="25" align="bottom-center"/>
+<attribute name="VALUE" x="100.33" y="47.99" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="D210" library="led" package="CHIP_0805" value="GN" x="100.33" y="44.45" smashed="yes" rot="R180">
+<attribute name="VALUE" x="100.33" y="45.45" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="D211" library="led" package="CHIP_0805" value="GN" x="100.33" y="41.91" smashed="yes" rot="R180">
+<attribute name="VALUE" x="100.33" y="42.91" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="D212" library="led" package="CHIP_0805" value="GN" x="100.33" y="39.37" smashed="yes" rot="R180">
+<attribute name="VALUE" x="100.33" y="40.37" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="D213" library="led" package="CHIP_0805" value="GN" x="100.33" y="36.83" smashed="yes" rot="R180">
+<attribute name="VALUE" x="100.33" y="37.83" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="D214" library="led" package="CHIP_0805" value="GN" x="100.33" y="34.29" smashed="yes" rot="R180">
+<attribute name="VALUE" x="100.33" y="35.29" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="D215" library="led" package="CHIP_0805" value="GN" x="100.33" y="31.75" smashed="yes" rot="R180">
+<attribute name="VALUE" x="100.33" y="32.75" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="D216" library="led" package="CHIP_0805" value="GN" x="100.33" y="29.21" smashed="yes" rot="R180">
+<attribute name="NAME" x="100.965" y="28.21" size="1.27" layer="25" rot="R180" align="bottom-center"/>
+<attribute name="VALUE" x="100.33" y="30.21" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="C109" library="passiv" package="CHIP_0805" value="1μF" x="111.76" y="69.85" smashed="yes">
+<attribute name="NAME" x="110.125" y="73.025" size="1.27" layer="25" rot="R90" align="bottom-center"/>
+<attribute name="VALUE" x="111.76" y="68.85" size="1.27" layer="27" align="top-center"/>
+</element>
+<element name="X101" library="stecker" package="WE651005136421" value="" x="114.3" y="76.835" smashed="yes" rot="R180">
+<attribute name="NAME" x="122.555" y="77.375" size="1.27" layer="25" rot="R180" align="bottom-center"/>
+<attribute name="VALUE" x="114.3" y="78.835" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="R102" library="passiv" package="CHIP_0805" value="22Ω" x="113.665" y="73.025" smashed="yes" rot="R270">
+<attribute name="NAME" x="110.22" y="73.025" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="112.665" y="73.025" size="1.27" layer="27" rot="R270" align="top-center"/>
+</element>
+<element name="R101" library="passiv" package="CHIP_0805" value="22Ω" x="115.57" y="73.025" smashed="yes" rot="R270">
+<attribute name="NAME" x="111.49" y="73.025" size="1.27" layer="25" rot="R270" align="bottom-center"/>
+<attribute name="VALUE" x="114.57" y="73.025" size="1.27" layer="27" rot="R270" align="top-center"/>
+</element>
+<element name="C106" library="passiv" package="CHIP_0805" value="10μF" x="114.3" y="79.375" smashed="yes" rot="R180">
+<attribute name="NAME" x="118.745" y="80.28" size="1.27" layer="25" rot="R180" align="bottom-center"/>
+<attribute name="VALUE" x="114.3" y="80.375" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
 <element name="C102" library="passiv" package="CHIP_0805" value="100nF" x="117.475" y="73.025" rot="MR270"/>
-<element name="Q101" library="passiv" package="X22" value="16MHz" x="95.885" y="58.42"/>
+<element name="Q101" library="passiv" package="X22" value="16MHz" x="95.885" y="58.42" smashed="yes">
+<attribute name="NAME" x="95.885" y="57.12" size="1.27" layer="25" rot="R180" align="bottom-center"/>
+<attribute name="VALUE" x="95.885" y="57.12" size="1.27" layer="27" align="top-center"/>
+</element>
 <element name="C103" library="passiv" package="CHIP_0805" value="15pF" x="92.71" y="59.055" rot="R90"/>
-<element name="C108" library="passiv" package="CHIP_0805" value="15pF" x="95.885" y="60.96" rot="R180"/>
+<element name="C108" library="passiv" package="CHIP_0805" value="15pF" x="95.885" y="60.96" smashed="yes" rot="R180">
+<attribute name="NAME" x="95.885" y="61.96" size="1.27" layer="25" align="bottom-center"/>
+<attribute name="VALUE" x="95.885" y="61.96" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
 <element name="X103" library="anschluss" package="WS34V" value="" x="125.73" y="48.26" rot="MR270"/>
-<element name="X303" library="anschluss" package="WS34V" value="" x="44.45" y="77.47"/>
-<element name="D101" library="diode" package="SOD123" value="MMSZ5222BT1" x="120.015" y="69.85"/>
-<element name="R105" library="passiv" package="CHIP_0805" value="10kΩ" x="120.015" y="67.945"/>
-<element name="R201" library="passiv" package="CHIP_0805" value="1,5kΩ" x="139.065" y="46.99" rot="R180"/>
-<element name="R202" library="passiv" package="CHIP_0805" value="1,5kΩ" x="139.065" y="44.45" rot="R180"/>
-<element name="R203" library="passiv" package="CHIP_0805" value="1,5kΩ" x="139.065" y="41.91" rot="R180"/>
-<element name="R204" library="passiv" package="CHIP_0805" value="1,5kΩ" x="139.065" y="39.37" rot="R180"/>
-<element name="R205" library="passiv" package="CHIP_0805" value="1,5kΩ" x="139.065" y="36.83" rot="R180"/>
-<element name="R206" library="passiv" package="CHIP_0805" value="1,5kΩ" x="139.065" y="34.29" rot="R180"/>
-<element name="R207" library="passiv" package="CHIP_0805" value="1,5kΩ" x="139.065" y="31.75" rot="R180"/>
-<element name="R208" library="passiv" package="CHIP_0805" value="1,5kΩ" x="139.065" y="29.21" rot="R180"/>
-<element name="R209" library="passiv" package="CHIP_0805" value="1,5kΩ" x="95.885" y="46.99"/>
-<element name="R210" library="passiv" package="CHIP_0805" value="1,5kΩ" x="95.885" y="44.45"/>
-<element name="R211" library="passiv" package="CHIP_0805" value="1,5kΩ" x="95.885" y="41.91"/>
-<element name="R212" library="passiv" package="CHIP_0805" value="1,5kΩ" x="95.885" y="39.37"/>
-<element name="R213" library="passiv" package="CHIP_0805" value="1,5kΩ" x="95.885" y="36.83"/>
-<element name="R214" library="passiv" package="CHIP_0805" value="1,5kΩ" x="95.885" y="34.29"/>
-<element name="R215" library="passiv" package="CHIP_0805" value="1,5kΩ" x="95.885" y="31.75"/>
-<element name="R216" library="passiv" package="CHIP_0805" value="1,5kΩ" x="95.885" y="29.21"/>
-<element name="R109" library="passiv" package="CHIP_0805" value="1,5kΩ" x="106.68" y="92.71" rot="R270"/>
-<element name="R110" library="passiv" package="CHIP_0805" value="1,5kΩ" x="104.14" y="92.71" rot="R270"/>
-<element name="R111" library="passiv" package="CHIP_0805" value="1,5kΩ" x="101.6" y="92.71" rot="R270"/>
-<element name="R113" library="passiv" package="CHIP_0805" value="1,5kΩ" x="99.06" y="92.71" rot="R270"/>
+<element name="X303" library="anschluss" package="WS34V" value="" x="44.45" y="77.47" smashed="yes">
+<attribute name="NAME" x="44.45" y="82.55" size="1.778" layer="25" align="bottom-center"/>
+<attribute name="VALUE" x="29.21" y="82.55" size="1.778" layer="27"/>
+</element>
+<element name="D101" library="diode" package="SOD123" value="MMSZ5222BT1" x="120.015" y="69.85" smashed="yes">
+<attribute name="NAME" x="125.095" y="69.58" size="1.27" layer="25" align="bottom-center"/>
+<attribute name="VALUE" x="120.015" y="68.85" size="1.27" layer="27" align="top-center"/>
+</element>
+<element name="R105" library="passiv" package="CHIP_0805" value="10kΩ" x="120.015" y="67.945" smashed="yes">
+<attribute name="NAME" x="115.57" y="67.675" size="1.27" layer="25" align="bottom-center"/>
+<attribute name="VALUE" x="120.015" y="66.945" size="1.27" layer="27" align="top-center"/>
+</element>
+<element name="R201" library="passiv" package="CHIP_0805" value="1,5kΩ" x="139.065" y="46.99" smashed="yes" rot="R180">
+<attribute name="NAME" x="139.7" y="47.99" size="1.27" layer="25" align="bottom-center"/>
+<attribute name="VALUE" x="139.065" y="47.99" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="R202" library="passiv" package="CHIP_0805" value="1,5kΩ" x="139.065" y="44.45" smashed="yes" rot="R180">
+<attribute name="VALUE" x="139.065" y="45.45" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="R203" library="passiv" package="CHIP_0805" value="1,5kΩ" x="139.065" y="41.91" smashed="yes" rot="R180">
+<attribute name="VALUE" x="139.065" y="42.91" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="R204" library="passiv" package="CHIP_0805" value="1,5kΩ" x="139.065" y="39.37" smashed="yes" rot="R180">
+<attribute name="VALUE" x="139.065" y="40.37" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="R205" library="passiv" package="CHIP_0805" value="1,5kΩ" x="139.065" y="36.83" smashed="yes" rot="R180">
+<attribute name="VALUE" x="139.065" y="37.83" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="R206" library="passiv" package="CHIP_0805" value="1,5kΩ" x="139.065" y="34.29" smashed="yes" rot="R180">
+<attribute name="VALUE" x="139.065" y="35.29" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="R207" library="passiv" package="CHIP_0805" value="1,5kΩ" x="139.065" y="31.75" smashed="yes" rot="R180">
+<attribute name="VALUE" x="139.065" y="32.75" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="R208" library="passiv" package="CHIP_0805" value="1,5kΩ" x="139.065" y="29.21" smashed="yes" rot="R180">
+<attribute name="NAME" x="139.7" y="28.21" size="1.27" layer="25" rot="R180" align="bottom-center"/>
+<attribute name="VALUE" x="139.065" y="30.21" size="1.27" layer="27" rot="R180" align="top-center"/>
+</element>
+<element name="R209" library="passiv" package="CHIP_0805" value="1,5kΩ" x="95.885" y="46.99" smashed="yes">
+<attribute name="NAME" x="95.25" y="47.99" size="1.27" layer="25" align="bottom-center"/>
+<attribute name="VALUE" x="95.885" y="45.99" size="1.27" layer="27" align="top-center"/>
+</element>
+<element name="R210" library="passiv" package="CHIP_0805" value="1,5kΩ" x="95.885" y="44.45" smashed="yes">
+<attribute name="VALUE" x="95.885" y="43.45" size="1.27" layer="27" align="top-center"/>
+</element>
+<element name="R211" library="passiv" package="CHIP_0805" value="1,5kΩ" x="95.885" y="41.91" smashed="yes">
+<attribute name="VALUE" x="95.885" y="40.91" size="1.27" layer="27" align="top-center"/>
+</element>
+<element name="R212" library="passiv" package="CHIP_0805" value="1,5kΩ" x="95.885" y="39.37" smashed="yes">
+<attribute name="VALUE" x="95.885" y="38.37" size="1.27" layer="27" align="top-center"/>
+</element>
+<element name="R213" library="passiv" package="CHIP_0805" value="1,5kΩ" x="95.885" y="36.83" smashed="yes">
+<attribute name="VALUE" x="95.885" y="35.83" size="1.27" layer="27" align="top-center"/>
+</element>
+<element name="R214" library="passiv" package="CHIP_0805" value="1,5kΩ" x="95.885" y="34.29" smashed="yes">
+<attribute name="VALUE" x="95.885" y="33.29" size="1.27" layer="27" align="top-center"/>
+</element>
+<element name="R215" library="passiv" package="CHIP_0805" value="1,5kΩ" x="95.885" y="31.75" smashed="yes">
+<attribute name="VALUE" x="95.885" y="30.75" size="1.27" layer="27" align="top-center"/>
+</element>
+<element name="R216" library="passiv" package="CHIP_0805" value="1,5kΩ" x="95.885" y="29.21" smashed="yes">
+<attribute name="NAME" x="95.25" y="28.21" size="1.27" layer="25" rot="R180" align="bottom-center"/>
+<attribute name="VALUE" x="95.885" y="28.21" size="1.27" layer="27" align="top-center"/>
+</element>
+<element name="R109" library="passiv" package="CHIP_0805" value="1,5kΩ" x="106.68" y="92.71" smashed="yes" rot="R270">
+<attribute name="NAME" x="105.68" y="88.265" size="1.27" layer="25" rot="R90" align="bottom-center"/>
+<attribute name="VALUE" x="105.68" y="92.71" size="1.27" layer="27" rot="R270" align="top-center"/>
+</element>
+<element name="R110" library="passiv" package="CHIP_0805" value="1,5kΩ" x="104.14" y="92.71" smashed="yes" rot="R270">
+<attribute name="NAME" x="103.775" y="88.265" size="1.27" layer="25" rot="R90" align="bottom-center"/>
+<attribute name="VALUE" x="103.14" y="92.71" size="1.27" layer="27" rot="R270" align="top-center"/>
+</element>
+<element name="R111" library="passiv" package="CHIP_0805" value="1,5kΩ" x="101.6" y="92.71" smashed="yes" rot="R270">
+<attribute name="NAME" x="101.87" y="88.265" size="1.27" layer="25" rot="R90" align="bottom-center"/>
+<attribute name="VALUE" x="100.6" y="92.71" size="1.27" layer="27" rot="R270" align="top-center"/>
+</element>
+<element name="R113" library="passiv" package="CHIP_0805" value="1,5kΩ" x="99.06" y="92.71" smashed="yes" rot="R270">
+<attribute name="NAME" x="99.965" y="88.265" size="1.27" layer="25" rot="R90" align="bottom-center"/>
+<attribute name="VALUE" x="98.06" y="92.71" size="1.27" layer="27" rot="R270" align="top-center"/>
+</element>
 <element name="S102" library="schalter" package="SCHURTER1301" value="" x="130.81" y="76.2"/>
-<element name="R104" library="passiv" package="CHIP_0805" value="10kΩ" x="135.89" y="81.28" rot="R90"/>
-<element name="S101" library="schalter" package="JUMPER2" value="" x="109.22" y="96.52" rot="R270"/>
-<element name="X406" library="anschluss" package="AKL_230-08" value="" x="10.16" y="26.67" rot="R270"/>
-<element name="X308" library="anschluss" package="AKL_230-08" value="" x="76.2" y="26.67" rot="R90"/>
-<element name="X301" library="anschluss" package="AKL_230-02" value="" x="76.2" y="60.96" rot="R90"/>
+<element name="R104" library="passiv" package="CHIP_0805" value="10kΩ" x="135.89" y="81.28" smashed="yes" rot="R90">
+<attribute name="NAME" x="138.7" y="81.28" size="1.27" layer="25" rot="R90" align="bottom-center"/>
+<attribute name="VALUE" x="136.89" y="81.28" size="1.27" layer="27" rot="R90" align="top-center"/>
+</element>
+<element name="S101" library="schalter" package="JUMPER2" value="" x="109.22" y="96.52" smashed="yes" rot="R270">
+<attribute name="NAME" x="112.395" y="97.79" size="1.27" layer="25" align="bottom-center"/>
+</element>
+<element name="X406" library="anschluss" package="AKL_230-08" value="AKL_230-08" x="10.16" y="26.67" smashed="yes" rot="R270">
+<attribute name="NAME" x="7.46" y="49.07" size="1.27" layer="25" rot="R180" align="center"/>
+<attribute name="VALUE" x="13.16" y="16.67" size="1.27" layer="27" rot="R270" align="center"/>
+</element>
+<element name="X308" library="anschluss" package="AKL_230-08" value="AKL_230-08" x="76.2" y="26.67" smashed="yes" rot="R90">
+<attribute name="NAME" x="80.17" y="48.72" size="1.27" layer="25" align="center"/>
+<attribute name="VALUE" x="73.2" y="36.67" size="1.27" layer="27" rot="R90" align="center"/>
+</element>
+<element name="X301" library="anschluss" package="AKL_230-02" value="" x="76.2" y="60.96" smashed="yes" rot="R90">
+<attribute name="NAME" x="80.01" y="67.77" size="1.27" layer="25" align="center"/>
+<attribute name="VALUE" x="79.2" y="60.96" size="1.27" layer="27" rot="R90" align="center"/>
+</element>
 <element name="X409" library="anschluss" package="AKL_230-02" value="" x="10.16" y="60.96" rot="R270"/>
-<element name="X403" library="anschluss" package="AKL_230-04" value="" x="76.2" y="88.9" rot="R90"/>
-<element name="X404" library="stecker" package="C-BMJ-0102" value="" x="7.62" y="75.565" rot="R270"/>
+<element name="X403" library="anschluss" package="AKL_230-04" value="" x="76.2" y="88.9" smashed="yes" rot="R90">
+<attribute name="NAME" x="79.93" y="77.01" size="1.27" layer="25" rot="R180" align="center"/>
+<attribute name="VALUE" x="73.2" y="93.8" size="1.27" layer="27" rot="R90" align="center"/>
+</element>
+<element name="X404" library="stecker" package="C-BMJ-0102" value="" x="7.62" y="75.565" smashed="yes" rot="R270">
+<attribute name="NAME" x="18.62" y="70.485" size="1.27" layer="25" rot="R270" align="center"/>
+<attribute name="VALUE" x="10.62" y="75.665" size="1.27" layer="27" rot="R270" align="center"/>
+</element>
 <element name="X405" library="stecker" package="C-BMJ-0102" value="" x="7.62" y="91.44" rot="R270"/>
 </elements>
 <signals>
 <signal name="GND">
 <contactref element="IC102" pad="5"/>
 <contactref element="C111" pad="2"/>
-<contactref element="LED104" pad="2"/>
+<contactref element="D105" pad="2"/>
 <contactref element="V401" pad="3"/>
 <contactref element="IC103" pad="8"/>
 <contactref element="C110" pad="2"/>
@@ -1677,8 +1993,8 @@ Your Eurocircuits Team</description>
 <contactref element="IC103" pad="14"/>
 <contactref element="IC103" pad="1"/>
 <contactref element="R402" pad="2"/>
-<contactref element="LED101" pad="2"/>
-<contactref element="LED102" pad="2"/>
+<contactref element="D102" pad="2"/>
+<contactref element="D103" pad="2"/>
 <contactref element="IC303" pad="3"/>
 <contactref element="IC305" pad="3"/>
 <contactref element="IC307" pad="3"/>
@@ -1703,7 +2019,7 @@ Your Eurocircuits Team</description>
 <contactref element="R108" pad="2A"/>
 <contactref element="R108" pad="3A"/>
 <contactref element="R108" pad="4A"/>
-<contactref element="LED103" pad="2"/>
+<contactref element="D104" pad="2"/>
 <wire x1="120.65" y1="56.68" x2="121.45" y2="56.68" width="0.3048" layer="1"/>
 <wire x1="121.45" y1="56.68" x2="121.92" y2="57.15" width="0.3048" layer="1"/>
 <via x="98.425" y="60.96" extent="1-16" drill="0.4"/>
@@ -2060,9 +2376,9 @@ Your Eurocircuits Team</description>
 <via x="45.72" y="46.99" extent="1-16" drill="0.4"/>
 <wire x1="52.07" y1="92.115" x2="48.895" y2="92.115" width="1.27" layer="1"/>
 <wire x1="48.895" y1="92.115" x2="48.26" y2="92.75" width="1.27" layer="1"/>
-<wire x1="48.26" y1="92.75" x2="48.26" y2="97.79" width="1.27" layer="1"/>
-<wire x1="48.26" y1="97.79" x2="47.625" y2="98.425" width="1.27" layer="1"/>
-<wire x1="47.625" y1="98.425" x2="13.335" y2="98.425" width="1.27" layer="1"/>
+<wire x1="48.26" y1="92.75" x2="43.18" y2="97.79" width="1.27" layer="1"/>
+<wire x1="43.18" y1="97.79" x2="42.545" y2="98.425" width="1.27" layer="1"/>
+<wire x1="42.545" y1="98.425" x2="13.335" y2="98.425" width="1.27" layer="1"/>
 <wire x1="13.335" y1="98.425" x2="4.445" y2="89.535" width="1.27" layer="1"/>
 <wire x1="4.445" y1="89.535" x2="4.445" y2="78.105" width="1.27" layer="1"/>
 <wire x1="4.445" y1="78.105" x2="13.335" y2="69.215" width="1.27" layer="1"/>
@@ -2362,7 +2678,7 @@ Your Eurocircuits Team</description>
 <contactref element="X103" pad="18"/>
 <wire x1="125.73" y1="46.99" x2="124.46" y2="48.26" width="0.4064" layer="1"/>
 <wire x1="124.46" y1="48.26" x2="106.045" y2="48.26" width="0.4064" layer="16"/>
-<contactref element="LED201" pad="1"/>
+<contactref element="D201" pad="1"/>
 <wire x1="125.73" y1="46.99" x2="133.62" y2="46.99" width="0.4064" layer="1"/>
 </signal>
 <signal name="IN1">
@@ -2373,7 +2689,7 @@ Your Eurocircuits Team</description>
 <contactref element="X103" pad="20"/>
 <wire x1="125.73" y1="44.45" x2="124.46" y2="45.72" width="0.4064" layer="1"/>
 <wire x1="124.46" y1="45.72" x2="106.68" y2="45.72" width="0.4064" layer="16"/>
-<contactref element="LED202" pad="1"/>
+<contactref element="D202" pad="1"/>
 <wire x1="125.73" y1="44.45" x2="133.62" y2="44.45" width="0.4064" layer="1"/>
 </signal>
 <signal name="IN2">
@@ -2384,7 +2700,7 @@ Your Eurocircuits Team</description>
 <contactref element="X103" pad="22"/>
 <wire x1="125.73" y1="41.91" x2="124.46" y2="43.18" width="0.4064" layer="1"/>
 <wire x1="124.46" y1="43.18" x2="107.315" y2="43.18" width="0.4064" layer="16"/>
-<contactref element="LED203" pad="1"/>
+<contactref element="D203" pad="1"/>
 <wire x1="125.73" y1="41.91" x2="133.62" y2="41.91" width="0.4064" layer="1"/>
 </signal>
 <signal name="IN3">
@@ -2395,7 +2711,7 @@ Your Eurocircuits Team</description>
 <contactref element="X103" pad="24"/>
 <wire x1="125.73" y1="39.37" x2="124.46" y2="40.64" width="0.4064" layer="1"/>
 <wire x1="124.46" y1="40.64" x2="107.95" y2="40.64" width="0.4064" layer="16"/>
-<contactref element="LED204" pad="1"/>
+<contactref element="D204" pad="1"/>
 <wire x1="125.73" y1="39.37" x2="133.62" y2="39.37" width="0.4064" layer="1"/>
 </signal>
 <signal name="IN4">
@@ -2406,7 +2722,7 @@ Your Eurocircuits Team</description>
 <contactref element="X103" pad="26"/>
 <wire x1="125.73" y1="36.83" x2="124.46" y2="38.1" width="0.4064" layer="1"/>
 <wire x1="124.46" y1="38.1" x2="108.585" y2="38.1" width="0.4064" layer="16"/>
-<contactref element="LED205" pad="1"/>
+<contactref element="D205" pad="1"/>
 <wire x1="125.73" y1="36.83" x2="133.62" y2="36.83" width="0.4064" layer="1"/>
 </signal>
 <signal name="IN5">
@@ -2417,7 +2733,7 @@ Your Eurocircuits Team</description>
 <contactref element="X103" pad="28"/>
 <wire x1="125.73" y1="34.29" x2="124.46" y2="35.56" width="0.4064" layer="1"/>
 <wire x1="124.46" y1="35.56" x2="109.22" y2="35.56" width="0.4064" layer="16"/>
-<contactref element="LED206" pad="1"/>
+<contactref element="D206" pad="1"/>
 <wire x1="125.73" y1="34.29" x2="133.62" y2="34.29" width="0.4064" layer="1"/>
 </signal>
 <signal name="IN6">
@@ -2428,7 +2744,7 @@ Your Eurocircuits Team</description>
 <contactref element="X103" pad="30"/>
 <wire x1="125.73" y1="31.75" x2="124.46" y2="33.02" width="0.4064" layer="1"/>
 <wire x1="124.46" y1="33.02" x2="109.855" y2="33.02" width="0.4064" layer="16"/>
-<contactref element="LED207" pad="1"/>
+<contactref element="D207" pad="1"/>
 <wire x1="125.73" y1="31.75" x2="133.62" y2="31.75" width="0.4064" layer="1"/>
 </signal>
 <signal name="IN7">
@@ -2439,7 +2755,7 @@ Your Eurocircuits Team</description>
 <contactref element="X103" pad="32"/>
 <wire x1="125.73" y1="29.21" x2="124.46" y2="30.48" width="0.4064" layer="1"/>
 <wire x1="124.46" y1="30.48" x2="110.49" y2="30.48" width="0.4064" layer="16"/>
-<contactref element="LED208" pad="1"/>
+<contactref element="D208" pad="1"/>
 <wire x1="125.73" y1="29.21" x2="133.62" y2="29.21" width="0.4064" layer="1"/>
 </signal>
 <signal name="TXD">
@@ -2503,12 +2819,12 @@ Your Eurocircuits Team</description>
 <via x="99.695" y="53.34" extent="1-16" drill="0.4"/>
 </signal>
 <signal name="N$62">
-<contactref element="LED101" pad="1"/>
+<contactref element="D102" pad="1"/>
 <contactref element="R109" pad="1"/>
 <wire x1="106.68" y1="96.155" x2="106.68" y2="93.71" width="0.4064" layer="1"/>
 </signal>
 <signal name="N$63">
-<contactref element="LED102" pad="1"/>
+<contactref element="D103" pad="1"/>
 <contactref element="R110" pad="1"/>
 <wire x1="104.14" y1="96.155" x2="104.14" y2="93.71" width="0.4064" layer="1"/>
 </signal>
@@ -3173,7 +3489,7 @@ Your Eurocircuits Team</description>
 <wire x1="76.2" y1="13.97" x2="81.28" y2="13.97" width="0.4064" layer="16"/>
 </signal>
 <signal name="N$4">
-<contactref element="LED103" pad="1"/>
+<contactref element="D104" pad="1"/>
 <contactref element="R111" pad="1"/>
 <wire x1="101.6" y1="96.155" x2="101.6" y2="93.71" width="0.4064" layer="1"/>
 </signal>
@@ -3191,7 +3507,7 @@ Your Eurocircuits Team</description>
 <via x="113.665" y="53.34" extent="1-16" drill="0.4"/>
 <wire x1="118.29" y1="54.655" x2="114.98" y2="54.655" width="0.4064" layer="1"/>
 <wire x1="114.98" y1="54.655" x2="113.665" y2="53.34" width="0.4064" layer="1"/>
-<contactref element="LED209" pad="1"/>
+<contactref element="D209" pad="1"/>
 <wire x1="104.775" y1="48.895" x2="102.87" y2="46.99" width="0.4064" layer="1"/>
 <wire x1="102.87" y1="46.99" x2="101.33" y2="46.99" width="0.4064" layer="1"/>
 <wire x1="125.73" y1="49.53" x2="117.475" y2="49.53" width="0.4064" layer="16"/>
@@ -3212,7 +3528,7 @@ Your Eurocircuits Team</description>
 <wire x1="116.84" y1="52.705" x2="117.475" y2="52.07" width="0.4064" layer="1"/>
 <wire x1="117.475" y1="52.07" x2="117.475" y2="46.99" width="0.4064" layer="1"/>
 <via x="117.475" y="46.99" extent="1-16" drill="0.4"/>
-<contactref element="LED210" pad="1"/>
+<contactref element="D210" pad="1"/>
 <wire x1="105.41" y1="46.99" x2="102.87" y2="44.45" width="0.4064" layer="1"/>
 <wire x1="102.87" y1="44.45" x2="101.33" y2="44.45" width="0.4064" layer="1"/>
 </signal>
@@ -3226,7 +3542,7 @@ Your Eurocircuits Team</description>
 <wire x1="118.29" y1="53.055" x2="118.29" y2="45.265" width="0.4064" layer="1"/>
 <via x="117.475" y="44.45" extent="1-16" drill="0.4"/>
 <wire x1="118.29" y1="45.265" x2="117.475" y2="44.45" width="0.4064" layer="1"/>
-<contactref element="LED211" pad="1"/>
+<contactref element="D211" pad="1"/>
 <wire x1="105.41" y1="44.45" x2="102.87" y2="41.91" width="0.4064" layer="1"/>
 <wire x1="102.87" y1="41.91" x2="101.33" y2="41.91" width="0.4064" layer="1"/>
 </signal>
@@ -3240,7 +3556,7 @@ Your Eurocircuits Team</description>
 <wire x1="105.41" y1="41.91" x2="117.475" y2="41.91" width="0.4064" layer="16"/>
 <contactref element="X103" pad="23"/>
 <wire x1="127" y1="40.64" x2="125.73" y2="41.91" width="0.4064" layer="16"/>
-<contactref element="LED212" pad="1"/>
+<contactref element="D212" pad="1"/>
 <wire x1="105.41" y1="41.91" x2="102.87" y2="39.37" width="0.4064" layer="1"/>
 <wire x1="102.87" y1="39.37" x2="101.33" y2="39.37" width="0.4064" layer="1"/>
 </signal>
@@ -3254,7 +3570,7 @@ Your Eurocircuits Team</description>
 <wire x1="105.41" y1="39.37" x2="117.475" y2="39.37" width="0.4064" layer="16"/>
 <contactref element="X103" pad="25"/>
 <wire x1="125.73" y1="39.37" x2="127" y2="38.1" width="0.4064" layer="16"/>
-<contactref element="LED213" pad="1"/>
+<contactref element="D213" pad="1"/>
 <wire x1="105.41" y1="39.37" x2="102.87" y2="36.83" width="0.4064" layer="1"/>
 <wire x1="102.87" y1="36.83" x2="101.33" y2="36.83" width="0.4064" layer="1"/>
 </signal>
@@ -3268,7 +3584,7 @@ Your Eurocircuits Team</description>
 <wire x1="105.41" y1="36.83" x2="117.475" y2="36.83" width="0.4064" layer="16"/>
 <contactref element="X103" pad="27"/>
 <wire x1="125.73" y1="36.83" x2="127" y2="35.56" width="0.4064" layer="16"/>
-<contactref element="LED214" pad="1"/>
+<contactref element="D214" pad="1"/>
 <wire x1="105.41" y1="36.83" x2="102.87" y2="34.29" width="0.4064" layer="1"/>
 <wire x1="102.87" y1="34.29" x2="101.33" y2="34.29" width="0.4064" layer="1"/>
 </signal>
@@ -3282,7 +3598,7 @@ Your Eurocircuits Team</description>
 <via x="117.475" y="34.29" extent="1-16" drill="0.4"/>
 <contactref element="X103" pad="29"/>
 <wire x1="125.73" y1="34.29" x2="127" y2="33.02" width="0.4064" layer="16"/>
-<contactref element="LED215" pad="1"/>
+<contactref element="D215" pad="1"/>
 <wire x1="105.41" y1="34.29" x2="102.87" y2="31.75" width="0.4064" layer="1"/>
 <wire x1="102.87" y1="31.75" x2="101.33" y2="31.75" width="0.4064" layer="1"/>
 </signal>
@@ -3296,7 +3612,7 @@ Your Eurocircuits Team</description>
 <wire x1="105.41" y1="31.75" x2="117.475" y2="31.75" width="0.4064" layer="16"/>
 <contactref element="X103" pad="31"/>
 <wire x1="125.73" y1="31.75" x2="127" y2="30.48" width="0.4064" layer="16"/>
-<contactref element="LED216" pad="1"/>
+<contactref element="D216" pad="1"/>
 <wire x1="105.41" y1="31.75" x2="102.87" y2="29.21" width="0.4064" layer="1"/>
 <wire x1="102.87" y1="29.21" x2="101.33" y2="29.21" width="0.4064" layer="1"/>
 </signal>
@@ -3587,7 +3903,7 @@ Your Eurocircuits Team</description>
 <wire x1="31.75" y1="49.165" x2="31.75" y2="52.07" width="0.4064" layer="1"/>
 </signal>
 <signal name="N$44">
-<contactref element="LED104" pad="1"/>
+<contactref element="D105" pad="1"/>
 <contactref element="R113" pad="1"/>
 <wire x1="99.06" y1="96.155" x2="99.06" y2="93.71" width="0.4064" layer="1"/>
 </signal>
@@ -3915,82 +4231,82 @@ Your Eurocircuits Team</description>
 <wire x1="34.29" y1="63.77" x2="34.29" y2="76.2" width="0.4064" layer="1"/>
 </signal>
 <signal name="N$102">
-<contactref element="LED201" pad="2"/>
+<contactref element="D201" pad="2"/>
 <contactref element="R201" pad="2"/>
 <wire x1="135.62" y1="46.99" x2="138.065" y2="46.99" width="0.4064" layer="1"/>
 </signal>
 <signal name="N$103">
-<contactref element="LED202" pad="2"/>
+<contactref element="D202" pad="2"/>
 <contactref element="R202" pad="2"/>
 <wire x1="135.62" y1="44.45" x2="138.065" y2="44.45" width="0.4064" layer="1"/>
 </signal>
 <signal name="N$104">
-<contactref element="LED203" pad="2"/>
+<contactref element="D203" pad="2"/>
 <contactref element="R203" pad="2"/>
 <wire x1="135.62" y1="41.91" x2="138.065" y2="41.91" width="0.4064" layer="1"/>
 </signal>
 <signal name="N$105">
-<contactref element="LED204" pad="2"/>
+<contactref element="D204" pad="2"/>
 <contactref element="R204" pad="2"/>
 <wire x1="135.62" y1="39.37" x2="138.065" y2="39.37" width="0.4064" layer="1"/>
 </signal>
 <signal name="N$106">
-<contactref element="LED205" pad="2"/>
+<contactref element="D205" pad="2"/>
 <contactref element="R205" pad="2"/>
 <wire x1="135.62" y1="36.83" x2="138.065" y2="36.83" width="0.4064" layer="1"/>
 </signal>
 <signal name="N$107">
-<contactref element="LED206" pad="2"/>
+<contactref element="D206" pad="2"/>
 <contactref element="R206" pad="2"/>
 <wire x1="135.62" y1="34.29" x2="138.065" y2="34.29" width="0.4064" layer="1"/>
 </signal>
 <signal name="N$108">
-<contactref element="LED207" pad="2"/>
+<contactref element="D207" pad="2"/>
 <contactref element="R207" pad="2"/>
 <wire x1="135.62" y1="31.75" x2="138.065" y2="31.75" width="0.4064" layer="1"/>
 </signal>
 <signal name="N$109">
-<contactref element="LED208" pad="2"/>
+<contactref element="D208" pad="2"/>
 <contactref element="R208" pad="2"/>
 <wire x1="135.62" y1="29.21" x2="138.065" y2="29.21" width="0.4064" layer="1"/>
 </signal>
 <signal name="N$110">
-<contactref element="LED209" pad="2"/>
+<contactref element="D209" pad="2"/>
 <contactref element="R209" pad="2"/>
 <wire x1="96.885" y1="46.99" x2="99.33" y2="46.99" width="0.4064" layer="1"/>
 </signal>
 <signal name="N$111">
-<contactref element="LED210" pad="2"/>
+<contactref element="D210" pad="2"/>
 <contactref element="R210" pad="2"/>
 <wire x1="96.885" y1="44.45" x2="99.33" y2="44.45" width="0.4064" layer="1"/>
 </signal>
 <signal name="N$112">
-<contactref element="LED211" pad="2"/>
+<contactref element="D211" pad="2"/>
 <contactref element="R211" pad="2"/>
 <wire x1="96.885" y1="41.91" x2="99.33" y2="41.91" width="0.4064" layer="1"/>
 </signal>
 <signal name="N$113">
-<contactref element="LED212" pad="2"/>
+<contactref element="D212" pad="2"/>
 <contactref element="R212" pad="2"/>
 <wire x1="96.885" y1="39.37" x2="99.33" y2="39.37" width="0.4064" layer="1"/>
 </signal>
 <signal name="N$114">
-<contactref element="LED213" pad="2"/>
+<contactref element="D213" pad="2"/>
 <contactref element="R213" pad="2"/>
 <wire x1="96.885" y1="36.83" x2="99.33" y2="36.83" width="0.4064" layer="1"/>
 </signal>
 <signal name="N$115">
-<contactref element="LED214" pad="2"/>
+<contactref element="D214" pad="2"/>
 <contactref element="R214" pad="2"/>
 <wire x1="96.885" y1="34.29" x2="99.33" y2="34.29" width="0.4064" layer="1"/>
 </signal>
 <signal name="N$116">
-<contactref element="LED215" pad="2"/>
+<contactref element="D215" pad="2"/>
 <contactref element="R215" pad="2"/>
 <wire x1="96.885" y1="31.75" x2="99.33" y2="31.75" width="0.4064" layer="1"/>
 </signal>
 <signal name="N$117">
-<contactref element="LED216" pad="2"/>
+<contactref element="D216" pad="2"/>
 <contactref element="R216" pad="2"/>
 <wire x1="96.885" y1="29.21" x2="99.33" y2="29.21" width="0.4064" layer="1"/>
 </signal>
