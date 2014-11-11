@@ -6457,6 +6457,68 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 </deviceset>
 </devicesets>
 </library>
+<library name="test">
+<packages>
+<package name="PADS">
+<smd name="1" x="0" y="0" dx="1.27" dy="1.016" layer="1"/>
+<text x="-1.27" y="0" size="1.016" layer="25" align="center-right">&gt;NAME</text>
+<text x="1.27" y="0" size="1.016" layer="27" align="center-left">&gt;VALUE</text>
+</package>
+<package name="VIA08">
+<pad name="1" x="0" y="0" drill="0.8" diameter="1.6764"/>
+<text x="-1.27" y="0" size="1.27" layer="25" align="center-right">&gt;NAME</text>
+<text x="1.27" y="0" size="1.27" layer="27" align="center-left">&gt;VALUE</text>
+</package>
+<package name="VIA06">
+<pad name="1" x="0" y="0" drill="0.6"/>
+<text x="-1.27" y="0" size="1.016" layer="25" align="center-right">&gt;NAME</text>
+<text x="1.27" y="0" size="1.016" layer="27" align="center-left">&gt;VALUE</text>
+</package>
+</packages>
+<symbols>
+<symbol name="TEST">
+<pin name="1" x="-2.54" y="0" visible="off" length="short" direction="pas"/>
+<text x="2.54" y="0" size="1.778" layer="95" align="center-left">&gt;NAME</text>
+<wire x1="0" y1="0" x2="1.016" y2="1.016" width="0.1778" layer="94"/>
+<wire x1="1.016" y1="1.016" x2="2.032" y2="0" width="0.1778" layer="94"/>
+<wire x1="2.032" y1="0" x2="1.016" y2="-1.016" width="0.1778" layer="94"/>
+<wire x1="1.016" y1="-1.016" x2="0" y2="0" width="0.1778" layer="94"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="TEST" prefix="T" uservalue="yes">
+<gates>
+<gate name="G$1" symbol="TEST" x="0" y="0"/>
+</gates>
+<devices>
+<device name="_PAD_SMALL" package="PADS">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="_VIA_08" package="VIA08">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="_VIA_06" package="VIA06">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -6775,6 +6837,26 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <part name="L401" library="passiv" deviceset="L_" device="1812AF" value="10μH"/>
 <part name="C403" library="passiv" deviceset="C_" device="0805" value="4,7μF"/>
 <part name="GND407" library="versorgung" deviceset="GND" device=""/>
+<part name="ADC0" library="test" deviceset="TEST" device="_PAD_SMALL"/>
+<part name="ADC1" library="test" deviceset="TEST" device="_PAD_SMALL"/>
+<part name="ADC2" library="test" deviceset="TEST" device="_PAD_SMALL"/>
+<part name="ADC3" library="test" deviceset="TEST" device="_PAD_SMALL"/>
+<part name="ADC4" library="test" deviceset="TEST" device="_PAD_SMALL"/>
+<part name="ADC5" library="test" deviceset="TEST" device="_PAD_SMALL"/>
+<part name="ADC6" library="test" deviceset="TEST" device="_PAD_SMALL"/>
+<part name="ADC7" library="test" deviceset="TEST" device="_PAD_SMALL"/>
+<part name="GND" library="test" deviceset="TEST" device="_VIA_08"/>
+<part name="N" library="test" deviceset="TEST" device="_VIA_08"/>
+<part name="GND1" library="versorgung" deviceset="GND" device=""/>
+<part name="GND2" library="versorgung" deviceset="GNDIO" device=""/>
+<part name="SCL" library="test" deviceset="TEST" device="_VIA_06"/>
+<part name="SDA" library="test" deviceset="TEST" device="_VIA_06"/>
+<part name="SGND" library="test" deviceset="TEST" device="_VIA_06"/>
+<part name="GND3" library="versorgung" deviceset="GND" device=""/>
+<part name="P+1" library="versorgung" deviceset="+5V" device=""/>
+<part name="GND4" library="versorgung" deviceset="GND" device=""/>
+<part name="0V" library="test" deviceset="TEST" device="_VIA_08"/>
+<part name="5V" library="test" deviceset="TEST" device="_VIA_08"/>
 </parts>
 <sheets>
 <sheet>
@@ -9276,14 +9358,14 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <instance part="X303" gate=".2" x="190.5" y="27.94"/>
 <instance part="X303" gate=".7" x="91.44" y="43.18" rot="R180"/>
 <instance part="X303" gate=".8" x="91.44" y="40.64" rot="R180"/>
-<instance part="X303" gate=".9" x="114.3" y="106.68" rot="R180"/>
-<instance part="X303" gate=".10" x="142.24" y="142.24"/>
-<instance part="X303" gate=".11" x="142.24" y="139.7"/>
-<instance part="X303" gate=".12" x="142.24" y="137.16"/>
-<instance part="X303" gate=".13" x="142.24" y="134.62"/>
-<instance part="X303" gate=".14" x="142.24" y="132.08"/>
-<instance part="X303" gate=".15" x="142.24" y="129.54"/>
-<instance part="X303" gate=".16" x="142.24" y="127"/>
+<instance part="X303" gate=".9" x="96.52" y="106.68"/>
+<instance part="X303" gate=".10" x="127" y="104.14"/>
+<instance part="X303" gate=".11" x="127" y="101.6"/>
+<instance part="X303" gate=".12" x="127" y="99.06"/>
+<instance part="X303" gate=".13" x="127" y="96.52"/>
+<instance part="X303" gate=".14" x="127" y="93.98"/>
+<instance part="X303" gate=".15" x="127" y="91.44"/>
+<instance part="X303" gate=".16" x="127" y="88.9"/>
 <instance part="X303" gate=".17" x="190.5" y="172.72"/>
 <instance part="X303" gate=".19" x="190.5" y="152.4"/>
 <instance part="X303" gate=".21" x="190.5" y="132.08"/>
@@ -9294,9 +9376,9 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <instance part="X303" gate=".31" x="190.5" y="30.48"/>
 <instance part="X303" gate=".33" x="190.5" y="22.86"/>
 <instance part="X303" gate=".34" x="190.5" y="175.26"/>
-<instance part="IC401" gate="A" x="68.58" y="35.56"/>
-<instance part="Q401" gate="G$1" x="38.1" y="43.18"/>
-<instance part="GND401" gate="1" x="38.1" y="33.02"/>
+<instance part="IC401" gate="A" x="66.04" y="35.56"/>
+<instance part="Q401" gate="G$1" x="35.56" y="43.18"/>
+<instance part="GND401" gate="1" x="35.56" y="33.02"/>
 <instance part="D402" gate="A" x="109.22" y="43.18" rot="R270"/>
 <instance part="D403" gate="A" x="116.84" y="43.18" rot="R270"/>
 <instance part="IC401" gate="P" x="109.22" y="25.4"/>
@@ -9345,6 +9427,26 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <instance part="L401" gate="G$1" x="137.16" y="172.72"/>
 <instance part="C403" gate="G$1" x="144.78" y="167.64"/>
 <instance part="GND407" gate="1" x="144.78" y="157.48"/>
+<instance part="ADC0" gate="G$1" x="109.22" y="106.68"/>
+<instance part="ADC1" gate="G$1" x="137.16" y="104.14"/>
+<instance part="ADC2" gate="G$1" x="137.16" y="101.6"/>
+<instance part="ADC3" gate="G$1" x="137.16" y="99.06"/>
+<instance part="ADC4" gate="G$1" x="137.16" y="96.52"/>
+<instance part="ADC5" gate="G$1" x="137.16" y="93.98"/>
+<instance part="ADC6" gate="G$1" x="137.16" y="91.44"/>
+<instance part="ADC7" gate="G$1" x="137.16" y="88.9"/>
+<instance part="GND" gate="G$1" x="137.16" y="71.12" rot="R90"/>
+<instance part="N" gate="G$1" x="144.78" y="71.12" rot="R90"/>
+<instance part="GND1" gate="1" x="137.16" y="63.5"/>
+<instance part="GND2" gate="G$1" x="144.78" y="63.5"/>
+<instance part="SCL" gate="G$1" x="83.82" y="48.26" rot="R90"/>
+<instance part="SDA" gate="G$1" x="83.82" y="35.56" rot="R270"/>
+<instance part="SGND" gate="G$1" x="88.9" y="22.86" rot="R90"/>
+<instance part="GND3" gate="1" x="88.9" y="15.24"/>
+<instance part="P+1" gate="1" x="137.16" y="58.42"/>
+<instance part="GND4" gate="1" x="137.16" y="27.94"/>
+<instance part="0V" gate="G$1" x="137.16" y="33.02" rot="R90"/>
+<instance part="5V" gate="G$1" x="137.16" y="53.34" rot="R270"/>
 </instances>
 <busses>
 </busses>
@@ -9420,7 +9522,7 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <segment>
 <pinref part="Q401" gate="G$1" pin="G"/>
 <pinref part="GND401" gate="1" pin="GND"/>
-<wire x1="38.1" y1="38.1" x2="38.1" y2="35.56" width="0.1524" layer="91"/>
+<wire x1="35.56" y1="38.1" x2="35.56" y2="35.56" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="IC401" gate="P" pin="GND"/>
@@ -9450,6 +9552,20 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <pinref part="GND407" gate="1" pin="GND"/>
 <pinref part="C403" gate="G$1" pin="2"/>
 <wire x1="144.78" y1="160.02" x2="144.78" y2="162.56" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="GND1" gate="1" pin="GND"/>
+<pinref part="GND" gate="G$1" pin="1"/>
+<wire x1="137.16" y1="68.58" x2="137.16" y2="66.04" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="GND3" gate="1" pin="GND"/>
+<pinref part="SGND" gate="G$1" pin="1"/>
+<wire x1="88.9" y1="20.32" x2="88.9" y2="17.78" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="GND4" gate="1" pin="GND"/>
+<pinref part="0V" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="N$68" class="1">
@@ -9626,6 +9742,10 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <wire x1="144.78" y1="170.18" x2="144.78" y2="172.72" width="0.1524" layer="91"/>
 <junction x="144.78" y="172.72"/>
 </segment>
+<segment>
+<pinref part="P+1" gate="1" pin="+5V"/>
+<pinref part="5V" gate="G$1" pin="1"/>
+</segment>
 </net>
 <net name="N$16" class="0">
 <segment>
@@ -9743,16 +9863,16 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <segment>
 <pinref part="IC401" gate="A" pin="X1"/>
 <pinref part="Q401" gate="G$1" pin="2"/>
-<wire x1="53.34" y1="43.18" x2="40.64" y2="43.18" width="0.1524" layer="91"/>
+<wire x1="50.8" y1="43.18" x2="38.1" y2="43.18" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$127" class="0">
 <segment>
 <pinref part="IC401" gate="A" pin="X2"/>
 <pinref part="Q401" gate="G$1" pin="1"/>
-<wire x1="35.56" y1="43.18" x2="33.02" y2="43.18" width="0.1524" layer="91"/>
-<wire x1="33.02" y1="43.18" x2="33.02" y2="27.94" width="0.1524" layer="91"/>
-<wire x1="33.02" y1="27.94" x2="53.34" y2="27.94" width="0.1524" layer="91"/>
+<wire x1="33.02" y1="43.18" x2="30.48" y2="43.18" width="0.1524" layer="91"/>
+<wire x1="30.48" y1="43.18" x2="30.48" y2="27.94" width="0.1524" layer="91"/>
+<wire x1="30.48" y1="27.94" x2="50.8" y2="27.94" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$64" class="0">
@@ -9782,6 +9902,10 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <pinref part="IC401" gate="A" pin="SCL"/>
 <pinref part="X303" gate=".7" pin="A"/>
 <wire x1="86.36" y1="43.18" x2="83.82" y2="43.18" width="0.1524" layer="91"/>
+<pinref part="SCL" gate="G$1" pin="1"/>
+<wire x1="83.82" y1="43.18" x2="81.28" y2="43.18" width="0.1524" layer="91"/>
+<wire x1="83.82" y1="45.72" x2="83.82" y2="43.18" width="0.1524" layer="91"/>
+<junction x="83.82" y="43.18"/>
 </segment>
 </net>
 <net name="N$132" class="0">
@@ -9789,6 +9913,10 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <pinref part="IC401" gate="A" pin="SDA"/>
 <pinref part="X303" gate=".8" pin="A"/>
 <wire x1="86.36" y1="40.64" x2="83.82" y2="40.64" width="0.1524" layer="91"/>
+<pinref part="SDA" gate="G$1" pin="1"/>
+<wire x1="83.82" y1="40.64" x2="81.28" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="83.82" y1="40.64" x2="83.82" y2="38.1" width="0.1524" layer="91"/>
+<junction x="83.82" y="40.64"/>
 </segment>
 </net>
 <net name="N$133" class="0">
@@ -9838,8 +9966,10 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <wire x1="104.14" y1="104.14" x2="104.14" y2="106.68" width="0.1524" layer="91"/>
 <pinref part="X303" gate=".9" pin="A"/>
 <wire x1="104.14" y1="106.68" x2="104.14" y2="109.22" width="0.1524" layer="91"/>
-<wire x1="109.22" y1="106.68" x2="104.14" y2="106.68" width="0.1524" layer="91"/>
+<wire x1="101.6" y1="106.68" x2="104.14" y2="106.68" width="0.1524" layer="91"/>
 <junction x="104.14" y="106.68"/>
+<pinref part="ADC0" gate="G$1" pin="1"/>
+<wire x1="104.14" y1="106.68" x2="106.68" y2="106.68" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$23" class="2">
@@ -9954,17 +10084,66 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <wire x1="132.08" y1="172.72" x2="129.54" y2="172.72" width="0.1524" layer="91"/>
 </segment>
 </net>
+<net name="N$41" class="0">
+<segment>
+<pinref part="X303" gate=".10" pin="A"/>
+<pinref part="ADC1" gate="G$1" pin="1"/>
+<wire x1="134.62" y1="104.14" x2="132.08" y2="104.14" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$148" class="0">
+<segment>
+<pinref part="X303" gate=".11" pin="A"/>
+<pinref part="ADC2" gate="G$1" pin="1"/>
+<wire x1="134.62" y1="101.6" x2="132.08" y2="101.6" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$149" class="0">
+<segment>
+<pinref part="X303" gate=".12" pin="A"/>
+<pinref part="ADC3" gate="G$1" pin="1"/>
+<wire x1="134.62" y1="99.06" x2="132.08" y2="99.06" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$150" class="0">
+<segment>
+<pinref part="X303" gate=".13" pin="A"/>
+<pinref part="ADC4" gate="G$1" pin="1"/>
+<wire x1="134.62" y1="96.52" x2="132.08" y2="96.52" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$151" class="0">
+<segment>
+<pinref part="X303" gate=".14" pin="A"/>
+<pinref part="ADC5" gate="G$1" pin="1"/>
+<wire x1="134.62" y1="93.98" x2="132.08" y2="93.98" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$152" class="0">
+<segment>
+<pinref part="X303" gate=".15" pin="A"/>
+<pinref part="ADC6" gate="G$1" pin="1"/>
+<wire x1="134.62" y1="91.44" x2="132.08" y2="91.44" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$153" class="0">
+<segment>
+<pinref part="X303" gate=".16" pin="A"/>
+<pinref part="ADC7" gate="G$1" pin="1"/>
+<wire x1="134.62" y1="88.9" x2="132.08" y2="88.9" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="GNDIO" class="1">
+<segment>
+<pinref part="N" gate="G$1" pin="1"/>
+<pinref part="GND2" gate="G$1" pin="GNDIO"/>
+<wire x1="144.78" y1="68.58" x2="144.78" y2="66.04" width="0.1524" layer="91"/>
+</segment>
+</net>
 </nets>
 </sheet>
 </sheets>
 <errors>
-<approved hash="101,4,124.46,149.86,X303.10,A,,,,"/>
-<approved hash="101,4,124.46,147.32,X303.11,A,,,,"/>
-<approved hash="101,4,124.46,144.78,X303.12,A,,,,"/>
-<approved hash="101,4,124.46,142.24,X303.13,A,,,,"/>
-<approved hash="101,4,124.46,139.7,X303.14,A,,,,"/>
-<approved hash="101,4,124.46,137.16,X303.15,A,,,,"/>
-<approved hash="101,4,124.46,134.62,X303.16,A,,,,"/>
 <approved hash="104,1,279.4,35.56,IC102P,VCC,+5V,,,"/>
 <approved hash="104,4,109.22,33.02,IC401P,VCC,N$64,,,"/>
 <approved hash="104,1,243.84,182.88,IC103P,VCC,+5V,,,"/>
