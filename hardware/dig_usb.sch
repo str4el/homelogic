@@ -6857,6 +6857,8 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <part name="GND4" library="versorgung" deviceset="GND" device=""/>
 <part name="0V" library="test" deviceset="TEST" device="_VIA_08"/>
 <part name="5V" library="test" deviceset="TEST" device="_VIA_08"/>
+<part name="C112" library="passiv" deviceset="C_" device="0603" value="100nF"/>
+<part name="GND5" library="versorgung" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -6972,6 +6974,8 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <instance part="S101" gate="G$1" x="45.72" y="66.04" rot="R270"/>
 <instance part="P+103" gate="1" x="45.72" y="76.2"/>
 <instance part="GND105" gate="1" x="35.56" y="27.94"/>
+<instance part="C112" gate="G$1" x="55.88" y="68.58"/>
+<instance part="GND5" gate="1" x="55.88" y="60.96"/>
 </instances>
 <busses>
 <bus name="IN[0..7],OUT[0..7],LED[1..3],C1,C2,DI,!R,RXD,TXD,RE,TE,SCL,SDA,ALARM1,ALARM2,MISO,MOSI,SCK,!RESET">
@@ -7165,6 +7169,10 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <pinref part="S102" gate="G$1" pin="P"/>
 <wire x1="152.4" y1="35.56" x2="152.4" y2="38.1" width="0.1524" layer="91"/>
 </segment>
+<segment>
+<pinref part="C112" gate="G$1" pin="2"/>
+<pinref part="GND5" gate="1" pin="GND"/>
+</segment>
 </net>
 <net name="+5V" class="0">
 <segment>
@@ -7269,10 +7277,13 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <pinref part="S101" gate="G$1" pin="P$1"/>
 <pinref part="IC101" gate="G$1" pin="UVCC"/>
 <pinref part="P+103" gate="1" pin="+5V"/>
-<wire x1="60.96" y1="71.12" x2="45.72" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="60.96" y1="71.12" x2="55.88" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="55.88" y1="71.12" x2="45.72" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="45.72" y1="71.12" x2="45.72" y2="73.66" width="0.1524" layer="91"/>
 <wire x1="45.72" y1="68.58" x2="45.72" y2="71.12" width="0.1524" layer="91"/>
 <junction x="45.72" y="71.12"/>
+<pinref part="C112" gate="G$1" pin="1"/>
+<junction x="55.88" y="71.12"/>
 </segment>
 </net>
 <net name="!RESET" class="0">
@@ -7969,11 +7980,16 @@ Datasheet: &lt;a href="./eagle/doc/sensor/kty81-1.pdf"&gt;kty81-1.pdf&lt;/a&gt; 
 <segment>
 <pinref part="IC101" gate="G$1" pin="(ALE/HWB)PE2"/>
 <pinref part="S102" gate="G$1" pin="S"/>
-<wire x1="111.76" y1="53.34" x2="152.4" y2="53.34" width="0.1524" layer="91"/>
+<wire x1="111.76" y1="53.34" x2="116.84" y2="53.34" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="53.34" x2="152.4" y2="53.34" width="0.1524" layer="91"/>
 <wire x1="152.4" y1="53.34" x2="152.4" y2="48.26" width="0.1524" layer="91"/>
 <pinref part="R104" gate="G$1" pin="1"/>
 <wire x1="152.4" y1="68.58" x2="152.4" y2="53.34" width="0.1524" layer="91"/>
 <junction x="152.4" y="53.34"/>
+<pinref part="IC101" gate="G$1" pin="(INT4/TOSC1)PE4"/>
+<wire x1="111.76" y1="58.42" x2="116.84" y2="58.42" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="58.42" x2="116.84" y2="53.34" width="0.1524" layer="91"/>
+<junction x="116.84" y="53.34"/>
 </segment>
 </net>
 </nets>
