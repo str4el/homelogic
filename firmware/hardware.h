@@ -32,14 +32,12 @@
 #include <util/atomic.h>
 #include <util/delay.h>
 
-#include "config.h"
+#include "../config.h"
 
 
-
-
-#ifdef MCU_ATMEGA32
+#ifdef MCU_atmega32
 #    include "hardware/atmega32.h"
-#elif defined(MCU_ATMEGA1284P)
+#elif defined(MCU_atmega1284p)
 #    include "hardware/atmega1284.h"
 #else
 #    error "No MCU defined"

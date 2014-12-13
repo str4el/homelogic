@@ -314,7 +314,7 @@ void bus_command_reset (uint8_t sender, char *data)
 
 void bus_command_identify (uint8_t sender, char *data)
 {
-        bus_send_message_async("IDENT", sender, "%s", HARDWARE_NAME " " MCU_NAME " " FIRMWARE_VERSION);
+        bus_send_message_async("IDENT", sender, "%s", HARDWARE_NAME " " MCU_NAME " " VERSION);
 }
 
 
