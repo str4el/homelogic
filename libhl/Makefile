@@ -1,15 +1,15 @@
-CC = gcc
-AR = ar
-RM = rm -rf
+TARGET = libhl
+PURPOSE = host_lib
 
-CFLAGS = -std=gnu99 -Wall -g -fpic -fvisibility=hidden
-LFLAGS = -Wl,-O1 -shared 
+include ../defaults.mk
+include ../.config
+
 
 SRC = compiler.c connector.c loader.c virtualbus.c error.c
 OBJ = $(SRC:%.c=%.o)
 
-SHARED = libhl.so
-STATIC = libhl.a
+SHARED = $(TARGET).so
+STATIC = $(TARGET).a
 
 all: $(SHARED) $(STATIC)
 
@@ -18,11 +18,8 @@ all: $(SHARED) $(STATIC)
 
 -include .deps
 
-%.o: %.c
-	$(CC) -c $(CFLAGS) $< -o $@
-
 $(SHARED): $(OBJ)
-	$(CC) $(LFLAGS) -o $(SHARED) $(OBJ) 
+	$(CC) $(LFLAGS) -o $(SHARED) $(OBJ)
 
 $(STATIC): $(OBJ)
 	$(AR) rc $(STATIC) $(OBJ)

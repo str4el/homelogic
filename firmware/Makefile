@@ -1,8 +1,9 @@
+TARGET = homelogic
 PORPOSE = mcu
+
 include ../defaults.mk
 include ../.config
 
-TARGET = homelogic
 
 DEPFILE = .deps
 

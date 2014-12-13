@@ -1,10 +1,4 @@
-
-ifneq ($(MAKECMDGOALS),menuconfig)
-
-include .config
-
-endif # MAKECMDGOALS!=menuconfig
-
+-include .config
 
 SUBDIRS-$(BUILD_FIRMWARE) += firmware
 SUBDIRS-$(BUILD_LIBRARY) += libhl
@@ -14,7 +8,6 @@ SUBDIRS = $(SUBDIRS-y)
 
 SUBCLEAN = $(addsuffix .clean,$(SUBDIRS))
 
-.PHONY: subdirs $(SUBDIRS) clean $(SUBCLEAN)
 
 all: subdirs
 
@@ -31,6 +24,7 @@ $(SUBCLEAN): %.clean:
 
 test: libhl
 
+.PHONY: subdirs $(SUBDIRS) clean $(SUBCLEAN)
 
 CONFIG_SHELL := $(shell if [ x"`uname`" = x"Darwin" ] && [ -x /opt/local/bin/bash ] ; then echo /opt/local/bin/bash; \
           elif [ x"`uname`" = x"Darwin" ] && [ -x /usr/local/bin/bash ] ; then echo /usr/local/bin/bash; \

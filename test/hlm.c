@@ -180,7 +180,7 @@ int compile_program (hlc_t *data)
 
 /* Verbindug zwischen dem virtuellen und dem echten Bus herstellen
  */
-hlcon_t *connect_device()
+hlcon_t *connect_device(void)
 {
         hlcon_t *con;
         unsigned int flags;
@@ -193,7 +193,7 @@ hlcon_t *connect_device()
 
         flags = 0;
         strtok(device, ",");
-        while(flag = strtok(NULL, ",")) {
+        while((flag = strtok(NULL, ","))) {
                 if (!strcasecmp(flag, "noverify")) {
                         flags |= HL_NOVERIFY;
                 } else {
@@ -256,7 +256,7 @@ void unterm(int n)
 
 /* Innere Terminalfunktion
  */
-void run_terminal()
+void run_terminal(void)
 {
         fd_set fds;
         char buf[1024];
@@ -306,7 +306,7 @@ void run_terminal()
 
 /* Forkt den Terminalprozess
  */
-int start_terminal()
+int start_terminal(void)
 {
         pid_t pid;
 
@@ -331,7 +331,7 @@ int start_terminal()
 
 /* Sendent das TERM signal und wartet auf die Beendigung des Terminalporzesses
  */
-int stop_terminal()
+int stop_terminal(void)
 {
         int ret = 0;
         if (terminal_child > 0) {

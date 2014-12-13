@@ -1,18 +1,19 @@
-CC = gcc
-RM = rm -rf
+PURPOSE = host
+include ../defaults.mk
+include ../.config
 
-CFLAGS = -std=gnu99
-LFLAGS = -lrt -lpthread -lftdi
+TARGET-$(BUILD_HLM) += hlm
+TARGET = $(TARGET-y)
+
+SRC = $(TARGET:%=%.c)
 
 LIBRARY = ../libhl/libhl.a
+LFLAGS += -lrt -lpthread -lftdi
 
-MANAGER = hlm
+all: $(TARGET)
 
-all: $(MANAGER)
-
-
-$(MANAGER): $(MANAGER).c
-	$(CC) $(CFLAGS) -o $@ $@.c $(LIBRARY) $(LFLAGS) 
+$(TARGET): $(SRC) $(LIBRARY)
+	$(CC) $(CFLAGS) -o $@ $< $(LIBRARY) $(LFLAGS)
 
 clean:
 	$(RM) $(MANAGER)

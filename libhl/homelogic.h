@@ -227,7 +227,7 @@ typedef struct hlcon_s {
 
 
 
-extern hlc_t *hl_compiler_init();
+extern hlc_t *hl_compiler_init(void);
 extern void hl_compiler_destroy(hlc_t *data);
 extern int hl_scan_instruction_list (hlc_t *data, FILE* file);
 extern int hl_compile (hlc_t *data);
