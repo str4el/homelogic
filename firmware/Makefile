@@ -7,7 +7,9 @@ TARGET = homelogic
 DEPFILE = .deps
 
 SRC-y = adc.c bus.c error.c i2c.c main.c prog.c rtc.c
-OBJ = $(SRC-y:.c=.o)
+
+SRC = $(SRC-y)
+OBJ = $(SRC:.c=.o)
 
 all: build
 
@@ -32,6 +34,8 @@ $(TARGET).elf: $(OBJ)
 clean:
 	$(RM) $(TARGET).hex $(TARGET).elf $(OBJ) $(DEPFILE)
 
+
+-include $(DEPFILE)
 
 # Dependency
 $(DEPFILE): $(SRC)
