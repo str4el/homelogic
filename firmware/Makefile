@@ -41,6 +41,5 @@ clean:
 $(DEPFILE): $(SRC)
 	$(CC) -M -mmcu=$(MCU) $(SRC) > $(DEPFILE)
 
-#-include $(DEPFILE)
 
 .PHONY:	all build elf hex program clean distclean
