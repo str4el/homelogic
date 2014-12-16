@@ -7,9 +7,12 @@ include ../.config
 
 DEPFILE = .deps
 
-SRC-y = adc.c bus.c error.c i2c.c main.c prog.c rtc.c
+SRC = adc.c bus.c error.c i2c.c main.c prog.c rtc.c
+SRC-$(atmega32) += hardware/atmega32.c
+SRC-$(atmega1284p) += hardware/atmega1284p.c
+SRC-$(at90usb1287) += hardware/at90usb1287.c
 
-SRC = $(SRC-y)
+SRC += $(SRC-y)
 OBJ = $(SRC:.c=.o)
 
 all: build

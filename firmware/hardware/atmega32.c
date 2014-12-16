@@ -17,30 +17,12 @@
  * along with Homelogic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ATMEGA32_H
-#define ATMEGA32_H
-
-#define MCU_NAME "AtMega32"
-
-#define LFUSE (FUSE_CKSEL0 & FUSE_CKSEL1 & FUSE_CKSEL3 & FUSE_SUT0 & FUSE_SUT1 & FUSE_BODEN & FUSE_BODLEVEL)
-#define HFUSE (FUSE_BOOTSZ0 & FUSE_BOOTSZ1 & FUSE_SPIEN)
-
-
-#define TIMER_MS_vect TIMER2_COMP_vect
-
-#define BUS_RXC_vect USART_RXC_vect
-#define BUS_IS_URDE (UCSRA & (1 << UDRE))
-#define BUS_IS_TXC (UCSRA & (1 << TXC))
-#define BUS_CLEAR_TXC() UCSRA |= (1 << TXC)
-#define BUS_UDR UDR
-
-
-
+#include "../hardware.h"
 
 
 /* MCU Spezifische Initialisierung des 1ms Timer
  */
-static inline void init_timer_ms(void)
+void init_timer_ms()
 {
         TCCR2 |= (1 << WGM21) | (1 << CS22);
         OCR2 = 124;
@@ -52,7 +34,7 @@ static inline void init_timer_ms(void)
 
 /* MCU Spezifische Initialisierung der EIA-485 Schnittstelle
  */
-static inline void init_uart(void)
+void init_uart()
 {
         UCSRC |= (1 << UCSZ1) | (1 << UCSZ0);
         UCSRB |= (1 << TXEN) | (1 << RXEN) | (1 << RXCIE);
@@ -65,11 +47,8 @@ static inline void init_uart(void)
 
 /* MCU Spezifische Initialisierung des AD-Wandlers
 */
-static inline void init_adc(void)
+void init_adc()
 {
         ADMUX |= (1 << REFS0) | (1 << REFS1);
         ADCSRA |= (1 << ADPS1) | (1 << ADPS2);
 }
-
-
-#endif // ATMEGA32_H

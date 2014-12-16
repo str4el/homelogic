@@ -36,11 +36,27 @@
 
 
 #ifdef MCU_atmega32
-#    include "hardware/atmega32.h"
+
+#define TIMER_MS_vect TIMER2_COMP_vect
+
+#define BUS_RXC_vect USART_RXC_vect
+#define BUS_IS_URDE (UCSRA & (1 << UDRE))
+#define BUS_IS_TXC (UCSRA & (1 << TXC))
+#define BUS_CLEAR_TXC() UCSRA |= (1 << TXC)
+#define BUS_UDR UDR
+
 #elif defined(MCU_atmega1284p)
-#    include "hardware/atmega1284.h"
+
+#define TIMER_MS_vect TIMER2_COMPA_vect
+
+#define BUS_RXC_vect USART0_RX_vect
+#define BUS_IS_URDE (UCSR0A & (1 << UDRE0))
+#define BUS_IS_TXC (UCSR0A & (1 << TXC0))
+#define BUS_CLEAR_TXC() UCSR0A |= (1 << TXC0)
+#define BUS_UDR UDR0
+
 #else
-#    error "No MCU defined"
+#error "No MCU defined"
 #endif
 
 
@@ -53,3 +69,9 @@
 #endif
 
 #endif // HARDWARE_H
+
+
+
+extern void init_timer_ms(void);
+extern void init_uart(void);
+extern void init_adc(void);

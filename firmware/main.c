@@ -30,16 +30,6 @@
 
 
 
-FUSES = {
-        .low = LFUSE,
-        .high = HFUSE,
-#ifdef EFUSE
-        .extended = EFUSE,
-#endif
-};
-
-
-
 struct state_s state;
 volatile prog_write_t prog_write;
 
