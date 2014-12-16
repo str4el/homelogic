@@ -20,8 +20,9 @@
 #ifndef HARDWARE_H
 #define HARDWARE_H
 
-#define F_CPU 8000000UL
-#define BAUD 9600
+
+#include "../config.h"
+#define F_CPU FREQ
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -32,7 +33,6 @@
 #include <util/atomic.h>
 #include <util/delay.h>
 
-#include "../config.h"
 
 
 #ifdef MCU_atmega32

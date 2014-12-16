@@ -16,6 +16,7 @@ dep_bool_menu "Firmware" BUILD_FIRMWARE
         define_bool MCU_${MCU} y
 
 	int "MCU frequency" FREQ 8000000
+        int "Bus speed (baudrate)" BAUD 9600
 
 	# get the flash size according to the cpu type
 	FLASH_SIZE=$((`echo -e "#include <avr/io.h>\nFLASHEND" | avr-cpp -mmcu=$MCU | sed '$!d'` + 1 ))
