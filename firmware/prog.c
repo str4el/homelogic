@@ -123,7 +123,7 @@ static inline void prog_error(uint8_t e)
 {
         error(e);
         progc.ip = -1;
-        state.coming = STOP;
+        state.coming = ps_stop;
         progc.valid = false;
 }
 
@@ -333,7 +333,7 @@ void prog_periphery_sync()
 static inline void prog_wait_for_step(void)
 {
         state.step = false;
-        while (state.coming == DEBUG && state.step == false) wdt_reset();
+        while (state.coming == ps_debug && state.step == false) wdt_reset();
 }
 
 
@@ -437,7 +437,7 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
         depth++;
 
         while (progc.valid && progc.ip >= 0) {
-                if (state.current == DEBUG) {
+                if (state.current == ps_debug) {
                         bus_send_message_sync("STAT", 0xFF, "SD: %hhu IP: %4u A: %04X C: %s", depth, progc.ip, reg.a, reg.c ? "TRUE" : "FALSE");
                         prog_wait_for_step();
                 }
@@ -453,7 +453,7 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                                           sizeof(progc.cmd));
                 }
 
-                if (state.current == DEBUG) {
+                if (state.current == ps_debug) {
                         bus_send_message_sync("STAT", 0xFF, "CMD: %02X DATA: %02X%02X%02X",
                                               progc.cmd.c_opcode,
                                               progc.cmd.c_address.aa_device,

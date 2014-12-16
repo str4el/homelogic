@@ -322,7 +322,7 @@ void bus_command_identify (uint8_t sender, char *data)
 
 void bus_command_run (uint8_t sender, char *data)
 {
-        state.coming = RUN;
+        state.coming = ps_run;
 }
 
 
@@ -330,7 +330,7 @@ void bus_command_run (uint8_t sender, char *data)
 
 void bus_command_stop (uint8_t sender, char *data)
 {
-        state.coming = STOP;
+        state.coming = ps_stop;
 }
 
 
@@ -338,7 +338,7 @@ void bus_command_stop (uint8_t sender, char *data)
 
 void bus_command_debug (uint8_t sender, char *data)
 {
-        state.coming = DEBUG;
+        state.coming = ps_debug;
 }
 
 

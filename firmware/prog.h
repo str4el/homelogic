@@ -28,9 +28,9 @@
 
 
 typedef enum prog_status_e {
-        STOP = 0,
-        RUN,
-        DEBUG
+        ps_stop = 0,
+        ps_run,
+        ps_debug
 } prog_status_t;
 
 

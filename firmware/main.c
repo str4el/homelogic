@@ -264,8 +264,8 @@ int __attribute__ ((OS_main)) main (void) {
 
 
         prog_write.len = 0;
-        state.current = STOP;
-        state.coming = RUN;
+        state.current = ps_stop;
+        state.coming = ps_run;
         state.step = false;
         wdt_enable(WDTO_2S);
 
@@ -277,24 +277,24 @@ int __attribute__ ((OS_main)) main (void) {
 
                 if (state.current != state.coming) {
                         switch (state.coming) {
-                        case STOP:
+                        case ps_stop:
                                 prog_deinit();
                                 bus_send_message_sync("STAT", 0xFF, "STOP");
                                 led.yellow = ls_off;
                                 break;
 
-                        case RUN:
+                        case ps_run:
                                 if (error(prog_init())) {
-                                        state.coming = STOP;
+                                        state.coming = ps_stop;
                                 } else {
                                         bus_send_message_sync("STAT", 0xFF, "RUN");
                                         led.yellow = ls_on;
                                 }
                                 break;
 
-                        case DEBUG:
+                        case ps_debug:
                                 if (error(prog_init())) {
-                                        state.coming = STOP;
+                                        state.coming = ps_stop;
                                 } else {
                                         bus_send_message_sync("STAT", 0xFF, "DEBUG");
                                         led.yellow = ls_blink;
@@ -305,7 +305,7 @@ int __attribute__ ((OS_main)) main (void) {
                 }
 
                 switch (state.current) {
-                case STOP:
+                case ps_stop:
                         if (prog_write.len) {
                                 led.red = ls_blink_fast;
 
@@ -323,8 +323,8 @@ int __attribute__ ((OS_main)) main (void) {
                         }
                         break;
 
-                case RUN:
-                case DEBUG:
+                case ps_run:
+                case ps_debug:
                         progc.ip = 0;
                         prog_execute((prog_register_t){0, false}, 0);
                         prog_periphery_sync();
