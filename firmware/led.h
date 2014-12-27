@@ -55,21 +55,21 @@ void static inline led_control(void)
         static uint8_t status = 0;
 
         if (led.green & ((uint32_t)1 << status)) {
-                SET_LED_GN;
+                PIN_SET(LED_GN);
         } else {
-                CLR_LED_GN;
+                PIN_CLR(LED_GN);
         }
 
         if (led.yellow & ((uint32_t)1 << status)) {
-                SET_LED_YE;
+                PIN_SET(LED_YE);
         } else {
-                CLR_LED_YE;
+                PIN_CLR(LED_YE);
         }
 
         if (led.red & ((uint32_t)1 << status)) {
-                SET_LED_RD;
+                PIN_SET(LED_RD);
         } else {
-                CLR_LED_RD;
+                PIN_CLR(LED_RD);
         }
 
         if (++status >= 32) status = 0;

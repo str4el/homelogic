@@ -4,16 +4,25 @@ PORPOSE = mcu
 include ../defaults.mk
 include ../.config
 
-
 DEPFILE = .deps
+
+HW_SRC-$(atmega32) += hardware/atmega32.m4
+HW_SRC-$(atmega1284p) += hardware/atmega1284p.m4
+HW_SRC-$(PROTOTYPE) += hardware/prototype.m4
+HW_SRC-$(DIG_AC230) += hardware/dig_ac230.m4
 
 SRC = adc.c bus.c error.c i2c.c main.c prog.c rtc.c
 SRC-$(atmega32) += hardware/atmega32.c
 SRC-$(atmega1284p) += hardware/atmega1284p.c
 SRC-$(at90usb1287) += hardware/at90usb1287.c
 
+
+HW_SRC = hardware/header.m4 $(HW_SRC-y) hardware/footer.m4
+HW_H = hardware.h
+
 SRC += $(SRC-y)
 OBJ = $(SRC:.c=.o)
+
 
 all: build
 
@@ -22,6 +31,8 @@ build: elf hex
 elf: $(TARGET).elf
 hex: $(TARGET).hex
 
+$(HW_H): $(HW_SRC)
+	$(M4) $(HW_SRC) > $(HW_H)
 
 .SUFFIXES: .elf .hex
 
@@ -36,13 +47,13 @@ $(TARGET).elf: $(OBJ)
 
 # Target: clean project.
 clean:
-	$(RM) $(TARGET).hex $(TARGET).elf $(OBJ) $(DEPFILE)
+	$(RM) $(TARGET).hex $(TARGET).elf $(OBJ) $(DEPFILE) $(HW_H)
 
 
 -include $(DEPFILE)
 
 # Dependency
-$(DEPFILE): $(SRC)
+$(DEPFILE): $(SRC) $(HW_H)
 	$(CC) -M -mmcu=$(MCU) $(SRC) > $(DEPFILE)
 
 

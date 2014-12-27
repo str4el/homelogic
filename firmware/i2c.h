@@ -28,14 +28,14 @@
 
 static inline int8_t i2c_start(void)
 {
-        I2C_SET_SDA;
-        I2C_SET_SCL;
+        PIN_OC_SET(SDA);
+        PIN_OC_SET(SCL);
         _delay_us(1);
-        if (!I2C_IS_SDA || !I2C_IS_SCL) return -1;
+        if (PIN_IS_LOW(SDA) || PIN_IS_LOW(SCL)) return -1;
         _delay_us(I2C_T_BUF);
-        I2C_CLR_SDA;
+        PIN_OC_CLR(SDA);
         _delay_us(I2C_T_HD_STA);
-        I2C_CLR_SCL;
+        PIN_OC_CLR(SCL);
         return 0;
 }
 
@@ -45,10 +45,10 @@ static inline int8_t i2c_start(void)
 
 static inline void i2c_stop(void)
 {
-        I2C_CLR_SDA;
-        I2C_SET_SCL;
+        PIN_OC_CLR(SDA);
+        PIN_OC_SET(SCL);
         _delay_us(I2C_T_SU_STO);
-        I2C_SET_SDA;
+        PIN_OC_SET(SDA);
 }
 
 

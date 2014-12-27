@@ -112,7 +112,7 @@ ISR(BUS_RXC_vect) {
 void bus_init(void)
 {
         init_uart();
-        CLR_RE;
+        PIN_CLR(RE);
         BUS_TX_LOCK(2 + adr * 2);
 }
 
@@ -123,7 +123,7 @@ void bus_transmit_data (const char * data, uint8_t len)
 {
         while (bus.tx_lock);
         bus.status = tx_start;
-        SET_TE;
+        PIN_SET(TE);
 
 
         for (uint8_t i = 0; i < len; i++) {
@@ -133,7 +133,7 @@ void bus_transmit_data (const char * data, uint8_t len)
 
         while (!BUS_IS_TXC);
         BUS_CLEAR_TXC();
-        CLR_TE;
+        PIN_CLR(TE);
         BUS_TX_LOCK(2 + adr * 2);
         bus.status = rx_start;
 }

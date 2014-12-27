@@ -27,28 +27,28 @@ int8_t i2c_write_byte(uint8_t data)
                 _delay_us(I2C_T_HD_DAT);
 
                 if (data & (1 << i)) {
-                        I2C_SET_SDA;
+                        PIN_OC_SET(SDA);
                 } else {
-                        I2C_CLR_SDA;
+                        PIN_OC_CLR(SDA);
                 }
 
                 _delay_us(I2C_T_LOW);
-                I2C_SET_SCL;
+                PIN_OC_SET(SCL);
                 _delay_us(I2C_T_HIGH);
-                I2C_CLR_SCL;
+                PIN_OC_CLR(SCL);
         }
-        I2C_SET_SDA;
+        PIN_OC_SET(SDA);
         _delay_us(I2C_T_LOW);
-        I2C_SET_SCL;
+        PIN_OC_SET(SCL);
 
-        if (I2C_IS_SDA) {
+        if (PIN_IS_HIGH(SDA)) {
                 ret = -1;
         } else {
                 ret = 0;
         }
 
         _delay_us(I2C_T_HIGH);
-        I2C_CLR_SCL;
+        PIN_OC_CLR(SCL);
 
         return ret;
 }
@@ -60,32 +60,32 @@ uint8_t i2c_read_byte(uint8_t ack)
 {
         uint8_t data = 0;
 
-        I2C_SET_SDA;
+        PIN_OC_SET(SDA);
 
         for (int8_t i = 7; i >= 0; i--) {
                 _delay_us(I2C_T_LOW);
-                I2C_SET_SCL;
+                PIN_OC_SET(SCL);
 
-                if (I2C_IS_SDA) {
+                if (PIN_IS_HIGH(SDA)) {
                         data |= (1 << i);
                 }
 
                 _delay_us(I2C_T_HIGH);
-                I2C_CLR_SCL;
+                PIN_OC_CLR(SCL);
         }
 
         _delay_us(I2C_T_HD_DAT);
 
         if (ack) {
-                I2C_CLR_SDA;
+                PIN_OC_CLR(SDA);
         } else {
-                I2C_SET_SDA;
+                PIN_OC_SET(SDA);
         }
 
         _delay_us(I2C_T_LOW);
-        I2C_SET_SCL;
+        PIN_OC_SET(SCL);
         _delay_us(I2C_T_HIGH);
-        I2C_CLR_SCL;
+        PIN_OC_CLR(SCL);
 
         return data;
 }

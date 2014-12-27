@@ -117,19 +117,19 @@ ISR(TIMER_MS_vect) {
 
 void write_outputs(void)
 {
-        CLR_C2;
+        PIN_CLR(C2);
 
         for (int8_t i = OUTPUT_REACH * 8 - 1; i >= 0; i--) {
-                CLR_C1;
+                PIN_CLR(C1);
                 if (outputs[i >> 3] & (1 << i % 8)) {
-                        SET_DO;
+                        PIN_SET(DO);
                 } else {
-                        CLR_DO;
+                        PIN_CLR(DO);
                 }
-                SET_C1;
+                PIN_SET(C1);
         }
 
-        SET_C2;
+        PIN_SET(C2);
 }
 
 
@@ -151,9 +151,9 @@ void health_monitor(void)
                                 error(ERR_HITEMP);
                         }
 
-                        CLR_C2;
-                        CLR_R;
-                        SET_C2;
+                        PIN_CLR(C2);
+                        PIN_CLR(R);
+                        PIN_SET(C2);
 
                         health |= temperature_critical;
 
@@ -165,7 +165,7 @@ void health_monitor(void)
 
                 } else if (value < TEMPERATURE_WARN - 5) {
                         health &= ~(temperature_high | temperature_critical);
-                        SET_R;
+                        PIN_SET(R);
                 }
         }
 
@@ -222,10 +222,10 @@ int __attribute__ ((OS_main)) main (void) {
         bus_init();
 
         // Reset Shiftregister
-        CLR_C2;
-        CLR_R;
-        SET_C2;
-        SET_R;
+        PIN_CLR(C2);
+        PIN_CLR(R);
+        PIN_SET(C2);
+        PIN_SET(R);
 
         // Interrupts ein
         sei();

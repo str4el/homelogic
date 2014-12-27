@@ -96,8 +96,8 @@ void rtc_update_clock()
         static bool last_sqw;
         rtc_time_t time;
 
-        if (IS_SQW != last_sqw) {
-                last_sqw = IS_SQW;
+        if (PIN_IS_LOW(SQW) != last_sqw) {
+                last_sqw = PIN_IS_LOW(SQW);
 
                 if (rtc_read_time(&time)) {
                         return;
