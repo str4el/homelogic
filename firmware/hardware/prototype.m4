@@ -15,6 +15,7 @@ dnl
 dnl You should have received a copy of the GNU General Public License
 dnl along with Homelogic.  If not, see <http://www.gnu.org/licenses/>.
 dnl
+divert(-1)
 
 pin(R, PD7)
 pin(C1, PD4)
@@ -34,13 +35,28 @@ pin(SDA, PB1)
 
 pin(SQW, PB2)
 
-divert(3)
-`
-#include <stdint.h>
+input(PA0, INV)
+input(PA1, INV)
+input(PA2, INV)
+input(PA3, INV)
+input(PA4, INV)
+input(PA5, INV)
+input(PA6, INV)
+input(PA7, INV)
+input(PC7, INV)
+input(PC6, INV)
+input(PC5, INV)
+input(PC4, INV)
+input(PC3, INV)
+input(PC2, INV)
+input(PC1, INV)
+input(PC0, INV)
 
+
+divert(0)
+`
 #define HARDWARE_NAME "mm16"
 
-#define INPUT_REACH 2
 #define OUTPUT_REACH 2
 
 #define INIT_DDRA  0x00
@@ -74,9 +90,9 @@ divert(3)
 #define GET_TEMPERATURE() -1
 #define TEMPERATURE_WARN 0
 #define TEMPERATURE_ERROR 0
-
-
-
+'
+divert(3)dnl
+`
 /* Liest die eingestellte Adresse von dem Hexsteller
  *
  * ACHTUNG: der Hexsteller ist an den SPI Ports angeschlossen;
@@ -92,4 +108,3 @@ static inline uint8_t adr_read(void)
         return adr;
 }
 '
-

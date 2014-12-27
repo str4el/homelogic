@@ -195,8 +195,8 @@ void prog_periphery_sync()
 
                         switch(am.ma_mem_adr & 0xE0) {
                         case as_input:
-                                tmp = byte < INPUT_REACH ? inputs[byte] : 0;
-                                tmp |= (byte + 1) < INPUT_REACH ? (uint16_t)inputs[byte + 1] << 8 : 0;
+                                tmp = byte < INPUT_BYTES ? inputs[byte] : 0;
+                                tmp |= (byte + 1) < INPUT_BYTES ? (uint16_t)inputs[byte + 1] << 8 : 0;
 
                                 // Systemzeit auf Eingänge
                                 switch (byte) {

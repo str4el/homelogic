@@ -18,6 +18,9 @@ dep_bool_menu "Firmware" BUILD_FIRMWARE
 	int "MCU frequency" FREQ 8000000
         int "Bus speed (baudrate)" BAUD 9600
 
+        int "Input debounce time (ms)" INPUT_DEBOUNCE 200
+        int "Debounce on state multiplier" INPUT_DEBOUNCE_ON_MUL 4
+
 	# get the flash size according to the cpu type
 	FLASH_SIZE=$((`echo -e "#include <avr/io.h>\nFLASHEND" | avr-cpp -mmcu=$MCU | sed '$!d'` + 1 ))
 

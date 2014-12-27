@@ -15,6 +15,7 @@ dnl
 dnl You should have received a copy of the GNU General Public License
 dnl along with Homelogic.  If not, see <http://www.gnu.org/licenses/>.
 dnl
+divert(0)
 `
 #define TIMER_MS_vect TIMER2_COMP_vect
 

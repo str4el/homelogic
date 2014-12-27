@@ -39,7 +39,7 @@ volatile prog_write_t prog_write;
 /* Interruptroutine für 1ms Timer
  */
 ISR(TIMER_MS_vect) {
-        static uint8_t intimer[INPUT_REACH * 8];
+        static uint8_t intimer[INPUT_COUNT];
         static uint16_t timerbase = 0;
 
         if (bus.tx_lock) bus.tx_lock--;
@@ -54,62 +54,23 @@ ISR(TIMER_MS_vect) {
         timerbase++;
 
 
-#ifdef HW_PROTOTYPE
-        uint8_t n = 0;
 
-        for (int8_t i = 0; i < 8; i++) {
-                if (!(PINA & (1 << i))) {
-                        if (intimer[n] < 200) {
-                                intimer[n] += 4;
+        for (int8_t i = 0; i < INPUT_COUNT; i++) {
+                if (get_input(i)) {
+                        if (intimer[i] < INPUT_DEBOUNCE) {
+                                intimer[i] += INPUT_DEBOUNCE_ON_MUL;
                         } else {
-                                inputs[0] |= (1 << n);
-                        }
-                } else {
-                        if (intimer[n]) {
-                                intimer[n]--;
-                        } else {
-                                inputs[0] &= ~(1 << n);
-                        }
-                }
-                n++;
-        }
-
-        for (int8_t i = 7; i >= 0; i--) {
-                if (!(PINC & (1 << i))) {
-                        if (intimer[n] < 200) {
-                                intimer[n] += 4;
-                        } else {
-                                inputs[1] |= (1 << (n - 8));
-                        }
-                } else {
-                        if (intimer[n]) {
-                                intimer[n]--;
-                        } else {
-                                inputs[1] &= ~(1 << (n - 8));
-                        }
-                }
-                n++;
-        }
-#endif
-
-
-#ifdef HW_DIG_AC230
-        for (int8_t i = 0; i < 8; i++) {
-                if (PINC & (1 << i)) {
-                        if (intimer[i] < 20) {
-                                intimer[i]++;
-                        } else {
-                                inputs[0] |= (1 << i);
+                                inputs[i >> 3] |= (1 << i % 8);
                         }
                 } else {
                         if (intimer[i]) {
                                 intimer[i]--;
                         } else {
-                                inputs[0] &= ~(1 << i);
+                                inputs[i >> 3] &= ~(1 << i % 8);
                         }
                 }
         }
-#endif
+
 }
 
 

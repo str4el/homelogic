@@ -29,7 +29,7 @@
 #define TOSTR(x) _TOSTR(x)
 
 
-volatile uint8_t inputs[INPUT_REACH];
+volatile uint8_t inputs[INPUT_BYTES];
 uint8_t outputs[OUTPUT_REACH];
 
 uint8_t adr;

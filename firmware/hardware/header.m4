@@ -18,6 +18,7 @@ dnl
 divert(-1)
 changecom(`//')
 
+define(`adjust8', `ifelse(eval(`$1 % 8'), `0', eval(`$1 / 8'), eval(`$1 / 8 + 1'))')
 
 define(`pin', `dnl
 ifelse(regexp($2, `^P[A-Z][0-9]$'), `-1', `divert(2)', `divert(1)')dnl
@@ -28,7 +29,21 @@ define(`pinnum', `ifelse(regexp($2, `^P[A-Z][0-9]$'), `-1', `$2_MASK', `eval(1 <
 ')dnl
 
 
+define(`inputcount', 0)
+define(`input', `dnl
+pin($1, $1)dnl
+divert(4)dnl
+        case inputcount: return ifelse($2, `INV', `PIN_IS_LOW', `PIN_IS_HIGH')($1);dnl
+define(`inputcount', incr(inputcount))dnl
+')
+
 divert(1)dnl
+`
+#define NC_PORT A
+#define NC_MASK 0
+'
+
+divert(0)dnl
 `
 #ifndef HARDWARE_H
 #define HARDWARE_H
@@ -36,6 +51,8 @@ divert(1)dnl
 #include "../config.h"
 #define F_CPU FREQ
 
+#include <stdbool.h>
+#include <stdint.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
@@ -59,14 +76,10 @@ divert(1)dnl
 #define DDR_OUT(pin)  DDR_CHAR( pin ## _PORT) |= pin ## _MASK
 
 #define PIN_IS_HIGH(pin) (PIN_CHAR(pin ## _PORT) & pin ## _MASK)
-#define PIN_IS_LOW(pin) (! PIN_IS_HIGH(pin))
+#define PIN_IS_LOW(pin) (!(PIN_CHAR(pin ## _PORT) & pin ## _MASK))
 #define PIN_SET(pin) PORT_CHAR(pin ## _PORT) |= pin ## _MASK
 #define PIN_CLR(pin) PORT_CHAR(pin ## _PORT) &= ~pin ## _MASK
 #define PIN_TOGGLE(pin) PORT_CHAR(pin ## _PORT) ^= pin ## _MASK
 #define PIN_OC_SET(pin) do {DDR_IN(pin); PIN_SET(pin); } while(0)
 #define PIN_OC_CLR(pin) do {PIN_CLR(pin); DDR_OUT(pin); } while(0)
-
-
-#define NC_PORT A
-#define NC_MASK 0
 '

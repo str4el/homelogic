@@ -15,12 +15,24 @@ dnl
 dnl You should have received a copy of the GNU General Public License
 dnl along with Homelogic.  If not, see <http://www.gnu.org/licenses/>.
 dnl
-divert(3)
+divert(2)
+`#define INPUT_COUNT' inputcount
+`#define INPUT_BYTES' adjust8(inputcount)
+divert(0)
+undivert(1)
+undivert(2)
+undivert(3)
 
-`
+static inline bool get_input(uint8_t in)
+{
+        switch(in) {
+undivert(4)dnl
+        }
+        return false;
+}
+
 extern void init_timer_ms(void);
 extern void init_uart(void);
 extern void init_adc(void);
 
 #endif
-'

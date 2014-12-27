@@ -15,6 +15,7 @@ dnl
 dnl You should have received a copy of the GNU General Public License
 dnl along with Homelogic.  If not, see <http://www.gnu.org/licenses/>.
 dnl
+divert(-1)
 
 pin(R, PB0)
 pin(C1, PB1)
@@ -34,14 +35,20 @@ pin(SDA, PD7)
 
 pin(SQW, PD3)
 
-divert(3)
+input(PC0)
+input(PC1)
+input(PC2)
+input(PC3)
+input(PC4)
+input(PC5)
+input(PC6)
+input(PC7)
 
+
+divert(0)dnl
 `
-#include <stdint.h>
-
 #define HARDWARE_NAME "dig_ac230"
 
-#define INPUT_REACH 1
 #define OUTPUT_REACH 1
 
 
@@ -77,9 +84,9 @@ divert(3)
 #define GET_TEMPERATURE() get_analog_value(7, 3)
 #define TEMPERATURE_WARN  780 // ca. 50°C
 #define TEMPERATURE_ERROR 820 // ca. 60°C
-
-
-
+'
+divert(3)dnl
+`
 /* Liest die eingestellte Adresse über das Shiftgegister ein
  *
  * ACHTUNG: die Funktion überschreibt die Ausgänge mit 0 nur während
