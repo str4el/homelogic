@@ -31,7 +31,7 @@ build: elf hex
 elf: $(TARGET).elf
 hex: $(TARGET).hex
 
-$(HW_H): $(HW_SRC)
+$(HW_H): $(HW_SRC) ../config.h
 	$(M4) $(HW_SRC) > $(HW_H)
 
 .SUFFIXES: .elf .hex

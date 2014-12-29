@@ -17,6 +17,11 @@ dnl along with Homelogic.  If not, see <http://www.gnu.org/licenses/>.
 dnl
 divert(-1)
 
+pin(ADR1, PB4)
+pin(ADR2, PB6)
+pin(ADR4, PB7)
+pin(ADR8, PB5)
+
 pin(R, PD7)
 pin(C1, PD4)
 pin(C2, PD5)
@@ -35,29 +40,28 @@ pin(SDA, PB1)
 
 pin(SQW, PB2)
 
-input(PA0, INV)
-input(PA1, INV)
-input(PA2, INV)
-input(PA3, INV)
-input(PA4, INV)
-input(PA5, INV)
-input(PA6, INV)
-input(PA7, INV)
-input(PC7, INV)
-input(PC6, INV)
-input(PC5, INV)
-input(PC4, INV)
-input(PC3, INV)
-input(PC2, INV)
-input(PC1, INV)
-input(PC0, INV)
+diginput(PA0, INV)
+diginput(PA1, INV)
+diginput(PA2, INV)
+diginput(PA3, INV)
+diginput(PA4, INV)
+diginput(PA5, INV)
+diginput(PA6, INV)
+diginput(PA7, INV)
+diginput(PC7, INV)
+diginput(PC6, INV)
+diginput(PC5, INV)
+diginput(PC4, INV)
+diginput(PC3, INV)
+diginput(PC2, INV)
+diginput(PC1, INV)
+diginput(PC0, INV)
 
+digoutput(shift, 16)
 
 divert(0)
 `
 #define HARDWARE_NAME "mm16"
-
-#define OUTPUT_REACH 2
 
 #define INIT_DDRA  0x00
 #define INIT_DDRB  0x00
@@ -101,10 +105,10 @@ divert(3)dnl
 static inline uint8_t adr_read(void)
 {
         uint8_t adr = 0;
-        if (!(PINB & (1 << 4))) adr |= 1;
-        if (!(PINB & (1 << 6))) adr |= 2;
-        if (!(PINB & (1 << 7))) adr |= 4;
-        if (!(PINB & (1 << 5))) adr |= 8;
+        if (PIN_IS_LOW(ADR1)) adr |= 1;
+        if (PIN_IS_LOW(ADR2)) adr |= 2;
+        if (PIN_IS_LOW(ADR4)) adr |= 4;
+        if (PIN_IS_LOW(ADR8)) adr |= 8;
         return adr;
 }
 '

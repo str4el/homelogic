@@ -29,13 +29,29 @@ define(`pinnum', `ifelse(regexp($2, `^P[A-Z][0-9]$'), `-1', `$2_MASK', `eval(1 <
 ')dnl
 
 
-define(`inputcount', 0)
-define(`input', `dnl
+define(`diginputcount', 0)
+define(`diginput', `dnl
+divert(1)dnl
 pin($1, $1)dnl
 divert(4)dnl
-        case inputcount: return ifelse($2, `INV', `PIN_IS_LOW', `PIN_IS_HIGH')($1);dnl
-define(`inputcount', incr(inputcount))dnl
+        case diginputcount: return ifelse($2, `INV', `PIN_IS_LOW', `PIN_IS_HIGH')($1);dnl
+define(`diginputcount', incr(diginputcount))dnl
 ')
+
+
+define(`digoutputcount', 0)
+define(`shiftoutputcount', 0)
+define(`digoutput', `dnl
+ifelse(translit(`$1', `a-z', `A-Z'), `SHIFT',dnl
+`define(`shiftoutputcount', $2)', `dnl
+divert(1)dnl
+pin($1, $1)dnl
+divert(5)dnl
+        case digoutputcount: if (state) PIN_SET($1); else PIN_CLR($1); return;dnl
+define(`digoutputcount', incr(digoutputcount))dnl
+')dnl
+')
+
 
 divert(1)dnl
 `

@@ -235,11 +235,11 @@ void prog_periphery_sync()
                                         bus_send_message_async("SET", 0xFF, "%%OW:%u.%u=%04X", adr, byte, progc.image[i]);
                                         progc.periphery[i] = progc.image[i];
                                 }
-                                if (byte < OUTPUT_REACH) {
+                                if (byte < OUTPUT_BYTES) {
                                         outputs[byte] = progc.periphery[i] & 0xFF;
                                 }
 
-                                if ((byte + 1) < OUTPUT_REACH) {
+                                if ((byte + 1) < OUTPUT_BYTES) {
                                         outputs[byte + 1] = progc.periphery[i] >> 8;
                                 }
                                 break;

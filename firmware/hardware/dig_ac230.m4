@@ -35,22 +35,20 @@ pin(SDA, PD7)
 
 pin(SQW, PD3)
 
-input(PC0)
-input(PC1)
-input(PC2)
-input(PC3)
-input(PC4)
-input(PC5)
-input(PC6)
-input(PC7)
+diginput(PC0)
+diginput(PC1)
+diginput(PC2)
+diginput(PC3)
+diginput(PC4)
+diginput(PC5)
+diginput(PC6)
+diginput(PC7)
 
+digoutput(shift, 8)
 
 divert(0)dnl
 `
 #define HARDWARE_NAME "dig_ac230"
-
-#define OUTPUT_REACH 1
-
 
 #define INIT_DDRA  0x03
 #define INIT_DDRB  0x17

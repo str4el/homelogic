@@ -78,9 +78,10 @@ ISR(TIMER_MS_vect) {
 
 void write_outputs(void)
 {
+#ifdef SHIFT_OUTPUT
         PIN_CLR(C2);
 
-        for (int8_t i = OUTPUT_REACH * 8 - 1; i >= 0; i--) {
+        for (int8_t i = OUTPUT_COUNT - 1; i >= 0; i--) {
                 PIN_CLR(C1);
                 if (outputs[i >> 3] & (1 << i % 8)) {
                         PIN_SET(DO);
@@ -91,6 +92,13 @@ void write_outputs(void)
         }
 
         PIN_SET(C2);
+#endif //SHIFT_OUTPUT
+
+#ifdef PORT_OUTPUT
+        for (uint8_t i = 0; i < OUTPUT_COUNT; i++) {
+                set_output(i, outputs[i >> 3] & (1 << i % 8));
+        }
+#endif //PORT_OUTPUT
 }
 
 
