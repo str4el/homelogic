@@ -93,11 +93,17 @@ char *rtc_day()
  */
 void rtc_update_clock()
 {
-        static bool last_sqw;
         rtc_time_t time;
+
+#ifdef RTC_USE_SQW
+        static bool last_sqw;
 
         if (PIN_IS_LOW(SQW) != last_sqw) {
                 last_sqw = PIN_IS_LOW(SQW);
+#else
+        if (!rtc_update_time) {
+                rtc_update_time = 300;
+#endif
 
                 if (rtc_read_time(&time)) {
                         return;

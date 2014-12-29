@@ -53,6 +53,9 @@ ISR(TIMER_MS_vect) {
         if (!(timerbase % 10000)) timerbase = 0;
         timerbase++;
 
+#ifndef RTC_USE_SQW
+        if (rtc_update_time) rtc_update_time--;
+#endif
 
 
         for (int8_t i = 0; i < INPUT_COUNT; i++) {
@@ -137,17 +140,20 @@ int __attribute__ ((OS_main)) main (void) {
         // Interrupts ein
         sei();
 
+#ifdef RTC_SUPPORT
         /* RTC Control register einstellen mit
          * Interrupts an auf ausgang ALARM1
          * SQW auf 1HZ default 32kHz
          */
         rtc_write_control(0);
         rtc_update_clock();
+#endif
 
         bus_send_message_sync("READY", 0xFF, NULL);
         bus_command_identify(0xFF, NULL);
 
 
+#ifdef RTC_SUPPORT
         // Sende die aktuelle Systemzeit
         bus_send_message_async("RTC", 0xFF, "%s-%02u.%02u.%02u-%02u:%02u:%02u",
                                rtc_day(),
@@ -158,6 +164,7 @@ int __attribute__ ((OS_main)) main (void) {
                                clock.minutes,
                                clock.seconds
                                );
+#endif
 
 
         prog_write.len = 0;
@@ -169,7 +176,9 @@ int __attribute__ ((OS_main)) main (void) {
         led.red = ls_off;
         while(1) {
                 bus_flush_send_buffer();
+#ifdef RTC_SUPPORT
                 rtc_update_clock();
+#endif
                 hardware_monitor();
 
                 if (state.current != state.coming) {

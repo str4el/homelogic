@@ -58,7 +58,9 @@ const bus_command_table_t bus_command_table [] PROGMEM = {
         { "STEP" , 4, bus_command_step,           0,  0},
         { "DUMP" , 4, bus_command_dump,           0,  0},
         { "PROG" , 4, bus_command_program,        8, BUS_DATA_MAX_LEN},
+#ifdef RTC_SUPPORT
         { "SRTC" , 4, bus_command_set_rtc,       20, 20},
+#endif
         { "SET"  , 3, bus_command_set_word,       8, 15},
         { "MEM"  , 3, bus_command_memory,         0,  0},
 };
@@ -402,6 +404,8 @@ void bus_command_program (uint8_t sender, char *data)
 
 
 
+
+#ifdef RTC_SUPPORT
 void bus_command_set_rtc (uint8_t sender, char *data)
 {
         rtc_time_t t;
@@ -423,6 +427,7 @@ void bus_command_set_rtc (uint8_t sender, char *data)
 
         rtc_write_time(&t);
 }
+#endif
 
 
 

@@ -198,6 +198,9 @@ void prog_periphery_sync()
                                 tmp = byte < INPUT_BYTES ? inputs[byte] : 0;
                                 tmp |= (byte + 1) < INPUT_BYTES ? (uint16_t)inputs[byte + 1] << 8 : 0;
 
+
+
+#ifdef RTC_SUPPORT
                                 // Systemzeit auf Eingänge
                                 switch (byte) {
                                 case 8:
@@ -221,6 +224,9 @@ void prog_periphery_sync()
                                         tmp |= clock.year << 8;
                                         break;
                                 }
+#endif
+
+
 
                                 if (tmp != progc.periphery[i]) {
                                         bus_send_message_async("SET", 0xFF, "%%IW:%u.%u=%04X", adr, byte, tmp);

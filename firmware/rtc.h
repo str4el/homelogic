@@ -31,7 +31,9 @@
 #define RTC_CONTROL_ADR 0x0E
 #define RTC_STATUS_ADR 0x0F
 
-
+#ifndef RTC_USE_SQW
+volatile uint16_t rtc_update_time;
+#endif
 
 typedef struct rtc_time_s {
         uint8_t seconds;
