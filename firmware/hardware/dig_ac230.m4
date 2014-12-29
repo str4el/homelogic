@@ -60,19 +60,6 @@ divert(0)dnl
 #define INIT_PORTD 0x0C
 
 
-#define I2C_T_BUF    5
-#define I2C_T_HD_STA 4
-#define I2C_T_LOW    5
-#define I2C_T_HIGH   4
-#define I2C_T_SU_STA 5
-#define I2C_T_HD_DAT 0
-#define I2C_T_SU_DAT 1
-#define I2C_T_SU_STO 4
-
-#define I2C_ACK 1
-#define I2C_NACK 0
-
-
 /* Hardwareüberwachung
  */
 #define GET_BATTERIE_CONDITION() get_analog_value(6, 3)

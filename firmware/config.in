@@ -21,6 +21,21 @@ dep_bool_menu "Firmware" BUILD_FIRMWARE
         int "Input debounce time (ms)" INPUT_DEBOUNCE 200
         int "Debounce on state multiplier" INPUT_DEBOUNCE_ON_MUL 4
 
+        mainmenu_option next_comment
+        comment "I2C Bus timing"
+                int "Bus free time between a STOP and START condition" I2C_T_BUF 5
+                int "Hold time (repeated) START condition" I2C_T_HD_STA 4
+                int "LOW period of SCL clock" I2C_T_LOW 5
+                int "HIGH period of SCL clock" I2C_T_HIGH 4
+                int "Setup time for a repeated START condition" I2C_T_SU_STA 5
+                int "Data hold time" I2C_T_HD_DAT 0
+                int "Data setup time" I2C_T_SU_DAT 1
+                int "Setup time for STOP condition" I2C_T_SU_STO 4
+
+                define_int I2C_ACK 1
+                define_int I2C_NACK 0
+        endmenu
+
 	# get the flash size according to the cpu type
 	FLASH_SIZE=$((`echo -e "#include <avr/io.h>\nFLASHEND" | avr-cpp -mmcu=$MCU | sed '$!d'` + 1 ))
 
