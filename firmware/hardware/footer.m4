@@ -33,9 +33,13 @@ undivert(5)dnl
 }
 
 divert(6)
+extern void init_pin(void);
 extern void init_timer_ms(void);
 extern void init_uart(void);
 extern void init_adc(void);
+extern uint8_t adr_read(void);
+extern void hardware_monitor(void);
+
 
 divert(0)
 undivert(1)

@@ -104,61 +104,6 @@ void write_outputs(void)
 
 
 
-/* Überwacht den Batteriestatus und die Temperatur der Ausgänge.
- * Es wird jeweils ein Fehler beim übergang der Warn- bzw. Fehlerschwelle
- * angezeigt. Bei Übertemperatur werden die Ausgänge abgeschaltet und erst
- * wider frei gegeben wenn die Warnschwelle unterschritten wurde.
- */
-void health_monitor(void)
-{
-        int16_t value;
-
-        value = GET_TEMPERATURE();
-        if (value >= 0) {
-                if (value > TEMPERATURE_ERROR) {
-                        if (!(health & temperature_critical)) {
-                                error(ERR_HITEMP);
-                        }
-
-                        PIN_CLR(C2);
-                        PIN_CLR(R);
-                        PIN_SET(C2);
-
-                        health |= temperature_critical;
-
-                } else if (value > TEMPERATURE_WARN) {
-                        if (!(health & temperature_high)) {
-                                error(ERR_HITEMP);
-                        }
-                        health |= temperature_high;
-
-                } else if (value < TEMPERATURE_WARN - 5) {
-                        health &= ~(temperature_high | temperature_critical);
-                        PIN_SET(R);
-                }
-        }
-
-        value = GET_BATTERIE_CONDITION();
-        if (value >= 0) {
-                if (value < BATTERIE_ERROR) {
-                        if (!(health & batterie_critical)) {
-                                error(ERR_LOWBAT);
-                        }
-                        health |= batterie_critical;
-                } else if (value < BATTERIE_WARN) {
-                        if (!(health & batterie_low)) {
-                                error(ERR_LOWBAT);
-                        }
-                        health |= batterie_low;
-                } else if (value > BATTERIE_WARN + 5) {
-                        health &= ~(batterie_low | batterie_critical);
-                }
-        }
-}
-
-
-
-
 int __attribute__ ((OS_main)) main (void) {
         /* Bei allen neueren AVRs bleibt der Watchdog auch nach dem Reset aktiv.
          * Deswegen muss er schnellstmöglich abgeschaltet werden. Die avr-libc
@@ -168,14 +113,7 @@ int __attribute__ ((OS_main)) main (void) {
         MCUSR = 0; // WDRF muss vorher gelöscht werden
         wdt_disable();
 
-        DDRA = INIT_DDRA;
-        DDRB = INIT_DDRB;
-        DDRC = INIT_DDRC;
-        DDRD = INIT_DDRD;
-        PORTA = INIT_PORTA;
-        PORTB = INIT_PORTB;
-        PORTC = INIT_PORTC;
-        PORTD = INIT_PORTD;
+        init_pin();
 
         led.green = ls_off;
         led.yellow = ls_off;
@@ -232,7 +170,7 @@ int __attribute__ ((OS_main)) main (void) {
         while(1) {
                 bus_flush_send_buffer();
                 rtc_update_clock();
-                health_monitor();
+                hardware_monitor();
 
                 if (state.current != state.coming) {
                         switch (state.coming) {

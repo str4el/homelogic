@@ -32,14 +32,6 @@ uint8_t outputs[OUTPUT_BYTES];
 
 uint8_t adr;
 
-enum health_e {
-        temperature_high = 1,
-        temperature_critical = 2,
-        batterie_low = 4,
-        batterie_critical = 8
-} health;
-
-
 struct state_s {
         prog_status_t current;
         volatile prog_status_t coming;

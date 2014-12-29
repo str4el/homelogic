@@ -8,13 +8,15 @@ DEPFILE = .deps
 
 HW_SRC-$(atmega32) += hardware/atmega32.m4
 HW_SRC-$(atmega1284p) += hardware/atmega1284p.m4
-HW_SRC-$(PROTOTYPE) += hardware/prototype.m4
-HW_SRC-$(DIG_AC230) += hardware/dig_ac230.m4
+HW_SRC-$(prototype) += hardware/prototype.m4
+HW_SRC-$(dig_ac230) += hardware/dig_ac230.m4
 
 SRC = adc.c bus.c error.c i2c.c main.c prog.c rtc.c
 SRC-$(atmega32) += hardware/atmega32.c
 SRC-$(atmega1284p) += hardware/atmega1284p.c
 SRC-$(at90usb1287) += hardware/at90usb1287.c
+SRC-$(prototype) += hardware/prototype.c
+SRC-$(dig_ac230) += hardware/dig_ac230.c
 
 
 HW_SRC = hardware/header.m4 $(HW_SRC-y) hardware/footer.m4
