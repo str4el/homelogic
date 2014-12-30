@@ -32,6 +32,7 @@
 
 struct state_s state;
 volatile prog_write_t prog_write;
+bool output_lock = false;
 
 
 
@@ -81,6 +82,11 @@ ISR(TIMER_MS_vect) {
 
 void write_outputs(void)
 {
+        if (output_lock) {
+                for (uint8_t i = 0; i < sizeof(outputs) / sizeof(*outputs); i++)
+                        outputs[i] = 0;
+        }
+
 #ifdef SHIFT_OUTPUT
         PIN_CLR(C2);
 

@@ -78,7 +78,7 @@ uint8_t adr_read()
 #define TEMPERATURE_WARN  780 // ca. 50°C
 #define TEMPERATURE_ERROR 820 // ca. 60°C
 
-
+extern bool output_lock;
 
 /* Überwacht den Batteriestatus und die Temperatur der Ausgänge.
  * Es wird jeweils ein Fehler beim übergang der Warn- bzw. Fehlerschwelle
@@ -104,6 +104,7 @@ void hardware_monitor()
                                 error(ERR_HITEMP);
                         }
 
+                        output_lock = true;
                         PIN_CLR(C2);
                         PIN_CLR(R);
                         PIN_SET(C2);
@@ -119,6 +120,7 @@ void hardware_monitor()
                 } else if (value < TEMPERATURE_WARN - 5) {
                         health &= ~(temperature_high | temperature_critical);
                         PIN_SET(R);
+                        output_lock = false;
                 }
         }
 
