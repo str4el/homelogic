@@ -26,7 +26,7 @@
 void init_pin()
 {
         DDRA = 0xff;
-        DDRB = 0x70;
+        DDRB = 0xe0;
         DDRD = 0xf0;
         DDRE = 0x01;
         PORTD = 0x03;

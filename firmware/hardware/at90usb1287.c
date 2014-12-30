@@ -37,10 +37,15 @@ void init_timer_ms()
  */
 void init_uart()
 {
-        UCSR1C |= (1 << UCSZ11) | (1 << UCSZ10);
-        UCSR1B |= (1 << TXEN1) | (1 << RXEN1) | (1 << RXCIE1);
         UBRR1H = UBRRH_VALUE;
         UBRR1L = UBRRL_VALUE;
+#if USE_2X
+        UCSR1A |= (1 << U2X1);
+#else
+        UCSR1A &= ~(1 << U2X1);
+#endif
+        UCSR1C |= (1 << UCSZ11) | (1 << UCSZ10);
+        UCSR1B |= (1 << TXEN1) | (1 << RXEN1) | (1 << RXCIE1);
 }
 
 
