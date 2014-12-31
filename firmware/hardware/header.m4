@@ -20,13 +20,29 @@ changecom(`//')
 
 define(`adjust8', `ifelse(eval(`$1 % 8'), `0', eval(`$1 / 8'), eval(`$1 / 8 + 1'))')
 
+
+define(`reg', `divert(1)dnl
+#define `$1' `$2'
+divert(-1)
+')
+
+
+define(`sfr', `divert(1)dnl
+#define `$1'_REG `$2'
+#define `$1'_BIT (1 << `$3')
+divert(-1)
+')
+
+
+
 define(`pin', `dnl
 ifelse(regexp($2, `^P[A-Z][0-9]$'), `-1', `divert(2)', `divert(1)')dnl
 define(`pinname', `ifelse(regexp($2, `^P[A-Z][0-9]$'), `-1', `$2_PORT', `translit(substr(`$2', 1, 1), `a-z', `A-Z')')')dnl
 define(`pinnum', `ifelse(regexp($2, `^P[A-Z][0-9]$'), `-1', `$2_MASK', `eval(1 << substr(`$2', 2, 1))')')dnl
 #define translit(`$1',`a-z', `A-Z')_PORT pinname
 #define translit(`$1',`a-z', `A-Z')_MASK pinnum
-')dnl
+divert(-1)
+')
 
 
 define(`diginputcount', 0)
@@ -34,8 +50,9 @@ define(`diginput', `dnl
 divert(1)dnl
 pin($1, $1)dnl
 divert(4)dnl
-        case diginputcount: return ifelse($2, `INV', `PIN_IS_LOW', `PIN_IS_HIGH')($1);dnl
+        case diginputcount: return ifelse($2, `INV', `PIN_IS_LOW', `PIN_IS_HIGH')($1);
 define(`diginputcount', incr(diginputcount))dnl
+divert(-1)
 ')
 
 
@@ -47,9 +64,10 @@ ifelse(translit(`$1', `a-z', `A-Z'), `SHIFT',dnl
 divert(1)dnl
 pin($1, $1)dnl
 divert(5)dnl
-        case digoutputcount: if (state) PIN_SET($1); else PIN_CLR($1); return;dnl
+        case digoutputcount: if (state) PIN_SET($1); else PIN_CLR($1); return;
 define(`digoutputcount', incr(digoutputcount))dnl
-')dnl
+divert(-1)
+')
 ')
 
 
@@ -77,6 +95,11 @@ divert(0)dnl
 #include <util/setbaud.h>
 #include <util/atomic.h>
 #include <util/delay.h>
+
+#define SFR_SET(sfr) sfr ## _REG |= sfr ## _BIT
+#define SFR_CLR(sfr) sfr ## _REG &= ~sfr ## _BIT
+#define SFR_IS_HIGH(sfr) (sfr ## _REG & sfr ## _BIT)
+#define SFR_IS_LOW(sfr) (!(sfr ## _REG & sfr ## _BIT))
 
 
 #define _PORT_CHAR(character) PORT ## character

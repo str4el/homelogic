@@ -32,19 +32,6 @@ void init_timer_ms()
 
 
 
-/* MCU Spezifische Initialisierung der EIA-485 Schnittstelle
- */
-void init_uart()
-{
-        UCSRC |= (1 << UCSZ1) | (1 << UCSZ0);
-        UCSRB |= (1 << TXEN) | (1 << RXEN) | (1 << RXCIE);
-        UBRRH = UBRRH_VALUE;
-        UBRRL = UBRRL_VALUE;
-}
-
-
-
-
 /* MCU Spezifische Initialisierung des AD-Wandlers
 */
 void init_adc()

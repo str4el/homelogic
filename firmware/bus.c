@@ -24,6 +24,7 @@
 #include <stdarg.h>
 #include <stdbool.h>
 #include <avr/eeprom.h>
+#include <util/atomic.h>
 
 #include "bus.h"
 #include "main.h"
@@ -113,7 +114,21 @@ ISR(BUS_RXC_vect) {
 
 void bus_init(void)
 {
-        init_uart();
+        ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+                BUS_UBRRH = UBRRH_VALUE;
+                BUS_UBRRL = UBRRL_VALUE;
+#if USE_2X
+                SFR_SET(BUS_U2X);
+#else
+                SFR_CLR(BUS_U2X);
+#endif
+                SFR_SET(BUS_UCSZ0);
+                SFR_SET(BUS_UCSZ1);
+                SFR_SET(BUS_TXEN);
+                SFR_SET(BUS_RXEN);
+                SFR_SET(BUS_RXCIE);
+        }
+
         PIN_CLR(RE);
         BUS_TX_LOCK(2 + adr * 2);
 }
@@ -129,12 +144,13 @@ void bus_transmit_data (const char * data, uint8_t len)
 
 
         for (uint8_t i = 0; i < len; i++) {
-                while(!BUS_IS_URDE);
+                while(SFR_IS_LOW(BUS_UDRE));
                 BUS_UDR = data[i];
         }
 
-        while (!BUS_IS_TXC);
-        BUS_CLEAR_TXC();
+        while (SFR_IS_LOW(BUS_TXC));
+        SFR_SET(BUS_TXC);
+
         PIN_CLR(TE);
         BUS_TX_LOCK(2 + adr * 2);
         bus.status = rx_start;

@@ -15,13 +15,27 @@ dnl
 dnl You should have received a copy of the GNU General Public License
 dnl along with Homelogic.  If not, see <http://www.gnu.org/licenses/>.
 dnl
+divert(-1)
+
+
+reg(BUS_UBRRL, UBRRL)
+reg(BUS_UBRRH, UBRRH)
+reg(BUS_UDR, UDR)
+
+sfr(BUS_UCSZ0, UCSRC, UCSZ0)
+sfr(BUS_UCSZ1, UCSRC, UCSZ1)
+sfr(BUS_TXEN, UCSRB, TXEN)
+sfr(BUS_RXEN, UCSRB, RXEN)
+sfr(BUS_RXCIE, UCSRB, RXCIE)
+
+sfr(BUS_UDRE, UCSRA, UDRE)
+sfr(BUS_TXC, UCSRA, TXC)
+sfr(BUS_U2X, UCSRA, U2X)
+
+
+
 divert(0)
 `
 #define TIMER_MS_vect TIMER2_COMP_vect
-
 #define BUS_RXC_vect USART_RXC_vect
-#define BUS_IS_URDE (UCSRA & (1 << UDRE))
-#define BUS_IS_TXC (UCSRA & (1 << TXC))
-#define BUS_CLEAR_TXC() UCSRA |= (1 << TXC)
-#define BUS_UDR UDR
 '
