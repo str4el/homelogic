@@ -20,7 +20,6 @@
 #include "../hardware.h"
 
 
-
 /* MCU Spezifische Initialisierung des AD-Wandlers
 */
 void init_adc()

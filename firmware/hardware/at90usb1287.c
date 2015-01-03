@@ -27,5 +27,3 @@ void init_adc()
         ADMUX |= (1 << REFS0) | (1 << REFS1);
         ADCSRA |= (1 << ADPS0) | (1 << ADPS1) | (1 << ADPS2);
 }
-
-

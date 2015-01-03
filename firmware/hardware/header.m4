@@ -108,8 +108,6 @@ divert(0)dnl
 #define HARDWARE_H
 
 #include "../config.h"
-#define F_CPU FREQ
-
 #include <stdbool.h>
 #include <stdint.h>
 #include <avr/io.h>
@@ -130,8 +128,8 @@ divert(0)dnl
 #    define OCR2 OCR2A
 #endif
 
-#define TC2_MAX 255
-#define TC2_US 1000
+#define TC2_MAX 255UL
+#define TC2_US 1000UL
 
 
 #define SFR_SET(sfr) sfr ## _REG |= sfr ## _BIT

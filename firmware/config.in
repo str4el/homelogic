@@ -21,6 +21,8 @@ dep_bool_menu "Firmware" BUILD_FIRMWARE
 
 
 	int "MCU frequency" FREQ 8000000
+        define_int F_CPU ${FREQ}UL
+
         int "Bus speed (baudrate)" BAUD 9600
 
         int "Input debounce time (ms)" INPUT_DEBOUNCE 200
