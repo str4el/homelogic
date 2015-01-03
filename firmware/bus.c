@@ -115,6 +115,15 @@ ISR(BUS_RXC_vect) {
 void bus_init(void)
 {
         ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+                SFR_SET(BUS_UCSZ0);
+                SFR_SET(BUS_UCSZ1);
+                SFR_SET(BUS_TXEN);
+                SFR_SET(BUS_RXEN);
+                SFR_SET(BUS_RXCIE);
+
+                /* Aus einem mir absuolut räzelhaftem Grund funktioniert das Einstellen
+                 * der Baudrate beim AtMega32 nur wenn es nach dem setzen der Flags passiert!
+                 */
                 BUS_UBRRH = UBRRH_VALUE;
                 BUS_UBRRL = UBRRL_VALUE;
 #if USE_2X
@@ -122,11 +131,6 @@ void bus_init(void)
 #else
                 SFR_CLR(BUS_U2X);
 #endif
-                SFR_SET(BUS_UCSZ0);
-                SFR_SET(BUS_UCSZ1);
-                SFR_SET(BUS_TXEN);
-                SFR_SET(BUS_RXEN);
-                SFR_SET(BUS_RXCIE);
         }
 
         PIN_CLR(RE);
