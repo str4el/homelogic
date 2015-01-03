@@ -34,7 +34,6 @@ undivert(5)dnl
 
 divert(6)
 extern void init_pin(void);
-extern void init_timer_ms(void);
 extern void init_adc(void);
 extern uint8_t adr_read(void);
 extern void hardware_monitor(void);
@@ -59,5 +58,6 @@ define(`digoutputcount', `shiftoutputcount')dnl
 
 undivert(3)
 undivert(6)
+undivert(8)
 
 #endif

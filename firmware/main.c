@@ -39,7 +39,7 @@ bool output_lock = false;
 
 /* Interruptroutine für 1ms Timer
  */
-ISR(TIMER_MS_vect) {
+ISR(TIMER2_COMP_vect) {
         static uint8_t intimer[INPUT_COUNT];
         static uint16_t timerbase = 0;
 
@@ -128,7 +128,13 @@ int __attribute__ ((OS_main)) main (void) {
         led.yellow = ls_off;
         led.red = ls_on;
 
-        init_timer_ms();
+        // Timer2 Initialisiegung
+        SFR_SET(WGM21);
+        TC2_SET_PRESCALER();
+        OCR2 = TC2_VALUE;
+        SFR_SET(OCIE2);
+
+
         init_adc();
 
         // Adressdecodierung wird nur nach dem Reset durchgeführt
@@ -157,7 +163,6 @@ int __attribute__ ((OS_main)) main (void) {
 
         bus_send_message_sync("READY", 0xFF, NULL);
         bus_command_identify(0xFF, NULL);
-
 
 #ifdef RTC_SUPPORT
         // Sende die aktuelle Systemzeit

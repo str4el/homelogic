@@ -71,6 +71,31 @@ divert(-1)
 ')
 
 
+
+
+divert(8)dnl
+#error No matching prescaler
+divert(-1)
+
+define(`prescale', `dnl
+divert(9)dnl
+#if ((F_CPU) / (`$2'UL) / (`$1'_US) - 1UL) <= (`$1'_MAX)
+#define `$1'_VALUE ((F_CPU) / (`$2'UL) / (`$1'_US) - 1UL)
+#define `$1'_SET_PRESCALER() do { dnl
+ifelse(substr(`$4', 0, 1), `1', `SFR_SET(`$3'2); ', `SFR_CLR(`$3'2); ')dnl
+ifelse(substr(`$4', 1, 1), `1', `SFR_SET(`$3'1); ', `SFR_CLR(`$3'1); ')dnl
+ifelse(substr(`$4', 2, 1), `1', `SFR_SET(`$3'0); ', `SFR_CLR(`$3'0); ')dnl
+} while(0)
+#else
+undivert(8)dnl
+#endif // `$2'
+divert(8)dnl
+undivert(9)dnl
+divert(-1)
+')
+
+
+
 divert(1)dnl
 `
 #define NC_PORT A
@@ -95,6 +120,19 @@ divert(0)dnl
 #include <util/setbaud.h>
 #include <util/atomic.h>
 #include <util/delay.h>
+
+
+#ifndef TIMER2_COMP_vect
+#    define TIMER2_COMP_vect TIMER2_COMPA_vect
+#endif
+
+#ifndef OCR2
+#    define OCR2 OCR2A
+#endif
+
+#define TC2_MAX 255
+#define TC2_US 1000
+
 
 #define SFR_SET(sfr) sfr ## _REG |= sfr ## _BIT
 #define SFR_CLR(sfr) sfr ## _REG &= ~sfr ## _BIT

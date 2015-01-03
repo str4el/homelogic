@@ -32,10 +32,24 @@ sfr(BUS_UDRE, UCSR1A, UDRE1)
 sfr(BUS_TXC, UCSR1A, TXC1)
 sfr(BUS_U2X, UCSR1A, U2X1)
 
+sfr(WGM21, TCCR2A, WGM21);
+sfr(OCIE2, TIMSK2, OCIE2A);
+
+sfr(CS20, TCCR2B, CS20)
+sfr(CS21, TCCR2B, CS21)
+sfr(CS22, TCCR2B, CS22)
+
+dnl Die Prescaler müssen in absteigender reihenfolge definiert werden!
+prescale(TC2, 1024, CS2, 111)
+prescale(TC2, 256, CS2, 110)
+prescale(TC2, 128, CS2, 101)
+prescale(TC2, 64, CS2, 100)
+prescale(TC2, 32, CS2, 011)
+prescale(TC2, 8, CS2, 010)
+prescale(TC2, 1, CS2, 001)
 
 
 divert(0)
 `
-#define TIMER_MS_vect TIMER2_COMPA_vect
 #define BUS_RXC_vect USART1_RX_vect
 '

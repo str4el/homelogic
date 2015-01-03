@@ -20,19 +20,6 @@
 #include "../hardware.h"
 
 
-/* MCU Spezifische Initialisierung des 1ms Timer
- */
-void init_timer_ms()
-{
-        TCCR2A |= (1 << WGM21);
-        TCCR2B |= (1 << CS20) | (1 << CS22);
-        OCR2A = 124;
-        TIMSK2 |= (1 << OCIE2A);
-}
-
-
-
-
 /* MCU Spezifische Initialisierung des AD-Wandlers
 */
 void init_adc()
