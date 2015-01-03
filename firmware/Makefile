@@ -36,6 +36,16 @@ SRC += $(SRC-y)
 OBJ = $(SRC:.c=.o)
 
 
+AVRDUDE_FLAGS = -c $(subst ",,$(AVRDUDE_PROGRAMMER)) -P $(subst ",,$(AVRDUDE_PORT)) -p $(subst ",,$(MCU))
+AVRDUDE_FLAGS += $(subst ",,$(AVRDUDE_EXTRA_OPTIONS))
+
+AVRDUDE_WRITE_FLASH = -U flash:w:$(TARGET).hex:i
+AVRDUDE_WRITE_LFUSE = -U lfuse:w:$(AVRDUDE_LFUSE):m
+AVRDUDE_WRITE_HFUSE = -U hfuse:w:$(AVRDUDE_HFUSE):m
+ifneq (,$(findstring 0x,$(AVRDUDE_EFUSE)))
+	AVRDUDE_WRITE_EFUSE = -U efuse:w:$(AVRDUDE_EFUSE):m
+endif
+
 all: build
 
 build: elf hex
@@ -62,6 +72,16 @@ clean:
 	$(RM) $(TARGET).hex $(TARGET).elf $(OBJ) $(DEPFILE) $(HW_H)
 
 
+# Program the device.
+program: $(TARGET).hex
+	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH)
+
+# Write the fuses
+fuses:
+	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_LFUSE) $(AVRDUDE_WRITE_HFUSE) $(AVRDUDE_WRITE_EFUSE)
+
+
+
 -include $(DEPFILE)
 
 # Dependency
@@ -69,4 +89,4 @@ $(DEPFILE): $(SRC) $(HW_H)
 	$(CC) -M -mmcu=$(MCU) $(SRC) > $(DEPFILE)
 
 
-.PHONY:	all build elf hex program clean distclean
+.PHONY:	all build elf hex program fuses clean distclean

@@ -11,22 +11,36 @@ dep_bool_menu "Firmware" BUILD_FIRMWARE
                         "ATmega32     atmega32		\
                          ATmega1284p  atmega1284p"	\
                         'ATmega32' MCU
+
+                int "MCU frequency" FREQ 8000000
+                define_int F_CPU ${FREQ}UL
         ;;
+
         USB_CPU)
                 choice 'Target MCU'                \
                         "AT90usb1287  at90usb1287" \
                         'AT90usb1287' MCU
+
+                int "MCU frequency" FREQ 16000000
+                define_int F_CPU ${FREQ}UL
         ;;
         esac
 
 
-	int "MCU frequency" FREQ 8000000
-        define_int F_CPU ${FREQ}UL
+
+
+        case $HARDWARE in
+        prototype)
+                int "Input debounce time (ms)" INPUT_DEBOUNCE 200
+                int "Debounce on state multiplier" INPUT_DEBOUNCE_ON_MUL 4
+        ;;
+        dig_ac230|USB_CPU)
+                int "Input debounce time (ms)" INPUT_DEBOUNCE 20
+                int "Debounce on state multiplier" INPUT_DEBOUNCE_ON_MUL 1
+        ;;
+        esac
 
         int "Bus speed (baudrate)" BAUD 9600
-
-        int "Input debounce time (ms)" INPUT_DEBOUNCE 200
-        int "Debounce on state multiplier" INPUT_DEBOUNCE_ON_MUL 4
 
         dep_bool_menu "I2C Bus" I2C_SUPPORT
                 define_int I2C_ACK 1
@@ -62,5 +76,55 @@ dep_bool_menu "Firmware" BUILD_FIRMWARE
 	define_hex RAM_SIZE "$(printf '0x%X\n' $((`echo -e "#include <avr/io.h>\nRAMEND" | avr-cpp -mmcu=$MCU | sed '$!d'` + 1)))"
 	define_hex FLASH_PAGESIZE "$(printf '0x%X\n' $((`echo -e "#include <avr/io.h>\nSPM_PAGESIZE" | avr-cpp -mmcu=$MCU | sed '$!d'`)))"
 	define_hex EEPROM_PAGESIZE "$(printf '0x%X\n' $((`echo -e "#include <avr/io.h>\nE2PAGESIZE" | avr-cpp -mmcu=$MCU | sed '$!d'`)))"
+
+
+	AVRDUDE=$( command -v avrdude )
+	if [ "x${AVRDUDE}" != "x" ]; then
+                mainmenu_option next_comment
+                comment "AVRDUDE configuration"
+                        string "Programmer Type (-c type)" AVRDUDE_PROGRAMMER "avrispmkii"
+                        string "Port (-P port)" AVRDUDE_PORT "usb"
+                        string "Pass extra options to avrdude" AVRDUDE_EXTRA_OPTIONS
+
+                        case "$MCU" in
+                                atmega32)
+                                        DEFAULT_AVRDUDE_LFUSE=04
+                                        DEFAULT_AVRDUDE_HFUSE=d9
+                                        DEFAULT_AVRDUDE_EFUSE=""
+                                ;;
+                                atmega1284p)
+                                        DEFAULT_AVRDUDE_LFUSE=c2
+                                        DEFAULT_AVRDUDE_HFUSE=d9
+                                        DEFAULT_AVRDUDE_EFUSE=fc
+                                ;;
+                                at90usb1287)
+                                        DEFAULT_AVRDUDE_LFUSE=de
+                                        DEFAULT_AVRDUDE_HFUSE=d9
+                                        DEFAULT_AVRDUDE_EFUSE=f0
+                                ;;
+                                *)
+                                        DEFAULT_AVRDUDE_LFUSE=""
+                                        DEFAULT_AVRDUDE_HFUSE=""
+                                        DEFAULT_AVRDUDE_EFUSE=""
+                                ;;
+                        esac
+
+                        hex "Fuse Low Byte" CONFIG_AVRDUDE_LFUSE $DEFAULT_AVRDUDE_LFUSE
+                        if [ "x${CONFIG_AVRDUDE_LFUSE}" != "x" ]; then
+                                define_symbol AVRDUDE_LFUSE 0x${CONFIG_AVRDUDE_LFUSE}
+                        fi
+
+                        hex "Fuse High Byte" CONFIG_AVRDUDE_HFUSE $DEFAULT_AVRDUDE_HFUSE
+                        if [ "x${CONFIG_AVRDUDE_HFUSE}" != "x" ]; then
+                                define_symbol AVRDUDE_HFUSE 0x${CONFIG_AVRDUDE_HFUSE}
+                        fi
+
+                        hex "Fuse Extended Byte" CONFIG_AVRDUDE_EFUSE $DEFAULT_AVRDUDE_EFUSE
+                        if [ "x${CONFIG_AVRDUDE_EFUSE}" != "x" ]; then
+                                define_symbol AVRDUDE_EFUSE 0x${CONFIG_AVRDUDE_EFUSE}
+                        fi
+
+                endmenu
+        fi
 
 endmenu

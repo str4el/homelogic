@@ -15,6 +15,13 @@ subdirs: .config $(SUBDIRS)
 
 clean: $(SUBCLEAN)
 
+program:
+	$(MAKE) -C firmware program
+
+fuses:
+	$(MAKE) -C firmware fuses
+
+
 $(SUBDIRS):
 	$(MAKE) -C $@
 
@@ -24,7 +31,7 @@ $(SUBCLEAN): %.clean:
 
 test: libhl
 
-.PHONY: subdirs $(SUBDIRS) clean $(SUBCLEAN)
+.PHONY: subdirs $(SUBDIRS) clean $(SUBCLEAN) program fuses
 
 CONFIG_SHELL := $(shell if [ x"`uname`" = x"Darwin" ] && [ -x /opt/local/bin/bash ] ; then echo /opt/local/bin/bash; \
           elif [ x"`uname`" = x"Darwin" ] && [ -x /usr/local/bin/bash ] ; then echo /usr/local/bin/bash; \
