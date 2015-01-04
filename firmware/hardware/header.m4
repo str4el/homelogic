@@ -22,7 +22,7 @@ define(`adjust8', `ifelse(eval(`$1 % 8'), `0', eval(`$1 / 8'), eval(`$1 / 8 + 1'
 define(`concat', `$1$2$3$4$5')
 
 
-define(`reg', `divert(1)dnl
+define(`redef', `divert(1)dnl
 #define `$1' `$2'
 divert(-1)
 ')

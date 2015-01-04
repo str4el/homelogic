@@ -17,10 +17,10 @@ dnl along with Homelogic.  If not, see <http://www.gnu.org/licenses/>.
 dnl
 divert(-1)
 
-
-reg(BUS_UBRRL, UBRR0L)
-reg(BUS_UBRRH, UBRR0H)
-reg(BUS_UDR, UDR0)
+redef(BUS_RXC_vect, USART0_RX_vect)
+redef(BUS_UBRRL, UBRR0L)
+redef(BUS_UBRRH, UBRR0H)
+redef(BUS_UDR, UDR0)
 
 sfr(BUS_UCSZ0, UCSR0C, UCSZ00)
 sfr(BUS_UCSZ1, UCSR0C, UCSZ01)
@@ -71,9 +71,3 @@ prescale(8,   011)
 prescale(4,   010)
 prescale(2,   001)
 prescale_fini()
-
-
-divert(0)
-`
-#define BUS_RXC_vect USART0_RX_vect
-'
