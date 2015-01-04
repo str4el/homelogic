@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+ * Copyright (C) 2014, 2015 Stephan Reinhard <Stephan-Reinhard@gmx.de>
  *
  * This file is part of Homelogic.
  *
@@ -44,13 +44,13 @@ int16_t get_analog_value(uint8_t in, uint8_t n)
         ADMUX &= 0xE0;
         ADMUX |= in;
 
-        ADCSRA |= (1 << ADEN);
+        SFR_SET(ADEN);
 
         for (uint8_t i = 0; i < n; i++) {
-                ADCSRA |= (1 << ADSC);
+                SFR_SET(ADSC);
                 //set_sleep_mode(SLEEP_MODE_ADC);
                 //sleep_mode();
-                while (ADCSRA & (1 << ADSC));
+                while (SFR_IS_HIGH(ADSC));
 
                 uint16_t value = ADC;
                 sum += value;
@@ -59,7 +59,7 @@ int16_t get_analog_value(uint8_t in, uint8_t n)
                 if (value < min) min = value;
         }
 
-        ADCSRA &= ~(1 << ADEN);
+        SFR_CLR(ADEN);
         return (int16_t)(sum - first - max - min) / (n - 3);
 
 }

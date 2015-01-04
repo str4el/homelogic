@@ -46,6 +46,9 @@ sfr(ADPS2, ADCSRA, ADPS2)
 sfr(REFS0, ADMUX, REFS0)
 sfr(REFS1, ADMUX, REFS1)
 
+sfr(ADEN, ADCSRA, ADEN)
+sfr(ADSC, ADCSRA, ADSC)
+
 
 dnl Die Prescaler müssen in absteigender reihenfolge definiert werden!
 prescale_init(TC2, CS2, 255)
