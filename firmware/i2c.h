@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+ * Copyright (C) 2013 - 2015 Stephan Reinhard <Stephan-Reinhard@gmx.de>
  *
  * This file is part of Homelogic.
  *

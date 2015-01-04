@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013, 2014 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+ * Copyright (C) 2013 - 2015 Stephan Reinhard <Stephan-Reinhard@gmx.de>
  *
  * This file is part of Homelogic.
  *
@@ -135,7 +135,10 @@ int __attribute__ ((OS_main)) main (void) {
         SFR_SET(OCIE2);
 
 
-        init_adc();
+        // Initialisierung des AD - Wandlers
+        SFR_SET(REFS0);
+        SFR_SET(REFS1);
+        ADC_SET_PRESCALER();
 
         // Adressdecodierung wird nur nach dem Reset durchgeführt
         adr = adr_read();

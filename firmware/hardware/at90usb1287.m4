@@ -1,4 +1,4 @@
-dnl Copyright (C) 2014 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+dnl Copyright (C) 2014, 2015 Stephan Reinhard <Stephan-Reinhard@gmx.de>
 dnl
 dnl This file is part of Homelogic.
 dnl
@@ -32,21 +32,42 @@ sfr(BUS_UDRE, UCSR1A, UDRE1)
 sfr(BUS_TXC, UCSR1A, TXC1)
 sfr(BUS_U2X, UCSR1A, U2X1)
 
-sfr(WGM21, TCCR2A, WGM21);
-sfr(OCIE2, TIMSK2, OCIE2A);
+sfr(WGM21, TCCR2A, WGM21)
+sfr(OCIE2, TIMSK2, OCIE2A)
 
 sfr(CS20, TCCR2B, CS20)
 sfr(CS21, TCCR2B, CS21)
 sfr(CS22, TCCR2B, CS22)
 
+sfr(ADPS0, ADCSRA, ADPS0)
+sfr(ADPS1, ADCSRA, ADPS1)
+sfr(ADPS2, ADCSRA, ADPS2)
+
+sfr(REFS0, ADMUX, REFS0)
+sfr(REFS1, ADMUX, REFS1)
+
+
 dnl Die Prescaler müssen in absteigender reihenfolge definiert werden!
-prescale(TC2, 1024, CS2, 111)
-prescale(TC2, 256, CS2, 110)
-prescale(TC2, 128, CS2, 101)
-prescale(TC2, 64, CS2, 100)
-prescale(TC2, 32, CS2, 011)
-prescale(TC2, 8, CS2, 010)
-prescale(TC2, 1, CS2, 001)
+prescale_init(TC2, CS2, 255)
+prescale(1024, 111)
+prescale(256,  110)
+prescale(128,  101)
+prescale(64,   100)
+prescale(32,   011)
+prescale(8,    010)
+prescale(1,    001)
+prescale_fini()
+
+
+prescale_init(ADC, ADPS)
+prescale(128, 111)
+prescale(64,  110)
+prescale(32,  101)
+prescale(16,  100)
+prescale(8,   011)
+prescale(4,   010)
+prescale(2,   001)
+prescale_fini()
 
 
 divert(0)

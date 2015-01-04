@@ -1,4 +1,4 @@
-dnl Copyright (C) 2014 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+dnl Copyright (C) 2014, 2015 Stephan Reinhard <Stephan-Reinhard@gmx.de>
 dnl
 dnl This file is part of Homelogic.
 dnl
@@ -15,11 +15,11 @@ dnl
 dnl You should have received a copy of the GNU General Public License
 dnl along with Homelogic.  If not, see <http://www.gnu.org/licenses/>.
 dnl
-divert(6)
+divert(5)
 static inline bool get_input(uint8_t in)
 {
         switch(in) {
-undivert(4)dnl
+undivert(3)dnl
         }
         return false;
 }
@@ -28,11 +28,11 @@ ifelse(digoutputcount, 0, `divert(-1)')
 static inline void set_output(uint8_t out, bool state)
 {
         switch(out) {
-undivert(5)dnl
+undivert(4)dnl
         }
 }
 
-divert(6)
+divert(5)
 extern void init_pin(void);
 extern void init_adc(void);
 extern uint8_t adr_read(void);
@@ -42,6 +42,7 @@ extern void hardware_monitor(void);
 divert(0)
 undivert(1)
 undivert(2)
+undivert(6)
 
 `#define INPUT_COUNT' diginputcount
 `#define INPUT_BYTES' adjust8(diginputcount)
@@ -56,8 +57,6 @@ define(`digoutputcount', `shiftoutputcount')dnl
 `#define OUTPUT_COUNT' digoutputcount
 `#define OUTPUT_BYTES' adjust8(digoutputcount)
 
-undivert(3)
-undivert(6)
-undivert(8)
+undivert(5)
 
 #endif

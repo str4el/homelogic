@@ -1,4 +1,4 @@
-dnl Copyright (C) 2014 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+dnl Copyright (C) 2014, 2015 Stephan Reinhard <Stephan-Reinhard@gmx.de>
 dnl
 dnl This file is part of Homelogic.
 dnl
@@ -19,6 +19,7 @@ divert(-1)
 changecom(`//')
 
 define(`adjust8', `ifelse(eval(`$1 % 8'), `0', eval(`$1 / 8'), eval(`$1 / 8 + 1'))')
+define(`concat', `$1$2$3$4$5')
 
 
 define(`reg', `divert(1)dnl
@@ -49,7 +50,7 @@ define(`diginputcount', 0)
 define(`diginput', `dnl
 divert(1)dnl
 pin($1, $1)dnl
-divert(4)dnl
+divert(3)dnl
         case diginputcount: return ifelse($2, `INV', `PIN_IS_LOW', `PIN_IS_HIGH')($1);
 define(`diginputcount', incr(diginputcount))dnl
 divert(-1)
@@ -63,7 +64,7 @@ ifelse(translit(`$1', `a-z', `A-Z'), `SHIFT',dnl
 `define(`shiftoutputcount', $2)', `dnl
 divert(1)dnl
 pin($1, $1)dnl
-divert(5)dnl
+divert(4)dnl
         case digoutputcount: if (state) PIN_SET($1); else PIN_CLR($1); return;
 define(`digoutputcount', incr(digoutputcount))dnl
 divert(-1)
@@ -72,25 +73,41 @@ divert(-1)
 
 
 
-
-divert(8)dnl
+define(`prescale_init', `dnl
+divert(7)dnl
 #error No matching prescaler
 divert(-1)
+define(`prescale_max', `$3')
+define(`prescale_prefix', `$1')
+define(`prescale_sfr', `$2')
+')
+
+
+define(`prescale_fini', `dnl
+divert(6)dnl
+undivert(7)
+divert(-1)
+')
+
 
 define(`prescale', `dnl
-divert(9)dnl
-#if ((F_CPU) / (`$2'UL) / (`$1'_US) - 1UL) <= (`$1'_MAX)
-#define `$1'_VALUE ((F_CPU) / (`$2'UL) / (`$1'_US) - 1UL)
-#define `$1'_SET_PRESCALER() do { dnl
-ifelse(substr(`$4', 0, 1), `1', `SFR_SET(`$3'2); ', `SFR_CLR(`$3'2); ')dnl
-ifelse(substr(`$4', 1, 1), `1', `SFR_SET(`$3'1); ', `SFR_CLR(`$3'1); ')dnl
-ifelse(substr(`$4', 2, 1), `1', `SFR_SET(`$3'0); ', `SFR_CLR(`$3'0); ')dnl
+divert(8)dnl
+ifelse(prescale_max, `', `dnl
+#if (F_CPU / `$1'UL) <= concat(prescale_prefix, _US)
+', `dnl
+#if (F_CPU / `$1'UL / (concat(prescale_prefix, _US)) - 1UL) <= concat(prescale_max, UL)
+#define concat(prescale_prefix, _VALUE) ((F_CPU) / (`$1'UL) / (concat(prescale_prefix, _US)) - 1UL)
+')dnl
+#define concat(prescale_prefix, _SET_PRESCALER()) do { dnl
+ifelse(substr(`$2', 0, 1), `1', `SFR_SET(concat(prescale_sfr, 2)); ', `SFR_CLR(concat(prescale_sfr, 2)); ')dnl
+ifelse(substr(`$2', 1, 1), `1', `SFR_SET(concat(prescale_sfr, 1)); ', `SFR_CLR(concat(prescale_sfr, 1)); ')dnl
+ifelse(substr(`$2', 2, 1), `1', `SFR_SET(concat(prescale_sfr, 0)); ', `SFR_CLR(concat(prescale_sfr, 0)); ')dnl
 } while(0)
 #else
+undivert(7)dnl
+#endif // `$1'
+divert(7)dnl
 undivert(8)dnl
-#endif // `$2'
-divert(8)dnl
-undivert(9)dnl
 divert(-1)
 ')
 
@@ -128,8 +145,8 @@ divert(0)dnl
 #    define OCR2 OCR2A
 #endif
 
-#define TC2_MAX 255UL
 #define TC2_US 1000UL
+#define ADC_US 200000UL
 
 
 #define SFR_SET(sfr) sfr ## _REG |= sfr ## _BIT

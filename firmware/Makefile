@@ -20,10 +20,6 @@ SRC = adc.c bus.c error.c main.c prog.c
 SRC-$(I2C_SUPPORT) += i2c.c
 SRC-$(RTC_SUPPORT) += rtc.c
 
-SRC-$(atmega32) += hardware/atmega32.c
-SRC-$(atmega1284p) += hardware/atmega1284p.c
-SRC-$(at90usb1287) += hardware/at90usb1287.c
-
 SRC-$(prototype) += hardware/prototype.c
 SRC-$(dig_ac230) += hardware/dig_ac230.c
 SRC-$(USB_CPU) += hardware/usb_cpu.c

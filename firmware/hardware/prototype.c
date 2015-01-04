@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2014 Stephan Reinhard <Stephan-Reinhard@gmx.de>
  *
