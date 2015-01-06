@@ -42,6 +42,11 @@ ifneq (,$(findstring 0x,$(AVRDUDE_EFUSE)))
         AVRDUDE_WRITE_EFUSE = -U efuse:w:$(AVRDUDE_EFUSE):m
 endif
 
+ifeq ($(USB_SUPPORT),y)
+	include usb.mk
+endif
+
+
 all: build
 
 build: elf hex
@@ -82,7 +87,7 @@ fuses:
 
 # Dependency
 $(DEPFILE): $(SRC) $(HW_H)
-	$(CC) -M -mmcu=$(MCU) $(SRC) > $(DEPFILE)
+	$(CC) $(CFLAGS) -M -mmcu=$(MCU) $(SRC) > $(DEPFILE)
 
 
 .PHONY:	all build elf hex program fuses clean distclean

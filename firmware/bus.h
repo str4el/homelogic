@@ -94,7 +94,7 @@ extern bool bus_send_message_async(const char *cmd, uint8_t dst, const char *for
 
 extern uint8_t bus_encode_prog_message(char *str, uint8_t len);
 
-extern void bus_command (void);
+extern void bus_command (const char *str);
 extern void bus_command_reset (uint8_t sender, char *data);
 extern void bus_command_identify (uint8_t sender, char *data);
 extern void bus_command_run (uint8_t sender, char *data);

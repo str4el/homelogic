@@ -27,6 +27,7 @@
 #include "led.h"
 #include "error.h"
 #include "adc.h"
+#include "usb.h"
 
 
 
@@ -155,6 +156,11 @@ int __attribute__ ((OS_main)) main (void) {
         // Interrupts ein
         sei();
 
+#ifdef USB_SUPPORT
+        usb_init();
+#endif
+
+
 #ifdef RTC_SUPPORT
         /* RTC Control register einstellen mit
          * Interrupts an auf ausgang ALARM1
@@ -256,6 +262,10 @@ int __attribute__ ((OS_main)) main (void) {
                         led.red = ~ls_blink;
                         break;
                 }
+
+#ifdef USB_SUPPORT
+                usb_task();
+#endif
 
                 wdt_reset();
         }

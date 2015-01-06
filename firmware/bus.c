@@ -27,6 +27,7 @@
 #include <util/atomic.h>
 
 #include "bus.h"
+#include "usb.h"
 #include "main.h"
 #include "rtc.h"
 #include "memory.h"
@@ -78,15 +79,18 @@ ISR(BUS_RXC_vect) {
                 bus.rx_len = 0;
                 bus.status = rx_ready;
         case rx_ready:
-                if (bus.rx_len < BUS_BUFSIZE) {
+                if (bus.rx_len < BUS_BUFSIZE - 1) {
                         bus.rx_buffer[bus.rx_len] = in;
                         bus.rx_len++;
                 }
 
 
                 if (in == '\r') {
+#ifdef USB_SUPPORT
+                        usb_send_data(bus.rx_buffer, bus.rx_len);
+#endif
                         bus.rx_buffer[bus.rx_len] = 0;
-                        bus_command();
+                        bus_command(bus.rx_buffer);
                         bus.rx_len = 0;
                 }
 
@@ -142,6 +146,10 @@ void bus_init(void)
 
 void bus_transmit_data (const char * data, uint8_t len)
 {
+#ifdef USB_SUPPORT
+        usb_send_data(data, (uint16_t) len);
+#endif
+
         while (bus.tx_lock);
         bus.status = tx_start;
         PIN_SET(TE);
@@ -288,14 +296,14 @@ uint8_t bus_encode_prog_message(char *str, uint8_t len)
  * Ist das der Fall wird die entsprechende Funktion aus der Tabelle
  * aufgerufen
  */
-void bus_command ()
+void bus_command(const char *str)
 {
         char cmd[BUS_CMD_MAX_LEN + 1];
         char data[BUS_DATA_MAX_LEN + 1];
         unsigned char src;
         unsigned char dst;
 
-        int ret = sscanf (bus.rx_buffer, "%" TOSTR(BUS_CMD_MAX_LEN) "s %2hhx %2hhx %" TOSTR(BUS_DATA_MAX_LEN) "s", cmd, &src, &dst, data);
+        int ret = sscanf (str, "%" TOSTR(BUS_CMD_MAX_LEN) "s %2hhx %2hhx %" TOSTR(BUS_DATA_MAX_LEN) "s", cmd, &src, &dst, data);
         if (ret < 3) return;
         if (ret < 4) data[0] = 0;
 

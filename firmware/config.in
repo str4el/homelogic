@@ -68,6 +68,10 @@ dep_bool_menu "Firmware" BUILD_FIRMWARE
 
         endmenu
 
+
+        dep_bool "USB Support" USB_SUPPORT $CPU_USB
+
+
         # get the flash size according to the cpu type
         FLASH_SIZE=$((`echo -e "#include <avr/io.h>\nFLASHEND" | avr-cpp -mmcu=$MCU | sed '$!d'` + 1 ))
 
