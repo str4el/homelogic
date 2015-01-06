@@ -2,7 +2,7 @@ dep_bool_menu "Firmware" BUILD_FIRMWARE
         choice 'Target Hardware'             \
                 "Prototype    prototype      \
                  DigAC230     dig_ac230      \
-                 USBCPU       USB_CPU"       \
+                 CPU_USB      CPU_USB"       \
                 'DigAC230' HARDWARE
 
         case $HARDWARE in
@@ -16,7 +16,7 @@ dep_bool_menu "Firmware" BUILD_FIRMWARE
                 define_int F_CPU ${FREQ}UL
         ;;
 
-        USB_CPU)
+        CPU_USB)
                 choice 'Target MCU'                \
                         "AT90usb1287  at90usb1287" \
                         'AT90usb1287' MCU
@@ -34,7 +34,7 @@ dep_bool_menu "Firmware" BUILD_FIRMWARE
                 int "Input debounce time (ms)" INPUT_DEBOUNCE 200
                 int "Debounce on state multiplier" INPUT_DEBOUNCE_ON_MUL 4
         ;;
-        dig_ac230|USB_CPU)
+        dig_ac230|CPU_USB)
                 int "Input debounce time (ms)" INPUT_DEBOUNCE 20
                 int "Debounce on state multiplier" INPUT_DEBOUNCE_ON_MUL 1
         ;;
@@ -68,18 +68,18 @@ dep_bool_menu "Firmware" BUILD_FIRMWARE
 
         endmenu
 
-	# get the flash size according to the cpu type
-	FLASH_SIZE=$((`echo -e "#include <avr/io.h>\nFLASHEND" | avr-cpp -mmcu=$MCU | sed '$!d'` + 1 ))
+        # get the flash size according to the cpu type
+        FLASH_SIZE=$((`echo -e "#include <avr/io.h>\nFLASHEND" | avr-cpp -mmcu=$MCU | sed '$!d'` + 1 ))
 
-	define_hex FLASH_SIZE "$(printf '0x%X\n' $FLASH_SIZE)"
-	define_hex EEPROM_SIZE "$(printf '0x%X\n' $((`echo -e "#include <avr/io.h>\nE2END" | avr-cpp -mmcu=$MCU | sed '$!d'` + 1)))"
-	define_hex RAM_SIZE "$(printf '0x%X\n' $((`echo -e "#include <avr/io.h>\nRAMEND" | avr-cpp -mmcu=$MCU | sed '$!d'` + 1)))"
-	define_hex FLASH_PAGESIZE "$(printf '0x%X\n' $((`echo -e "#include <avr/io.h>\nSPM_PAGESIZE" | avr-cpp -mmcu=$MCU | sed '$!d'`)))"
-	define_hex EEPROM_PAGESIZE "$(printf '0x%X\n' $((`echo -e "#include <avr/io.h>\nE2PAGESIZE" | avr-cpp -mmcu=$MCU | sed '$!d'`)))"
+        define_hex FLASH_SIZE "$(printf '0x%X\n' $FLASH_SIZE)"
+        define_hex EEPROM_SIZE "$(printf '0x%X\n' $((`echo -e "#include <avr/io.h>\nE2END" | avr-cpp -mmcu=$MCU | sed '$!d'` + 1)))"
+        define_hex RAM_SIZE "$(printf '0x%X\n' $((`echo -e "#include <avr/io.h>\nRAMEND" | avr-cpp -mmcu=$MCU | sed '$!d'` + 1)))"
+        define_hex FLASH_PAGESIZE "$(printf '0x%X\n' $((`echo -e "#include <avr/io.h>\nSPM_PAGESIZE" | avr-cpp -mmcu=$MCU | sed '$!d'`)))"
+        define_hex EEPROM_PAGESIZE "$(printf '0x%X\n' $((`echo -e "#include <avr/io.h>\nE2PAGESIZE" | avr-cpp -mmcu=$MCU | sed '$!d'`)))"
 
 
-	AVRDUDE=$( command -v avrdude )
-	if [ "x${AVRDUDE}" != "x" ]; then
+        AVRDUDE=$( command -v avrdude )
+        if [ "x${AVRDUDE}" != "x" ]; then
                 mainmenu_option next_comment
                 comment "AVRDUDE configuration"
                         string "Programmer Type (-c type)" AVRDUDE_PROGRAMMER "avrispmkii"

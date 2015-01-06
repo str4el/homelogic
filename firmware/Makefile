@@ -12,7 +12,7 @@ HW_SRC-$(at90usb1287) += hardware/at90usb1287.m4
 
 HW_SRC-$(prototype) += hardware/prototype.m4
 HW_SRC-$(dig_ac230) += hardware/dig_ac230.m4
-HW_SRC-$(USB_CPU) += hardware/usb_cpu.m4
+HW_SRC-$(CPU_USB) += hardware/usb_cpu.m4
 
 
 SRC = adc.c bus.c error.c main.c prog.c
@@ -22,7 +22,7 @@ SRC-$(RTC_SUPPORT) += rtc.c
 
 SRC-$(prototype) += hardware/prototype.c
 SRC-$(dig_ac230) += hardware/dig_ac230.c
-SRC-$(USB_CPU) += hardware/usb_cpu.c
+SRC-$(CPU_USB) += hardware/usb_cpu.c
 
 
 HW_SRC = hardware/header.m4 $(HW_SRC-y) hardware/footer.m4
@@ -39,7 +39,7 @@ AVRDUDE_WRITE_FLASH = -U flash:w:$(TARGET).hex:i
 AVRDUDE_WRITE_LFUSE = -U lfuse:w:$(AVRDUDE_LFUSE):m
 AVRDUDE_WRITE_HFUSE = -U hfuse:w:$(AVRDUDE_HFUSE):m
 ifneq (,$(findstring 0x,$(AVRDUDE_EFUSE)))
-	AVRDUDE_WRITE_EFUSE = -U efuse:w:$(AVRDUDE_EFUSE):m
+        AVRDUDE_WRITE_EFUSE = -U efuse:w:$(AVRDUDE_EFUSE):m
 endif
 
 all: build
