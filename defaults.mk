@@ -1,4 +1,4 @@
-F_CPU ?= a8000000UL
+F_CPU ?= 8000000UL
 MCU ?= atmega32
 
 CP = cp
