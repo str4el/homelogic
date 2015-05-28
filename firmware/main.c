@@ -125,6 +125,19 @@ int __attribute__ ((OS_main)) main (void) {
 
         init_pin();
 
+#ifdef BOOTLOADER_SUPPORT
+        if (PIN_IS_LOW(BTL)) {
+                PIN_SET(LED_RD);
+                PIN_SET(LED_YE);
+                PIN_SET(LED_GN);
+                _delay_ms(2000);
+                PIN_CLR(LED_RD);
+                PIN_CLR(LED_YE);
+                bootloader();
+        }
+#endif
+
+
         led.green = ls_off;
         led.yellow = ls_off;
         led.red = ls_on;
@@ -265,6 +278,13 @@ int __attribute__ ((OS_main)) main (void) {
 
 #ifdef USB_SUPPORT
                 usb_task();
+#endif
+
+
+#ifdef BOOTLOADER_SUPPORT
+                if (PIN_IS_LOW(BTL)) {
+                        reset();
+                }
 #endif
 
                 wdt_reset();

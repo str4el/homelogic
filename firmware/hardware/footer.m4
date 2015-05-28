@@ -38,6 +38,8 @@ extern void init_adc(void);
 extern uint8_t adr_read(void);
 extern void hardware_monitor(void);
 
+extern void (*bootloader) (void);
+
 
 divert(0)
 undivert(1)

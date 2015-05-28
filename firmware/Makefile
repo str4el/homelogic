@@ -31,6 +31,7 @@ HW_H = hardware.h
 SRC += $(SRC-y)
 OBJ = $(SRC:.c=.o)
 
+DFUPROG_FLAGS = $(subst ",,$(MCU))
 
 AVRDUDE_FLAGS = -c $(subst ",,$(AVRDUDE_PROGRAMMER)) -P $(subst ",,$(AVRDUDE_PORT)) -p $(subst ",,$(MCU))
 AVRDUDE_FLAGS += $(subst ",,$(AVRDUDE_EXTRA_OPTIONS))
@@ -75,7 +76,13 @@ clean:
 
 # Program the device.
 program: $(TARGET).hex
+ifeq ($(BOOTLOADER_SUPPORT),y)
+	$(DFUPROG) $(DFUPROG_FLAGS) erase $(subst ",,$(DFUPROG_EXTRA_OPTIONS))
+	$(DFUPROG) $(DFUPROG_FLAGS) flash $(TARGET).hex $(subst ",,$(DFUPROG_EXTRA_OPTIONS))
+	-$(DFUPROG) $(DFUPROG_FLAGS) reset $(subst ",,$(DFUPROG_EXTRA_OPTIONS))
+else
 	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH)
+endif
 
 # Write the fuses
 fuses:

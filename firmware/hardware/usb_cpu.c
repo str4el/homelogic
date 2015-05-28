@@ -23,6 +23,10 @@
 
 
 
+void (*bootloader) (void) = (void (*)(void))0xf000;
+
+
+
 void init_pin()
 {
         DDRA = 0xff;

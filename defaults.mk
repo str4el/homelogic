@@ -3,8 +3,6 @@ MCU ?= atmega32
 
 CP = cp
 RM = rm -f
-AVRDUDE = avrdude
-AVRDUDE_BAUDRATE = 115200
 AWK = gawk
 
 ### use GNU m4 and GNU sed on FreeBSD
@@ -38,10 +36,6 @@ CFLAGS += -funsigned-bitfields
 CFLAGS += -fpack-struct
 CFLAGS += -fshort-enums
 CFLAGS += -mcall-prologues
-
-ifeq ($(BOOTLOADER_SUPPORT),y)
-LFLAGS += -Wl,--section-start=.text=$(BOOTLOADER_START_ADDRESS)
-endif
 
 else
 CC=gcc
