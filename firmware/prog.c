@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013, 2014 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+ * Copyright (C) 2013 - 2015 Stephan Reinhard <Stephan-Reinhard@gmx.de>
  *
  * This file is part of Homelogic.
  *
@@ -49,6 +49,9 @@ prog_context_t progc = {
  */
 uint8_t prog_init()
 {
+        // Programmkontext auf keinen Fall doppelt initialisieren
+        if (progc.valid) return 0;
+
         eeprom_read_block(&progc.header, 0, sizeof(progc.header));
 
         uint16_t crc;
@@ -108,6 +111,8 @@ uint8_t prog_init()
 
 void prog_deinit()
 {
+        if (!progc.valid) return;
+
         progc.valid = false;
         ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
                 free((void *)progc.periphery);
@@ -124,7 +129,6 @@ static inline void prog_error(uint8_t e)
         error(e);
         progc.ip = -1;
         state.coming = ps_stop;
-        progc.valid = false;
 }
 
 
