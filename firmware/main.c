@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2013 - 2015 Stephan Reinhard <Stephan-Reinhard@gmx.de>
  *
  * This file is part of Homelogic.
@@ -279,8 +279,9 @@ int __attribute__ ((OS_main)) main (void) {
 
 
 
-/* Aktionen die regelmäßig ausgeführt werden sollen
- * zum aufrufen in Warteschleifen
+/* Von yield werden alle wichtigen nebenläufigen Funktionen aufgerufen.
+ * Diese Funktion muss von der Hauptschleife und alle anderen Warteschleifen
+ * aus aufgerufen werden.
  */
 void yield()
 {
