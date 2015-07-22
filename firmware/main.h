@@ -47,5 +47,7 @@ static inline void reset(void)
         while(1);
 }
 
+void yield (void);
+
 
 #endif // MAIN_H

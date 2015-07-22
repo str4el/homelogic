@@ -343,7 +343,7 @@ void prog_periphery_sync()
 static inline void prog_wait_for_step(void)
 {
         state.step = false;
-        while (state.coming == ps_debug && state.step == false) wdt_reset();
+        while (state.coming == ps_debug && state.step == false) yield();
 }
 
 

@@ -208,12 +208,6 @@ int __attribute__ ((OS_main)) main (void) {
 
         led.red = ls_off;
         while(1) {
-                bus_flush_send_buffer();
-#ifdef RTC_SUPPORT
-                rtc_update_clock();
-#endif
-                hardware_monitor();
-
                 if (state.current != state.coming) {
                         switch (state.coming) {
                         case ps_stop:
@@ -276,17 +270,38 @@ int __attribute__ ((OS_main)) main (void) {
                         break;
                 }
 
-#ifdef USB_SUPPORT
-                usb_task();
+
+                yield();
+        }
+}
+
+
+
+
+
+/* Aktionen die regelmäßig ausgeführt werden sollen
+ * zum aufrufen in Warteschleifen
+ */
+void yield()
+{
+
+        bus_flush_send_buffer();
+
+#ifdef RTC_SUPPORT
+        rtc_update_clock();
 #endif
 
+        hardware_monitor();
+
+#ifdef USB_SUPPORT
+        usb_task();
+#endif
 
 #ifdef BOOTLOADER_SUPPORT
-                if (PIN_IS_LOW(BTL)) {
-                        reset();
-                }
+        if (PIN_IS_LOW(BTL)) {
+                reset();
+        }
 #endif
 
-                wdt_reset();
-        }
+        wdt_reset();
 }
