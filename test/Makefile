@@ -3,20 +3,20 @@ include ../defaults.mk
 include ../.config
 
 TARGET-$(BUILD_HLM) += hlm
-TARGET = $(TARGET-y)
+TARGET-$(BUILD_PANA) += pana
 
-SRC = $(TARGET:%=%.c)
+TARGET = $(TARGET-y)
 
 LIBRARY = ../libhl/libhl.a
 LFLAGS += -lrt -lpthread -lftdi
 
 all: $(TARGET)
 
-$(TARGET): $(SRC) $(LIBRARY)
+%: %.c $(LIBRARY)
 	$(CC) $(CFLAGS) -o $@ $< $(LIBRARY) $(LFLAGS)
 
 clean:
-	$(RM) $(MANAGER)
+	$(RM) $(TARGET)
 
 .PHONY: all clean
 

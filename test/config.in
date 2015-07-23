@@ -1,3 +1,4 @@
 dep_bool_menu "Testprograms" BUILD_TEST $BUILD_LIBRARY
         dep_bool "Build hlm" BUILD_HLM $BUILD_TEST
+	dep_bool "Build pana" BUILD_PANA $BUILD_TEST
 endmenu
