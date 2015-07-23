@@ -20,11 +20,11 @@
 #include "usb.h"
 #include "bus.h"
 
-#include <stdint.h>
 #include "LUFA/Drivers/USB/USB.h"
 
 
 typedef struct usb_s {
+        volatile uint8_t u_send_lock;
         volatile char u_send_buffer[BUS_BUFSIZE];
         volatile uint8_t u_send_buffer_len;
         char u_receive_buffer[BUS_BUFSIZE];
@@ -33,6 +33,7 @@ typedef struct usb_s {
 
 
 usb_t usb = {
+        .u_send_lock = 0,
         .u_send_buffer_len = 0,
         .u_receive_buffer_len = 0
 };
@@ -240,7 +241,10 @@ void usb_task()
                 }
 
                 if (c == '\r') {
+                        usb.u_send_lock = 1;
                         bus_send_raw_sync(usb.u_receive_buffer, usb.u_receive_buffer_len);
+                        usb.u_send_lock = 0;
+
                         usb.u_receive_buffer[usb.u_receive_buffer_len] = 0;
                         bus_command(usb.u_receive_buffer);
                         usb.u_receive_buffer_len = 0;
@@ -264,6 +268,7 @@ void usb_task()
 
 int usb_send_data(const char *data, uint16_t len)
 {
+        if (usb.u_send_lock) return 0;
         if (usb.u_send_buffer_len || len > sizeof(usb.u_send_buffer)) return -1;
         ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
                 memcpy(&usb.u_send_buffer, data, len);
