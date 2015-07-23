@@ -21,6 +21,8 @@
 #include "bus.h"
 
 #include <stdint.h>
+#include "LUFA/Drivers/USB/USB.h"
+
 
 typedef struct usb_s {
         volatile char u_send_buffer[BUS_BUFSIZE];
@@ -37,6 +39,18 @@ usb_t usb = {
 
 
 
+typedef struct usb_configuration_s {
+        USB_Descriptor_Configuration_Header_t uc_config;
+        USB_Descriptor_Interface_t uc_cci;
+        USB_CDC_Descriptor_FunctionalHeader_t uc_func_header;
+        USB_CDC_Descriptor_FunctionalACM_t uc_func_acm;
+        USB_CDC_Descriptor_FunctionalUnion_t uc_func_union;
+        USB_Descriptor_Endpoint_t uc_notification;
+
+        USB_Descriptor_Interface_t uc_dci;
+        USB_Descriptor_Endpoint_t uc_out;
+        USB_Descriptor_Endpoint_t uc_in;
+} usb_configuration_t;
 
 
 const USB_Descriptor_String_t PROGMEM usb_lang = USB_STRING_DESCRIPTOR_ARRAY(LANGUAGE_ID_ENG);

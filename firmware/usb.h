@@ -24,7 +24,6 @@
 
 #include <stdint.h>
 #include <avr/pgmspace.h>
-#include <LUFA/Drivers/USB/USB.h>
 
 
 #define USB_NOTI_EP (ENDPOINT_DIR_IN | 2)
@@ -47,18 +46,6 @@ enum usb_string_id_e {
 
 
 
-typedef struct usb_configuration_s {
-        USB_Descriptor_Configuration_Header_t uc_config;
-        USB_Descriptor_Interface_t uc_cci;
-        USB_CDC_Descriptor_FunctionalHeader_t uc_func_header;
-        USB_CDC_Descriptor_FunctionalACM_t uc_func_acm;
-        USB_CDC_Descriptor_FunctionalUnion_t uc_func_union;
-        USB_Descriptor_Endpoint_t uc_notification;
-
-        USB_Descriptor_Interface_t uc_dci;
-        USB_Descriptor_Endpoint_t uc_out;
-        USB_Descriptor_Endpoint_t uc_in;
-} usb_configuration_t;
 
 
 
