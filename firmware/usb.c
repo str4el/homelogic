@@ -20,6 +20,24 @@
 #include "usb.h"
 #include "bus.h"
 
+#include <stdint.h>
+
+typedef struct usb_s {
+        volatile char u_send_buffer[BUS_BUFSIZE];
+        volatile uint8_t u_send_buffer_len;
+        char u_receive_buffer[BUS_BUFSIZE];
+        uint8_t u_receive_buffer_len;
+} usb_t;
+
+
+usb_t usb = {
+        .u_send_buffer_len = 0,
+        .u_receive_buffer_len = 0
+};
+
+
+
+
 
 const USB_Descriptor_String_t PROGMEM usb_lang = USB_STRING_DESCRIPTOR_ARRAY(LANGUAGE_ID_ENG);
 const USB_Descriptor_String_t PROGMEM usb_manufact = USB_STRING_DESCRIPTOR(L"Stephan Reinhard");
@@ -198,25 +216,30 @@ void usb_init()
 
 void usb_task()
 {
-        static char buffer[BUS_BUFSIZE];
-        static uint8_t len = 0;
-
         for (uint16_t i = 0; i < CDC_Device_BytesReceived(&usb_cdc_interface); i++) {
                 int16_t c = CDC_Device_ReceiveByte(&usb_cdc_interface);
                 if (c < 0) continue;
 
-                if (len < BUS_BUFSIZE - 1) {
-                        buffer[len] = (char) c;
-                        len++;
+                if (usb.u_receive_buffer_len < BUS_BUFSIZE - 1) {
+                        usb.u_receive_buffer[usb.u_receive_buffer_len] = (char) c;
+                        usb.u_receive_buffer_len++;
                 }
 
                 if (c == '\r') {
-                        bus_send_raw_sync(buffer, len);
-                        buffer[len] = 0;
-                        bus_command(buffer);
-                        len = 0;
+                        bus_send_raw_sync(usb.u_receive_buffer, usb.u_receive_buffer_len);
+                        usb.u_receive_buffer[usb.u_receive_buffer_len] = 0;
+                        bus_command(usb.u_receive_buffer);
+                        usb.u_receive_buffer_len = 0;
                 }
         }
+
+        if (usb.u_send_buffer_len) {
+                ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+                        CDC_Device_SendData(&usb_cdc_interface, (void *)usb.u_send_buffer, usb.u_send_buffer_len);
+                        usb.u_send_buffer_len = 0;
+                }
+        }
+
 
         CDC_Device_USBTask(&usb_cdc_interface);
         USB_USBTask();
@@ -225,9 +248,14 @@ void usb_task()
 
 
 
-void usb_send_data(const char *data, uint16_t len)
+int usb_send_data(const char *data, uint16_t len)
 {
-        CDC_Device_SendData(&usb_cdc_interface, data, len);
+        if (usb.u_send_buffer_len || len > sizeof(usb.u_send_buffer)) return -1;
+        ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+                memcpy(&usb.u_send_buffer, data, len);
+                usb.u_send_buffer_len = len;
+        }
+        return 0;
 }
 
 

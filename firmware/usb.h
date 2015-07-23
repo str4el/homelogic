@@ -47,8 +47,7 @@ enum usb_string_id_e {
 
 
 
-typedef struct
-{
+typedef struct usb_configuration_s {
         USB_Descriptor_Configuration_Header_t uc_config;
         USB_Descriptor_Interface_t uc_cci;
         USB_CDC_Descriptor_FunctionalHeader_t uc_func_header;
@@ -63,9 +62,10 @@ typedef struct
 
 
 
+
 extern void usb_init(void);
 extern void usb_task(void);
-extern void usb_send_data(const char *data, uint16_t len);
+extern int usb_send_data(const char *data, uint16_t len);
 
 
 extern void EVENT_USB_Device_ConfigurationChanged(void);
