@@ -106,7 +106,7 @@ void hardware_monitor()
                         }
                         health |= temperature_high;
 
-                } else if (value < TEMPERATURE_WARN - 5) {
+                } else if (value < TEMPERATURE_WARN - 20) {
                         health &= ~(temperature_high | temperature_critical);
 
                         output_lock = false;

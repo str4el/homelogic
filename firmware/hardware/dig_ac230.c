@@ -75,8 +75,8 @@ uint8_t adr_read()
 #define BATTERIE_WARN 580 // ca. 2,9V
 #define BATTERIE_ERROR 400 // ca. 2V
 
-#define TEMPERATURE_WARN  780 // ca. 50°C
-#define TEMPERATURE_ERROR 820 // ca. 60°C
+#define TEMPERATURE_WARN  790
+#define TEMPERATURE_ERROR 820
 
 extern bool output_lock;
 
@@ -117,7 +117,7 @@ void hardware_monitor()
                         }
                         health |= temperature_high;
 
-                } else if (value < TEMPERATURE_WARN - 5) {
+                } else if (value < TEMPERATURE_WARN - 20) {
                         health &= ~(temperature_high | temperature_critical);
                         PIN_SET(R);
                         output_lock = false;
