@@ -29,22 +29,22 @@ void analyze_address(const struct map_address_s *ma)
 {
         switch(ma->ma_mem_adr & 0xE0) {
         case as_memory:
-                printf("%%MW:%hhu.%hhu\n", ma->ma_device_adr, (ma->ma_mem_adr & 0x1F) << 1);
+                printf("\t%%MW:%hhu.%hhu\n", ma->ma_device_adr, (ma->ma_mem_adr & 0x1F) << 1);
                 break;
         case as_input:
-                printf("%%IW:%hhu.%hhu\n", ma->ma_device_adr, (ma->ma_mem_adr & 0x1F) << 1);
+                printf("\t%%IW:%hhu.%hhu\n", ma->ma_device_adr, (ma->ma_mem_adr & 0x1F) << 1);
                 break;
         case as_output:
-                printf("%%OW:%hhu.%hhu\n", ma->ma_device_adr, (ma->ma_mem_adr & 0x1F) << 1);
+                printf("\t%%OW:%hhu.%hhu\n", ma->ma_device_adr, (ma->ma_mem_adr & 0x1F) << 1);
                 break;
         case as_timer:
-                printf("%%T:%hhu.%hhu\n", ma->ma_device_adr, ma->ma_mem_adr & 0x1F);
+                printf("\t%%T:%hhu.%hhu\n", ma->ma_device_adr, ma->ma_mem_adr & 0x1F);
                 break;
         case as_counter:
-                printf("%%C:%hhu.%hhu\n", ma->ma_device_adr, ma->ma_mem_adr & 0x1F);
+                printf("\t%%C:%hhu.%hhu\n", ma->ma_device_adr, ma->ma_mem_adr & 0x1F);
                 break;
         default:
-                printf("Invalid address %02X %02X\n", ma->ma_device_adr, ma->ma_mem_adr);
+                printf("\tInvalid address %02X %02X\n", ma->ma_device_adr, ma->ma_mem_adr);
                 break;
         }
 }
@@ -86,27 +86,27 @@ void analyze_command(const struct command_s *cmd)
         case as_memory:
                 switch(cmd->c_address.aa_spec & 0x1F) {
                 case as_byte:
-                        printf("%s\t%%%cB:%hhu.%hhu\n", name, get_memtype(cmd), dev, byte);
+                        printf("\t%s\t%%%cB:%hhu.%hhu\n", name, get_memtype(cmd), dev, byte);
                         break;
                 case as_word:
-                        printf("%s\t%%%cW:%hhu.%hhu\n", name, get_memtype(cmd), dev, byte);
+                        printf("\t%s\t%%%cW:%hhu.%hhu\n", name, get_memtype(cmd), dev, byte);
                         break;
                 default:
-                        printf("%s\t%%%cX:%hhu.%hhu.%hhu\n", name, get_memtype(cmd), dev, byte, cmd->c_address.aa_spec & 0x07);
+                        printf("\t%s\t%%%cX:%hhu.%hhu.%hhu\n", name, get_memtype(cmd), dev, byte, cmd->c_address.aa_spec & 0x07);
                 }
                 break;
 
         case as_timer:
         case as_counter:
-                printf("%s\t%%%c:%hhu.%hhu\n", name, get_memtype(cmd), dev, byte);
+                printf("\t%s\t%%%c:%hhu.%hhu\n", name, get_memtype(cmd), dev, byte);
                 break;
 
         case as_constant:
-                printf("%s\t0x%04X\n", name, (uint16_t) dev << 8 | byte);
+                printf("\t%s\t0x%04X\n", name, (uint16_t) dev << 8 | byte);
                 break;
 
         default:
-                printf("%s\n", name);
+                printf("\t%s\n", name);
 
         }
 
@@ -118,29 +118,29 @@ void analyze_command(const struct command_s *cmd)
 int analyze_data(const hl_device_data_t *data)
 {
         if (!data->dd_program_size) return 0;
-        printf("Size: %hu\n", data->dd_program_size);
+        printf("\tSize: %hu\n", data->dd_program_size);
 
         if (data->dd_program_size < sizeof(struct program_header_s)) {
-                printf("Program to small!\n");
+                printf("\tProgram to small!\n");
                 return -1;
         }
 
         const struct program_header_s *ph = (const struct program_header_s *) data->dd_program_memory;
 
-        printf("Address map size: %hu\n", ph->ph_address_map_size);
-        printf("Program size: %hu\n\n", ph->ph_program_size);
+        printf("\tAddress map size: %hu\n", ph->ph_address_map_size);
+        printf("\tProgram size: %hu\n\n", ph->ph_program_size);
 
         uint16_t size = sizeof(struct program_header_s);
         size += ph->ph_address_map_size * sizeof(struct map_address_s);
         size += ph->ph_program_size * sizeof(struct command_s);
 
         if (data->dd_program_size != size) {
-                printf("Datasize doesn't match Headerdata!\n");
+                printf("\tDatasize doesn't match Headerdata!\n");
                 return 1;
         }
 
 
-        printf("Address map:\n");
+        printf("\tAddress map:\n");
         for (int i = 0; i < ph->ph_address_map_size; i++) {
                 const struct map_address_s *ma = (void *) data->dd_program_memory
                                 + ph->ph_address_map_offset + i * sizeof(*ma);
@@ -148,7 +148,7 @@ int analyze_data(const hl_device_data_t *data)
         }
         printf("\n");
 
-        printf("Commands:\n");
+        printf("\tCommands:\n");
         for (int i = 0; i < ph->ph_program_size; i++) {
                 const struct command_s *cmd = (void *) data->dd_program_memory
                                 + ph->ph_program_offset + i * sizeof(*cmd);
