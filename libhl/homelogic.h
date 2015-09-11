@@ -165,12 +165,6 @@ typedef struct hl_address_map_s {
 
 
 typedef struct hl_device_data_s {
-        enum {
-                dd_empty = 0,
-                dd_populated,
-                dd_compiled
-        } dd_status;
-
         hl_address_map_t dd_am;
         hl_command_block_t dd_cb;
 

@@ -517,7 +517,6 @@ static int hlc_scan_command(hlc_t *data, FILE *file, hl_opcode_t opcode, hl_comm
                                 return -1;
                         }
 
-                        data->d_device[current_device].dd_status = dd_populated;
                         current_device = -1;
                         hlc_clear_address_map(am);
                         hlc_clear_command_block(cb);
@@ -619,7 +618,16 @@ int EXPORT hl_compile (hlc_t *data)
 
         for (int i = 0; i < sizeof(data->d_device) / sizeof(*data->d_device); i++) {
                 hl_device_data_t *d = &data->d_device[i];
-                if (d->dd_status != dd_populated) continue;
+                if (!d->dd_cb.cb_size && !d->dd_am.am_size) continue;
+
+                /* Füge ein END als einzigen Befehl ein wenn eine AM existiert aber keine Befehle
+                 */
+                if (!d->dd_cb.cb_size) {
+                        hl_command_t end_command;
+                        memset(&end_command, 0, sizeof(end_command));
+                        end_command.c_opcode.oc_num = oc_end_of_program;
+                        hlc_add_to_command_block(&d->dd_cb, end_command);
+                }
 
                 struct program_header_s ph;
                 struct map_address_s am;
@@ -739,7 +747,6 @@ int EXPORT hl_compile (hlc_t *data)
 
                 memcpy(d->dd_program_memory, &ph, ph_size);
 
-                d->dd_status = dd_compiled;
                 ret++;
         }
         return ret;
@@ -753,7 +760,7 @@ int EXPORT hl_write_intel_hex(hlc_t *data, FILE *file)
         int ret = 0;
 
         for (uint16_t i = 0; i < sizeof(data->d_device) / sizeof(*data->d_device); i++) {
-                if (data->d_device[i].dd_status != dd_compiled) continue;
+                if (!data->d_device[i].dd_program_size) continue;
 
                 uint8_t sum = 0x02 + 0x04 + (i & 0xFF) + (i >> 8);
                 fprintf(file, ":02000004%04X%02X\n", i, (uint8_t) (0 - sum));
