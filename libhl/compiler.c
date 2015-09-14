@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 
 #include "private.h"
@@ -421,26 +422,135 @@ static inline void hlc_clear_command_block (hl_command_block_t *cb)
 
 
 
-static char *hlc_get_chunk(hlc_t *data, FILE *file)
+/* Sucht im Inputstream nach dem nächsten Token.
+ * Komentare werden ignoriert und Anführungszeichen berücksichtigt.
+ * Der Rückgabewert ist die länge des Token, 0 bei EOF oder -1 im Fehlerfall.
+ * Der gelesene Token wird im scan_context abgespeichert.
+ */
+static ssize_t hl_scan_get_token(hl_scan_context_t *sc)
 {
-        static char chunk[64];
-        if (fscanf(file, "%63s", chunk) != 1) {
-                return NULL;
+        int c;
+        ssize_t len = 0;
+
+        FILE *token = fmemopen(sc->sc_token, sizeof(sc->sc_token), "w");
+        if (!token) {
+                return -1;
         }
 
-        for (int i = 0; i < data->d_sym_tab.st_used; i++) {
-                if (0 == strcmp(chunk, data->d_sym_tab.st_sym[i].s_name)) {
-                        return data->d_sym_tab.st_sym[i].s_subst;
+        while ((c = fgetc(sc->sc_in)) != EOF) {
+                switch(sc->sc_context) {
+                case tc_none:
+                        switch(c) {
+                        case '"':
+                                sc->sc_context = tc_quote;
+                                continue;
+
+                        case '/':
+                                c = fgetc(sc->sc_in);
+                                switch(c) {
+                                case EOF:
+                                        if (fclose(token)) return -1;
+                                        return 0;
+                                case '/':
+                                        sc->sc_context = tc_comment_single_line;
+                                        continue;
+                                case '*':
+                                        sc->sc_context = tc_comment_multi_line;
+                                        continue;
+                                }
+                                ungetc(c, sc->sc_in);
+                                c = '/';
+                        }
+
+                        if (isspace(c)) {
+                                if (len > 0) {
+                                        if (fclose(token)) return -1;
+                                        return len;
+                                }
+                                continue;
+                        }
+
+                        if ((len >= sizeof(sc->sc_token - 1)) || (fputc(c, token) == EOF)) {
+                                fclose(token);
+                                return -1;
+                        }
+                        len++;
+                        break;
+
+                case tc_quote:
+                        if (c == '"') {
+                                sc->sc_context = tc_none;
+                                if (len > 0) {
+                                        if (fclose(token)) return -1;
+                                        return len;
+                                }
+                                continue;
+                        }
+                        if ((len >= sizeof(sc->sc_token - 1)) || (fputc(c, token) == EOF)) {
+                                fclose(token);
+                                return -1;
+                        }
+                        len++;
+                        break;
+
+                case tc_comment_single_line:
+                        if (c == '\n') sc->sc_context = tc_none;
+                        break;
+
+                case tc_comment_multi_line:
+                        if (c == '*') {
+                                c = fgetc(sc->sc_in);
+                                if (c == '/') {
+                                        sc->sc_context = tc_none;
+                                        continue;
+                                }
+                                if (c == EOF) {
+                                        if (fclose(token)) return -1;
+                                        return 0;
+                                }
+                                ungetc(c, sc->sc_in);
+                        }
+                        break;
+
                 }
+
         }
 
-        return chunk;
+        if (fclose(token)) {
+                return -1;
+        }
+        return len;
 }
 
 
 
 
-static int hlc_scan_command(hlc_t *data, FILE *file, hl_opcode_t opcode, hl_command_block_t *cb, hl_address_map_t *am)
+static char *hl_scan_get_replaced_token(hlc_t *data)
+{
+        ssize_t len;
+
+        len = hl_scan_get_token(&data->d_scan);
+        if (len < 0) {
+                hlc_set_error(data, hl_e_scan_error, NULL);
+                return NULL;
+        }
+
+        if (len == 0) {
+                return NULL;
+        }
+
+        for (int i = 0; i < data->d_sym_tab.st_used; i++) {
+                if (0 == strcmp(data->d_scan.sc_token, data->d_sym_tab.st_sym[i].s_name)) {
+                        return data->d_sym_tab.st_sym[i].s_subst;
+                }
+        }
+
+        return data->d_scan.sc_token;
+}
+
+
+
+static int hlc_scan_command(hlc_t *data, hl_opcode_t opcode, hl_command_block_t *cb, hl_address_map_t *am)
 {
         static int current_device = -1;
 
@@ -449,7 +559,7 @@ static int hlc_scan_command(hlc_t *data, FILE *file, hl_opcode_t opcode, hl_comm
         command.c_data.cd_data_type = dt_none;
 
         if (opcode.oc_data_type != dt_none) {
-                char *chunk = hlc_get_chunk(data, file);
+                char *chunk = hl_scan_get_replaced_token(data);
                 if (!chunk) {
                         hlc_set_error(data, hl_e_corrupt_input_file, chunk);
                         return -1;
@@ -564,19 +674,15 @@ int EXPORT hl_scan_instruction_list (hlc_t *data, FILE* file)
         int ret = 0;
         char *chunk;
 
-        hl_command_block_t cb = {
-                .cb_size = 0,
-                .cb_used = 0,
-                .cb_commands = NULL
-        };
+        hl_command_block_t cb;
+        hl_address_map_t am;
 
-        hl_address_map_t am = {
-                .am_size = 0,
-                .am_used = 0,
-                .am_addresses = NULL
-        };
+        memset(&cb, 0, sizeof(cb));
+        memset(&am, 0, sizeof(am));
 
-        while ((chunk = hlc_get_chunk(data, file))) {
+        data->d_scan.sc_in = file;
+
+        while ((chunk = hl_scan_get_replaced_token(data))) {
                 if (0 == strcmp(chunk, "#define")) {
                         char c1[64], c2[64];
                         if (2 == fscanf(file, "%63s %63s", c1, c2)) {
@@ -591,7 +697,7 @@ int EXPORT hl_scan_instruction_list (hlc_t *data, FILE* file)
 
                 int ocn = hlc_get_opcode(chunk);
                 if (ocn >= 0) {
-                        if (hlc_scan_command(data, file, opcodes[ocn], &cb, &am)) {
+                        if (hlc_scan_command(data, opcodes[ocn], &cb, &am)) {
                                 hlc_clear_address_map(&am);
                                 hlc_clear_command_block(&cb);
                                 return -1;

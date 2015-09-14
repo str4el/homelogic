@@ -34,6 +34,7 @@ extern "C" {
 
 #define HL_MAX_DEVICES 128
 #define HL_MAX_LINE_LEN 1024
+#define HL_MAX_TOKEN_LEN 128
 
 
 /* Flags für connector
@@ -52,6 +53,7 @@ typedef enum hl_error_e {
         hl_e_out_of_range,
         hl_e_unexpected_end,
         hl_e_unreachable_device,
+        hl_e_scan_error,
         hl_e_corrupt_input_file
 } hl_error_t;
 
@@ -175,13 +177,28 @@ typedef struct hl_device_data_s {
 
 
 
+typedef struct hl_scan_context_s {
+        FILE *sc_in;
+        enum hl_token_context_e {
+                tc_none,
+                tc_comment_single_line,
+                tc_comment_multi_line,
+                tc_quote
+        } sc_context;
+
+        char sc_token[HL_MAX_TOKEN_LEN];
+} hl_scan_context_t;
+
+
+
 typedef struct hlc_s {
         hl_device_data_t d_device[HL_MAX_DEVICES];
+        hl_scan_context_t d_scan;
 
-        struct hlc_symbol_table_s {
+        struct hl_symbol_table_s {
                 size_t st_size;
                 size_t st_used;
-                struct hlc_symbol_s {
+                struct hl_symbol_s {
                         char *s_name;
                         char *s_subst;
                 } *st_sym;
