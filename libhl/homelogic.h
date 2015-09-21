@@ -54,7 +54,8 @@ typedef enum hl_error_e {
         hl_e_unexpected_end,
         hl_e_unreachable_device,
         hl_e_scan_error,
-        hl_e_corrupt_input_file
+        hl_e_corrupt_input_file,
+        hl_e_unknown_token
 } hl_error_t;
 
 
@@ -181,10 +182,14 @@ typedef struct hl_scan_context_s {
         FILE *sc_in;
         enum hl_token_context_e {
                 tc_none,
+                tc_quote,
+                tc_preprocessor,
                 tc_comment_single_line,
-                tc_comment_multi_line,
-                tc_quote
+                tc_comment_multi_line
         } sc_context;
+
+        size_t sc_line;
+        size_t sc_char;
 
         char sc_token[HL_MAX_TOKEN_LEN];
 } hl_scan_context_t;

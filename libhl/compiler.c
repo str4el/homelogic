@@ -438,11 +438,28 @@ static ssize_t hl_scan_get_token(hl_scan_context_t *sc)
         }
 
         while ((c = fgetc(sc->sc_in)) != EOF) {
+                // Zeilen und Zeichenzähler für die Fehlerausgabe
+                if (c == '\n') {
+                        sc->sc_line++;
+                        sc->sc_char = 0;
+                } else {
+                        sc->sc_char++;
+                }
+
                 switch(sc->sc_context) {
+                case tc_preprocessor:
+                        if (c == '\n') {
+                                sc->sc_context = tc_none;
+                        }
+                        // fall threw
                 case tc_none:
                         switch(c) {
                         case '"':
                                 sc->sc_context = tc_quote;
+                                continue;
+
+                        case '#':
+                                sc->sc_context = tc_preprocessor;
                                 continue;
 
                         case '/':
@@ -547,6 +564,37 @@ static char *hl_scan_get_replaced_token(hlc_t *data)
 
         return data->d_scan.sc_token;
 }
+
+
+
+
+static int hl_scan_define(hlc_t *data)
+{
+        char *symbol;
+        int ret;
+
+        if (-1 == hl_scan_get_token(&data->d_scan)) {
+                hlc_set_error(data, hl_e_unexpected_end, NULL);
+                return -1;
+        }
+
+        symbol = strdup(data->d_scan.sc_token);
+        if (!symbol) {
+                hlc_set_error(data, hl_e_out_of_memory, NULL);
+                return -1;
+        }
+
+        if (-1 == hl_scan_get_token(&data->d_scan)) {
+                hlc_set_error(data, hl_e_unexpected_end, NULL);
+                free(symbol);
+                return -1;
+        }
+
+        ret = hlc_add_to_symbol_table(data, symbol, data->d_scan.sc_token);
+        free(symbol);
+        return ret;
+}
+
 
 
 
@@ -672,7 +720,8 @@ void EXPORT hl_compiler_destroy(hlc_t *data)
 int EXPORT hl_scan_instruction_list (hlc_t *data, FILE* file)
 {
         int ret = 0;
-        char *chunk;
+        char *token;
+        int ocn;
 
         hl_command_block_t cb;
         hl_address_map_t am;
@@ -681,28 +730,35 @@ int EXPORT hl_scan_instruction_list (hlc_t *data, FILE* file)
         memset(&am, 0, sizeof(am));
 
         data->d_scan.sc_in = file;
+        data->d_scan.sc_line = 1;
+        data->d_scan.sc_char = 0;
 
-        while ((chunk = hl_scan_get_replaced_token(data))) {
-                if (0 == strcmp(chunk, "#define")) {
-                        char c1[64], c2[64];
-                        if (2 == fscanf(file, "%63s %63s", c1, c2)) {
-                                hlc_add_to_symbol_table(data, c1, c2);
-                        } else {
-                                hlc_set_error(data, hl_e_unexpected_end, NULL);
-                                return -1;
+        while ((token = hl_scan_get_replaced_token(data))) {
+                switch (data->d_scan.sc_context) {
+                case tc_preprocessor:
+                        if (!strcasecmp(token, "define")) {
+                                if (hl_scan_define(data)) {
+                                        hlc_clear_address_map(&am);
+                                        hlc_clear_command_block(&cb);
+                                        return -1;
+                                }
+                                continue;
                         }
 
-                        continue;
-                }
+                        hlc_set_error(data, hl_e_unknown_token, token);
+                        return -1;
 
-                int ocn = hlc_get_opcode(chunk);
-                if (ocn >= 0) {
-                        if (hlc_scan_command(data, opcodes[ocn], &cb, &am)) {
-                                hlc_clear_address_map(&am);
-                                hlc_clear_command_block(&cb);
-                                return -1;
+                default:
+                        ocn = hlc_get_opcode(token);
+                        if (ocn >= 0) {
+                                if (hlc_scan_command(data, opcodes[ocn], &cb, &am)) {
+                                        hlc_clear_address_map(&am);
+                                        hlc_clear_command_block(&cb);
+                                        return -1;
+                                }
                         }
                 }
+
         }
 
         if (am.am_used || cb.cb_used) {
