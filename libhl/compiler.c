@@ -427,7 +427,7 @@ static inline void hlc_clear_command_block (hl_command_block_t *cb)
  * Der Rückgabewert ist die länge des Token, 0 bei EOF oder -1 im Fehlerfall.
  * Der gelesene Token wird im scan_context abgespeichert.
  */
-static ssize_t hl_scan_get_token(hl_scan_context_t *sc)
+static ssize_t hl_scan_token(hl_scan_context_t *sc)
 {
         int c;
         ssize_t len = 0;
@@ -542,57 +542,48 @@ static ssize_t hl_scan_get_token(hl_scan_context_t *sc)
 
 
 
-static char *hl_scan_get_replaced_token(hlc_t *data)
+/* Scannt n Token und speichert sie in das token array. Der Speicher für die
+ * Token wird allokiert und muss mit free() wieder frei gegeben werden.
+ * token muss groß genug für n pointer auf char sein.
+ */
+static int hl_scan_get_token(hlc_t *data, size_t n, char **token)
 {
-        ssize_t len;
-
-        len = hl_scan_get_token(&data->d_scan);
-        if (len < 0) {
-                hlc_set_error(data, hl_e_scan_error, NULL);
-                return NULL;
-        }
-
-        if (len == 0) {
-                return NULL;
-        }
-
-        for (int i = 0; i < data->d_sym_tab.st_used; i++) {
-                if (0 == strcmp(data->d_scan.sc_token, data->d_sym_tab.st_sym[i].s_name)) {
-                        return data->d_sym_tab.st_sym[i].s_subst;
+        for (int i = 0; i < n; i++) {
+                if (hl_scan_token(&data->d_scan) > 0) {
+                        token[i] = strdup(data->d_scan.sc_token);
+                        if (token[i]) {
+                                continue;
+                        } else {
+                                hlc_set_error(data, hl_e_out_of_memory, NULL);
+                        }
+                } else {
+                        hlc_set_error(data, hl_e_unexpected_end, NULL);
                 }
+
+                // Aufräumarbeiten bei abbruch
+                for (int j = 0; j < i; j++) {
+                        free(token[j]);
+                }
+                return -1;
         }
 
-        return data->d_scan.sc_token;
+        return 0;
 }
 
 
 
 
-static int hl_scan_define(hlc_t *data)
+/* Sucht nach ersetzungen in der Symboltabelle. Wird eine gefunden wird die
+ * entsprechende Ersetzung zurück gegeben, andernfalls das orginal Token
+ */
+static const char *hl_replace_token(hlc_t *data, const char *token)
 {
-        char *symbol;
-        int ret;
-
-        if (-1 == hl_scan_get_token(&data->d_scan)) {
-                hlc_set_error(data, hl_e_unexpected_end, NULL);
-                return -1;
+        for (int i = 0; i < data->d_sym_tab.st_used; i++) {
+                if (!strcmp(token, data->d_sym_tab.st_sym[i].s_name)) {
+                        return data->d_sym_tab.st_sym[i].s_subst;
+                }
         }
-
-        symbol = strdup(data->d_scan.sc_token);
-        if (!symbol) {
-                hlc_set_error(data, hl_e_out_of_memory, NULL);
-                return -1;
-        }
-
-        if (-1 == hl_scan_get_token(&data->d_scan)) {
-                hlc_set_error(data, hl_e_unexpected_end, NULL);
-                free(symbol);
-                return -1;
-        }
-
-        ret = hlc_add_to_symbol_table(data, symbol, data->d_scan.sc_token);
-        free(symbol);
-        return ret;
+        return token;
 }
 
 
@@ -601,27 +592,32 @@ static int hl_scan_define(hlc_t *data)
 static int hlc_scan_command(hlc_t *data, hl_opcode_t opcode, hl_command_block_t *cb, hl_address_map_t *am)
 {
         static int current_device = -1;
+        char *token;
+        const char *replaced;
+
 
         hl_command_t command;
         command.c_opcode = opcode;
         command.c_data.cd_data_type = dt_none;
 
         if (opcode.oc_data_type != dt_none) {
-                char *chunk = hl_scan_get_replaced_token(data);
-                if (!chunk) {
-                        hlc_set_error(data, hl_e_corrupt_input_file, chunk);
+                if (hl_scan_get_token(data, 1, &token)) {
                         return -1;
                 }
 
-                if (hlc_get_timer_counter(chunk, &command.c_data) &&
-                    hlc_get_address(chunk, &command.c_data) &&
-                    hlc_get_constant(chunk, &command.c_data)) {
-                        hlc_set_error(data, hl_e_opaque_datatype, chunk);
+                replaced = hl_replace_token(data, token);
+
+                if (hlc_get_timer_counter(replaced, &command.c_data) &&
+                    hlc_get_address(replaced, &command.c_data) &&
+                    hlc_get_constant(replaced, &command.c_data)) {
+                        hlc_set_error(data, hl_e_opaque_datatype, replaced);
+                        free(token);
                         return -1;
                 }
 
                 if (!(opcode.oc_data_type & command.c_data.cd_data_type)) {
-                        hlc_set_error(data, hl_e_datatype_missmatch, chunk);
+                        hlc_set_error(data, hl_e_datatype_missmatch, replaced);
+                        free(token);
                         return -1;
                 }
 
@@ -629,10 +625,13 @@ static int hlc_scan_command(hlc_t *data, hl_opcode_t opcode, hl_command_block_t 
                         if (current_device < 0) {
                                 current_device = command.c_data.cd_address.cd_device;
                         } else if (current_device != command.c_data.cd_address.cd_device) {
-                                hlc_set_error(data, hl_e_unclear_authority, chunk);
+                                hlc_set_error(data, hl_e_unclear_authority, replaced);
+                                free(token);
                                 return -1;
                         }
                 }
+
+                free(token);
 
                 if (command.c_data.cd_data_type & dt_anyadr) {
                         if (hlc_add_to_address_map(am, command.c_data)) {
@@ -720,7 +719,7 @@ void EXPORT hl_compiler_destroy(hlc_t *data)
 int EXPORT hl_scan_instruction_list (hlc_t *data, FILE* file)
 {
         int ret = 0;
-        char *token;
+        char *token[2];
         int ocn;
 
         hl_command_block_t cb;
@@ -733,30 +732,40 @@ int EXPORT hl_scan_instruction_list (hlc_t *data, FILE* file)
         data->d_scan.sc_line = 1;
         data->d_scan.sc_char = 0;
 
-        while ((token = hl_scan_get_replaced_token(data))) {
+        while (!hl_scan_get_token(data, 1, token)) {
                 switch (data->d_scan.sc_context) {
                 case tc_preprocessor:
-                        if (!strcasecmp(token, "define")) {
-                                if (hl_scan_define(data)) {
-                                        hlc_clear_address_map(&am);
-                                        hlc_clear_command_block(&cb);
-                                        return -1;
+                        if (!strcasecmp(token[0], "define")) {
+                                free(token[0]);
+
+                                if (!hl_scan_get_token(data, 2, token)) {
+                                        hlc_add_to_symbol_table(data, token[0], hl_replace_token(data, token[1]));
+                                        free(token[0]);
+                                        free(token[1]);
+                                        continue;
                                 }
-                                continue;
+
+                                hlc_clear_address_map(&am);
+                                hlc_clear_command_block(&cb);
+                                return -1;
                         }
 
-                        hlc_set_error(data, hl_e_unknown_token, token);
+                        hlc_set_error(data, hl_e_unknown_token, token[0]);
+                        free(token[0]);
                         return -1;
 
                 default:
-                        ocn = hlc_get_opcode(token);
+                        ocn = hlc_get_opcode(token[0]);
                         if (ocn >= 0) {
                                 if (hlc_scan_command(data, opcodes[ocn], &cb, &am)) {
                                         hlc_clear_address_map(&am);
                                         hlc_clear_command_block(&cb);
+                                        free(token[0]);
                                         return -1;
                                 }
                         }
+
+                        free(token[0]);
                 }
 
         }
