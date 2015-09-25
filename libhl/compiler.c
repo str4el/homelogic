@@ -101,53 +101,56 @@ static uint16_t hlc_crc16_update(uint16_t crc, uint8_t data)
 
 
 
-
-static int hlc_get_constant(const char *chunk, hl_command_data_t *data)
+/* Versucht aus dem Token eine Konstatnte zu lesen und speichert den
+ * gelesen Wert in der command_data ab.
+ * Gibt bei Erfolg 0 zurück, andernfalls -1
+ */
+static int hlc_get_constant(const char *token, hl_command_data_t *cd)
 {
         unsigned int val;
         double time;
         char time_base;
 
-        if (sscanf(chunk, "0x%x", &val) == 1) {
-                data->cd_data_type = dt_constant;
-                data->cd_constant = val;
+        if (sscanf(token, "0x%x", &val) == 1) {
+                cd->cd_data_type = dt_constant;
+                cd->cd_constant = val;
                 return 0;
         }
 
-        if (sscanf(chunk, "%lf%1[ms]", &time, &time_base) == 2) {
-                data->cd_data_type = dt_constant;
+        if (sscanf(token, "%lf%1[ms]", &time, &time_base) == 2) {
+                cd->cd_data_type = dt_constant;
                 if (time_base == 'm') time *= 60;
                 val = (unsigned int) (time * 100);
 
                 if (val <= 1000) {
-                        data->cd_constant = val | TIMER_F001;
+                        cd->cd_constant = val | TIMER_F001;
                         return 0;
                 }
 
                 val /= 10;
                 if (val <= 1000) {
-                        data->cd_constant = val | TIMER_F01;
+                        cd->cd_constant = val | TIMER_F01;
                         return 0;
                 }
 
                 val /= 10;
                 if (val <= 1000) {
-                        data->cd_constant = val | TIMER_F1;
+                        cd->cd_constant = val | TIMER_F1;
                         return 0;
                 }
 
                 val /= 10;
                 if (val <= 1000) {
-                        data->cd_constant = val | TIMER_F10;
+                        cd->cd_constant = val | TIMER_F10;
                         return 0;
                 }
 
                 return -1;
         }
 
-        if (sscanf(chunk, "%u", &val) == 1) {
-                data->cd_data_type = dt_constant;
-                data->cd_constant = val;
+        if (sscanf(token, "%u", &val) == 1) {
+                cd->cd_data_type = dt_constant;
+                cd->cd_constant = val;
                 return 0;
         }
 
@@ -157,25 +160,29 @@ static int hlc_get_constant(const char *chunk, hl_command_data_t *data)
 
 
 
-static int hlc_get_timer_counter(const char *chunk, hl_command_data_t *adr)
+/* Versucht aus dem Token eine gültige Timer- oder Counteradresse zu lesen
+ * und legt diese in der command_data ab.
+ * Gibt bei erfolg 0 zurück, andernfalls -1.
+ */
+static int hlc_get_timer_counter(const char *token, hl_command_data_t *cd)
 {
         char type[1];
-        int count = sscanf(chunk, "%%%1[tTcCzZ]:%hhu.%hhu", type, &adr->cd_address.cd_device, &adr->cd_address.cd_byte);
+        int count = sscanf(token, "%%%1[tTcCzZ]:%hhu.%hhu", type, &cd->cd_address.cd_device, &cd->cd_address.cd_byte);
         if (count != 3) return -1;
 
         switch(type[0]) {
         case 't':
         case 'T':
-                adr->cd_address.cd_mem_type = mt_timer;
-                adr->cd_data_type = dt_timer;
+                cd->cd_address.cd_mem_type = mt_timer;
+                cd->cd_data_type = dt_timer;
                 break;
 
         case 'c':
         case 'C':
         case 'z':
         case 'Z':
-                adr->cd_address.cd_mem_type = mt_counter;
-                adr->cd_data_type = dt_counter;
+                cd->cd_address.cd_mem_type = mt_counter;
+                cd->cd_data_type = dt_counter;
                 break;
 
         default:
@@ -188,18 +195,22 @@ static int hlc_get_timer_counter(const char *chunk, hl_command_data_t *adr)
 
 
 
-static int hlc_get_address(const char *chunk, hl_command_data_t *adr)
+/* Versucht aus dem Token eine gültige Speicheradresse zu lesen und
+ * legt diese in der command_data ab.
+ * Gibt bei erfolg 0 zurück, andernfalls -1.
+ */
+static int hlc_get_address(const char *token, hl_command_data_t *cd)
 {
         char type[2];
 
-        int count = sscanf(chunk, "%%%2c:%hhu.%hhu.%hhu", type, &adr->cd_address.cd_device, &adr->cd_address.cd_byte, &adr->cd_address.cd_bit);
+        int count = sscanf(token, "%%%2c:%hhu.%hhu.%hhu", type, &cd->cd_address.cd_device, &cd->cd_address.cd_byte, &cd->cd_address.cd_bit);
         if (count >= 3) {
                 switch (type[0]) {
                         case 'i':
                         case 'I':
                         case 'e':
                         case 'E':
-                                adr->cd_address.cd_mem_type = mt_input;
+                                cd->cd_address.cd_mem_type = mt_input;
                                 break;
 
                         case 'o':
@@ -208,12 +219,12 @@ static int hlc_get_address(const char *chunk, hl_command_data_t *adr)
                         case 'Q':
                         case 'a':
                         case 'A':
-                                adr->cd_address.cd_mem_type = mt_output;
+                                cd->cd_address.cd_mem_type = mt_output;
                                 break;
 
                         case 'm':
                         case 'M':
-                                adr->cd_address.cd_mem_type = mt_memory;
+                                cd->cd_address.cd_mem_type = mt_memory;
                                 break;
 
                         default:
@@ -224,17 +235,17 @@ static int hlc_get_address(const char *chunk, hl_command_data_t *adr)
                         case 'x':
                         case 'X':
                                 if (count < 4) return -1;
-                                adr->cd_data_type = dt_bit;
+                                cd->cd_data_type = dt_bit;
                                 break;
 
                         case 'b':
                         case 'B':
-                                adr->cd_data_type = dt_byte;
+                                cd->cd_data_type = dt_byte;
                                 break;
 
                         case 'w':
                         case 'W':
-                                adr->cd_data_type = dt_word;
+                                cd->cd_data_type = dt_word;
                                 break;
 
 //                        case 'd':
