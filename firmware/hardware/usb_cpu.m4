@@ -1,4 +1,4 @@
-dnl Copyright (C) 2014 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+dnl Copyright (C) 2014 - 2015 Stephan Reinhard <Stephan-Reinhard@gmx.de>
 dnl
 dnl This file is part of Homelogic.
 dnl
@@ -34,20 +34,20 @@ pin(SDA, PD1)
 
 pin(BTL, PE4)
 
-diginput(PC0)
-diginput(PC1)
-diginput(PC2)
-diginput(PC3)
-diginput(PC4)
-diginput(PC5)
-diginput(PC6)
 diginput(PC7)
+diginput(PC6)
+diginput(PC5)
+diginput(PC4)
+diginput(PC3)
+diginput(PC2)
+diginput(PC1)
+diginput(PC0)
 
-digoutput(PA0)
-digoutput(PA1)
-digoutput(PA2)
-digoutput(PA3)
-digoutput(PA4)
-digoutput(PA5)
-digoutput(PA6)
 digoutput(PA7)
+digoutput(PA6)
+digoutput(PA5)
+digoutput(PA4)
+digoutput(PA3)
+digoutput(PA2)
+digoutput(PA1)
+digoutput(PA0)
