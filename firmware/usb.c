@@ -25,9 +25,9 @@
 
 typedef struct usb_s {
         volatile uint8_t u_send_lock;
-        volatile char u_send_buffer[BUS_BUFSIZE];
+        volatile char u_send_buffer[USB_BUFSIZE];
         volatile uint8_t u_send_buffer_len;
-        char u_receive_buffer[BUS_BUFSIZE];
+        char u_receive_buffer[USB_BUFSIZE];
         uint8_t u_receive_buffer_len;
 } usb_t;
 
@@ -269,10 +269,10 @@ void usb_task()
 int usb_send_data(const char *data, uint16_t len)
 {
         if (usb.u_send_lock) return 0;
-        if (usb.u_send_buffer_len || len > sizeof(usb.u_send_buffer)) return -1;
+        if (usb.u_send_buffer_len + len > sizeof(usb.u_send_buffer)) return -1;
         ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-                memcpy(&usb.u_send_buffer, data, len);
-                usb.u_send_buffer_len = len;
+                memcpy((void *)usb.u_send_buffer + usb.u_send_buffer_len, data, len);
+                usb.u_send_buffer_len += len;
         }
         return 0;
 }
