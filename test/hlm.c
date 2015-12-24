@@ -199,11 +199,11 @@ hlcon_t *connect_device(void)
 
         if (!device) return NULL;
 
-        flags = 0;
+        flags = HL_NOVERIFY;
         strtok(device, ",");
         while((flag = strtok(NULL, ","))) {
-                if (!strcasecmp(flag, "noverify")) {
-                        flags |= HL_NOVERIFY;
+                if (!strcasecmp(flag, "verify")) {
+                        flags &= ~HL_NOVERIFY;
                 } else {
                         fprintf(stderr, "Unknown flag %s!\n", flag);
                         return NULL;
