@@ -42,6 +42,7 @@ pid_t terminal_child = -1;
 bool verbose = false;
 bool terminal = false;
 bool compile = false;
+bool stop_after_pp = false;
 bool load = false;
 
 volatile bool stay = false;
@@ -68,7 +69,7 @@ void get_options(int argc, char *argv[])
 {
         int c;
 
-        while ((c = getopt(argc, argv, ":b:cd:lo:stv")) != -1) {
+        while ((c = getopt(argc, argv, ":b:cd:Elo:stv")) != -1) {
                 switch (c) {
                 case 'b':
                         busfile = optarg;
@@ -80,6 +81,10 @@ void get_options(int argc, char *argv[])
 
                 case 'd':
                         device = optarg;
+                        break;
+
+                case 'E':
+                        stop_after_pp = true;
                         break;
 
                 case 'l':
@@ -114,12 +119,73 @@ void get_options(int argc, char *argv[])
 
 
 
-/* Kompeliert das Programm
+/* Eigentliche Kompelierung
+ */
+int do_compile (hlc_t *data, FILE *in, FILE *out)
+{
+        char *buffer = NULL;
+        size_t buffer_len = 0;
+        FILE *tmp;
+
+
+        if (stop_after_pp) {
+                if (out) {
+                        if (hl_preprocessor(in, out)) {
+                                return -1;
+                        }
+                }
+                return 0;
+        }
+
+        tmp = open_memstream(&buffer, &buffer_len);
+        if (!tmp) {
+                fprintf(stderr, "Out of Memory at compile\n");
+                return -1;
+        }
+
+        if (hl_preprocessor(in, tmp)) {
+                fprintf(stderr, "Preprocessor error\n");
+                fclose(tmp);
+                free(buffer);
+                return -1;
+        }
+        fflush(tmp);
+        fseek(tmp, 0, SEEK_SET);
+
+        info("Parse ...\n");
+        if (hl_scan_instruction_list(data, tmp)) {
+                fprintf(stderr, "Parser error at \"%s\": %s.\n", data->d_errchunk, hl_strerror(data->d_errno));
+                fclose(tmp);
+                free(buffer);
+                return -1;
+        }
+
+        fclose(tmp);
+        free(buffer);
+
+        info("Compile ... ");
+        info("finished for %i devices.\n", hl_compile(data));
+
+        if (out) {
+                if (hl_write_intel_hex(data, out) == 0) {
+                        fprintf(stderr, "No data written to %s!\n", outfile);
+                        return -1;
+                }
+        }
+
+        return 0;
+}
+
+
+
+
+/* Vorbereitung für die Kompelierung des Programms
  */
 int compile_program (hlc_t *data)
 {
         FILE *in;
-        FILE *out;
+        FILE *out = NULL;
+        int ret = 0;
 
         info("Compile %s", infile ? infile : "stdin");
         if (outfile) {
@@ -140,38 +206,27 @@ int compile_program (hlc_t *data)
                 info("Read from file %s.\n", infile);
         }
 
-        info("Parse ...\n");
-        if (hl_scan_instruction_list(data, in)) {
-                fprintf(stderr, "Parser error at \"%s\": %s.\n", data->d_errchunk, hl_strerror(data->d_errno));
-                if (infile) {
-                        fclose(in);
-                }
-                return -1;
-        }
-
-        if (infile) {
-                fclose(in);
-        }
-
-        info("Compile ... ");
-        info("finished for %i devices.\n", hl_compile(data));
-
         if (outfile) {
                 out = fopen(outfile, "w");
                 if (!out) {
                         fprintf(stderr, "Couldn't open output file %s!\n", outfile);
+                        if (infile) {
+                                fclose(in);
+                        }
                         return -1;
                 }
-
-                if (hl_write_intel_hex(data, out) == 0) {
-                        fprintf(stderr, "No data written to %s!\n", outfile);
-                }
-
-                fclose(out);
         }
 
+        if (!outfile && !load) {
+                out = stdout;
+        }
 
-        return 0;
+        ret = do_compile(data, in, out);
+
+        if (infile) fclose(in);
+        if (outfile) fclose(out);
+
+        return ret;
 }
 
 

@@ -289,58 +289,6 @@ static inline void hlc_convert_to_word_address (hl_command_data_t *address)
 
 
 
-static int hlc_add_to_symbol_table (hlc_t *data, const char *name, const char *subst)
-{
-        int n = data->d_sym_tab.st_used;
-        for (int i = 0; i < n; i++) {
-                if (0 == strcmp(name, data->d_sym_tab.st_sym[i].s_name)) {
-                        char *new = realloc(data->d_sym_tab.st_sym[i].s_subst, strlen(subst) + 1);
-                        if (!new) return -1;
-                        strcpy(new, subst);
-                        data->d_sym_tab.st_sym[i].s_subst = new;
-                        return 0;
-                }
-        }
-
-        if (n >= data->d_sym_tab.st_size) {
-                void *new = realloc(data->d_sym_tab.st_sym, (data->d_sym_tab.st_size + 10) * sizeof(*(data->d_sym_tab.st_sym)));
-                if (!new) return -1;
-                data->d_sym_tab.st_sym = new;
-                data->d_sym_tab.st_size += 10;
-        }
-
-        data->d_sym_tab.st_sym[n].s_name = malloc(strlen(name) + 1);
-        if (!data->d_sym_tab.st_sym[n].s_name) return -1;
-        data->d_sym_tab.st_sym[n].s_subst = malloc(strlen(subst) + 1);
-        if (!data->d_sym_tab.st_sym[n].s_subst) {
-                free(data->d_sym_tab.st_sym[n].s_name);
-                return -1;
-        }
-
-        strcpy(data->d_sym_tab.st_sym[n].s_name, name);
-        strcpy(data->d_sym_tab.st_sym[n].s_subst, subst);
-        data->d_sym_tab.st_used += 1;
-
-        return 0;
-}
-
-
-
-
-static void hlc_clear_symbol_table (hlc_t *data)
-{
-        for (int i = 0; i < data->d_sym_tab.st_used; i++) {
-                free(data->d_sym_tab.st_sym[i].s_name);
-                free(data->d_sym_tab.st_sym[i].s_subst);
-        }
-        free(data->d_sym_tab.st_sym);
-        data->d_sym_tab.st_size = 0;
-        data->d_sym_tab.st_used = 0;
-}
-
-
-
-
 static int hlc_add_to_address_map (hl_address_map_t *am, hl_command_data_t address)
 {
         hlc_convert_to_word_address(&address);
@@ -435,18 +383,13 @@ static inline void hlc_clear_command_block (hl_command_block_t *cb)
 
 /* Sucht im Inputstream nach dem nächsten Token.
  * Komentare werden ignoriert und Anführungszeichen berücksichtigt.
- * Der Rückgabewert ist die länge des Token, 0 bei EOF oder -1 im Fehlerfall.
+ * Gibt das Token zurück oder NULL.
  * Der gelesene Token wird im scan_context abgespeichert.
  */
-static ssize_t hl_scan_token(hl_scan_context_t *sc)
+const char *hl_scan_token(hl_scan_context_t *sc)
 {
         int c;
-        ssize_t len = 0;
-
-        FILE *token = fmemopen(sc->sc_token, sizeof(sc->sc_token), "w");
-        if (!token) {
-                return -1;
-        }
+        size_t len = 0;
 
         while ((c = fgetc(sc->sc_in)) != EOF) {
                 // Zeilen und Zeichenzähler für die Fehlerausgabe
@@ -458,11 +401,6 @@ static ssize_t hl_scan_token(hl_scan_context_t *sc)
                 }
 
                 switch(sc->sc_context) {
-                case tc_preprocessor:
-                        if (c == '\n') {
-                                sc->sc_context = tc_none;
-                        }
-                        // fall threw
                 case tc_none:
                         switch(c) {
                         case '"':
@@ -470,15 +408,14 @@ static ssize_t hl_scan_token(hl_scan_context_t *sc)
                                 continue;
 
                         case '#':
-                                sc->sc_context = tc_preprocessor;
+                                sc->sc_context = tc_comment_single_line;
                                 continue;
 
                         case '/':
                                 c = fgetc(sc->sc_in);
                                 switch(c) {
                                 case EOF:
-                                        if (fclose(token)) return -1;
-                                        return 0;
+                                        return NULL;
                                 case '/':
                                         sc->sc_context = tc_comment_single_line;
                                         continue;
@@ -491,34 +428,28 @@ static ssize_t hl_scan_token(hl_scan_context_t *sc)
                         }
 
                         if (isspace(c)) {
-                                if (len > 0) {
-                                        if (fclose(token)) return -1;
-                                        return len;
-                                }
+                                if (len > 0) return sc->sc_token;
                                 continue;
                         }
 
-                        if ((len >= sizeof(sc->sc_token - 1)) || (fputc(c, token) == EOF)) {
-                                fclose(token);
-                                return -1;
+                        if (len >= sizeof(sc->sc_token) - 1) {
+                                return NULL;
                         }
-                        len++;
+                        sc->sc_token[len++] = (char)c;
+                        sc->sc_token[len] = 0;
                         break;
 
                 case tc_quote:
                         if (c == '"') {
                                 sc->sc_context = tc_none;
-                                if (len > 0) {
-                                        if (fclose(token)) return -1;
-                                        return len;
-                                }
+                                if (len > 0) return sc->sc_token;
                                 continue;
                         }
-                        if ((len >= sizeof(sc->sc_token - 1)) || (fputc(c, token) == EOF)) {
-                                fclose(token);
-                                return -1;
+                        if (len >= sizeof(sc->sc_token) - 1) {
+                                return NULL;
                         }
-                        len++;
+                        sc->sc_token[len++] = (char)c;
+                        sc->sc_token[len] = 0;
                         break;
 
                 case tc_comment_single_line:
@@ -532,10 +463,11 @@ static ssize_t hl_scan_token(hl_scan_context_t *sc)
                                         sc->sc_context = tc_none;
                                         continue;
                                 }
+
                                 if (c == EOF) {
-                                        if (fclose(token)) return -1;
-                                        return 0;
+                                        return NULL;
                                 }
+
                                 ungetc(c, sc->sc_in);
                         }
                         break;
@@ -544,57 +476,8 @@ static ssize_t hl_scan_token(hl_scan_context_t *sc)
 
         }
 
-        if (fclose(token)) {
-                return -1;
-        }
-        return len;
-}
-
-
-
-
-/* Scannt n Token und speichert sie in das token array. Der Speicher für die
- * Token wird allokiert und muss mit free() wieder frei gegeben werden.
- * token muss groß genug für n pointer auf char sein.
- */
-static int hl_scan_get_token(hlc_t *data, size_t n, char **token)
-{
-        for (int i = 0; i < n; i++) {
-                if (hl_scan_token(&data->d_scan) > 0) {
-                        token[i] = strdup(data->d_scan.sc_token);
-                        if (token[i]) {
-                                continue;
-                        } else {
-                                hlc_set_error(data, hl_e_out_of_memory, NULL);
-                        }
-                } else {
-                        hlc_set_error(data, hl_e_unexpected_end, NULL);
-                }
-
-                // Aufräumarbeiten bei abbruch
-                for (int j = 0; j < i; j++) {
-                        free(token[j]);
-                }
-                return -1;
-        }
-
-        return 0;
-}
-
-
-
-
-/* Sucht nach ersetzungen in der Symboltabelle. Wird eine gefunden wird die
- * entsprechende Ersetzung zurück gegeben, andernfalls das orginal Token
- */
-static const char *hl_replace_token(hlc_t *data, const char *token)
-{
-        for (int i = 0; i < data->d_sym_tab.st_used; i++) {
-                if (!strcmp(token, data->d_sym_tab.st_sym[i].s_name)) {
-                        return data->d_sym_tab.st_sym[i].s_subst;
-                }
-        }
-        return token;
+        if (len > 0) return sc->sc_token;
+        return NULL;
 }
 
 
@@ -603,8 +486,7 @@ static const char *hl_replace_token(hlc_t *data, const char *token)
 static int hlc_scan_command(hlc_t *data, hl_opcode_t opcode, hl_command_block_t *cb, hl_address_map_t *am)
 {
         static int current_device = -1;
-        char *token;
-        const char *replaced;
+        const char *token;
 
 
         hl_command_t command;
@@ -612,23 +494,20 @@ static int hlc_scan_command(hlc_t *data, hl_opcode_t opcode, hl_command_block_t 
         command.c_data.cd_data_type = dt_none;
 
         if (opcode.oc_data_type != dt_none) {
-                if (hl_scan_get_token(data, 1, &token)) {
+                if ((token = hl_scan_token(&data->d_scan)) == NULL) {
+                        hlc_set_error(data, hl_e_unexpected_end, "");
                         return -1;
                 }
 
-                replaced = hl_replace_token(data, token);
-
-                if (hlc_get_timer_counter(replaced, &command.c_data) &&
-                    hlc_get_address(replaced, &command.c_data) &&
-                    hlc_get_constant(replaced, &command.c_data)) {
-                        hlc_set_error(data, hl_e_opaque_datatype, replaced);
-                        free(token);
+                if (hlc_get_timer_counter(token, &command.c_data) &&
+                    hlc_get_address(token, &command.c_data) &&
+                    hlc_get_constant(token, &command.c_data)) {
+                        hlc_set_error(data, hl_e_opaque_datatype, token);
                         return -1;
                 }
 
                 if (!(opcode.oc_data_type & command.c_data.cd_data_type)) {
-                        hlc_set_error(data, hl_e_datatype_missmatch, replaced);
-                        free(token);
+                        hlc_set_error(data, hl_e_datatype_missmatch, token);
                         return -1;
                 }
 
@@ -636,13 +515,10 @@ static int hlc_scan_command(hlc_t *data, hl_opcode_t opcode, hl_command_block_t 
                         if (current_device < 0) {
                                 current_device = command.c_data.cd_address.cd_device;
                         } else if (current_device != command.c_data.cd_address.cd_device) {
-                                hlc_set_error(data, hl_e_unclear_authority, replaced);
-                                free(token);
+                                hlc_set_error(data, hl_e_unclear_authority, token);
                                 return -1;
                         }
                 }
-
-                free(token);
 
                 if (command.c_data.cd_data_type & dt_anyadr) {
                         if (hlc_add_to_address_map(am, command.c_data)) {
@@ -720,7 +596,6 @@ void EXPORT hl_compiler_destroy(hlc_t *data)
                 hlc_clear_command_block(&dd.dd_cb);
                 if (dd.dd_program_memory) free(dd.dd_program_memory);
         }
-        hlc_clear_symbol_table(data);
         free(data);
 }
 
@@ -730,8 +605,8 @@ void EXPORT hl_compiler_destroy(hlc_t *data)
 int EXPORT hl_scan_instruction_list (hlc_t *data, FILE* file)
 {
         int ret = 0;
-        char *token[2];
         int ocn;
+        const char *token;
 
         hl_command_block_t cb;
         hl_address_map_t am;
@@ -743,42 +618,15 @@ int EXPORT hl_scan_instruction_list (hlc_t *data, FILE* file)
         data->d_scan.sc_line = 1;
         data->d_scan.sc_char = 0;
 
-        while (!hl_scan_get_token(data, 1, token)) {
-                switch (data->d_scan.sc_context) {
-                case tc_preprocessor:
-                        if (!strcasecmp(token[0], "define")) {
-                                free(token[0]);
-
-                                if (!hl_scan_get_token(data, 2, token)) {
-                                        hlc_add_to_symbol_table(data, token[0], hl_replace_token(data, token[1]));
-                                        free(token[0]);
-                                        free(token[1]);
-                                        continue;
-                                }
-
+        while ((token = hl_scan_token(&data->d_scan)) != NULL) {
+                ocn = hlc_get_opcode(token);
+                if (ocn >= 0) {
+                        if (hlc_scan_command(data, opcodes[ocn], &cb, &am)) {
                                 hlc_clear_address_map(&am);
                                 hlc_clear_command_block(&cb);
                                 return -1;
                         }
-
-                        hlc_set_error(data, hl_e_unknown_token, token[0]);
-                        free(token[0]);
-                        return -1;
-
-                default:
-                        ocn = hlc_get_opcode(token[0]);
-                        if (ocn >= 0) {
-                                if (hlc_scan_command(data, opcodes[ocn], &cb, &am)) {
-                                        hlc_clear_address_map(&am);
-                                        hlc_clear_command_block(&cb);
-                                        free(token[0]);
-                                        return -1;
-                                }
-                        }
-
-                        free(token[0]);
                 }
-
         }
 
         if (am.am_used || cb.cb_used) {

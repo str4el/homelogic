@@ -183,7 +183,6 @@ typedef struct hl_scan_context_s {
         enum hl_token_context_e {
                 tc_none,
                 tc_quote,
-                tc_preprocessor,
                 tc_comment_single_line,
                 tc_comment_multi_line
         } sc_context;
@@ -199,16 +198,6 @@ typedef struct hl_scan_context_s {
 typedef struct hlc_s {
         hl_device_data_t d_device[HL_MAX_DEVICES];
         hl_scan_context_t d_scan;
-
-        struct hl_symbol_table_s {
-                size_t st_size;
-                size_t st_used;
-                struct hl_symbol_s {
-                        char *s_name;
-                        char *s_subst;
-                } *st_sym;
-        } d_sym_tab;
-
         hl_error_t d_errno;
         char d_errchunk[64];
 } hlc_t;
@@ -242,6 +231,7 @@ typedef struct hlcon_s {
 
 
 
+extern int hl_preprocessor(FILE *in, FILE *out);
 
 extern hlc_t *hl_compiler_init(void);
 extern void hl_compiler_destroy(hlc_t *data);

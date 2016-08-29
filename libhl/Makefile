@@ -5,7 +5,7 @@ include ../defaults.mk
 include ../.config
 
 
-SRC = compiler.c connector.c loader.c virtualbus.c error.c
+SRC = preprocessor.c compiler.c connector.c loader.c virtualbus.c error.c
 OBJ = $(SRC:%.c=%.o)
 
 SHARED = $(TARGET).so
