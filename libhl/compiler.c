@@ -534,7 +534,7 @@ void split_blocks(hlc_t *hlc)
                                 hl_set_node_error(e_code_after_end, node);
                         }
 
-                        hlc->block_count = n;
+                        hlc->block_count = n + 1;
                         return;
 
                 } else if (node_is_writing_opcode(hlc, i)) {
