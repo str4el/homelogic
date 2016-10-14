@@ -51,16 +51,16 @@ static int hll_expand_device_data(hl_device_data_t *dd, uint16_t size)
 static int hl_insert_device_data(hlc_t *data, hl_data_block_t *db, uint8_t device)
 {
         if (device >= HL_MAX_DEVICES) {
-                data->d_errno = hl_e_unreachable_device;
+                //data->errno = hl_e_unreachable_device;
                 return -1;
         }
 
-        if (hll_expand_device_data(&data->d_device[device], db->db_pos + db->db_size)) {
-                data->d_errno = hl_e_out_of_memory;
+        if (hll_expand_device_data(&data->device[device], db->db_pos + db->db_size)) {
+                //data->errno = hl_e_out_of_memory;
                 return -1;
         }
 
-        memcpy(data->d_device[device].dd_program_memory + db->db_pos, db->db_data, db->db_size);
+        memcpy(data->device[device].dd_program_memory + db->db_pos, db->db_data, db->db_size);
         return 0;
 }
 
@@ -112,9 +112,9 @@ int EXPORT hl_read_intel_hex(hlc_t *data, FILE *file)
         int current_device = 0;
 
 
-        for (int i = 0; i < sizeof(data->d_device) / sizeof(*data->d_device); i++) {
-                free(data->d_device[i].dd_program_memory);
-                data->d_device[i].dd_program_size = 0;
+        for (int i = 0; i < sizeof(data->device) / sizeof(*data->device); i++) {
+                free(data->device[i].dd_program_memory);
+                data->device[i].dd_program_size = 0;
         }
 
 
@@ -129,7 +129,7 @@ int EXPORT hl_read_intel_hex(hlc_t *data, FILE *file)
 
                         case 0x01:
                                 if (line.db_size != 0) {
-                                        data->d_errno = hl_e_corrupt_input_file;
+                                        //data->errno = hl_e_corrupt_input_file;
                                         return -1;
                                 }
                                 return 0;
@@ -137,14 +137,14 @@ int EXPORT hl_read_intel_hex(hlc_t *data, FILE *file)
 
                         case 0x04:
                                 if (line.db_pos != 0 || line.db_size != 2 || line.db_data[0] != 0) {
-                                        data->d_errno = hl_e_corrupt_input_file;
+                                        //data->errno = hl_e_corrupt_input_file;
                                         return -1;
                                 }
                                 current_device = line.db_data[1];
                                 break;
 
                         default:
-                                data->d_errno = hl_e_corrupt_input_file;
+                                //data->errno = hl_e_corrupt_input_file;
                                 return -1;
                 }
         }
@@ -198,7 +198,7 @@ int EXPORT hl_load_device(hlc_t *data, int bus, int n)
         char *ptr;
         int retry = 0;
 
-        int left = data->d_device[n].dd_program_size;
+        int left = data->device[n].dd_program_size;
 
         uint16_t pos = 0;
         while (left) {
@@ -207,7 +207,7 @@ int EXPORT hl_load_device(hlc_t *data, int bus, int n)
                 ptr = vry;
                 ptr += sprintf(ptr, "%04X%02X", pos, len);
                 for (int i = 0; i < len; i++) {
-                        ptr += sprintf(ptr, "%02X", (uint8_t)data->d_device[n].dd_program_memory[pos + i]);
+                        ptr += sprintf(ptr, "%02X", (uint8_t)data->device[n].dd_program_memory[pos + i]);
                 }
                 *ptr = 0;
 
@@ -229,7 +229,7 @@ int EXPORT hl_load_device(hlc_t *data, int bus, int n)
 
         }
 
-        return data->d_device[n].dd_program_size;
+        return data->device[n].dd_program_size;
 }
 
 
@@ -242,8 +242,8 @@ int EXPORT hl_load_all(hlc_t *data, int bus)
         int load;
 
 
-        for (uint16_t i = 0; i < sizeof(data->d_device) / sizeof(*data->d_device); i++) {
-                if (data->d_device[i].dd_program_size == 0) continue;
+        for (uint16_t i = 0; i < sizeof(data->device) / sizeof(*data->device); i++) {
+                if (data->device[i].dd_program_size == 0) continue;
 
                 sprintf(buf, "STOP FE %02X\n", (uint8_t)i);
                 if (write(bus, buf, strlen(buf)) == -1) {

@@ -35,29 +35,11 @@ extern "C" {
 #define HL_MAX_DEVICES 128
 #define HL_MAX_LINE_LEN 1024
 #define HL_MAX_TOKEN_LEN 128
-
+#define HL_MAX_LABEL_LEN 32
 
 /* Flags für connector
  */
 #define HL_NOVERIFY 1
-
-
-
-
-typedef enum hl_error_e {
-        hl_e_none = 0,
-        hl_e_out_of_memory,
-        hl_e_opaque_datatype,
-        hl_e_datatype_missmatch,
-        hl_e_unclear_authority,
-        hl_e_out_of_range,
-        hl_e_unexpected_end,
-        hl_e_unreachable_device,
-        hl_e_scan_error,
-        hl_e_corrupt_input_file,
-        hl_e_unknown_token
-} hl_error_t;
-
 
 
 
@@ -79,13 +61,21 @@ typedef enum hl_data_type_e {
 
 
 
-typedef enum hl_memory_type_e {
-        mt_input,
-        mt_output,
-        mt_memory,
-        mt_timer,
-        mt_counter
-} hl_memory_type_t;
+typedef enum hl_address_type_e {
+        t_input,
+        t_output,
+        t_memory,
+        t_timer,
+        t_counter
+} hl_address_type_t;
+
+
+typedef enum hl_address_size_e {
+        s_bit,
+        s_byte,
+        s_word,
+        s_dword
+} hl_address_size_t;
 
 
 
@@ -114,25 +104,29 @@ enum hlcon_run_e {
 
 
 typedef struct hl_opcode_s {
-        char oc_name[5];
-        uint8_t oc_num;
-        hl_data_type_t oc_data_type;
-        bool oc_alter;
+        char name[5];
+        uint8_t num;
+        hl_data_type_t data_type;
+        bool alter;
 } hl_opcode_t;
 
+
+
+
+typedef struct hl_address_s {
+        hl_address_type_t type;
+        hl_address_size_t size;
+        uint8_t device;
+        uint8_t byte;
+        uint8_t bit;
+} hl_address_t;
 
 
 
 typedef struct hl_command_data_s {
         hl_data_type_t cd_data_type;
         union {
-                struct {
-                        hl_memory_type_t cd_mem_type;
-                        uint8_t cd_device;
-                        uint8_t cd_byte;
-                        uint8_t cd_bit;
-                } cd_address;
-
+                hl_address_t cd_address;
                 uint16_t cd_constant;
                 uint16_t cd_label;
         };
@@ -145,6 +139,52 @@ typedef struct hl_command_s {
         hl_opcode_t c_opcode;
         hl_command_data_t c_data;
 } hl_command_t;
+
+
+
+
+typedef enum hl_node_type_e {
+        n_none,
+        n_invalid,
+        n_opcode,
+        n_address,
+        n_const,
+        n_symbol,
+        n_target,
+} hl_node_type_t;
+
+
+
+
+typedef struct hl_node_s {
+        hl_node_type_t type;
+        size_t line;
+        size_t pos;
+        size_t size;
+        union {
+                hl_opcode_t *opcode;
+                hl_address_t address;
+                uint16_t constant;
+                char symbol [HL_MAX_LABEL_LEN];
+                char target [HL_MAX_LABEL_LEN];
+        };
+} hl_node_t;
+
+
+typedef struct hl_node_tab_s {
+        size_t size;
+        size_t used;
+        hl_node_t *node;
+} hl_node_tab_t;
+
+
+
+
+typedef struct hl_block_s {
+        size_t first_node;
+        size_t last_node;
+        int device;
+} hl_block_t;
 
 
 
@@ -179,27 +219,30 @@ typedef struct hl_device_data_s {
 
 
 typedef struct hl_scan_context_s {
-        FILE *sc_in;
+        FILE *in;
         enum hl_token_context_e {
                 tc_none,
                 tc_quote,
                 tc_comment_single_line,
                 tc_comment_multi_line
-        } sc_context;
+        } context;
 
-        size_t sc_line;
-        size_t sc_char;
+        size_t line;
+        size_t pos;
 
-        char sc_token[HL_MAX_TOKEN_LEN];
+        char token[HL_MAX_TOKEN_LEN];
+        size_t token_line;
+        size_t token_pos;
 } hl_scan_context_t;
 
 
 
 typedef struct hlc_s {
-        hl_device_data_t d_device[HL_MAX_DEVICES];
-        hl_scan_context_t d_scan;
-        hl_error_t d_errno;
-        char d_errchunk[64];
+        hl_scan_context_t scan_context;
+        hl_node_tab_t nodes;
+        hl_block_t *block;
+        size_t block_count;
+        hl_device_data_t device[HL_MAX_DEVICES];
 } hlc_t;
 
 
@@ -230,13 +273,14 @@ typedef struct hlcon_s {
 } hlcon_t;
 
 
+extern unsigned int hl_error_count(void);
+extern void hl_print_errors(FILE *in, FILE *out);
 
 extern int hl_preprocessor(FILE *in, FILE *out);
 
 extern hlc_t *hl_compiler_init(void);
 extern void hl_compiler_destroy(hlc_t *data);
-extern int hl_scan_instruction_list (hlc_t *data, FILE* file);
-extern int hl_compile (hlc_t *data);
+extern int hl_compile (hlc_t *hlc, FILE *in);
 extern int hl_write_intel_hex(hlc_t *data, FILE *file);
 extern int hl_read_intel_hex(hlc_t *data, FILE *file);
 extern int hl_load_device(hlc_t *data, int bus, int n);
@@ -252,8 +296,6 @@ extern int hl_start_vbus_server(const char *name);
 extern void hl_stop_vbus_server(void);
 extern int hl_vbus_connect(const char *name);
 extern void hl_vbus_disconnect(int s);
-
-extern const char *hl_strerror(hl_error_t num);
 
 #ifdef __cplusplus
 }

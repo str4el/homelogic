@@ -223,16 +223,16 @@ int main (int argc, char *argv[])
         fclose(in);
 
         if (cpu == -1) {
-                for (int i = 0; i < sizeof(hlc->d_device) / sizeof(*hlc->d_device); i++) {
-                        if (hlc->d_device[i].dd_program_size) {
+                for (int i = 0; i < sizeof(hlc->device) / sizeof(*hlc->device); i++) {
+                        if (hlc->device[i].dd_program_size) {
                                 printf("Device %i:\n", i);
-                                analyze_data(&hlc->d_device[i]);
+                                analyze_data(&hlc->device[i]);
                                 printf("\n");
                         }
                 }
         } else {
-                if (cpu >= 0 && cpu < sizeof(hlc->d_device) / sizeof(*hlc->d_device)) {
-                        analyze_data(&hlc->d_device[cpu]);
+                if (cpu >= 0 && cpu < sizeof(hlc->device) / sizeof(*hlc->device)) {
+                        analyze_data(&hlc->device[cpu]);
                 }
         }
 

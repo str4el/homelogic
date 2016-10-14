@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+ * Copyright (C) 2014, 2016 Stephan Reinhard <Stephan-Reinhard@gmx.de>
  *
  * This file is part of Homelogic.
  *
@@ -131,6 +131,7 @@ int do_compile (hlc_t *data, FILE *in, FILE *out)
         if (stop_after_pp) {
                 if (out) {
                         if (hl_preprocessor(in, out)) {
+                                hl_print_errors(in, stderr);
                                 return -1;
                         }
                 }
@@ -144,7 +145,7 @@ int do_compile (hlc_t *data, FILE *in, FILE *out)
         }
 
         if (hl_preprocessor(in, tmp)) {
-                fprintf(stderr, "Preprocessor error\n");
+                hl_print_errors(in, stderr);
                 fclose(tmp);
                 free(buffer);
                 return -1;
@@ -152,18 +153,20 @@ int do_compile (hlc_t *data, FILE *in, FILE *out)
         fflush(tmp);
         fseek(tmp, 0, SEEK_SET);
 
-        info("Parse ...\n");
-        if (hl_scan_instruction_list(data, tmp)) {
-                fprintf(stderr, "Parser error at \"%s\": %s.\n", data->d_errchunk, hl_strerror(data->d_errno));
-                fclose(tmp);
-                free(buffer);
-                return -1;
-        }
 
+        info("Parse ...\n");
+        hl_compile(data, tmp);
+        hl_print_errors(tmp, stderr);
         fclose(tmp);
         free(buffer);
 
+        if (hl_error_count()) {
+                return -1;
+        }
+
         info("Compile ... ");
+        fprintf(stderr, "Simulation, Jaja... ich werds schon wieder implementieren!\n");
+        /*
         info("finished for %i devices.\n", hl_compile(data));
 
         if (out) {
@@ -172,6 +175,7 @@ int do_compile (hlc_t *data, FILE *in, FILE *out)
                         return -1;
                 }
         }
+        */
 
         return 0;
 }
@@ -200,7 +204,7 @@ int compile_program (hlc_t *data)
         } else {
                 in = fopen(infile, "r");
                 if (!in) {
-                        fprintf(stderr, "Couldn't open input file %s!\n", infile);
+                        fprintf(stderr, "cannot open input file %s!\n", infile);
                         return -1;
                 }
                 info("Read from file %s.\n", infile);
@@ -209,7 +213,7 @@ int compile_program (hlc_t *data)
         if (outfile) {
                 out = fopen(outfile, "w");
                 if (!out) {
-                        fprintf(stderr, "Couldn't open output file %s!\n", outfile);
+                        fprintf(stderr, "cannot open output file %s!\n", outfile);
                         if (infile) {
                                 fclose(in);
                         }
@@ -252,26 +256,26 @@ hlcon_t *connect_device(void)
                 if (!strcasecmp(flag, "noverify")) {
                         flags |= HL_NOVERIFY;
                 } else {
-                        fprintf(stderr, "Unknown flag %s!\n", flag);
+                        fprintf(stderr, "unknown flag %s!\n", flag);
                         return NULL;
                 }
         }
 
         con = hl_connector_init(busfile, flags);
         if (!con) {
-                fprintf(stderr, "Couldn't init connector!\n");
+                fprintf(stderr, "cannot init connector!\n");
                 return NULL;
         }
 
         if (sscanf(device, "ftdi:%x:%x", &vid, &pid) == 2) {
                 if (hl_connect_ftdi(con, vid, pid)) {
-                        fprintf(stderr, "Couldn't connect to ftdi %X %X!\n", vid, pid);
+                        fprintf(stderr, "cannot connect to ftdi %X %X!\n", vid, pid);
                         hl_disconnect(con);
                         return NULL;
                 }
         } else if (sscanf(device, "dev:%127s", dev) == 1) {
                 if (hl_connect_device(con, dev)) {
-                        fprintf(stderr, "Couldn't connect to device %s!\n", dev);
+                        fprintf(stderr, "cannot connect to device %s!\n", dev);
                         hl_disconnect(con);
                         return NULL;
                 }
@@ -319,7 +323,7 @@ void run_terminal(void)
 
         int bus = hl_vbus_connect(busfile);
         if (bus == -1) {
-                fprintf(stderr, "Couldn't connect to vbus! Terminal terminated.\n");
+                fprintf(stderr, "cannot connect to vbus! Terminal terminated.\n");
                 exit(1);
         }
 
@@ -413,7 +417,7 @@ int load_program(hlc_t *data, int bus)
                         info ("Load file %s.\n", infile);
                         in = fopen(infile, "r");
                         if (!in) {
-                                fprintf(stderr, "Couldn't open file %s! Skip loading.\n", infile);
+                                fprintf(stderr, "cannot open file %s! Skip loading.\n", infile);
                                 return -1;
                         }
                 } else {
@@ -422,7 +426,7 @@ int load_program(hlc_t *data, int bus)
                 }
 
                 if (hl_read_intel_hex(data, in)) {
-                        fprintf(stderr, "Couldn't read file %s! Skip loading.\n", infile);
+                        fprintf(stderr, "cannot read file %s! Skip loading.\n", infile);
                         if (infile) fclose(in);
                         return -1;
                 }
@@ -431,19 +435,19 @@ int load_program(hlc_t *data, int bus)
         }
 
 
-        for (uint16_t i = 0; i < sizeof(data->d_device) / sizeof(*data->d_device); i++) {
-                if (data->d_device[i].dd_program_size == 0) continue;
+        for (uint16_t i = 0; i < sizeof(data->device) / sizeof(*data->device); i++) {
+                if (data->device[i].dd_program_size == 0) continue;
 
                 info("Stop device %i.\n", i);
                 sprintf(buf, "STOP FE %02X\n", (uint8_t)i);
                 if (write(bus, buf, strlen(buf)) == -1) {
-                        fprintf(stderr, "Couldn't stop device %i! Skip loading.\n", i);
+                        fprintf(stderr, "cannot stop device %i! Skip loading.\n", i);
                         return -1;
                 }
 
                 bytes = hl_load_device(data, bus, i);
                 if (bytes == -1) {
-                        fprintf(stderr, "Couldn't load data into device %i! Skip loading.\n", i);
+                        fprintf(stderr, "cannot load data into device %i! Skip loading.\n", i);
                         return -1;
                 }
                 info("%i bytes written to device %i.\n", bytes, i);
@@ -451,7 +455,7 @@ int load_program(hlc_t *data, int bus)
                 info("Run device %i.\n", i);
                 sprintf(buf, "RUN FE %02X\n", (uint8_t)i);
                 if (write(bus, buf, strlen(buf)) == -1) {
-                        fprintf(stderr, "Couldn't run device %i! Skip loading.\n", i);
+                        fprintf(stderr, "cannot run device %i!\n", i);
                         return -1;
                 }
         }
@@ -484,24 +488,25 @@ int main (int argc, char *argv[])
         if (compile || load) {
                 data = hl_compiler_init();
                 if (!data) {
-                        fprintf(stderr, "Couldn't init compiler!\n");
+                        fprintf(stderr, "cannot init compiler!\n");
                         exit(1);
                 }
         }
 
-        if (compile) {
+        if (compile || stop_after_pp) {
                 if (compile_program(data)) {
-                        fprintf(stderr, "Couldn't compile program!\n");
+                        fprintf(stderr, "cannot compile program!\n");
                         hl_compiler_destroy(data);
                         exit(1);
                 }
         }
 
+
         if (load || terminal || stay || device) {
                 info("Connect bus %s.\n", busfile);
                 bus = hl_vbus_connect(busfile);
                 if (bus == -1) {
-                        fprintf(stderr, "Couldn't connect vbus %s!\n", busfile);
+                        fprintf(stderr, "cannot connect vbus %s!\n", busfile);
                         hl_compiler_destroy(data);
                         exit(1);
                 }

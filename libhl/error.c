@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+ * Copyright (C) 2014, 2016 Stephan Reinhard <Stephan-Reinhard@gmx.de>
  *
  * This file is part of Homelogic.
  *
@@ -20,37 +20,200 @@
 #include "private.h"
 #include "homelogic.h"
 
+#include <string.h>
 
 
-const char none[] = "no error";
-const char out_of_memory[] = "out of memory";
-const char opaque_datatype[] = "could not recognize data type";
-const char datatype_missmatch[] = "data type does not match command";
-const char unclear_authority[] = "different responsibilities in the same network";
-const char out_of_range[] = "out of range";
-const char unexpected_end[] = "unexpected end of input stream";
-const char unreachable_device[] = "device is not reachable";
-const char scan_error[] = "can not scan input stream";
-const char corrupt_input_file[] = "input stream is damaged";
-const char unknown_token[] = "unknown token";
-const char unknown[] = "unknown error";
+typedef struct hl_error_s {
+        hl_error_type_t type;
+        union {
+                hl_node_t node;
+                char string[ERROR_STRING_SIZE];
+        };
+} hl_error_t;
+
+
+typedef struct hl_error_list_s {
+        hl_error_t list[10];
+        unsigned int nerror;
+        unsigned int nwarn;
+} hl_error_list_t;
 
 
 
-const char EXPORT *hl_strerror(hl_error_t num)
+
+hl_error_list_t errors;
+
+
+
+
+void EXPORT hl_clear_error()
 {
-        switch (num) {
-        case hl_e_none:               return none;               break;
-        case hl_e_out_of_memory:      return out_of_memory;      break;
-        case hl_e_opaque_datatype:    return opaque_datatype;    break;
-        case hl_e_datatype_missmatch: return datatype_missmatch; break;
-        case hl_e_unclear_authority:  return unclear_authority;  break;
-        case hl_e_out_of_range:       return out_of_range;       break;
-        case hl_e_unexpected_end:     return unexpected_end;     break;
-        case hl_e_unreachable_device: return unreachable_device; break;
-        case hl_e_scan_error:         return scan_error;         break;
-        case hl_e_corrupt_input_file: return corrupt_input_file; break;
-        case hl_e_unknown_token:      return unknown_token;      break;
-        default:                      return unknown;            break;
+        memset(&errors, 0, sizeof(errors));
+}
+
+
+
+
+static inline unsigned int errors_in_tab(void)
+{
+        if (errors.nerror + errors.nwarn > sizeof(errors.list) / sizeof(*errors.list)) {
+                return sizeof(errors.list) / sizeof(*errors.list);
+        }
+        return errors.nerror + errors.nwarn;
+}
+
+
+
+
+static inline hl_error_t *next_error(hl_error_type_t type)
+{
+        hl_error_t *ret = NULL;
+        if (errors_in_tab() < sizeof(errors.list) / sizeof(*errors.list)) {
+                ret = &errors.list[errors_in_tab()];
+        }
+
+        if (type & e_error) {
+                errors.nerror++;
+        } else {
+                errors.nwarn++;
+        }
+        return ret;
+}
+
+
+
+
+void hl_set_error(hl_error_type_t type)
+{
+        if (!(type & e_clear)) return;
+
+        hl_error_t *error = next_error(type);
+        if (!error) return;
+
+        error->type = type;
+}
+
+
+
+
+void hl_set_string_error(hl_error_type_t type, const char *str)
+{
+        if (!(type & e_string)) return;
+
+        hl_error_t *error = next_error(type);
+        if (!error) return;
+
+        error->type = type;
+        strncpy(error->string, str, sizeof(error->string) - 1);
+        error->string[sizeof(error->string) - 1] = 0;
+}
+
+
+
+
+void hl_set_node_error(hl_error_type_t type, const hl_node_t *node)
+{
+        if (!(type & e_node)) return;
+
+        hl_error_t *error = next_error(type);
+        if (!error) return;
+
+        error->type = type;
+        memcpy(&error->node, node, sizeof(*node));
+}
+
+
+
+
+unsigned int EXPORT hl_error_count()
+{
+        return errors.nerror;
+}
+
+
+
+
+/* Gibt den umliegenden Text um einen Node aus, hauptsächlich
+ * zur Fehlerausgabe
+ */
+static void print_node_context(hl_node_t *node, FILE *in, FILE *out)
+{
+        char *line = NULL;
+        size_t linesize = 0;
+        size_t linenum = 0;
+
+        fseek(in, 0, SEEK_SET);
+
+        while (getline(&line, &linesize, in) != EOF) {
+                linenum++;
+                if (linenum >= node->line - 2 && linenum <= node->line) {
+                        fprintf(out, "%5u. %s", (unsigned int) linenum, line);
+                }
+        }
+
+        for (int i = 0; i < node->pos; i++) fprintf(out, " ");
+        fprintf(out, "      ^\n\n");
+        free(line);
+}
+
+
+
+
+static void hl_print_error(unsigned int n, FILE *in, FILE *out)
+{
+        char *efmt = NULL;
+
+        hl_error_t *error;
+
+        if (n >= errors_in_tab())
+                return;
+
+        error = &errors.list[n];
+
+        if (error->type == e_none) return;
+        if (error->type & e_warn ) fprintf(out, "WARNING: ");
+        if (error->type & e_error) fprintf(out, "ERROR:   ");
+
+        switch (error->type) {
+        case e_out_of_memory:      efmt = "out of memory\n";                            break;
+        case e_pp_context:         efmt = "nestet macros are not suported: %s\n";       break;
+        case e_pp_macro_undef:     efmt = "macro \"%s\" is not defined\n";              break;
+        case e_code_after_end:     efmt = "end between code\n";                         break;
+        case e_datatype_missmatch: efmt = "datatype of opcode doesn't match address\n"; break;
+        case e_no_authority:       efmt = "block has no authority\n";                   break;
+        case e_unclear_authority:  efmt = "multiple authority in the same block\n";     break;
+        case e_empty_block:        efmt = "no code in block\n";                         break;
+        case e_unexpected_end:     efmt = "input ends without end statement\n";         break;
+        case e_unknown_symbol:     efmt = "symbol unknonwn\n";                          break;
+        case e_expect_opcode:      efmt = "opcode expected\n";                          break;
+        default: fprintf(out, "undefined error\n");
+        }
+
+        if (error->type & e_clear) fprintf(out, efmt);
+        if (error->type & e_string) fprintf(out, efmt, error->string);
+        if (error->type & e_node) {
+                fprintf(out, efmt);
+                print_node_context(&error->node, in, out);
+        }
+
+        fprintf(out, "\n");
+}
+
+
+
+
+void EXPORT hl_print_errors(FILE *in, FILE *out)
+{
+        int more;
+
+        for (int i = 0; i < errors_in_tab(); i++) {
+                hl_print_error(i, in, out);
+        }
+
+        more = errors_in_tab() - (sizeof(errors.list) / sizeof(*errors.list));
+        if (more > 0) {
+                fprintf(out, "there are %i more errors!", more);
         }
 }
+
+

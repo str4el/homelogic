@@ -57,14 +57,6 @@ typedef enum context_e {
 } context_t;
 
 
-typedef enum error_e {
-        e_noerror,
-        e_out_of_memory,
-        e_context,
-        e_undef
-} error_t;
-
-
 typedef struct scan_context_s {
         char *buffer;
         size_t buffer_size;
@@ -74,7 +66,6 @@ typedef struct scan_context_s {
         replace_t defines;
         macro_t *first_macro;
         macro_t *current_macro;
-        error_t error;
 } scan_context_t;
 
 
@@ -247,7 +238,7 @@ static int scan_define(scan_context_t *sc, char *line)
         copy_re_match(name, sizeof(name), line, match[1]);
         copy_re_match(subst, sizeof(subst), line, match[2]);
         if (add_to_replace_table(&sc->defines, name, subst)) {
-                sc->error = e_out_of_memory;
+                hl_set_error(e_out_of_memory);
                 return -1;
         }
 
@@ -269,7 +260,7 @@ static int scan_macro(scan_context_t *sc, char *line)
 
 
         if (sc->context != c_none) {
-                sc->error = e_context;
+                hl_set_string_error(e_pp_context, line);
                 return -1;
         }
         sc->context = c_macro;
@@ -280,7 +271,7 @@ static int scan_macro(scan_context_t *sc, char *line)
         while (regexec(&sc->re[4], line, nmatch, match, 0) != REG_NOMATCH) {
                 copy_re_match(name, sizeof(name), line, match[1]);
                 if (add_to_replace_table(&sc->current_macro->opts, name, "")) {
-                        sc->error = e_out_of_memory;
+                        hl_set_error(e_out_of_memory);
                         return -1;
                 }
                 line += match[1].rm_eo;
@@ -302,7 +293,7 @@ static int scan_endmacro(scan_context_t *sc, char *line)
         }
 
         if (sc->context != c_macro) {
-                sc->error = e_context;
+                hl_set_string_error(e_pp_context, line);
                 return -1;
         }
         sc->context = c_none;
@@ -310,7 +301,7 @@ static int scan_endmacro(scan_context_t *sc, char *line)
         fflush(sc->current_macro->in);
         sc->current_macro->next = new_macro();
         if (!sc->current_macro->next) {
-                sc->error = e_out_of_memory;
+                hl_set_error(e_out_of_memory);
                 return -1;
         }
         sc->current_macro = sc->current_macro->next;
@@ -333,7 +324,7 @@ static int scan_macrocall(scan_context_t *sc, char *line)
         }
 
         if (sc->context != c_none) {
-                sc->error = e_context;
+                hl_set_string_error(e_pp_context, line);
                 return -1;
         }
 
@@ -344,7 +335,7 @@ static int scan_macrocall(scan_context_t *sc, char *line)
                 m = m->next;
         }
         if (!m) {
-                sc->error = e_undef;
+                hl_set_string_error(e_pp_macro_undef, name);
                 return -1;
         }
 
@@ -352,7 +343,7 @@ static int scan_macrocall(scan_context_t *sc, char *line)
         int count = 0;
         while(regexec(&sc->re[4], pos, nmatch, match, 0) != REG_NOMATCH) {
                 if (count >= m->opts.used) {
-                        sc->error = e_undef;
+                        hl_set_string_error(e_pp_macro_undef, name);
                         return -1;
                 }
                 copy_re_match(m->opts.item[count].subst, sizeof(m->opts.item[count].subst), pos, match[1]);
@@ -360,7 +351,7 @@ static int scan_macrocall(scan_context_t *sc, char *line)
                 pos += match[0].rm_eo;
         }
         if (count != m->opts.used) {
-                sc->error = e_undef;
+                hl_set_string_error(e_pp_macro_undef, name);
                 return -1;
         }
 
@@ -376,15 +367,13 @@ static int scan_macrocall(scan_context_t *sc, char *line)
 static int init_context(scan_context_t *sc)
 {
         sc->context = c_none;
-        sc->error = e_noerror;
-
         sc->defines.size = 0;
         sc->defines.used = 0;
         sc->defines.item = NULL;
 
         sc->first_macro = sc->current_macro = new_macro();
         if (!sc->first_macro) {
-                sc->error = e_out_of_memory;
+                hl_set_error(e_out_of_memory);
                 return -1;
         }
 
@@ -393,7 +382,7 @@ static int init_context(scan_context_t *sc)
         sc->buffer_in = open_memstream(&sc->buffer, &sc->buffer_size);
         if (!sc->buffer_in) {
                 delete_macros(sc->first_macro);
-                sc->error = e_out_of_memory;
+                hl_set_error(e_out_of_memory);
                 return -1;
         }
         return 0;
@@ -427,19 +416,20 @@ int EXPORT hl_preprocessor (FILE *in, FILE *out)
         scan_context_t sc;
 
         if (init_context(&sc)) return -1;
+        hl_clear_error();
 
         if (regmcomp(sc.re, sizeof(sc.re) / sizeof(*sc.re),
-                     "#[[:space:]]*define[[:space:]]+([[:alpha:]][[:alnum:]]*)[[:space:]]+(.*)",
-                     "#[[:space:]]*macro[[:space:]]+([[:alpha:]][[:alnum:]]*)[[:space:]]*\\((.*)\\)",
+                     "#[[:space:]]*define[[:space:]]+([[:alpha:]_][[:alnum:]_]*)[[:space:]]+(.*)",
+                     "#[[:space:]]*macro[[:space:]]+([[:alpha:]_][[:alnum:]_]*)[[:space:]]*\\((.*)\\)",
                      "#[[:space:]]*endmacro[[:space:]]*$",
                      "[[:space:]]*([[:alpha:]_][[:alnum:]_]*)[[:space:]]*\\((.*)\\)",
-                     "[[:space:]]*([[:alpha:]_][[:alnum:]_]*)[[:space:]]*,?")) {
+                     "[[:space:]]*([[:alpha:]_%][[:alnum:]:._]*)[[:space:]]*,?")) {
                 deinit_context(&sc);
                 return -1;
         }
 
         while (getline(&line, &line_len, in) != -1) {
-                if (sc.error != e_noerror) {
+                if (hl_error_count()) {
                         ret = -1;
                         break;
                 }
