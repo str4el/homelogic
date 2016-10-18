@@ -189,10 +189,10 @@ static void hl_print_error(unsigned int n, FILE *in, FILE *out)
         default: fprintf(out, "undefined error\n");
         }
 
-        if (error->type & e_clear) fprintf(out, efmt);
+        if (error->type & e_clear) fprintf(out, "%s", efmt);
         if (error->type & e_string) fprintf(out, efmt, error->string);
         if (error->type & e_node) {
-                fprintf(out, efmt);
+                fprintf(out, "%s", efmt);
                 print_node_context(&error->node, in, out);
         }
 
