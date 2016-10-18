@@ -154,7 +154,7 @@ int do_compile (hlc_t *data, FILE *in, FILE *out)
         fseek(tmp, 0, SEEK_SET);
 
 
-        info("Parse ...\n");
+        info("Compile ...\n");
         hl_compile(data, tmp);
         hl_print_errors(tmp, stderr);
         fclose(tmp);
@@ -164,18 +164,12 @@ int do_compile (hlc_t *data, FILE *in, FILE *out)
                 return -1;
         }
 
-        info("Compile ... ");
-        fprintf(stderr, "Simulation, Jaja... ich werds schon wieder implementieren!\n");
-        /*
-        info("finished for %i devices.\n", hl_compile(data));
-
         if (out) {
                 if (hl_write_intel_hex(data, out) == 0) {
                         fprintf(stderr, "No data written to %s!\n", outfile);
                         return -1;
                 }
         }
-        */
 
         return 0;
 }
@@ -436,7 +430,7 @@ int load_program(hlc_t *data, int bus)
 
 
         for (uint16_t i = 0; i < sizeof(data->device) / sizeof(*data->device); i++) {
-                if (data->device[i].dd_program_size == 0) continue;
+                if (data->device[i].size == 0) continue;
 
                 info("Stop device %i.\n", i);
                 sprintf(buf, "STOP FE %02X\n", (uint8_t)i);

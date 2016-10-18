@@ -34,14 +34,14 @@ typedef struct hl_data_block_s {
 
 
 
-static int hll_expand_device_data(hl_device_data_t *dd, uint16_t size)
+static int hll_expand_device_data(hl_device_t *d, uint16_t size)
 {
-        if (size <= dd->dd_program_size) return 0;
-        char *new = realloc(dd->dd_program_memory, size);
+        if (size <= d->size) return 0;
+        char *new = realloc(d->memory, size);
         if (!new) return -1;
-        dd->dd_program_memory = new;
-        memset(dd->dd_program_memory + dd->dd_program_size, 0xFF, size - dd->dd_program_size);
-        dd->dd_program_size = size;
+        d->memory = new;
+        memset(d->memory + d->size, 0xFF, size - d->size);
+        d->size = size;
         return 0;
 }
 
@@ -60,7 +60,7 @@ static int hl_insert_device_data(hlc_t *data, hl_data_block_t *db, uint8_t devic
                 return -1;
         }
 
-        memcpy(data->device[device].dd_program_memory + db->db_pos, db->db_data, db->db_size);
+        memcpy(data->device[device].memory + db->db_pos, db->db_data, db->db_size);
         return 0;
 }
 
@@ -113,8 +113,8 @@ int EXPORT hl_read_intel_hex(hlc_t *data, FILE *file)
 
 
         for (int i = 0; i < sizeof(data->device) / sizeof(*data->device); i++) {
-                free(data->device[i].dd_program_memory);
-                data->device[i].dd_program_size = 0;
+                free(data->device[i].memory);
+                data->device[i].size = 0;
         }
 
 
@@ -198,7 +198,7 @@ int EXPORT hl_load_device(hlc_t *data, int bus, int n)
         char *ptr;
         int retry = 0;
 
-        int left = data->device[n].dd_program_size;
+        int left = data->device[n].size;
 
         uint16_t pos = 0;
         while (left) {
@@ -207,7 +207,7 @@ int EXPORT hl_load_device(hlc_t *data, int bus, int n)
                 ptr = vry;
                 ptr += sprintf(ptr, "%04X%02X", pos, len);
                 for (int i = 0; i < len; i++) {
-                        ptr += sprintf(ptr, "%02X", (uint8_t)data->device[n].dd_program_memory[pos + i]);
+                        ptr += sprintf(ptr, "%02X", (uint8_t)data->device[n].memory[pos + i]);
                 }
                 *ptr = 0;
 
@@ -229,7 +229,7 @@ int EXPORT hl_load_device(hlc_t *data, int bus, int n)
 
         }
 
-        return data->device[n].dd_program_size;
+        return data->device[n].size;
 }
 
 
@@ -243,7 +243,7 @@ int EXPORT hl_load_all(hlc_t *data, int bus)
 
 
         for (uint16_t i = 0; i < sizeof(data->device) / sizeof(*data->device); i++) {
-                if (data->device[i].dd_program_size == 0) continue;
+                if (data->device[i].size == 0) continue;
 
                 sprintf(buf, "STOP FE %02X\n", (uint8_t)i);
                 if (write(bus, buf, strlen(buf)) == -1) {

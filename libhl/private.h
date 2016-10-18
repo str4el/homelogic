@@ -44,7 +44,6 @@ typedef enum hl_error_type_e {
 
         e_out_of_memory         = 0x00000001,
         e_unknown               = 0x00000002,
-        e_unexpected_end        = 0x00000003,
 
         e_pp_context            = 0x00000010,
         e_pp_macro_undef        = 0x00000020,
@@ -53,6 +52,8 @@ typedef enum hl_error_type_e {
         e_unclear_authority     = 0x00000200,
         e_unknown_symbol        = 0x00000300,
         e_expect_opcode         = 0x00000400,
+
+        e_missing_end           = 0x00010000,
 
         e_code_after_end        = 0x01000000,
         e_no_authority          = 0x02000000,

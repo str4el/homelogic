@@ -136,46 +136,29 @@ void analyze_command(const struct command_s *cmd)
 
 
 
-int analyze_data(const hl_device_data_t *data)
+int analyze_data(const hl_device_t *dev)
 {
-        if (!data->dd_program_size) return 0;
-        printf("\tSize: %hu\n", data->dd_program_size);
+        size_t size = hl_program_size(dev);
+        if (!size) return 0;
+        printf("\tSize: %llu\n", (unsigned long long int) size);
 
-        if (data->dd_program_size < sizeof(struct program_header_s)) {
-                printf("\tProgram to small!\n");
-                return -1;
-        }
+        const struct program_header_s *head = (const struct program_header_s *) dev->memory;
 
-        const struct program_header_s *ph = (const struct program_header_s *) data->dd_program_memory;
-
-        printf("\tAddress map size: %hu\n", ph->ph_address_map_size);
-        printf("\tProgram size: %hu\n\n", ph->ph_program_size);
-
-        uint16_t size = sizeof(struct program_header_s);
-        size += ph->ph_address_map_size * sizeof(struct map_address_s);
-        size += ph->ph_program_size * sizeof(struct command_s);
-
-        if (data->dd_program_size != size) {
-                printf("\tDatasize doesn't match Headerdata!\n");
-                return 1;
-        }
-
+        printf("\tAddress map size: %hu\n", head->ph_address_map_size);
+        printf("\tProgram size: %hu\n\n", head->ph_program_size);
 
         printf("\tAddress map:\n");
-        for (int i = 0; i < ph->ph_address_map_size; i++) {
-                const struct map_address_s *ma = (void *) data->dd_program_memory
-                                + ph->ph_address_map_offset + i * sizeof(*ma);
-                analyze_address(ma);
+        struct map_address_s *ma = (struct map_address_s *) (dev->memory + head->ph_address_map_offset);
+        for (int i = 0; i < head->ph_address_map_size; i++) {
+                analyze_address(&ma[i]);
         }
         printf("\n");
 
         printf("\tCommands:\n");
-        for (int i = 0; i < ph->ph_program_size; i++) {
-                const struct command_s *cmd = (void *) data->dd_program_memory
-                                + ph->ph_program_offset + i * sizeof(*cmd);
-                analyze_command(cmd);
+        struct command_s *cmd = (struct command_s *) (dev->memory + head->ph_program_offset);
+        for (int i = 0; i < head->ph_program_size; i++) {
+                analyze_command(&cmd[i]);
         }
-
 
         return 0;
 }
@@ -224,7 +207,7 @@ int main (int argc, char *argv[])
 
         if (cpu == -1) {
                 for (int i = 0; i < sizeof(hlc->device) / sizeof(*hlc->device); i++) {
-                        if (hlc->device[i].dd_program_size) {
+                        if (hl_program_size(&hlc->device[i])) {
                                 printf("Device %i:\n", i);
                                 analyze_data(&hlc->device[i]);
                                 printf("\n");

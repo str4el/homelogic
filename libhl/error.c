@@ -183,7 +183,7 @@ static void hl_print_error(unsigned int n, FILE *in, FILE *out)
         case e_no_authority:       efmt = "block has no authority\n";                   break;
         case e_unclear_authority:  efmt = "multiple authority in the same block\n";     break;
         case e_empty_block:        efmt = "no code in block\n";                         break;
-        case e_unexpected_end:     efmt = "input ends without end statement\n";         break;
+        case e_missing_end:        efmt = "input ends without end statement\n";         break;
         case e_unknown_symbol:     efmt = "symbol unknonwn\n";                          break;
         case e_expect_opcode:      efmt = "opcode expected\n";                          break;
         default: fprintf(out, "undefined error\n");

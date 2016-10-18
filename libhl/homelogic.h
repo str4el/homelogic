@@ -70,12 +70,27 @@ typedef enum hl_address_type_e {
 } hl_address_type_t;
 
 
+
+
 typedef enum hl_address_size_e {
         s_bit,
         s_byte,
         s_word,
         s_dword
 } hl_address_size_t;
+
+
+
+
+typedef enum hl_node_type_e {
+        n_none,
+        n_invalid,
+        n_opcode,
+        n_address,
+        n_const,
+        n_symbol,
+        n_target,
+} hl_node_type_t;
 
 
 
@@ -123,38 +138,6 @@ typedef struct hl_address_s {
 
 
 
-typedef struct hl_command_data_s {
-        hl_data_type_t cd_data_type;
-        union {
-                hl_address_t cd_address;
-                uint16_t cd_constant;
-                uint16_t cd_label;
-        };
-} hl_command_data_t;
-
-
-
-
-typedef struct hl_command_s {
-        hl_opcode_t c_opcode;
-        hl_command_data_t c_data;
-} hl_command_t;
-
-
-
-
-typedef enum hl_node_type_e {
-        n_none,
-        n_invalid,
-        n_opcode,
-        n_address,
-        n_const,
-        n_symbol,
-        n_target,
-} hl_node_type_t;
-
-
-
 
 typedef struct hl_node_s {
         hl_node_type_t type;
@@ -169,6 +152,8 @@ typedef struct hl_node_s {
                 char target [HL_MAX_LABEL_LEN];
         };
 } hl_node_t;
+
+
 
 
 typedef struct hl_node_tab_s {
@@ -189,31 +174,10 @@ typedef struct hl_block_s {
 
 
 
-typedef struct hl_command_block_s {
-        size_t cb_size;
-        size_t cb_used;
-        hl_command_t *cb_commands;
-} hl_command_block_t;
-
-
-
-
-typedef struct hl_address_map_s {
-        size_t am_size;
-        size_t am_used;
-        hl_command_data_t *am_addresses;
-} hl_address_map_t;
-
-
-
-
-typedef struct hl_device_data_s {
-        hl_address_map_t dd_am;
-        hl_command_block_t dd_cb;
-
-        uint16_t dd_program_size;
-        char *dd_program_memory;
-} hl_device_data_t;
+typedef struct hl_device_s {
+        size_t size;
+        char *memory;
+} hl_device_t;
 
 
 
@@ -242,7 +206,7 @@ typedef struct hlc_s {
         hl_node_tab_t nodes;
         hl_block_t *block;
         size_t block_count;
-        hl_device_data_t device[HL_MAX_DEVICES];
+        hl_device_t device[HL_MAX_DEVICES];
 } hlc_t;
 
 
@@ -278,6 +242,7 @@ extern void hl_print_errors(FILE *in, FILE *out);
 
 extern int hl_preprocessor(FILE *in, FILE *out);
 
+extern size_t hl_program_size(const hl_device_t *dev);
 extern hlc_t *hl_compiler_init(void);
 extern void hl_compiler_destroy(hlc_t *data);
 extern int hl_compile (hlc_t *hlc, FILE *in);
