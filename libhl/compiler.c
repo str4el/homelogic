@@ -66,6 +66,9 @@ typedef enum hl_opcode_num_e {
 
 
 
+
+/* Initialisiert die Nodeliste.
+ */
 static inline void init_node_tab (hl_node_tab_t *tab)
 {
         tab->size = 0;
@@ -76,6 +79,8 @@ static inline void init_node_tab (hl_node_tab_t *tab)
 
 
 
+/* Gibt den Speicher der Nodeliste wieder frei.
+ */
 static inline void clear_node_tab (hl_node_tab_t *tab)
 {
         if (tab->node) free(tab->node);
@@ -85,6 +90,9 @@ static inline void clear_node_tab (hl_node_tab_t *tab)
 
 
 
+/* Fügt einen Node der Liste hinzu. Gibt 0 bei erfolg und
+ * -1 im fehlerfall zurück.
+ */
 static int add_node (hl_node_tab_t *tab, hl_node_t *node)
 {
         if (!tab || !node) return -1;
@@ -459,6 +467,9 @@ static inline bool node_is_writing_opcode(hlc_t *hlc, size_t n)
 
 
 
+/* Gibt die Geräteadresse im Node zurück, wenn dieser existiert und
+ * eine Adresse enthält oder -1 im Fehlerfall.
+ */
 static inline int node_has_device_address(hlc_t *hlc, size_t n)
 {
         if (n >= hlc->nodes.used) return -1;
@@ -689,6 +700,11 @@ static int device_alloc (hlc_t *hlc, int device)
 
 
 
+/* Wandelt die Adresse im Node um und hängt sie dem Devicespeicher an.
+ * ACHTUNG: Es wird nicht überprüft ob Node tatsächlich eine Adresse
+ * enthält, genügend Speicher vorhanden ist oder ob etwas übersrieben
+ * wird!
+ */
 static void assemble_add_address (hlc_t *hlc, int device, hl_node_t *node)
 {
         void *ptr = hlc->device[device].memory;
@@ -717,6 +733,8 @@ static void assemble_add_address (hlc_t *hlc, int device, hl_node_t *node)
 
 
 
+/* Sucht nach Adressen in der Nodeliste und erzeugt die address_map
+ */
 static void assemble_address_map (hlc_t *hlc, int device)
 {
         for (size_t block = 0; block < hlc->block_count; block++) {
@@ -779,6 +797,10 @@ static void assemble_command(hl_node_t *node, struct command_s *out)
 
 
 
+/* Erstellt das eigentliche Ablaufprogramm für das angegebene Device
+ * ACHTUNG: Es muss genügend Speicher für das Device reserviert sein
+ * und der Kopf korrekte Daten enthalten.
+ */
 static void assemble_program (hlc_t *hlc, int device)
 {
         void *mem = hlc->device[device].memory;
@@ -835,6 +857,10 @@ static uint16_t crc16_update(uint16_t crc, uint8_t data)
 
 
 
+/* Erstellt den Speicherinhalt für das angegebe Device.
+ * Funktion kann nur fehlschlagen wenn nicht genügend Speicher
+ * vorhanden ist und gibt dann -1 zurück, ansosten 0.
+ */
 static int assemble_device (hlc_t *hlc, int device)
 {
         if (device_alloc(hlc, device)) return -1;
@@ -868,6 +894,9 @@ static int assemble_device (hlc_t *hlc, int device)
 
 
 
+/* Berechnet die größe die das Programm im Speicher belegt und gibt
+ * den Wert zurück.
+ */
 size_t EXPORT hl_program_size(const hl_device_t *dev)
 {
         size_t size;
@@ -890,7 +919,8 @@ size_t EXPORT hl_program_size(const hl_device_t *dev)
 
 
 
-
+/* Kompeliert das Programm aus dem Stream.
+ */
 int EXPORT hl_compile(hlc_t *hlc, FILE *in)
 {
         if (scan_file(hlc, in)) {
@@ -913,6 +943,9 @@ int EXPORT hl_compile(hlc_t *hlc, FILE *in)
 
 
 
+/* Gibt eine initialisierte Kompilerstruktur zurück oder
+ * NULL im fehlerfall.
+ */
 hlc_t EXPORT *hl_compiler_init()
 {
         hlc_t *data;
@@ -934,6 +967,8 @@ hlc_t EXPORT *hl_compiler_init()
 
 
 
+/* Gibt den belegten Speicher der Kompilerstruktur wieder frei
+ */
 void EXPORT hl_compiler_destroy(hlc_t *hlc)
 {
         if (!hlc) return;
@@ -960,6 +995,11 @@ void EXPORT hl_compiler_destroy(hlc_t *hlc)
 
 
 
+
+/* Erzeugt eine Intel Hex datei aus dem Speicherinhalt in
+ * der Kompilerstruktur. Gibt die Anzahl der Devices zurück
+ * die in der Datei abgespeichert wurden.
+ */
 int EXPORT hl_write_intel_hex(hlc_t *hlc, FILE *file)
 {
         int ret = 0;
