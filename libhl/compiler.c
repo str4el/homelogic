@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 
 #include "private.h"
@@ -100,53 +101,56 @@ static uint16_t hlc_crc16_update(uint16_t crc, uint8_t data)
 
 
 
-
-static int hlc_get_constant(const char *chunk, hl_command_data_t *data)
+/* Versucht aus dem Token eine Konstatnte zu lesen und speichert den
+ * gelesen Wert in der command_data ab.
+ * Gibt bei Erfolg 0 zurück, andernfalls -1
+ */
+static int hlc_get_constant(const char *token, hl_command_data_t *cd)
 {
         unsigned int val;
         double time;
         char time_base;
 
-        if (sscanf(chunk, "0x%x", &val) == 1) {
-                data->cd_data_type = dt_constant;
-                data->cd_constant = val;
+        if (sscanf(token, "0x%x", &val) == 1) {
+                cd->cd_data_type = dt_constant;
+                cd->cd_constant = val;
                 return 0;
         }
 
-        if (sscanf(chunk, "%lf%1[ms]", &time, &time_base) == 2) {
-                data->cd_data_type = dt_constant;
+        if (sscanf(token, "%lf%1[ms]", &time, &time_base) == 2) {
+                cd->cd_data_type = dt_constant;
                 if (time_base == 'm') time *= 60;
                 val = (unsigned int) (time * 100);
 
                 if (val <= 1000) {
-                        data->cd_constant = val | TIMER_F001;
+                        cd->cd_constant = val | TIMER_F001;
                         return 0;
                 }
 
                 val /= 10;
                 if (val <= 1000) {
-                        data->cd_constant = val | TIMER_F01;
+                        cd->cd_constant = val | TIMER_F01;
                         return 0;
                 }
 
                 val /= 10;
                 if (val <= 1000) {
-                        data->cd_constant = val | TIMER_F1;
+                        cd->cd_constant = val | TIMER_F1;
                         return 0;
                 }
 
                 val /= 10;
                 if (val <= 1000) {
-                        data->cd_constant = val | TIMER_F10;
+                        cd->cd_constant = val | TIMER_F10;
                         return 0;
                 }
 
                 return -1;
         }
 
-        if (sscanf(chunk, "%u", &val) == 1) {
-                data->cd_data_type = dt_constant;
-                data->cd_constant = val;
+        if (sscanf(token, "%u", &val) == 1) {
+                cd->cd_data_type = dt_constant;
+                cd->cd_constant = val;
                 return 0;
         }
 
@@ -156,25 +160,29 @@ static int hlc_get_constant(const char *chunk, hl_command_data_t *data)
 
 
 
-static int hlc_get_timer_counter(const char *chunk, hl_command_data_t *adr)
+/* Versucht aus dem Token eine gültige Timer- oder Counteradresse zu lesen
+ * und legt diese in der command_data ab.
+ * Gibt bei erfolg 0 zurück, andernfalls -1.
+ */
+static int hlc_get_timer_counter(const char *token, hl_command_data_t *cd)
 {
         char type[1];
-        int count = sscanf(chunk, "%%%1[tTcCzZ]:%hhu.%hhu", type, &adr->cd_address.cd_device, &adr->cd_address.cd_byte);
+        int count = sscanf(token, "%%%1[tTcCzZ]:%hhu.%hhu", type, &cd->cd_address.cd_device, &cd->cd_address.cd_byte);
         if (count != 3) return -1;
 
         switch(type[0]) {
         case 't':
         case 'T':
-                adr->cd_address.cd_mem_type = mt_timer;
-                adr->cd_data_type = dt_timer;
+                cd->cd_address.cd_mem_type = mt_timer;
+                cd->cd_data_type = dt_timer;
                 break;
 
         case 'c':
         case 'C':
         case 'z':
         case 'Z':
-                adr->cd_address.cd_mem_type = mt_counter;
-                adr->cd_data_type = dt_counter;
+                cd->cd_address.cd_mem_type = mt_counter;
+                cd->cd_data_type = dt_counter;
                 break;
 
         default:
@@ -187,18 +195,22 @@ static int hlc_get_timer_counter(const char *chunk, hl_command_data_t *adr)
 
 
 
-static int hlc_get_address(const char *chunk, hl_command_data_t *adr)
+/* Versucht aus dem Token eine gültige Speicheradresse zu lesen und
+ * legt diese in der command_data ab.
+ * Gibt bei erfolg 0 zurück, andernfalls -1.
+ */
+static int hlc_get_address(const char *token, hl_command_data_t *cd)
 {
         char type[2];
 
-        int count = sscanf(chunk, "%%%2c:%hhu.%hhu.%hhu", type, &adr->cd_address.cd_device, &adr->cd_address.cd_byte, &adr->cd_address.cd_bit);
+        int count = sscanf(token, "%%%2c:%hhu.%hhu.%hhu", type, &cd->cd_address.cd_device, &cd->cd_address.cd_byte, &cd->cd_address.cd_bit);
         if (count >= 3) {
                 switch (type[0]) {
                         case 'i':
                         case 'I':
                         case 'e':
                         case 'E':
-                                adr->cd_address.cd_mem_type = mt_input;
+                                cd->cd_address.cd_mem_type = mt_input;
                                 break;
 
                         case 'o':
@@ -207,12 +219,12 @@ static int hlc_get_address(const char *chunk, hl_command_data_t *adr)
                         case 'Q':
                         case 'a':
                         case 'A':
-                                adr->cd_address.cd_mem_type = mt_output;
+                                cd->cd_address.cd_mem_type = mt_output;
                                 break;
 
                         case 'm':
                         case 'M':
-                                adr->cd_address.cd_mem_type = mt_memory;
+                                cd->cd_address.cd_mem_type = mt_memory;
                                 break;
 
                         default:
@@ -223,17 +235,17 @@ static int hlc_get_address(const char *chunk, hl_command_data_t *adr)
                         case 'x':
                         case 'X':
                                 if (count < 4) return -1;
-                                adr->cd_data_type = dt_bit;
+                                cd->cd_data_type = dt_bit;
                                 break;
 
                         case 'b':
                         case 'B':
-                                adr->cd_data_type = dt_byte;
+                                cd->cd_data_type = dt_byte;
                                 break;
 
                         case 'w':
                         case 'W':
-                                adr->cd_data_type = dt_word;
+                                cd->cd_data_type = dt_word;
                                 break;
 
 //                        case 'd':
@@ -272,58 +284,6 @@ static inline void hlc_convert_to_word_address (hl_command_data_t *address)
                 address->cd_data_type = dt_word;
                 address->cd_address.cd_byte &= ~1;
         }
-}
-
-
-
-
-static int hlc_add_to_symbol_table (hlc_t *data, const char *name, const char *subst)
-{
-        int n = data->d_sym_tab.st_used;
-        for (int i = 0; i < n; i++) {
-                if (0 == strcmp(name, data->d_sym_tab.st_sym[i].s_name)) {
-                        char *new = realloc(data->d_sym_tab.st_sym[i].s_subst, strlen(subst) + 1);
-                        if (!new) return -1;
-                        strcpy(new, subst);
-                        data->d_sym_tab.st_sym[i].s_subst = new;
-                        return 0;
-                }
-        }
-
-        if (n >= data->d_sym_tab.st_size) {
-                void *new = realloc(data->d_sym_tab.st_sym, (data->d_sym_tab.st_size + 10) * sizeof(*(data->d_sym_tab.st_sym)));
-                if (!new) return -1;
-                data->d_sym_tab.st_sym = new;
-                data->d_sym_tab.st_size += 10;
-        }
-
-        data->d_sym_tab.st_sym[n].s_name = malloc(strlen(name) + 1);
-        if (!data->d_sym_tab.st_sym[n].s_name) return -1;
-        data->d_sym_tab.st_sym[n].s_subst = malloc(strlen(subst) + 1);
-        if (!data->d_sym_tab.st_sym[n].s_subst) {
-                free(data->d_sym_tab.st_sym[n].s_name);
-                return -1;
-        }
-
-        strcpy(data->d_sym_tab.st_sym[n].s_name, name);
-        strcpy(data->d_sym_tab.st_sym[n].s_subst, subst);
-        data->d_sym_tab.st_used += 1;
-
-        return 0;
-}
-
-
-
-
-static void hlc_clear_symbol_table (hlc_t *data)
-{
-        for (int i = 0; i < data->d_sym_tab.st_used; i++) {
-                free(data->d_sym_tab.st_sym[i].s_name);
-                free(data->d_sym_tab.st_sym[i].s_subst);
-        }
-        free(data->d_sym_tab.st_sym);
-        data->d_sym_tab.st_size = 0;
-        data->d_sym_tab.st_used = 0;
 }
 
 
@@ -421,49 +381,133 @@ static inline void hlc_clear_command_block (hl_command_block_t *cb)
 
 
 
-static char *hlc_get_chunk(hlc_t *data, FILE *file)
+/* Sucht im Inputstream nach dem nächsten Token.
+ * Komentare werden ignoriert und Anführungszeichen berücksichtigt.
+ * Gibt das Token zurück oder NULL.
+ * Der gelesene Token wird im scan_context abgespeichert.
+ */
+const char *hl_scan_token(hl_scan_context_t *sc)
 {
-        static char chunk[64];
-        if (fscanf(file, "%63s", chunk) != 1) {
-                return NULL;
-        }
+        int c;
+        size_t len = 0;
 
-        for (int i = 0; i < data->d_sym_tab.st_used; i++) {
-                if (0 == strcmp(chunk, data->d_sym_tab.st_sym[i].s_name)) {
-                        return data->d_sym_tab.st_sym[i].s_subst;
+        while ((c = fgetc(sc->sc_in)) != EOF) {
+                // Zeilen und Zeichenzähler für die Fehlerausgabe
+                if (c == '\n') {
+                        sc->sc_line++;
+                        sc->sc_char = 0;
+                } else {
+                        sc->sc_char++;
                 }
+
+                switch(sc->sc_context) {
+                case tc_none:
+                        switch(c) {
+                        case '"':
+                                sc->sc_context = tc_quote;
+                                continue;
+
+                        case '#':
+                                sc->sc_context = tc_comment_single_line;
+                                continue;
+
+                        case '/':
+                                c = fgetc(sc->sc_in);
+                                switch(c) {
+                                case EOF:
+                                        return NULL;
+                                case '/':
+                                        sc->sc_context = tc_comment_single_line;
+                                        continue;
+                                case '*':
+                                        sc->sc_context = tc_comment_multi_line;
+                                        continue;
+                                }
+                                ungetc(c, sc->sc_in);
+                                c = '/';
+                        }
+
+                        if (isspace(c)) {
+                                if (len > 0) return sc->sc_token;
+                                continue;
+                        }
+
+                        if (len >= sizeof(sc->sc_token) - 1) {
+                                return NULL;
+                        }
+                        sc->sc_token[len++] = (char)c;
+                        sc->sc_token[len] = 0;
+                        break;
+
+                case tc_quote:
+                        if (c == '"') {
+                                sc->sc_context = tc_none;
+                                if (len > 0) return sc->sc_token;
+                                continue;
+                        }
+                        if (len >= sizeof(sc->sc_token) - 1) {
+                                return NULL;
+                        }
+                        sc->sc_token[len++] = (char)c;
+                        sc->sc_token[len] = 0;
+                        break;
+
+                case tc_comment_single_line:
+                        if (c == '\n') sc->sc_context = tc_none;
+                        break;
+
+                case tc_comment_multi_line:
+                        if (c == '*') {
+                                c = fgetc(sc->sc_in);
+                                if (c == '/') {
+                                        sc->sc_context = tc_none;
+                                        continue;
+                                }
+
+                                if (c == EOF) {
+                                        return NULL;
+                                }
+
+                                ungetc(c, sc->sc_in);
+                        }
+                        break;
+
+                }
+
         }
 
-        return chunk;
+        if (len > 0) return sc->sc_token;
+        return NULL;
 }
 
 
 
 
-static int hlc_scan_command(hlc_t *data, FILE *file, hl_opcode_t opcode, hl_command_block_t *cb, hl_address_map_t *am)
+static int hlc_scan_command(hlc_t *data, hl_opcode_t opcode, hl_command_block_t *cb, hl_address_map_t *am)
 {
         static int current_device = -1;
+        const char *token;
+
 
         hl_command_t command;
         command.c_opcode = opcode;
         command.c_data.cd_data_type = dt_none;
 
         if (opcode.oc_data_type != dt_none) {
-                char *chunk = hlc_get_chunk(data, file);
-                if (!chunk) {
-                        hlc_set_error(data, hl_e_corrupt_input_file, chunk);
+                if ((token = hl_scan_token(&data->d_scan)) == NULL) {
+                        hlc_set_error(data, hl_e_unexpected_end, "");
                         return -1;
                 }
 
-                if (hlc_get_timer_counter(chunk, &command.c_data) &&
-                    hlc_get_address(chunk, &command.c_data) &&
-                    hlc_get_constant(chunk, &command.c_data)) {
-                        hlc_set_error(data, hl_e_opaque_datatype, chunk);
+                if (hlc_get_timer_counter(token, &command.c_data) &&
+                    hlc_get_address(token, &command.c_data) &&
+                    hlc_get_constant(token, &command.c_data)) {
+                        hlc_set_error(data, hl_e_opaque_datatype, token);
                         return -1;
                 }
 
                 if (!(opcode.oc_data_type & command.c_data.cd_data_type)) {
-                        hlc_set_error(data, hl_e_datatype_missmatch, chunk);
+                        hlc_set_error(data, hl_e_datatype_missmatch, token);
                         return -1;
                 }
 
@@ -471,7 +515,7 @@ static int hlc_scan_command(hlc_t *data, FILE *file, hl_opcode_t opcode, hl_comm
                         if (current_device < 0) {
                                 current_device = command.c_data.cd_address.cd_device;
                         } else if (current_device != command.c_data.cd_address.cd_device) {
-                                hlc_set_error(data, hl_e_unclear_authority, chunk);
+                                hlc_set_error(data, hl_e_unclear_authority, token);
                                 return -1;
                         }
                 }
@@ -552,7 +596,6 @@ void EXPORT hl_compiler_destroy(hlc_t *data)
                 hlc_clear_command_block(&dd.dd_cb);
                 if (dd.dd_program_memory) free(dd.dd_program_memory);
         }
-        hlc_clear_symbol_table(data);
         free(data);
 }
 
@@ -562,36 +605,23 @@ void EXPORT hl_compiler_destroy(hlc_t *data)
 int EXPORT hl_scan_instruction_list (hlc_t *data, FILE* file)
 {
         int ret = 0;
-        char *chunk;
+        int ocn;
+        const char *token;
 
-        hl_command_block_t cb = {
-                .cb_size = 0,
-                .cb_used = 0,
-                .cb_commands = NULL
-        };
+        hl_command_block_t cb;
+        hl_address_map_t am;
 
-        hl_address_map_t am = {
-                .am_size = 0,
-                .am_used = 0,
-                .am_addresses = NULL
-        };
+        memset(&cb, 0, sizeof(cb));
+        memset(&am, 0, sizeof(am));
 
-        while ((chunk = hlc_get_chunk(data, file))) {
-                if (0 == strcmp(chunk, "#define")) {
-                        char c1[64], c2[64];
-                        if (2 == fscanf(file, "%63s %63s", c1, c2)) {
-                                hlc_add_to_symbol_table(data, c1, c2);
-                        } else {
-                                hlc_set_error(data, hl_e_unexpected_end, NULL);
-                                return -1;
-                        }
+        data->d_scan.sc_in = file;
+        data->d_scan.sc_line = 1;
+        data->d_scan.sc_char = 0;
 
-                        continue;
-                }
-
-                int ocn = hlc_get_opcode(chunk);
+        while ((token = hl_scan_token(&data->d_scan)) != NULL) {
+                ocn = hlc_get_opcode(token);
                 if (ocn >= 0) {
-                        if (hlc_scan_command(data, file, opcodes[ocn], &cb, &am)) {
+                        if (hlc_scan_command(data, opcodes[ocn], &cb, &am)) {
                                 hlc_clear_address_map(&am);
                                 hlc_clear_command_block(&cb);
                                 return -1;

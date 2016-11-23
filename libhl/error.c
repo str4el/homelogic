@@ -30,7 +30,9 @@ const char unclear_authority[] = "different responsibilities in the same network
 const char out_of_range[] = "out of range";
 const char unexpected_end[] = "unexpected end of input stream";
 const char unreachable_device[] = "device is not reachable";
+const char scan_error[] = "can not scan input stream";
 const char corrupt_input_file[] = "input stream is damaged";
+const char unknown_token[] = "unknown token";
 const char unknown[] = "unknown error";
 
 
@@ -46,7 +48,9 @@ const char EXPORT *hl_strerror(hl_error_t num)
         case hl_e_out_of_range:       return out_of_range;       break;
         case hl_e_unexpected_end:     return unexpected_end;     break;
         case hl_e_unreachable_device: return unreachable_device; break;
+        case hl_e_scan_error:         return scan_error;         break;
         case hl_e_corrupt_input_file: return corrupt_input_file; break;
+        case hl_e_unknown_token:      return unknown_token;      break;
         default:                      return unknown;            break;
         }
 }

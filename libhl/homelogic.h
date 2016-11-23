@@ -34,6 +34,7 @@ extern "C" {
 
 #define HL_MAX_DEVICES 128
 #define HL_MAX_LINE_LEN 1024
+#define HL_MAX_TOKEN_LEN 128
 
 
 /* Flags für connector
@@ -52,7 +53,9 @@ typedef enum hl_error_e {
         hl_e_out_of_range,
         hl_e_unexpected_end,
         hl_e_unreachable_device,
-        hl_e_corrupt_input_file
+        hl_e_scan_error,
+        hl_e_corrupt_input_file,
+        hl_e_unknown_token
 } hl_error_t;
 
 
@@ -175,18 +178,26 @@ typedef struct hl_device_data_s {
 
 
 
+typedef struct hl_scan_context_s {
+        FILE *sc_in;
+        enum hl_token_context_e {
+                tc_none,
+                tc_quote,
+                tc_comment_single_line,
+                tc_comment_multi_line
+        } sc_context;
+
+        size_t sc_line;
+        size_t sc_char;
+
+        char sc_token[HL_MAX_TOKEN_LEN];
+} hl_scan_context_t;
+
+
+
 typedef struct hlc_s {
         hl_device_data_t d_device[HL_MAX_DEVICES];
-
-        struct hlc_symbol_table_s {
-                size_t st_size;
-                size_t st_used;
-                struct hlc_symbol_s {
-                        char *s_name;
-                        char *s_subst;
-                } *st_sym;
-        } d_sym_tab;
-
+        hl_scan_context_t d_scan;
         hl_error_t d_errno;
         char d_errchunk[64];
 } hlc_t;
@@ -220,6 +231,7 @@ typedef struct hlcon_s {
 
 
 
+extern int hl_preprocessor(FILE *in, FILE *out);
 
 extern hlc_t *hl_compiler_init(void);
 extern void hl_compiler_destroy(hlc_t *data);
