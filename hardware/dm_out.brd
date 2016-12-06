@@ -74,6 +74,8 @@
 <text x="3.4925" y="18.415" size="0.8128" layer="25" align="center-left">V+</text>
 <text x="10.16" y="26.035" size="0.8128" layer="25" align="center-left">+3V3</text>
 <text x="7.9375" y="20.955" size="0.8128" layer="25" rot="R90" align="center">GPIO</text>
+<text x="12.7" y="5.715" size="1.27" layer="25" rot="R90" align="center">Homelogic</text>
+<text x="14.9225" y="5.715" size="1.27" layer="25" rot="R90" align="center">DMO</text>
 </plain>
 <libraries>
 <library name="transistor">
