@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="6.5.0">
+<eagle version="6.6.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="yes"/>
@@ -9,6 +9,10 @@
 <grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
+<layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
+<layer number="3" name="Route3" color="4" fill="3" visible="no" active="no"/>
+<layer number="14" name="Route14" color="1" fill="6" visible="no" active="no"/>
+<layer number="15" name="Route15" color="4" fill="6" visible="no" active="no"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="no" active="no"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="no" active="no"/>
@@ -314,248 +318,6 @@ Datasheet: &lt;a href="./eagle/doc/package/to220.pdf"&gt;to220.pdf&lt;/a&gt;</de
 <connect gate="G$1" pin="B" pad="1"/>
 <connect gate="G$1" pin="C" pad="3"/>
 <connect gate="G$1" pin="E" pad="2"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
-<library name="ic-mcu">
-<description>&lt;b&gt;Microcontroller&lt;/b&gt;&lt;p&gt;
-
-&lt;table border=1 cellpadding=3&gt;
-        &lt;tr&gt;
-                &lt;th&gt;Typ&lt;/th&gt;
-                &lt;th&gt;Flash&lt;/th&gt;
-                &lt;th&gt;SRAM&lt;/th&gt;
-                &lt;th&gt;EEPROM&lt;/th&gt;
-                &lt;th&gt;GPIO&lt;/th&gt;
-                &lt;th&gt;ADC&lt;/th&gt;
-                &lt;th&gt;DAC&lt;/th&gt;
-                &lt;th&gt;PWM&lt;/th&gt;
-                &lt;th&gt;Timer&lt;/th&gt;
-                &lt;th&gt;Ports&lt;/th&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-                &lt;td&gt; &lt;a href="./eagle/doc/ic-mcu/attiny24a_44a.pdf"&gt;ATtiny44A&lt;/a&gt;&lt;/td&gt;
-                &lt;td&gt;4kB&lt;/td&gt;
-                &lt;td&gt;256B&lt;/td&gt;
-                &lt;td&gt;256B&lt;/td&gt;
-                &lt;td&gt;12&lt;/td&gt;
-                &lt;td&gt;8x 10bit&lt;/td&gt;
-                &lt;td&gt;&lt;/td&gt;
-                &lt;td&gt;2x 8bit&lt;/td&gt;
-                &lt;td&gt;1x 8bit, 1x 16bit&lt;/td&gt;
-                &lt;td&gt;USI&lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-                &lt;td&gt; &lt;a href="./eagle/doc/ic-mcu/atmega32a.pdf"&gt;ATmega32A&lt;/a&gt;&lt;/td&gt;
-                &lt;td&gt;32kB&lt;/td&gt;
-                &lt;td&gt;2kB&lt;/td&gt;
-                &lt;td&gt;1kB&lt;/td&gt;
-                &lt;td&gt;32&lt;/td&gt;
-                &lt;td&gt;8x 10bit&lt;/td&gt;
-                &lt;td&gt;&lt;/td&gt;
-                &lt;td&gt;2x 8bit, 2x 16bit&lt;/td&gt;
-                &lt;td&gt;2x 8bit, 1x 16bit&lt;/td&gt;
-                &lt;td&gt;JTAG, USART, I2C, SPI&lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-                &lt;td&gt; &lt;a href="./eagle/doc/ic-mcu/atmega164a_164pa_324a_324pa_644a_644pa_1284a_1284pa.pdf"&gt;ATmega1284A&lt;/a&gt;&lt;/td&gt;
-                &lt;td&gt;128kB&lt;/td&gt;
-                &lt;td&gt;16kB&lt;/td&gt;
-                &lt;td&gt;4kB&lt;/td&gt;
-                &lt;td&gt;32&lt;/td&gt;
-                &lt;td&gt;8x 10bit&lt;/td&gt;
-                &lt;td&gt;&lt;/td&gt;
-                &lt;td&gt;4x 8bit, 2x 16bit&lt;/td&gt;
-                &lt;td&gt;2x 8bit, 1x 16bit&lt;/td&gt;
-                &lt;td&gt;JTAG, 2x USART, I2C, SPI&lt;/td&gt;
-        &lt;/tr&gt;
-&lt;/table&gt;</description>
-<packages>
-<package name="QFP32_08">
-<circle x="-2.5" y="2.5" radius="0.3" width="0.2" layer="21"/>
-<smd name="1" x="-4.3" y="2.8" dx="1.5" dy="0.5" layer="1"/>
-<smd name="2" x="-4.3" y="2" dx="1.5" dy="0.5" layer="1"/>
-<smd name="3" x="-4.3" y="1.2" dx="1.5" dy="0.5" layer="1"/>
-<smd name="4" x="-4.3" y="0.4" dx="1.5" dy="0.5" layer="1"/>
-<smd name="5" x="-4.3" y="-0.4" dx="1.5" dy="0.5" layer="1"/>
-<smd name="6" x="-4.3" y="-1.2" dx="1.5" dy="0.5" layer="1"/>
-<smd name="7" x="-4.3" y="-2" dx="1.5" dy="0.5" layer="1"/>
-<smd name="8" x="-4.3" y="-2.8" dx="1.5" dy="0.5" layer="1"/>
-<smd name="9" x="-2.8" y="-4.3" dx="0.5" dy="1.5" layer="1"/>
-<smd name="10" x="-2" y="-4.3" dx="0.5" dy="1.5" layer="1"/>
-<smd name="11" x="-1.2" y="-4.3" dx="0.5" dy="1.5" layer="1"/>
-<smd name="12" x="-0.4" y="-4.3" dx="0.5" dy="1.5" layer="1"/>
-<smd name="13" x="0.4" y="-4.3" dx="0.5" dy="1.5" layer="1"/>
-<smd name="14" x="1.2" y="-4.3" dx="0.5" dy="1.5" layer="1"/>
-<smd name="15" x="2" y="-4.3" dx="0.5" dy="1.5" layer="1"/>
-<smd name="16" x="2.8" y="-4.3" dx="0.5" dy="1.5" layer="1"/>
-<smd name="17" x="4.3" y="-2.8" dx="1.5" dy="0.5" layer="1"/>
-<smd name="18" x="4.3" y="-2" dx="1.5" dy="0.5" layer="1"/>
-<smd name="19" x="4.3" y="-1.2" dx="1.5" dy="0.5" layer="1"/>
-<smd name="20" x="4.3" y="-0.4" dx="1.5" dy="0.5" layer="1"/>
-<smd name="21" x="4.3" y="0.4" dx="1.5" dy="0.5" layer="1"/>
-<smd name="22" x="4.3" y="1.2" dx="1.5" dy="0.5" layer="1"/>
-<smd name="23" x="4.3" y="2" dx="1.5" dy="0.5" layer="1"/>
-<smd name="24" x="4.3" y="2.8" dx="1.5" dy="0.5" layer="1"/>
-<smd name="25" x="2.8" y="4.3" dx="0.5" dy="1.5" layer="1"/>
-<smd name="26" x="2" y="4.3" dx="0.5" dy="1.5" layer="1"/>
-<smd name="27" x="1.2" y="4.3" dx="0.5" dy="1.5" layer="1"/>
-<smd name="28" x="0.4" y="4.3" dx="0.5" dy="1.5" layer="1"/>
-<smd name="29" x="-0.4" y="4.3" dx="0.5" dy="1.5" layer="1"/>
-<smd name="30" x="-1.2" y="4.3" dx="0.5" dy="1.5" layer="1"/>
-<smd name="31" x="-2" y="4.3" dx="0.5" dy="1.5" layer="1"/>
-<smd name="32" x="-2.8" y="4.3" dx="0.5" dy="1.5" layer="1"/>
-<text x="-4" y="4" size="0.8128" layer="25" align="bottom-right">&gt;NAME</text>
-<text x="0" y="-6" size="0.8128" layer="27" align="top-center">&gt;VALUE</text>
-<rectangle x1="-3" y1="3.4" x2="-2.6" y2="4.5" layer="51"/>
-<wire x1="3.4" y1="3.4" x2="-2.9" y2="3.4" width="0.2" layer="21"/>
-<wire x1="-2.9" y1="3.4" x2="-3.4" y2="2.9" width="0.2" layer="21"/>
-<wire x1="-3.4" y1="2.9" x2="-3.4" y2="-3.4" width="0.2" layer="21"/>
-<wire x1="-3.4" y1="-3.4" x2="3.4" y2="-3.4" width="0.2" layer="21"/>
-<wire x1="3.4" y1="-3.4" x2="3.4" y2="3.4" width="0.2" layer="21"/>
-<rectangle x1="-2.2" y1="3.5" x2="-1.8" y2="4.5" layer="51"/>
-<rectangle x1="-1.4" y1="3.5" x2="-1" y2="4.5" layer="51"/>
-<rectangle x1="-0.6" y1="3.5" x2="-0.2" y2="4.5" layer="51"/>
-<rectangle x1="0.2" y1="3.5" x2="0.6" y2="4.5" layer="51"/>
-<rectangle x1="1" y1="3.5" x2="1.4" y2="4.5" layer="51"/>
-<rectangle x1="1.8" y1="3.5" x2="2.2" y2="4.5" layer="51"/>
-<rectangle x1="2.6" y1="3.5" x2="3" y2="4.5" layer="51"/>
-<rectangle x1="-4.5" y1="2.6" x2="-3.4" y2="3" layer="51"/>
-<rectangle x1="-3" y1="-4.5" x2="-2.6" y2="-3.5" layer="51"/>
-<rectangle x1="-2.2" y1="-4.5" x2="-1.8" y2="-3.5" layer="51"/>
-<rectangle x1="-1.4" y1="-4.5" x2="-1" y2="-3.5" layer="51"/>
-<rectangle x1="-0.6" y1="-4.5" x2="-0.2" y2="-3.5" layer="51"/>
-<rectangle x1="0.2" y1="-4.5" x2="0.6" y2="-3.5" layer="51"/>
-<rectangle x1="1" y1="-4.5" x2="1.4" y2="-3.5" layer="51"/>
-<rectangle x1="1.8" y1="-4.5" x2="2.2" y2="-3.5" layer="51"/>
-<rectangle x1="2.6" y1="-4.5" x2="3" y2="-3.5" layer="51"/>
-<rectangle x1="-4.5" y1="1.8" x2="-3.5" y2="2.2" layer="51"/>
-<rectangle x1="-4.5" y1="1" x2="-3.5" y2="1.4" layer="51"/>
-<rectangle x1="-4.5" y1="0.2" x2="-3.5" y2="0.6" layer="51"/>
-<rectangle x1="-4.5" y1="-0.6" x2="-3.5" y2="-0.2" layer="51"/>
-<rectangle x1="-4.5" y1="-1.4" x2="-3.5" y2="-1" layer="51"/>
-<rectangle x1="-4.5" y1="-2.2" x2="-3.5" y2="-1.8" layer="51"/>
-<rectangle x1="-4.5" y1="-3" x2="-3.5" y2="-2.6" layer="51"/>
-<rectangle x1="3.5" y1="2.6" x2="4.5" y2="3" layer="51"/>
-<rectangle x1="3.5" y1="1.8" x2="4.5" y2="2.2" layer="51"/>
-<rectangle x1="3.5" y1="1" x2="4.5" y2="1.4" layer="51"/>
-<rectangle x1="3.5" y1="0.2" x2="4.5" y2="0.6" layer="51"/>
-<rectangle x1="3.5" y1="-0.6" x2="4.5" y2="-0.2" layer="51"/>
-<rectangle x1="3.5" y1="-1.4" x2="4.5" y2="-1" layer="51"/>
-<rectangle x1="3.5" y1="-2.2" x2="4.5" y2="-1.8" layer="51"/>
-<rectangle x1="3.5" y1="-3" x2="4.5" y2="-2.6" layer="51"/>
-</package>
-</packages>
-<symbols>
-<symbol name="MEGA48/88/168/328">
-<wire x1="-20.32" y1="35.56" x2="20.32" y2="35.56" width="0.254" layer="94"/>
-<wire x1="20.32" y1="35.56" x2="20.32" y2="-38.1" width="0.254" layer="94"/>
-<wire x1="20.32" y1="-38.1" x2="-20.32" y2="-38.1" width="0.254" layer="94"/>
-<wire x1="-20.32" y1="-38.1" x2="-20.32" y2="35.56" width="0.254" layer="94"/>
-<text x="-20.32" y="38.1" size="1.778" layer="95" align="top-left">&gt;NAME</text>
-<text x="-20.32" y="-40.64" size="1.778" layer="96">&gt;VALUE</text>
-<pin name="\(XTAL2/TOSC2/PCINT7)PB7" x="25.4" y="33.02" length="middle" rot="R180"/>
-<pin name="\(XTAL1/TOSC1/PCINT6)PB6" x="25.4" y="30.48" length="middle" rot="R180"/>
-<pin name="\(SCK/PCINT5)PB5" x="25.4" y="27.94" length="middle" rot="R180"/>
-<pin name="\(MISO/PCINT4)PB4" x="25.4" y="25.4" length="middle" rot="R180"/>
-<pin name="\(MOSI/OC2A/PCINT3)PB3" x="25.4" y="22.86" length="middle" rot="R180"/>
-<pin name="\(SS/OC1B/PCINT2)PB2" x="25.4" y="20.32" length="middle" rot="R180"/>
-<pin name="\(OC1A/PCINT1)PB1" x="25.4" y="17.78" length="middle" rot="R180"/>
-<pin name="\(CLKO/ICP1/PCINT0)PB0" x="25.4" y="15.24" length="middle" rot="R180"/>
-<pin name="\(RESET/PCINT14)PC6" x="25.4" y="2.54" length="middle" rot="R180"/>
-<pin name="\(SCL/ADC5/PCINT13)PC5" x="25.4" y="0" length="middle" rot="R180"/>
-<pin name="\(SDA/ADC4/PCINT12)PC4" x="25.4" y="-2.54" length="middle" rot="R180"/>
-<pin name="\(ADC3/PCINT11)PC3" x="25.4" y="-5.08" length="middle" rot="R180"/>
-<pin name="\(ADC2/PCINT10)PC2" x="25.4" y="-7.62" length="middle" rot="R180"/>
-<pin name="\(ADC1/PCINT9)PC1" x="25.4" y="-10.16" length="middle" rot="R180"/>
-<pin name="\(ADC0/PCINT8)PC0" x="25.4" y="-12.7" length="middle" rot="R180"/>
-<pin name="AVCC" x="-25.4" y="20.32" length="middle" direction="pwr"/>
-<pin name="AREF" x="-25.4" y="17.78" length="middle" direction="pas"/>
-<pin name="VCC" x="-25.4" y="25.4" length="middle" direction="pwr"/>
-<pin name="GND" x="-25.4" y="2.54" length="middle" direction="pwr"/>
-<pin name="\(RXD/PCINT16)PD0" x="25.4" y="-35.56" length="middle" rot="R180"/>
-<pin name="\(TXD/PCINT17)PD1" x="25.4" y="-33.02" length="middle" rot="R180"/>
-<pin name="\(INT0/PCINT18)PD2" x="25.4" y="-30.48" length="middle" rot="R180"/>
-<pin name="\(OC2B/INT1/PCINT19)PD3" x="25.4" y="-27.94" length="middle" rot="R180"/>
-<pin name="\(XCK/T0/PCINT20)PD4" x="25.4" y="-25.4" length="middle" rot="R180"/>
-<pin name="\(OC0B/T1/PCINT21)PD5" x="25.4" y="-22.86" length="middle" rot="R180"/>
-<pin name="\(OC0A/AIN0/PCINT22)PD6" x="25.4" y="-20.32" length="middle" rot="R180"/>
-<pin name="\(AIN1/PCINT23)PD7" x="25.4" y="-17.78" length="middle" rot="R180"/>
-<pin name="ADC6" x="25.4" y="7.62" length="middle" rot="R180"/>
-<pin name="ADC7" x="25.4" y="10.16" length="middle" rot="R180"/>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="ATMEGA328" prefix="IC">
-<description>&lt;b&gt;Microcontroller&lt;/b&gt;&lt;p&gt;
-
-&lt;table border=1 cellpadding=3&gt;
-        &lt;tr&gt;
-                &lt;th&gt;Typ&lt;/th&gt;
-                &lt;th&gt;Flash&lt;/th&gt;
-                &lt;th&gt;SRAM&lt;/th&gt;
-                &lt;th&gt;EEPROM&lt;/th&gt;
-                &lt;th&gt;GPIO&lt;/th&gt;
-                &lt;th&gt;ADC&lt;/th&gt;
-                &lt;th&gt;DAC&lt;/th&gt;
-                &lt;th&gt;PWM&lt;/th&gt;
-                &lt;th&gt;Timer&lt;/th&gt;
-                &lt;th&gt;Ports&lt;/th&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-                &lt;td&gt; &lt;a href="./eagle/doc/ic-mcu/atmega48a_48pa_88a_88pa_168a_168pa_328_328p.pdf"&gt;ATmega328&lt;/a&gt;&lt;/td&gt;
-                &lt;td&gt;32kB&lt;/td&gt;
-                &lt;td&gt;2kB&lt;/td&gt;
-                &lt;td&gt;1kB&lt;/td&gt;
-                &lt;td&gt;23&lt;/td&gt;
-                &lt;td&gt;8x 10bit&lt;/td&gt;
-                &lt;td&gt;&lt;/td&gt;
-                &lt;td&gt;4x 8bit, 2x 16bit&lt;/td&gt;
-                &lt;td&gt;2x 8bit, 1x 16bit&lt;/td&gt;
-                &lt;td&gt;JTAG, USART, I2C, SPI&lt;/td&gt;
-        &lt;/tr&gt;
-&lt;/table&gt;</description>
-<gates>
-<gate name="G$1" symbol="MEGA48/88/168/328" x="0" y="0"/>
-</gates>
-<devices>
-<device name="-A" package="QFP32_08">
-<connects>
-<connect gate="G$1" pin="ADC6" pad="19"/>
-<connect gate="G$1" pin="ADC7" pad="22"/>
-<connect gate="G$1" pin="AREF" pad="20"/>
-<connect gate="G$1" pin="AVCC" pad="18"/>
-<connect gate="G$1" pin="GND" pad="3 5 21"/>
-<connect gate="G$1" pin="VCC" pad="4 6"/>
-<connect gate="G$1" pin="\(ADC0/PCINT8)PC0" pad="23"/>
-<connect gate="G$1" pin="\(ADC1/PCINT9)PC1" pad="24"/>
-<connect gate="G$1" pin="\(ADC2/PCINT10)PC2" pad="25"/>
-<connect gate="G$1" pin="\(ADC3/PCINT11)PC3" pad="26"/>
-<connect gate="G$1" pin="\(AIN1/PCINT23)PD7" pad="11"/>
-<connect gate="G$1" pin="\(CLKO/ICP1/PCINT0)PB0" pad="12"/>
-<connect gate="G$1" pin="\(INT0/PCINT18)PD2" pad="32"/>
-<connect gate="G$1" pin="\(MISO/PCINT4)PB4" pad="16"/>
-<connect gate="G$1" pin="\(MOSI/OC2A/PCINT3)PB3" pad="15"/>
-<connect gate="G$1" pin="\(OC0A/AIN0/PCINT22)PD6" pad="10"/>
-<connect gate="G$1" pin="\(OC0B/T1/PCINT21)PD5" pad="9"/>
-<connect gate="G$1" pin="\(OC1A/PCINT1)PB1" pad="13"/>
-<connect gate="G$1" pin="\(OC2B/INT1/PCINT19)PD3" pad="1"/>
-<connect gate="G$1" pin="\(RESET/PCINT14)PC6" pad="29"/>
-<connect gate="G$1" pin="\(RXD/PCINT16)PD0" pad="30"/>
-<connect gate="G$1" pin="\(SCK/PCINT5)PB5" pad="17"/>
-<connect gate="G$1" pin="\(SCL/ADC5/PCINT13)PC5" pad="28"/>
-<connect gate="G$1" pin="\(SDA/ADC4/PCINT12)PC4" pad="27"/>
-<connect gate="G$1" pin="\(SS/OC1B/PCINT2)PB2" pad="14"/>
-<connect gate="G$1" pin="\(TXD/PCINT17)PD1" pad="31"/>
-<connect gate="G$1" pin="\(XCK/T0/PCINT20)PD4" pad="2"/>
-<connect gate="G$1" pin="\(XTAL1/TOSC1/PCINT6)PB6" pad="7"/>
-<connect gate="G$1" pin="\(XTAL2/TOSC2/PCINT7)PB7" pad="8"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -4788,6 +4550,291 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 </deviceset>
 </devicesets>
 </library>
+<library name="ic-mcu">
+<description>&lt;b&gt;Microcontroller&lt;/b&gt;&lt;p&gt;
+
+&lt;table border=1 cellpadding=3&gt;
+        &lt;tr&gt;
+                &lt;th&gt;Typ&lt;/th&gt;
+                &lt;th&gt;Flash&lt;/th&gt;
+                &lt;th&gt;SRAM&lt;/th&gt;
+                &lt;th&gt;EEPROM&lt;/th&gt;
+                &lt;th&gt;GPIO&lt;/th&gt;
+                &lt;th&gt;ADC&lt;/th&gt;
+                &lt;th&gt;DAC&lt;/th&gt;
+                &lt;th&gt;PWM&lt;/th&gt;
+                &lt;th&gt;Timer&lt;/th&gt;
+                &lt;th&gt;Ports&lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+                &lt;td&gt; &lt;a href="./eagle/doc/ic-mcu/attiny24a_44a.pdf"&gt;ATtiny44A&lt;/a&gt;&lt;/td&gt;
+                &lt;td&gt;4kB&lt;/td&gt;
+                &lt;td&gt;256B&lt;/td&gt;
+                &lt;td&gt;256B&lt;/td&gt;
+                &lt;td&gt;12&lt;/td&gt;
+                &lt;td&gt;8x 10bit&lt;/td&gt;
+                &lt;td&gt;&lt;/td&gt;
+                &lt;td&gt;2x 8bit&lt;/td&gt;
+                &lt;td&gt;1x 8bit, 1x 16bit&lt;/td&gt;
+                &lt;td&gt;USI&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+                &lt;td&gt; &lt;a href="./eagle/doc/ic-mcu/atmega32a.pdf"&gt;ATmega32A&lt;/a&gt;&lt;/td&gt;
+                &lt;td&gt;32kB&lt;/td&gt;
+                &lt;td&gt;2kB&lt;/td&gt;
+                &lt;td&gt;1kB&lt;/td&gt;
+                &lt;td&gt;32&lt;/td&gt;
+                &lt;td&gt;8x 10bit&lt;/td&gt;
+                &lt;td&gt;&lt;/td&gt;
+                &lt;td&gt;2x 8bit, 2x 16bit&lt;/td&gt;
+                &lt;td&gt;2x 8bit, 1x 16bit&lt;/td&gt;
+                &lt;td&gt;JTAG, USART, I2C, SPI&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+                &lt;td&gt; &lt;a href="./eagle/doc/ic-mcu/atmega164a_164pa_324a_324pa_644a_644pa_1284a_1284pa.pdf"&gt;ATmega1284A&lt;/a&gt;&lt;/td&gt;
+                &lt;td&gt;128kB&lt;/td&gt;
+                &lt;td&gt;16kB&lt;/td&gt;
+                &lt;td&gt;4kB&lt;/td&gt;
+                &lt;td&gt;32&lt;/td&gt;
+                &lt;td&gt;8x 10bit&lt;/td&gt;
+                &lt;td&gt;&lt;/td&gt;
+                &lt;td&gt;4x 8bit, 2x 16bit&lt;/td&gt;
+                &lt;td&gt;2x 8bit, 1x 16bit&lt;/td&gt;
+                &lt;td&gt;JTAG, 2x USART, I2C, SPI&lt;/td&gt;
+        &lt;/tr&gt;
+&lt;/table&gt;</description>
+<packages>
+<package name="QFP32_08">
+<circle x="-2.5" y="2.5" radius="0.3" width="0.2" layer="21"/>
+<smd name="1" x="-4.3" y="2.8" dx="1.5" dy="0.5" layer="1"/>
+<smd name="2" x="-4.3" y="2" dx="1.5" dy="0.5" layer="1"/>
+<smd name="3" x="-4.3" y="1.2" dx="1.5" dy="0.5" layer="1"/>
+<smd name="4" x="-4.3" y="0.4" dx="1.5" dy="0.5" layer="1"/>
+<smd name="5" x="-4.3" y="-0.4" dx="1.5" dy="0.5" layer="1"/>
+<smd name="6" x="-4.3" y="-1.2" dx="1.5" dy="0.5" layer="1"/>
+<smd name="7" x="-4.3" y="-2" dx="1.5" dy="0.5" layer="1"/>
+<smd name="8" x="-4.3" y="-2.8" dx="1.5" dy="0.5" layer="1"/>
+<smd name="9" x="-2.8" y="-4.3" dx="0.5" dy="1.5" layer="1"/>
+<smd name="10" x="-2" y="-4.3" dx="0.5" dy="1.5" layer="1"/>
+<smd name="11" x="-1.2" y="-4.3" dx="0.5" dy="1.5" layer="1"/>
+<smd name="12" x="-0.4" y="-4.3" dx="0.5" dy="1.5" layer="1"/>
+<smd name="13" x="0.4" y="-4.3" dx="0.5" dy="1.5" layer="1"/>
+<smd name="14" x="1.2" y="-4.3" dx="0.5" dy="1.5" layer="1"/>
+<smd name="15" x="2" y="-4.3" dx="0.5" dy="1.5" layer="1"/>
+<smd name="16" x="2.8" y="-4.3" dx="0.5" dy="1.5" layer="1"/>
+<smd name="17" x="4.3" y="-2.8" dx="1.5" dy="0.5" layer="1"/>
+<smd name="18" x="4.3" y="-2" dx="1.5" dy="0.5" layer="1"/>
+<smd name="19" x="4.3" y="-1.2" dx="1.5" dy="0.5" layer="1"/>
+<smd name="20" x="4.3" y="-0.4" dx="1.5" dy="0.5" layer="1"/>
+<smd name="21" x="4.3" y="0.4" dx="1.5" dy="0.5" layer="1"/>
+<smd name="22" x="4.3" y="1.2" dx="1.5" dy="0.5" layer="1"/>
+<smd name="23" x="4.3" y="2" dx="1.5" dy="0.5" layer="1"/>
+<smd name="24" x="4.3" y="2.8" dx="1.5" dy="0.5" layer="1"/>
+<smd name="25" x="2.8" y="4.3" dx="0.5" dy="1.5" layer="1"/>
+<smd name="26" x="2" y="4.3" dx="0.5" dy="1.5" layer="1"/>
+<smd name="27" x="1.2" y="4.3" dx="0.5" dy="1.5" layer="1"/>
+<smd name="28" x="0.4" y="4.3" dx="0.5" dy="1.5" layer="1"/>
+<smd name="29" x="-0.4" y="4.3" dx="0.5" dy="1.5" layer="1"/>
+<smd name="30" x="-1.2" y="4.3" dx="0.5" dy="1.5" layer="1"/>
+<smd name="31" x="-2" y="4.3" dx="0.5" dy="1.5" layer="1"/>
+<smd name="32" x="-2.8" y="4.3" dx="0.5" dy="1.5" layer="1"/>
+<text x="-4" y="4" size="0.8128" layer="25" align="bottom-right">&gt;NAME</text>
+<text x="0" y="-6" size="0.8128" layer="27" align="top-center">&gt;VALUE</text>
+<rectangle x1="-3" y1="3.4" x2="-2.6" y2="4.5" layer="51"/>
+<wire x1="3.4" y1="3.4" x2="-2.9" y2="3.4" width="0.2" layer="21"/>
+<wire x1="-2.9" y1="3.4" x2="-3.4" y2="2.9" width="0.2" layer="21"/>
+<wire x1="-3.4" y1="2.9" x2="-3.4" y2="-3.4" width="0.2" layer="21"/>
+<wire x1="-3.4" y1="-3.4" x2="3.4" y2="-3.4" width="0.2" layer="21"/>
+<wire x1="3.4" y1="-3.4" x2="3.4" y2="3.4" width="0.2" layer="21"/>
+<rectangle x1="-2.2" y1="3.5" x2="-1.8" y2="4.5" layer="51"/>
+<rectangle x1="-1.4" y1="3.5" x2="-1" y2="4.5" layer="51"/>
+<rectangle x1="-0.6" y1="3.5" x2="-0.2" y2="4.5" layer="51"/>
+<rectangle x1="0.2" y1="3.5" x2="0.6" y2="4.5" layer="51"/>
+<rectangle x1="1" y1="3.5" x2="1.4" y2="4.5" layer="51"/>
+<rectangle x1="1.8" y1="3.5" x2="2.2" y2="4.5" layer="51"/>
+<rectangle x1="2.6" y1="3.5" x2="3" y2="4.5" layer="51"/>
+<rectangle x1="-4.5" y1="2.6" x2="-3.4" y2="3" layer="51"/>
+<rectangle x1="-3" y1="-4.5" x2="-2.6" y2="-3.5" layer="51"/>
+<rectangle x1="-2.2" y1="-4.5" x2="-1.8" y2="-3.5" layer="51"/>
+<rectangle x1="-1.4" y1="-4.5" x2="-1" y2="-3.5" layer="51"/>
+<rectangle x1="-0.6" y1="-4.5" x2="-0.2" y2="-3.5" layer="51"/>
+<rectangle x1="0.2" y1="-4.5" x2="0.6" y2="-3.5" layer="51"/>
+<rectangle x1="1" y1="-4.5" x2="1.4" y2="-3.5" layer="51"/>
+<rectangle x1="1.8" y1="-4.5" x2="2.2" y2="-3.5" layer="51"/>
+<rectangle x1="2.6" y1="-4.5" x2="3" y2="-3.5" layer="51"/>
+<rectangle x1="-4.5" y1="1.8" x2="-3.5" y2="2.2" layer="51"/>
+<rectangle x1="-4.5" y1="1" x2="-3.5" y2="1.4" layer="51"/>
+<rectangle x1="-4.5" y1="0.2" x2="-3.5" y2="0.6" layer="51"/>
+<rectangle x1="-4.5" y1="-0.6" x2="-3.5" y2="-0.2" layer="51"/>
+<rectangle x1="-4.5" y1="-1.4" x2="-3.5" y2="-1" layer="51"/>
+<rectangle x1="-4.5" y1="-2.2" x2="-3.5" y2="-1.8" layer="51"/>
+<rectangle x1="-4.5" y1="-3" x2="-3.5" y2="-2.6" layer="51"/>
+<rectangle x1="3.5" y1="2.6" x2="4.5" y2="3" layer="51"/>
+<rectangle x1="3.5" y1="1.8" x2="4.5" y2="2.2" layer="51"/>
+<rectangle x1="3.5" y1="1" x2="4.5" y2="1.4" layer="51"/>
+<rectangle x1="3.5" y1="0.2" x2="4.5" y2="0.6" layer="51"/>
+<rectangle x1="3.5" y1="-0.6" x2="4.5" y2="-0.2" layer="51"/>
+<rectangle x1="3.5" y1="-1.4" x2="4.5" y2="-1" layer="51"/>
+<rectangle x1="3.5" y1="-2.2" x2="4.5" y2="-1.8" layer="51"/>
+<rectangle x1="3.5" y1="-3" x2="4.5" y2="-2.6" layer="51"/>
+</package>
+</packages>
+<symbols>
+<symbol name="MEGA48B/88B/168B/328B">
+<wire x1="-20.32" y1="38.1" x2="20.32" y2="38.1" width="0.254" layer="94"/>
+<wire x1="20.32" y1="38.1" x2="20.32" y2="-40.64" width="0.254" layer="94"/>
+<wire x1="20.32" y1="-40.64" x2="-20.32" y2="-40.64" width="0.254" layer="94"/>
+<wire x1="-20.32" y1="-40.64" x2="-20.32" y2="38.1" width="0.254" layer="94"/>
+<text x="-20.32" y="40.64" size="1.778" layer="95" align="top-left">&gt;NAME</text>
+<text x="-20.32" y="-43.18" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="\(XTAL2/TOSC2/PCINT7)PB7" x="25.4" y="35.56" length="middle" rot="R180"/>
+<pin name="\(XTAL1/TOSC1/PCINT6)PB6" x="25.4" y="33.02" length="middle" rot="R180"/>
+<pin name="\(SCK0/PCINT5)PB5" x="25.4" y="30.48" length="middle" rot="R180"/>
+<pin name="\(RXD1/MISO0/PCINT4)PB4" x="25.4" y="27.94" length="middle" rot="R180"/>
+<pin name="\(TXD1/MOSI0/OC2A/PCINT3)PB3" x="25.4" y="25.4" length="middle" rot="R180"/>
+<pin name="\(SS0/OC1B/PCINT2)PB2" x="25.4" y="22.86" length="middle" rot="R180"/>
+<pin name="\(OC1A/PCINT1)PB1" x="25.4" y="20.32" length="middle" rot="R180"/>
+<pin name="\(CLKO/ICP1/PCINT0)PB0" x="25.4" y="17.78" length="middle" rot="R180"/>
+<pin name="\(RESET/PCINT14)PC6" x="25.4" y="12.7" length="middle" rot="R180"/>
+<pin name="\(SCL0/ADC5/PCINT13)PC5" x="25.4" y="10.16" length="middle" rot="R180"/>
+<pin name="\(SDA0/ADC4/PCINT12)PC4" x="25.4" y="7.62" length="middle" rot="R180"/>
+<pin name="\(ADC3/PCINT11)PC3" x="25.4" y="5.08" length="middle" rot="R180"/>
+<pin name="\(ADC2/PCINT10)PC2" x="25.4" y="2.54" length="middle" rot="R180"/>
+<pin name="\(SCK1/ADC1/PCINT9)PC1" x="25.4" y="0" length="middle" rot="R180"/>
+<pin name="\(MISO1/ADC0/PCINT8)PC0" x="25.4" y="-2.54" length="middle" rot="R180"/>
+<pin name="AVCC" x="-25.4" y="22.86" length="middle" direction="pwr"/>
+<pin name="AREF" x="-25.4" y="20.32" length="middle" direction="pas"/>
+<pin name="VCC" x="-25.4" y="27.94" length="middle" direction="pwr"/>
+<pin name="GND" x="-25.4" y="0" length="middle" direction="pwr"/>
+<pin name="\(RXD0/OC3A/PCINT16)PD0" x="25.4" y="-25.4" length="middle" rot="R180"/>
+<pin name="\(TXD0/OC4A/PCINT17)PD1" x="25.4" y="-22.86" length="middle" rot="R180"/>
+<pin name="\(OC3B/OC4B/INT0/PCINT18)PD2" x="25.4" y="-20.32" length="middle" rot="R180"/>
+<pin name="\(OC2B/INT1/PCINT19)PD3" x="25.4" y="-17.78" length="middle" rot="R180"/>
+<pin name="\(XCK0/T0/PCINT20)PD4" x="25.4" y="-15.24" length="middle" rot="R180"/>
+<pin name="\(OC0B/T1/PCINT21)PD5" x="25.4" y="-12.7" length="middle" rot="R180"/>
+<pin name="\(OC0A/AIN0/PCINT22)PD6" x="25.4" y="-10.16" length="middle" rot="R180"/>
+<pin name="\(AIN1/PCINT23)PD7" x="25.4" y="-7.62" length="middle" rot="R180"/>
+<pin name="(SS1/ICP3/ADC6/PCINT26)PE2" x="25.4" y="-33.02" length="middle" rot="R180"/>
+<pin name="(MOSI1/T3/ADC7/PCINT27)PE3" x="25.4" y="-30.48" length="middle" rot="R180"/>
+<pin name="(ACO/ICP4/PCINT24)PE0" x="25.4" y="-38.1" length="middle" rot="R180"/>
+<pin name="(SCL1/TC4/PCINT25)PE1" x="25.4" y="-35.56" length="middle" rot="R180"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="ATMEGA*8PB" prefix="IC">
+<description>&lt;b&gt;Microcontroller&lt;/b&gt;&lt;p&gt;
+
+&lt;table border=1 cellpadding=3&gt;
+        &lt;tr&gt;
+                &lt;th&gt;Typ&lt;/th&gt;
+                &lt;th&gt;Flash&lt;/th&gt;
+                &lt;th&gt;SRAM&lt;/th&gt;
+                &lt;th&gt;EEPROM&lt;/th&gt;
+                &lt;th&gt;GPIO&lt;/th&gt;
+                &lt;th&gt;ADC&lt;/th&gt;
+                &lt;th&gt;DAC&lt;/th&gt;
+                &lt;th&gt;PWM&lt;/th&gt;
+                &lt;th&gt;Timer&lt;/th&gt;
+                &lt;th&gt;Ports&lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+                &lt;td&gt; &lt;a href="./eagle/doc/ic-mcu/atmega48pb_88pb_168pb.pdf"&gt;ATmega48PB&lt;/a&gt;&lt;/td&gt;
+                &lt;td&gt;4kB&lt;/td&gt;
+                &lt;td&gt;512B&lt;/td&gt;
+                &lt;td&gt;256B&lt;/td&gt;
+                &lt;td&gt;23&lt;/td&gt;
+                &lt;td&gt;8x 10bit&lt;/td&gt;
+                &lt;td&gt;&lt;/td&gt;
+                &lt;td&gt;4x 8bit, 2x 16bit&lt;/td&gt;
+                &lt;td&gt;2x 8bit, 1x 16bit&lt;/td&gt;
+                &lt;td&gt;JTAG, 2x USART, 2x I2C, 2x SPI&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+                &lt;td&gt; &lt;a href="./eagle/doc/ic-mcu/atmega48pb_88pb_168pb.pdf"&gt;ATmega88PB&lt;/a&gt;&lt;/td&gt;
+                &lt;td&gt;8kB&lt;/td&gt;
+                &lt;td&gt;1kB&lt;/td&gt;
+                &lt;td&gt;512B&lt;/td&gt;
+                &lt;td&gt;23&lt;/td&gt;
+                &lt;td&gt;8x 10bit&lt;/td&gt;
+                &lt;td&gt;&lt;/td&gt;
+                &lt;td&gt;4x 8bit, 2x 16bit&lt;/td&gt;
+                &lt;td&gt;2x 8bit, 1x 16bit&lt;/td&gt;
+                &lt;td&gt;JTAG, 2x USART, 2x I2C, 2x SPI&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+                &lt;td&gt; &lt;a href="./eagle/doc/ic-mcu/atmega48pb_88pb_168pb.pdf"&gt;ATmega168PB&lt;/a&gt;&lt;/td&gt;
+                &lt;td&gt;16kB&lt;/td&gt;
+                &lt;td&gt;1kB&lt;/td&gt;
+                &lt;td&gt;512B&lt;/td&gt;
+                &lt;td&gt;23&lt;/td&gt;
+                &lt;td&gt;8x 10bit&lt;/td&gt;
+                &lt;td&gt;&lt;/td&gt;
+                &lt;td&gt;4x 8bit, 2x 16bit&lt;/td&gt;
+                &lt;td&gt;2x 8bit, 1x 16bit&lt;/td&gt;
+                &lt;td&gt;JTAG, 2x USART, 2x I2C, 2x SPI&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+                &lt;td&gt; &lt;a href="./eagle/doc/ic-mcu/atmega328pb.pdf"&gt;ATmega328PB&lt;/a&gt;&lt;/td&gt;
+                &lt;td&gt;32kB&lt;/td&gt;
+                &lt;td&gt;2kB&lt;/td&gt;
+                &lt;td&gt;1kB&lt;/td&gt;
+                &lt;td&gt;23&lt;/td&gt;
+                &lt;td&gt;8x 10bit&lt;/td&gt;
+                &lt;td&gt;&lt;/td&gt;
+                &lt;td&gt;4x 8bit, 2x 16bit&lt;/td&gt;
+                &lt;td&gt;2x 8bit, 1x 16bit&lt;/td&gt;
+                &lt;td&gt;JTAG, 2x USART, 2x I2C, 2x SPI&lt;/td&gt;
+        &lt;/tr&gt;
+&lt;/table&gt;</description>
+<gates>
+<gate name="G$1" symbol="MEGA48B/88B/168B/328B" x="0" y="0"/>
+</gates>
+<devices>
+<device name="-AU" package="QFP32_08">
+<connects>
+<connect gate="G$1" pin="(ACO/ICP4/PCINT24)PE0" pad="3"/>
+<connect gate="G$1" pin="(MOSI1/T3/ADC7/PCINT27)PE3" pad="22"/>
+<connect gate="G$1" pin="(SCL1/TC4/PCINT25)PE1" pad="6"/>
+<connect gate="G$1" pin="(SS1/ICP3/ADC6/PCINT26)PE2" pad="19"/>
+<connect gate="G$1" pin="AREF" pad="20"/>
+<connect gate="G$1" pin="AVCC" pad="18"/>
+<connect gate="G$1" pin="GND" pad="5 21"/>
+<connect gate="G$1" pin="VCC" pad="4"/>
+<connect gate="G$1" pin="\(ADC2/PCINT10)PC2" pad="25"/>
+<connect gate="G$1" pin="\(ADC3/PCINT11)PC3" pad="26"/>
+<connect gate="G$1" pin="\(AIN1/PCINT23)PD7" pad="11"/>
+<connect gate="G$1" pin="\(CLKO/ICP1/PCINT0)PB0" pad="12"/>
+<connect gate="G$1" pin="\(MISO1/ADC0/PCINT8)PC0" pad="23"/>
+<connect gate="G$1" pin="\(OC0A/AIN0/PCINT22)PD6" pad="10"/>
+<connect gate="G$1" pin="\(OC0B/T1/PCINT21)PD5" pad="9"/>
+<connect gate="G$1" pin="\(OC1A/PCINT1)PB1" pad="13"/>
+<connect gate="G$1" pin="\(OC2B/INT1/PCINT19)PD3" pad="1"/>
+<connect gate="G$1" pin="\(OC3B/OC4B/INT0/PCINT18)PD2" pad="32"/>
+<connect gate="G$1" pin="\(RESET/PCINT14)PC6" pad="29"/>
+<connect gate="G$1" pin="\(RXD0/OC3A/PCINT16)PD0" pad="30"/>
+<connect gate="G$1" pin="\(RXD1/MISO0/PCINT4)PB4" pad="16"/>
+<connect gate="G$1" pin="\(SCK0/PCINT5)PB5" pad="17"/>
+<connect gate="G$1" pin="\(SCK1/ADC1/PCINT9)PC1" pad="24"/>
+<connect gate="G$1" pin="\(SCL0/ADC5/PCINT13)PC5" pad="28"/>
+<connect gate="G$1" pin="\(SDA0/ADC4/PCINT12)PC4" pad="27"/>
+<connect gate="G$1" pin="\(SS0/OC1B/PCINT2)PB2" pad="14"/>
+<connect gate="G$1" pin="\(TXD0/OC4A/PCINT17)PD1" pad="31"/>
+<connect gate="G$1" pin="\(TXD1/MOSI0/OC2A/PCINT3)PB3" pad="15"/>
+<connect gate="G$1" pin="\(XCK0/T0/PCINT20)PD4" pad="2"/>
+<connect gate="G$1" pin="\(XTAL1/TOSC1/PCINT6)PB6" pad="7"/>
+<connect gate="G$1" pin="\(XTAL2/TOSC2/PCINT7)PB7" pad="8"/>
+</connects>
+<technologies>
+<technology name="16"/>
+<technology name="32"/>
+<technology name="4"/>
+<technology name="8"/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -4864,7 +4911,6 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 <part name="X9" library="stecker" deviceset="ISP" device="-AVR6"/>
 <part name="GND14" library="versorgung" deviceset="GND" device=""/>
 <part name="S1" library="schalter" deviceset="DP08" device="D"/>
-<part name="IC1" library="ic-mcu" deviceset="ATMEGA328" device="-A"/>
 <part name="C3" library="passiv" deviceset="C_" device="0603" value="100nF"/>
 <part name="GND15" library="versorgung" deviceset="GND" device=""/>
 <part name="C2" library="passiv" deviceset="C_" device="0603" value="100nF"/>
@@ -4896,6 +4942,7 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 <part name="R17" library="passiv" deviceset="R_" device="0603" value="1,5kΩ"/>
 <part name="D1" library="diode" deviceset="GLEICHRICHTER" device="-SDIP"/>
 <part name="FRAME1" library="info" deviceset="DOCFIELD" device=""/>
+<part name="IC1" library="ic-mcu" deviceset="ATMEGA*8PB" device="-AU" technology="32"/>
 </parts>
 <sheets>
 <sheet>
@@ -4906,10 +4953,10 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 <instances>
 <instance part="Q3" gate="G$1" x="170.18" y="139.7"/>
 <instance part="R11" gate="G$1" x="157.48" y="137.16"/>
-<instance part="P+1" gate="1" x="45.72" y="121.92"/>
-<instance part="GND1" gate="1" x="58.42" y="88.9"/>
-<instance part="GND2" gate="1" x="33.02" y="88.9"/>
-<instance part="C1" gate="G$1" x="33.02" y="104.14"/>
+<instance part="P+1" gate="1" x="48.26" y="121.92"/>
+<instance part="GND1" gate="1" x="60.96" y="83.82"/>
+<instance part="GND2" gate="1" x="35.56" y="83.82"/>
+<instance part="C1" gate="G$1" x="35.56" y="101.6"/>
 <instance part="R1" gate="G$1" x="132.08" y="154.94" rot="R90"/>
 <instance part="P+3" gate="1" x="132.08" y="165.1"/>
 <instance part="GND3" gate="1" x="175.26" y="129.54"/>
@@ -4972,28 +5019,27 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 <instance part="X6" gate=".2" x="241.3" y="147.32" rot="R180"/>
 <instance part="X9" gate="G$1" x="109.22" y="142.24" rot="MR0"/>
 <instance part="GND14" gate="1" x="231.14" y="172.72"/>
-<instance part="S1" gate="A" x="162.56" y="63.5" rot="R90"/>
-<instance part="S1" gate="B" x="167.64" y="63.5" rot="R90"/>
-<instance part="S1" gate="C" x="172.72" y="63.5" rot="R90"/>
-<instance part="S1" gate="D" x="177.8" y="63.5" rot="R90"/>
-<instance part="S1" gate="E" x="182.88" y="63.5" rot="R90"/>
-<instance part="S1" gate="F" x="187.96" y="63.5" rot="R90"/>
-<instance part="S1" gate="G" x="193.04" y="63.5" rot="R90"/>
-<instance part="IC1" gate="G$1" x="88.9" y="91.44"/>
-<instance part="C3" gate="G$1" x="58.42" y="104.14"/>
-<instance part="GND15" gate="1" x="45.72" y="88.9"/>
-<instance part="C2" gate="G$1" x="45.72" y="104.14"/>
-<instance part="P+2" gate="1" x="33.02" y="121.92"/>
+<instance part="S1" gate="A" x="162.56" y="78.74" rot="R90"/>
+<instance part="S1" gate="B" x="167.64" y="78.74" rot="R90"/>
+<instance part="S1" gate="C" x="172.72" y="78.74" rot="R90"/>
+<instance part="S1" gate="D" x="177.8" y="78.74" rot="R90"/>
+<instance part="S1" gate="E" x="182.88" y="78.74" rot="R90"/>
+<instance part="S1" gate="F" x="187.96" y="78.74" rot="R90"/>
+<instance part="S1" gate="G" x="193.04" y="78.74" rot="R90"/>
+<instance part="C3" gate="G$1" x="60.96" y="101.6"/>
+<instance part="GND15" gate="1" x="48.26" y="83.82"/>
+<instance part="C2" gate="G$1" x="48.26" y="101.6"/>
+<instance part="P+2" gate="1" x="35.56" y="121.92"/>
 <instance part="IC2" gate="A" x="248.92" y="187.96"/>
 <instance part="R118" gate="G$1" x="269.24" y="193.04" rot="R270"/>
 <instance part="S1" gate="H" x="269.24" y="182.88" rot="R270"/>
-<instance part="GND12" gate="1" x="162.56" y="55.88"/>
-<instance part="GND13" gate="1" x="167.64" y="55.88"/>
-<instance part="GND16" gate="1" x="172.72" y="55.88"/>
-<instance part="GND17" gate="1" x="177.8" y="55.88"/>
-<instance part="GND18" gate="1" x="182.88" y="55.88"/>
-<instance part="GND19" gate="1" x="187.96" y="55.88"/>
-<instance part="GND20" gate="1" x="193.04" y="55.88"/>
+<instance part="GND12" gate="1" x="162.56" y="71.12"/>
+<instance part="GND13" gate="1" x="167.64" y="71.12"/>
+<instance part="GND16" gate="1" x="172.72" y="71.12"/>
+<instance part="GND17" gate="1" x="177.8" y="71.12"/>
+<instance part="GND18" gate="1" x="182.88" y="71.12"/>
+<instance part="GND19" gate="1" x="187.96" y="71.12"/>
+<instance part="GND20" gate="1" x="193.04" y="71.12"/>
 <instance part="X8" gate="G$1" x="299.72" y="187.96"/>
 <instance part="X7" gate=".2" x="284.48" y="200.66" rot="R180"/>
 <instance part="X7" gate=".1" x="284.48" y="175.26" rot="R180"/>
@@ -5014,6 +5060,7 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 <instance part="R17" gate="G$1" x="248.92" y="73.66" rot="R90"/>
 <instance part="D1" gate="G$1" x="63.5" y="162.56"/>
 <instance part="FRAME1" gate="G$1" x="274.32" y="5.08"/>
+<instance part="IC1" gate="G$1" x="91.44" y="88.9"/>
 </instances>
 <busses>
 </busses>
@@ -5024,10 +5071,10 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 <wire x1="132.08" y1="147.32" x2="132.08" y2="149.86" width="0.1524" layer="91"/>
 <pinref part="X9" gate="G$1" pin="RESET"/>
 <wire x1="114.3" y1="147.32" x2="132.08" y2="147.32" width="0.1524" layer="91"/>
-<pinref part="IC1" gate="G$1" pin="\(RESET/PCINT14)PC6"/>
-<wire x1="114.3" y1="93.98" x2="132.08" y2="93.98" width="0.1524" layer="91"/>
-<wire x1="132.08" y1="93.98" x2="132.08" y2="147.32" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="101.6" x2="132.08" y2="101.6" width="0.1524" layer="91"/>
+<wire x1="132.08" y1="101.6" x2="132.08" y2="147.32" width="0.1524" layer="91"/>
 <junction x="132.08" y="147.32"/>
+<pinref part="IC1" gate="G$1" pin="\(RESET/PCINT14)PC6"/>
 </segment>
 </net>
 <net name="+5V" class="0">
@@ -5057,22 +5104,22 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 <wire x1="119.38" y1="149.86" x2="119.38" y2="152.4" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="IC1" gate="G$1" pin="AVCC"/>
-<wire x1="63.5" y1="111.76" x2="45.72" y2="111.76" width="0.1524" layer="91"/>
+<wire x1="66.04" y1="111.76" x2="48.26" y2="111.76" width="0.1524" layer="91"/>
 <pinref part="C2" gate="G$1" pin="1"/>
-<wire x1="45.72" y1="111.76" x2="45.72" y2="106.68" width="0.1524" layer="91"/>
+<wire x1="48.26" y1="111.76" x2="48.26" y2="104.14" width="0.1524" layer="91"/>
 <pinref part="P+1" gate="1" pin="+5V"/>
-<wire x1="45.72" y1="119.38" x2="45.72" y2="111.76" width="0.1524" layer="91"/>
-<junction x="45.72" y="111.76"/>
+<wire x1="48.26" y1="119.38" x2="48.26" y2="111.76" width="0.1524" layer="91"/>
+<junction x="48.26" y="111.76"/>
+<pinref part="IC1" gate="G$1" pin="AVCC"/>
 </segment>
 <segment>
-<pinref part="IC1" gate="G$1" pin="VCC"/>
-<wire x1="33.02" y1="116.84" x2="63.5" y2="116.84" width="0.1524" layer="91"/>
+<wire x1="35.56" y1="116.84" x2="66.04" y2="116.84" width="0.1524" layer="91"/>
 <pinref part="C1" gate="G$1" pin="1"/>
-<wire x1="33.02" y1="106.68" x2="33.02" y2="116.84" width="0.1524" layer="91"/>
+<wire x1="35.56" y1="104.14" x2="35.56" y2="116.84" width="0.1524" layer="91"/>
 <pinref part="P+2" gate="1" pin="+5V"/>
-<wire x1="33.02" y1="119.38" x2="33.02" y2="116.84" width="0.1524" layer="91"/>
-<junction x="33.02" y="116.84"/>
+<wire x1="35.56" y1="119.38" x2="35.56" y2="116.84" width="0.1524" layer="91"/>
+<junction x="35.56" y="116.84"/>
+<pinref part="IC1" gate="G$1" pin="VCC"/>
 </segment>
 <segment>
 <pinref part="IC2" gate="P" pin="VCC"/>
@@ -5089,7 +5136,7 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 <segment>
 <pinref part="C1" gate="G$1" pin="2"/>
 <pinref part="GND2" gate="1" pin="GND"/>
-<wire x1="33.02" y1="99.06" x2="33.02" y2="91.44" width="0.1524" layer="91"/>
+<wire x1="35.56" y1="96.52" x2="35.56" y2="86.36" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="GND3" gate="1" pin="GND"/>
@@ -5174,17 +5221,17 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 </segment>
 <segment>
 <pinref part="GND1" gate="1" pin="GND"/>
-<pinref part="IC1" gate="G$1" pin="GND"/>
-<wire x1="58.42" y1="91.44" x2="58.42" y2="93.98" width="0.1524" layer="91"/>
-<wire x1="58.42" y1="93.98" x2="63.5" y2="93.98" width="0.1524" layer="91"/>
+<wire x1="60.96" y1="86.36" x2="60.96" y2="88.9" width="0.1524" layer="91"/>
+<wire x1="60.96" y1="88.9" x2="66.04" y2="88.9" width="0.1524" layer="91"/>
 <pinref part="C3" gate="G$1" pin="2"/>
-<wire x1="58.42" y1="93.98" x2="58.42" y2="99.06" width="0.1524" layer="91"/>
-<junction x="58.42" y="93.98"/>
+<wire x1="60.96" y1="88.9" x2="60.96" y2="96.52" width="0.1524" layer="91"/>
+<junction x="60.96" y="88.9"/>
+<pinref part="IC1" gate="G$1" pin="GND"/>
 </segment>
 <segment>
 <pinref part="C2" gate="G$1" pin="2"/>
 <pinref part="GND15" gate="1" pin="GND"/>
-<wire x1="45.72" y1="99.06" x2="45.72" y2="91.44" width="0.1524" layer="91"/>
+<wire x1="48.26" y1="96.52" x2="48.26" y2="86.36" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="S1" gate="A" pin="3"/>
@@ -5331,9 +5378,9 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 <segment>
 <pinref part="R14" gate="G$1" pin="1"/>
 <wire x1="154.94" y1="40.64" x2="167.64" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="71.12" x2="154.94" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="154.94" y1="71.12" x2="154.94" y2="40.64" width="0.1524" layer="91"/>
 <pinref part="IC1" gate="G$1" pin="\(OC2B/INT1/PCINT19)PD3"/>
-<wire x1="114.3" y1="63.5" x2="154.94" y2="63.5" width="0.1524" layer="91"/>
-<wire x1="154.94" y1="63.5" x2="154.94" y2="40.64" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$16" class="0">
@@ -5356,9 +5403,9 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 </net>
 <net name="TX" class="0">
 <segment>
-<wire x1="114.3" y1="58.42" x2="134.62" y2="58.42" width="0.1524" layer="91"/>
-<label x="134.62" y="58.42" size="1.778" layer="95" xref="yes"/>
-<pinref part="IC1" gate="G$1" pin="\(TXD/PCINT17)PD1"/>
+<wire x1="116.84" y1="66.04" x2="134.62" y2="66.04" width="0.1524" layer="91"/>
+<label x="134.62" y="66.04" size="1.778" layer="95" xref="yes"/>
+<pinref part="IC1" gate="G$1" pin="\(TXD0/OC4A/PCINT17)PD1"/>
 </segment>
 <segment>
 <wire x1="236.22" y1="180.34" x2="226.06" y2="180.34" width="0.1524" layer="91"/>
@@ -5380,9 +5427,9 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 </net>
 <net name="RX" class="0">
 <segment>
-<label x="144.78" y="55.88" size="1.778" layer="95" xref="yes"/>
-<wire x1="114.3" y1="55.88" x2="144.78" y2="55.88" width="0.1524" layer="91"/>
-<pinref part="IC1" gate="G$1" pin="\(RXD/PCINT16)PD0"/>
+<label x="144.78" y="63.5" size="1.778" layer="95" xref="yes"/>
+<wire x1="116.84" y1="63.5" x2="144.78" y2="63.5" width="0.1524" layer="91"/>
+<pinref part="IC1" gate="G$1" pin="\(RXD0/OC3A/PCINT16)PD0"/>
 </segment>
 <segment>
 <wire x1="236.22" y1="195.58" x2="226.06" y2="195.58" width="0.1524" layer="91"/>
@@ -5408,9 +5455,9 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 <segment>
 <wire x1="152.4" y1="40.64" x2="142.24" y2="40.64" width="0.1524" layer="91"/>
 <pinref part="IC4" gate="A" pin="C"/>
-<pinref part="IC1" gate="G$1" pin="\(INT0/PCINT18)PD2"/>
-<wire x1="114.3" y1="60.96" x2="152.4" y2="60.96" width="0.1524" layer="91"/>
-<wire x1="152.4" y1="60.96" x2="152.4" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="68.58" x2="152.4" y2="68.58" width="0.1524" layer="91"/>
+<wire x1="152.4" y1="68.58" x2="152.4" y2="40.64" width="0.1524" layer="91"/>
+<pinref part="IC1" gate="G$1" pin="\(OC3B/OC4B/INT0/PCINT18)PD2"/>
 </segment>
 </net>
 <net name="N$2" class="0">
@@ -5499,16 +5546,16 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 <segment>
 <pinref part="R12" gate="G$1" pin="1"/>
 <wire x1="195.58" y1="137.16" x2="198.12" y2="137.16" width="0.1524" layer="91"/>
-<pinref part="IC1" gate="G$1" pin="\(CLKO/ICP1/PCINT0)PB0"/>
-<wire x1="114.3" y1="106.68" x2="195.58" y2="106.68" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="106.68" x2="195.58" y2="106.68" width="0.1524" layer="91"/>
 <wire x1="195.58" y1="106.68" x2="195.58" y2="137.16" width="0.1524" layer="91"/>
+<pinref part="IC1" gate="G$1" pin="\(CLKO/ICP1/PCINT0)PB0"/>
 </segment>
 </net>
 <net name="TE" class="0">
 <segment>
-<wire x1="114.3" y1="66.04" x2="144.78" y2="66.04" width="0.1524" layer="91"/>
-<label x="144.78" y="66.04" size="1.778" layer="95" xref="yes"/>
-<pinref part="IC1" gate="G$1" pin="\(XCK/T0/PCINT20)PD4"/>
+<wire x1="116.84" y1="73.66" x2="144.78" y2="73.66" width="0.1524" layer="91"/>
+<label x="144.78" y="73.66" size="1.778" layer="95" xref="yes"/>
+<pinref part="IC1" gate="G$1" pin="\(XCK0/T0/PCINT20)PD4"/>
 </segment>
 <segment>
 <wire x1="236.22" y1="185.42" x2="226.06" y2="185.42" width="0.1524" layer="91"/>
@@ -5519,10 +5566,10 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 <net name="N$5" class="0">
 <segment>
 <pinref part="R11" gate="G$1" pin="1"/>
-<pinref part="IC1" gate="G$1" pin="\(OC1A/PCINT1)PB1"/>
-<wire x1="114.3" y1="109.22" x2="149.86" y2="109.22" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="109.22" x2="149.86" y2="109.22" width="0.1524" layer="91"/>
 <wire x1="149.86" y1="109.22" x2="149.86" y2="137.16" width="0.1524" layer="91"/>
 <wire x1="149.86" y1="137.16" x2="152.4" y2="137.16" width="0.1524" layer="91"/>
+<pinref part="IC1" gate="G$1" pin="\(OC1A/PCINT1)PB1"/>
 </segment>
 </net>
 <net name="RX2" class="0">
@@ -5531,10 +5578,10 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 <label x="142.24" y="116.84" size="1.778" layer="95" xref="yes"/>
 <pinref part="X9" gate="G$1" pin="MISO"/>
 <wire x1="114.3" y1="142.24" x2="127" y2="142.24" width="0.1524" layer="91"/>
-<pinref part="IC1" gate="G$1" pin="\(MISO/PCINT4)PB4"/>
-<wire x1="114.3" y1="116.84" x2="127" y2="116.84" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="116.84" x2="127" y2="116.84" width="0.1524" layer="91"/>
 <wire x1="127" y1="116.84" x2="127" y2="142.24" width="0.1524" layer="91"/>
 <junction x="127" y="116.84"/>
+<pinref part="IC1" gate="G$1" pin="\(RXD1/MISO0/PCINT4)PB4"/>
 </segment>
 <segment>
 <pinref part="R10" gate="G$1" pin="1"/>
@@ -5552,10 +5599,10 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 <label x="134.62" y="114.3" size="1.778" layer="95" xref="yes"/>
 <pinref part="X9" gate="G$1" pin="MOSI"/>
 <wire x1="114.3" y1="139.7" x2="124.46" y2="139.7" width="0.1524" layer="91"/>
-<pinref part="IC1" gate="G$1" pin="\(MOSI/OC2A/PCINT3)PB3"/>
-<wire x1="114.3" y1="114.3" x2="124.46" y2="114.3" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="114.3" x2="124.46" y2="114.3" width="0.1524" layer="91"/>
 <wire x1="124.46" y1="114.3" x2="124.46" y2="139.7" width="0.1524" layer="91"/>
 <junction x="124.46" y="114.3"/>
+<pinref part="IC1" gate="G$1" pin="\(TXD1/MOSI0/OC2A/PCINT3)PB3"/>
 </segment>
 <segment>
 <pinref part="C7" gate="G$1" pin="1"/>
@@ -5567,17 +5614,17 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 <segment>
 <pinref part="X9" gate="G$1" pin="SCK"/>
 <wire x1="114.3" y1="144.78" x2="129.54" y2="144.78" width="0.1524" layer="91"/>
-<pinref part="IC1" gate="G$1" pin="\(SCK/PCINT5)PB5"/>
-<wire x1="114.3" y1="119.38" x2="129.54" y2="119.38" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="119.38" x2="129.54" y2="119.38" width="0.1524" layer="91"/>
 <wire x1="129.54" y1="119.38" x2="129.54" y2="144.78" width="0.1524" layer="91"/>
+<pinref part="IC1" gate="G$1" pin="\(SCK0/PCINT5)PB5"/>
 </segment>
 </net>
 <net name="N$39" class="0">
 <segment>
-<pinref part="IC1" gate="G$1" pin="AREF"/>
-<wire x1="63.5" y1="109.22" x2="58.42" y2="109.22" width="0.1524" layer="91"/>
+<wire x1="66.04" y1="109.22" x2="60.96" y2="109.22" width="0.1524" layer="91"/>
 <pinref part="C3" gate="G$1" pin="1"/>
-<wire x1="58.42" y1="109.22" x2="58.42" y2="106.68" width="0.1524" layer="91"/>
+<wire x1="60.96" y1="109.22" x2="60.96" y2="104.14" width="0.1524" layer="91"/>
+<pinref part="IC1" gate="G$1" pin="AREF"/>
 </segment>
 </net>
 <net name="N$3" class="0">
@@ -5624,58 +5671,58 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 </net>
 <net name="N$28" class="0">
 <segment>
-<pinref part="IC1" gate="G$1" pin="\(ADC0/PCINT8)PC0"/>
 <pinref part="S1" gate="A" pin="4"/>
-<wire x1="114.3" y1="78.74" x2="162.56" y2="78.74" width="0.1524" layer="91"/>
-<wire x1="162.56" y1="78.74" x2="162.56" y2="68.58" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="86.36" x2="162.56" y2="86.36" width="0.1524" layer="91"/>
+<wire x1="162.56" y1="86.36" x2="162.56" y2="83.82" width="0.1524" layer="91"/>
+<pinref part="IC1" gate="G$1" pin="\(MISO1/ADC0/PCINT8)PC0"/>
 </segment>
 </net>
 <net name="N$29" class="0">
 <segment>
-<pinref part="IC1" gate="G$1" pin="\(ADC1/PCINT9)PC1"/>
 <pinref part="S1" gate="B" pin="4"/>
-<wire x1="114.3" y1="81.28" x2="167.64" y2="81.28" width="0.1524" layer="91"/>
-<wire x1="167.64" y1="81.28" x2="167.64" y2="68.58" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="88.9" x2="167.64" y2="88.9" width="0.1524" layer="91"/>
+<wire x1="167.64" y1="88.9" x2="167.64" y2="83.82" width="0.1524" layer="91"/>
+<pinref part="IC1" gate="G$1" pin="\(SCK1/ADC1/PCINT9)PC1"/>
 </segment>
 </net>
 <net name="N$30" class="0">
 <segment>
-<pinref part="IC1" gate="G$1" pin="\(ADC2/PCINT10)PC2"/>
 <pinref part="S1" gate="C" pin="4"/>
-<wire x1="114.3" y1="83.82" x2="172.72" y2="83.82" width="0.1524" layer="91"/>
-<wire x1="172.72" y1="83.82" x2="172.72" y2="68.58" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="91.44" x2="172.72" y2="91.44" width="0.1524" layer="91"/>
+<wire x1="172.72" y1="91.44" x2="172.72" y2="83.82" width="0.1524" layer="91"/>
+<pinref part="IC1" gate="G$1" pin="\(ADC2/PCINT10)PC2"/>
 </segment>
 </net>
 <net name="N$31" class="0">
 <segment>
-<pinref part="IC1" gate="G$1" pin="\(ADC3/PCINT11)PC3"/>
 <pinref part="S1" gate="D" pin="4"/>
-<wire x1="114.3" y1="86.36" x2="177.8" y2="86.36" width="0.1524" layer="91"/>
-<wire x1="177.8" y1="86.36" x2="177.8" y2="68.58" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="93.98" x2="177.8" y2="93.98" width="0.1524" layer="91"/>
+<wire x1="177.8" y1="93.98" x2="177.8" y2="83.82" width="0.1524" layer="91"/>
+<pinref part="IC1" gate="G$1" pin="\(ADC3/PCINT11)PC3"/>
 </segment>
 </net>
 <net name="N$32" class="0">
 <segment>
-<pinref part="IC1" gate="G$1" pin="\(SDA/ADC4/PCINT12)PC4"/>
 <pinref part="S1" gate="E" pin="4"/>
-<wire x1="114.3" y1="88.9" x2="182.88" y2="88.9" width="0.1524" layer="91"/>
-<wire x1="182.88" y1="88.9" x2="182.88" y2="68.58" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="96.52" x2="182.88" y2="96.52" width="0.1524" layer="91"/>
+<wire x1="182.88" y1="96.52" x2="182.88" y2="83.82" width="0.1524" layer="91"/>
+<pinref part="IC1" gate="G$1" pin="\(SDA0/ADC4/PCINT12)PC4"/>
 </segment>
 </net>
 <net name="N$34" class="0">
 <segment>
-<pinref part="IC1" gate="G$1" pin="\(SCL/ADC5/PCINT13)PC5"/>
 <pinref part="S1" gate="F" pin="4"/>
-<wire x1="114.3" y1="91.44" x2="187.96" y2="91.44" width="0.1524" layer="91"/>
-<wire x1="187.96" y1="91.44" x2="187.96" y2="68.58" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="99.06" x2="187.96" y2="99.06" width="0.1524" layer="91"/>
+<wire x1="187.96" y1="99.06" x2="187.96" y2="83.82" width="0.1524" layer="91"/>
+<pinref part="IC1" gate="G$1" pin="\(SCL0/ADC5/PCINT13)PC5"/>
 </segment>
 </net>
 <net name="N$35" class="0">
 <segment>
-<pinref part="IC1" gate="G$1" pin="\(XTAL1/TOSC1/PCINT6)PB6"/>
 <pinref part="S1" gate="G" pin="4"/>
-<wire x1="114.3" y1="121.92" x2="193.04" y2="121.92" width="0.1524" layer="91"/>
-<wire x1="193.04" y1="121.92" x2="193.04" y2="68.58" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="121.92" x2="193.04" y2="121.92" width="0.1524" layer="91"/>
+<wire x1="193.04" y1="121.92" x2="193.04" y2="83.82" width="0.1524" layer="91"/>
+<pinref part="IC1" gate="G$1" pin="\(XTAL1/TOSC1/PCINT6)PB6"/>
 </segment>
 </net>
 <net name="N$62" class="0">
@@ -5707,9 +5754,9 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 <label x="226.06" y="91.44" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
+<wire x1="116.84" y1="76.2" x2="134.62" y2="76.2" width="0.1524" layer="91"/>
+<label x="134.62" y="76.2" size="1.778" layer="95" xref="yes"/>
 <pinref part="IC1" gate="G$1" pin="\(OC0B/T1/PCINT21)PD5"/>
-<wire x1="114.3" y1="68.58" x2="134.62" y2="68.58" width="0.1524" layer="91"/>
-<label x="134.62" y="68.58" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="LED2" class="0">
@@ -5720,9 +5767,9 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 <label x="226.06" y="86.36" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
+<wire x1="116.84" y1="78.74" x2="144.78" y2="78.74" width="0.1524" layer="91"/>
+<label x="144.78" y="78.74" size="1.778" layer="95" xref="yes"/>
 <pinref part="IC1" gate="G$1" pin="\(OC0A/AIN0/PCINT22)PD6"/>
-<wire x1="114.3" y1="71.12" x2="144.78" y2="71.12" width="0.1524" layer="91"/>
-<label x="144.78" y="71.12" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="LED1" class="0">
@@ -5733,9 +5780,9 @@ Datasheet: &lt;a href="./eagle/doc/ic-wandler/max1487-max491.pdf"&gt;max1487-max
 <label x="226.06" y="81.28" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
+<wire x1="116.84" y1="81.28" x2="134.62" y2="81.28" width="0.1524" layer="91"/>
+<label x="134.62" y="81.28" size="1.778" layer="95" xref="yes"/>
 <pinref part="IC1" gate="G$1" pin="\(AIN1/PCINT23)PD7"/>
-<wire x1="114.3" y1="73.66" x2="134.62" y2="73.66" width="0.1524" layer="91"/>
-<label x="134.62" y="73.66" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="N$20" class="0">
