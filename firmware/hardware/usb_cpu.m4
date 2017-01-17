@@ -1,4 +1,4 @@
-dnl Copyright (C) 2014 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+dnl Copyright (C) 2014 - 2015 Stephan Reinhard <Stephan-Reinhard@gmx.de>
 dnl
 dnl This file is part of Homelogic.
 dnl
@@ -42,7 +42,6 @@ diginput(PC3)
 diginput(PC2)
 diginput(PC1)
 diginput(PC0)
-
 
 digoutput(PA7)
 digoutput(PA6)

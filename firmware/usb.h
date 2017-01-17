@@ -26,6 +26,7 @@
 #include <avr/pgmspace.h>
 
 
+#define USB_BUFSIZE 256
 #define USB_NOTI_EP (ENDPOINT_DIR_IN | 2)
 #define USB_NOTI_SIZE 8
 #define USB_TX_EP (ENDPOINT_DIR_IN | 3)

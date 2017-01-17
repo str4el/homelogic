@@ -20,6 +20,7 @@
 
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
@@ -36,6 +37,7 @@ char *busfile = "/tmp/hlvbus";
 char *infile = NULL;
 char *outfile = NULL;
 char *device = NULL;
+char *device_to_load = NULL;
 
 pid_t terminal_child = -1;
 
@@ -69,7 +71,7 @@ void get_options(int argc, char *argv[])
 {
         int c;
 
-        while ((c = getopt(argc, argv, ":b:cd:Elo:stv")) != -1) {
+        while ((c = getopt(argc, argv, ":b:cd:El:Lo:stv")) != -1) {
                 switch (c) {
                 case 'b':
                         busfile = optarg;
@@ -89,6 +91,12 @@ void get_options(int argc, char *argv[])
 
                 case 'l':
                         load = true;
+                        device_to_load = optarg;
+                        break;
+
+                case 'L':
+                        load = true;
+                        device_to_load = "-1";
                         break;
 
                 case 'o':
@@ -244,11 +252,11 @@ hlcon_t *connect_device(void)
 
         if (!device) return NULL;
 
-        flags = 0;
+        flags = HL_NOVERIFY;
         strtok(device, ",");
         while((flag = strtok(NULL, ","))) {
-                if (!strcasecmp(flag, "noverify")) {
-                        flags |= HL_NOVERIFY;
+                if (!strcasecmp(flag, "verify")) {
+                        flags &= ~HL_NOVERIFY;
                 } else {
                         fprintf(stderr, "unknown flag %s!\n", flag);
                         return NULL;
@@ -398,11 +406,47 @@ int stop_terminal(void)
 
 
 
+/* Laedt ein teil des uebersetzten Programms in ein eizelnes Device
+ */
+int load_device(hlc_t *data, int bus, int device)
+{
+        int bytes;
+        char buf[64];
+
+        if (data->device[device].size == 0) return 0;
+
+        info("Stop device %i.\n", device);
+        sprintf(buf, "STOP FE %02X\n", (uint8_t)device);
+        if (write(bus, buf, strlen(buf)) == -1) {
+                fprintf(stderr, "Couldn't stop device %i! Skip loading.\n", device);
+                return -1;
+        }
+
+        bytes = hl_load_device(data, bus, device);
+        if (bytes == -1) {
+                fprintf(stderr, "Couldn't load data into device %i! Skip loading.\n", device);
+                return -1;
+        }
+        info("%i bytes written to device %i.\n", bytes, device);
+
+        info("Run device %i.\n", device);
+        sprintf(buf, "RUN FE %02X\n", (uint8_t)device);
+        if (write(bus, buf, strlen(buf)) == -1) {
+                fprintf(stderr, "Couldn't run device %i! Skip loading.\n", device);
+                return -1;
+        }
+
+        return 0;
+}
+
+
+
+
 int load_program(hlc_t *data, int bus)
 {
         FILE *in;
-        int bytes;
-        char buf[64];
+        int device;
+        char *end;
 
         if (compile) {
                 info("Load previously compiled data.\n");
@@ -428,28 +472,24 @@ int load_program(hlc_t *data, int bus)
                 if (infile) fclose(in);
         }
 
+        device = strtol(device_to_load, &end, 10);
+        if (! *device_to_load || *end) {
+                fprintf(stderr, "Couldn't identify device to load!\n");
+                return -1;
+        }
 
-        for (uint16_t i = 0; i < sizeof(data->device) / sizeof(*data->device); i++) {
-                if (data->device[i].size == 0) continue;
-
-                info("Stop device %i.\n", i);
-                sprintf(buf, "STOP FE %02X\n", (uint8_t)i);
-                if (write(bus, buf, strlen(buf)) == -1) {
-                        fprintf(stderr, "cannot stop device %i! Skip loading.\n", i);
+        if (device < 0) {
+                for (uint16_t i = 0; i < sizeof(data->device) / sizeof(*data->device); i++) {
+                        if (-1 == load_device(data, bus, i)) {
+                                return -1;
+                        }
+                }
+        } else {
+                if (device >= 128) {
+                        fprintf(stderr, "Device address %i is invalid!\n", device);
                         return -1;
                 }
-
-                bytes = hl_load_device(data, bus, i);
-                if (bytes == -1) {
-                        fprintf(stderr, "cannot load data into device %i! Skip loading.\n", i);
-                        return -1;
-                }
-                info("%i bytes written to device %i.\n", bytes, i);
-
-                info("Run device %i.\n", i);
-                sprintf(buf, "RUN FE %02X\n", (uint8_t)i);
-                if (write(bus, buf, strlen(buf)) == -1) {
-                        fprintf(stderr, "cannot run device %i!\n", i);
+                if (-1 == load_device(data, bus, device)) {
                         return -1;
                 }
         }
