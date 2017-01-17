@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013, 2014, 2016 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+ * Copyright (C) 2013 - 2017 Stephan Reinhard <Stephan-Reinhard@gmx.de>
  *
  * This file is part of Homelogic.
  *
@@ -221,6 +221,25 @@ static const char *get_token(hl_scan_context_t *sc)
 
 
 
+/* CRC32 Funktion wird als Hash für Sprungmarken benutzt
+ */
+static uint32_t crc32(uint8_t *msg, size_t len)
+{
+        uint32_t crc = 0xffffffff;
+
+        for (size_t i = 0; i < len; i++) {
+                crc ^= msg[i];
+                for (int j = 7; j >= 0; j--) {
+                        crc = (crc >> 1) ^ (0xEDB88320 & -(crc & 1));
+                }
+        }
+
+        return ~crc;
+}
+
+
+
+
 /* Versucht aus dem Token eine Konstatnte zu lesen und speichert den
  * der node ab. Gibt bei Erfolg 0 zurück, andernfalls -1
  */
@@ -407,6 +426,78 @@ static inline int scan_opcode(const char *token, hl_node_t *node)
 
 
 
+/* Versucht aus dem Token ein gültiges Sprungziel zu lesen und
+ * legt dessen Hash in der node ab.
+ * Gibt 0 bei Erfolg oder -1 bei Misserfolg zurück.
+ */
+static int scan_target(const char *token, hl_node_t *node)
+{
+        size_t len = 0;
+
+        for (size_t i = 0; i < strlen(token); i++) {
+                if (token[i] != '_') break;
+                len++;
+        }
+
+        if (isalpha(token[len++]) == 0) {
+                return -1;
+        }
+
+        for (size_t i = len; i < strlen(token); i++) {
+                if (isalnum(token[i]) || token[i] == '_') {
+                        len++;
+                        continue;
+                }
+
+                if (token[i] == ':' && len + 1 == strlen(token)) {
+                        node->type = n_target;
+                        node->hash = crc32(token, len);
+                        return 0;
+                }
+
+                return -1;
+        }
+
+        return -1;
+}
+
+
+
+
+/* Versucht aus dem Token ein gültiges Label zu lesen und legt
+ * dessen Hash in der node ab.
+ * Gibt 0 bei Erfolg oder -1 bei Misserfolg zurück.
+ */
+static int scan_label(const char *token, hl_node_t *node)
+{
+        size_t len = 0;
+
+        for (size_t i = 0; i < strlen(token); i++) {
+                if (token[i] != '_') break;
+                len++;
+        }
+
+        if (isalpha(token[len++]) == 0) {
+                return -1;
+        }
+
+        for (size_t i = len; i < strlen(token); i++) {
+                if (isalnum(token[i]) || token[i] == '_') {
+                        len++;
+                        continue;
+                }
+
+                return -1;
+        }
+
+        node->type = n_label;
+        node->hash = crc32(token, len);
+        return 0;
+}
+
+
+
+
 /* Liest den Eingangsstream und erstellet daraus die Nodetabelle.
  * Gibt im Fehlerfall -1 zurück ansonsten 0.
  */
@@ -426,7 +517,9 @@ static int scan_file(hlc_t *hlc, FILE *in)
                 if (scan_opcode(token, &node) &&
                     scan_address(token, &node) &&
                     scan_timer_counter(token, &node) &&
-                    scan_constant(token, &node)) {
+                    scan_constant(token, &node) &&
+                    scan_target(token, &node) &&
+                    scan_label(token, &node)) {
                         node.type = n_invalid;
                 }
 
@@ -484,7 +577,7 @@ static inline int node_has_device_address(hlc_t *hlc, size_t n)
  * start, ende und ein zuständiges Gerät.
  * Gibt -1 im Fehlerfall zurück ansonsten 0
  */
-void split_blocks(hlc_t *hlc)
+static void split_blocks(hlc_t *hlc)
 {
         int n = 0;
         int device;
@@ -629,6 +722,7 @@ static void check_block(hlc_t *hlc, hl_block_t block)
                 case n_address:
                 case n_const:
                 case n_target:
+                case n_label:
                         hl_set_node_error(e_expect_opcode, node);
                         continue;
 

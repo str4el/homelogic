@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+ * Copyright (C) 2014, 2017 Stephan Reinhard <Stephan-Reinhard@gmx.de>
  *
  * This file is part of Homelogic.
  *
@@ -35,7 +35,6 @@ extern "C" {
 #define HL_MAX_DEVICES 128
 #define HL_MAX_LINE_LEN 1024
 #define HL_MAX_TOKEN_LEN 128
-#define HL_MAX_LABEL_LEN 32
 
 /* Flags für connector
  */
@@ -88,7 +87,7 @@ typedef enum hl_node_type_e {
         n_opcode,
         n_address,
         n_const,
-        n_symbol,
+        n_label,
         n_target,
 } hl_node_type_t;
 
@@ -148,8 +147,7 @@ typedef struct hl_node_s {
                 hl_opcode_t *opcode;
                 hl_address_t address;
                 uint16_t constant;
-                char symbol [HL_MAX_LABEL_LEN];
-                char target [HL_MAX_LABEL_LEN];
+                uint32_t hash;
         };
 } hl_node_t;
 
