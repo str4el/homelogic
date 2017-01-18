@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2013 - 2015 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+ * Copyright (C) 2013 - 2017 Stephan Reinhard <Stephan-Reinhard@gmx.de>
  *
  * This file is part of Homelogic.
  *
@@ -120,8 +120,10 @@ int __attribute__ ((OS_main)) main (void) {
          * empfiehlt eine Funktion in der Sektion .init3, aber mein bisheriger
          * Test hat gezeig, dass das hier reicht.
          */
+        uint8_t mcusr = MCUSR;
         MCUSR = 0; // WDRF muss vorher gelöscht werden
         wdt_disable();
+
 
         init_pin();
 
@@ -202,7 +204,8 @@ int __attribute__ ((OS_main)) main (void) {
 
         prog_write.len = 0;
         state.current = ps_stop;
-        state.coming = ps_run;
+        // Wenn ein Watchdog ausgelöst wurde, soll das Programm nicht automatisch starten
+        state.coming = mcusr & (1 << WDRF) ? ps_stop : ps_run;
         state.step = false;
         wdt_enable(WDTO_2S);
 
