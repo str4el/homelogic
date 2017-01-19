@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
 #include <unistd.h>
 #include <getopt.h>
 #include <signal.h>
@@ -37,7 +38,7 @@ char *busfile = "/tmp/hlvbus";
 char *infile = NULL;
 char *outfile = NULL;
 char *device = NULL;
-char *device_to_load = NULL;
+char load_device_list[16] = { 0 };
 
 pid_t terminal_child = -1;
 
@@ -49,6 +50,74 @@ bool load = false;
 
 volatile bool stay = false;
 volatile bool run_term = false;
+
+
+
+/* Setzt oder löscht das Bit in load_device_list
+ */
+static inline int set_load_device(long int n, bool stat)
+{
+        if (n < 0 || n >= 128) return -1;
+
+        if (stat) {
+                load_device_list[n / 8] |= (1 << n % 8);
+        } else {
+                load_device_list[n / 8] &= ~(1 << n % 8);
+        }
+
+        return 0;
+}
+
+
+
+
+/* Gibt das Bit in load_device_list zurück
+ */
+static inline bool get_load_device(int n)
+{
+        if (n < 0 || n >= 128) return false;
+        return (load_device_list[n / 8] & (1 << n % 8)) ? true : false;
+}
+
+
+
+
+/* Dekodiert den Optionsparameter für die zu ladenden Geräte
+ */
+int decode_load_list(char *opt)
+{
+        char *sepptr = 0;
+        char *rangeptr = 0;
+        char *range;
+        char *num;
+
+        long int min, max;
+
+        char *sep = opt;
+        while((range = strtok_r(sep, ",", &sepptr)) != NULL) {
+                num = strtok_r(range, "-", &rangeptr);
+                if (!num || !isdigit(*num)) return -1;
+
+                min = max = strtol(num, NULL, 10);
+
+                num = strtok_r(NULL, ",", &rangeptr);
+                if (num) {
+                        if (!isdigit(*num)) return -1;
+                        max = strtol(num, NULL, 10);
+                }
+
+                if (min > max) return -1;
+                for (long int i = min; i <= max; i++) {
+                        if (set_load_device(i, true)) {
+                                return -1;
+                        }
+                }
+
+                sep = NULL;
+        }
+
+        return 0;
+}
 
 
 
@@ -71,7 +140,7 @@ void get_options(int argc, char *argv[])
 {
         int c;
 
-        while ((c = getopt(argc, argv, ":b:cd:El:Lo:stv")) != -1) {
+        while ((c = getopt(argc, argv, ":b:cd:El:o:stv")) != -1) {
                 switch (c) {
                 case 'b':
                         busfile = optarg;
@@ -91,12 +160,10 @@ void get_options(int argc, char *argv[])
 
                 case 'l':
                         load = true;
-                        device_to_load = optarg;
-                        break;
-
-                case 'L':
-                        load = true;
-                        device_to_load = "-1";
+                        if (decode_load_list(optarg)) {
+                                fprintf(stderr, "invalid value for load option!\n");
+                                exit(1);
+                        }
                         break;
 
                 case 'o':
@@ -406,47 +473,9 @@ int stop_terminal(void)
 
 
 
-/* Laedt ein teil des uebersetzten Programms in ein eizelnes Device
- */
-int load_device(hlc_t *data, int bus, int device)
-{
-        int bytes;
-        char buf[64];
-
-        if (data->device[device].size == 0) return 0;
-
-        info("Stop device %i.\n", device);
-        sprintf(buf, "STOP FE %02X\n", (uint8_t)device);
-        if (write(bus, buf, strlen(buf)) == -1) {
-                fprintf(stderr, "Couldn't stop device %i! Skip loading.\n", device);
-                return -1;
-        }
-
-        bytes = hl_load_device(data, bus, device);
-        if (bytes == -1) {
-                fprintf(stderr, "Couldn't load data into device %i! Skip loading.\n", device);
-                return -1;
-        }
-        info("%i bytes written to device %i.\n", bytes, device);
-
-        info("Run device %i.\n", device);
-        sprintf(buf, "RUN FE %02X\n", (uint8_t)device);
-        if (write(bus, buf, strlen(buf)) == -1) {
-                fprintf(stderr, "Couldn't run device %i! Skip loading.\n", device);
-                return -1;
-        }
-
-        return 0;
-}
-
-
-
-
 int load_program(hlc_t *data, int bus)
 {
         FILE *in;
-        int device;
-        char *end;
 
         if (compile) {
                 info("Load previously compiled data.\n");
@@ -472,24 +501,11 @@ int load_program(hlc_t *data, int bus)
                 if (infile) fclose(in);
         }
 
-        device = strtol(device_to_load, &end, 10);
-        if (! *device_to_load || *end) {
-                fprintf(stderr, "Couldn't identify device to load!\n");
-                return -1;
-        }
+        for (int i = 0; i < 128; i++) {
+                if (!get_load_device(i)) continue;
 
-        if (device < 0) {
-                for (uint16_t i = 0; i < sizeof(data->device) / sizeof(*data->device); i++) {
-                        if (-1 == load_device(data, bus, i)) {
-                                return -1;
-                        }
-                }
-        } else {
-                if (device >= 128) {
-                        fprintf(stderr, "Device address %i is invalid!\n", device);
-                        return -1;
-                }
-                if (-1 == load_device(data, bus, device)) {
+                if (-1 == hl_load_device(data, bus, i)) {
+                        fprintf(stderr, "cannot load data into device!\n");
                         return -1;
                 }
         }

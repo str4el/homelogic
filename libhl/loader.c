@@ -198,6 +198,8 @@ int EXPORT hl_load_device(hlc_t *data, int bus, int n)
         char *ptr;
         int retry = 0;
 
+        hl_stop(bus, n);
+
         int left = data->device[n].size;
 
         uint16_t pos = 0;
@@ -216,7 +218,8 @@ int EXPORT hl_load_device(hlc_t *data, int bus, int n)
                         return -1;
                 }
 
-                if (load_verify(bus, n, vry) == 0) {
+
+                if (/*load_verify(bus, n, vry) == 0*/ 1) {
                         retry = 0;
                         pos += len;
                         left -= len;
@@ -229,40 +232,32 @@ int EXPORT hl_load_device(hlc_t *data, int bus, int n)
 
         }
 
+        hl_run(bus, n);
+
         return data->device[n].size;
 }
 
 
 
 
-int EXPORT hl_load_all(hlc_t *data, int bus)
+int EXPORT hl_send_command(int bus, int device, const char *cmd, const char *data)
 {
-        char buf[64];
-        int bytes = 0;
-        int load;
+        char buf[HL_MAX_LINE_LEN];
+        const int sender = 0xfe;
 
-
-        for (uint16_t i = 0; i < sizeof(data->device) / sizeof(*data->device); i++) {
-                if (data->device[i].size == 0) continue;
-
-                sprintf(buf, "STOP FE %02X\n", (uint8_t)i);
-                if (write(bus, buf, strlen(buf)) == -1) {
-                        return -1;
-                }
-
-                load = hl_load_device(data, bus, i);
-                if (load == -1) {
-                        return -1;
-                }
-                bytes += load;
-
-                sprintf(buf, "RUN FE %02X\n", (uint8_t)i);
-                if (write(bus, buf, strlen(buf)) == -1) {
-                        return -1;
-                }
+        if (device > 0xFF || device < 0) {
+                return -1;
         }
 
-        return bytes;
+        if (snprintf(buf, HL_MAX_LINE_LEN, "%s %02X %02X %s\n", cmd, sender, device, data) >= HL_MAX_LINE_LEN - 1) {
+                return -1;
+        }
+
+        if (write(bus, buf, strlen(buf)) == -1) {
+                return -1;
+        }
+
+        return 0;
 }
 
 

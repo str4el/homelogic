@@ -247,7 +247,30 @@ extern int hl_compile (hlc_t *hlc, FILE *in);
 extern int hl_write_intel_hex(hlc_t *data, FILE *file);
 extern int hl_read_intel_hex(hlc_t *data, FILE *file);
 extern int hl_load_device(hlc_t *data, int bus, int n);
-extern int hl_load_all(hlc_t *data, int bus);
+extern int hl_send_command(int bus, int device, const char *cmd, const char *data);
+
+
+static inline int hl_stop(int bus, int device)
+{
+        return hl_send_command(bus, device, "STOP", "");
+}
+
+static inline int hl_stop_all(int bus)
+{
+        return hl_send_command(bus, 0xff, "STOP", "");
+}
+
+static inline int hl_run(int bus, int device)
+{
+        return hl_send_command(bus, device, "RUN", "");
+}
+
+static inline int hl_run_all(int bus)
+{
+        return hl_send_command(bus, 0xff, "RUN", "");
+}
+
+
 
 extern hlcon_t *hl_connector_init(const char *name, unsigned int flags);
 extern void hl_connector_destroy(hlcon_t *con);

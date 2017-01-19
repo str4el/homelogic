@@ -748,7 +748,7 @@ static void check_block(hlc_t *hlc, hl_block_t block)
 
 
 
-/* Reserviert genügend Speicher für die Assemblierung.
+/* Reserviert und initialisiert genügend Speicher für die Assemblierung.
  * Bestehender Speicher wird freigegeben.
  * Gibt im Fehlerfall -1 zurück ansonsten 0.
  */
