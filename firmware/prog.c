@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 - 2015 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+ * Copyright (C) 2013 - 2017 Stephan Reinhard <Stephan-Reinhard@gmx.de>
  *
  * This file is part of Homelogic.
  *
@@ -544,13 +544,18 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                 case oc_less_than_brace:
                 case oc_less_equal:
                 case oc_less_equal_brace:
-                        switch (spec) {
-                        case as_word:     tmp.a = prog_get_word(imageptr);  break;
-                        case as_byte:     tmp.a = prog_get_byte(imageptr);  break;
-                        case as_timer:    tmp.c = TIMER_STATUS(*imageptr);  break;
-                        case as_counter:  tmp.a = COUNTER_VALUE(*imageptr); break;
-                        case as_constant: tmp.a = prog_get_data();          break;
-                        default:          tmp.c = prog_get_bit(imageptr);   break;
+                        if (spec & as_timer) {
+                                tmp.c = TIMER_STATUS(*imageptr);
+                        } else if (spec & as_counter) {
+                                tmp.a = COUNTER_VALUE(*imageptr);
+                        } else if (spec & as_constant) {
+                                tmp.a = prog_get_data();
+                        } else {
+                                switch (spec) {
+                                case as_word:     tmp.a = prog_get_word(imageptr);  break;
+                                case as_byte:     tmp.a = prog_get_byte(imageptr);  break;
+                                default:          tmp.c = prog_get_bit(imageptr);   break;
+                                }
                         }
                         break;
 
@@ -558,13 +563,18 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                 case oc_and_not:
                 case oc_or_not:
                 case oc_xor_not:
-                        switch (spec) {
-                        case as_word:     tmp.a = ~prog_get_word(imageptr);  break;
-                        case as_byte:     tmp.a = ~prog_get_byte(imageptr);  break;
-                        case as_timer:    tmp.c = !TIMER_STATUS(*imageptr);  break;
-                        case as_counter:  tmp.a = ~COUNTER_VALUE(*imageptr); break;
-                        case as_constant: tmp.a = ~prog_get_data();          break;
-                        default:          tmp.c = !prog_get_bit(imageptr);   break;
+                        if (spec & as_timer) {
+                                tmp.c = !TIMER_STATUS(*imageptr);
+                        } else if (spec & as_counter) {
+                                tmp.a = ~COUNTER_VALUE(*imageptr);
+                        } else if (spec & as_constant) {
+                                tmp.a = ~prog_get_data();
+                        } else {
+                                switch (spec) {
+                                case as_word:     tmp.a = ~prog_get_word(imageptr);  break;
+                                case as_byte:     tmp.a = ~prog_get_byte(imageptr);  break;
+                                default:          tmp.c = !prog_get_bit(imageptr);   break;
+                                }
                         }
                         break;
 
