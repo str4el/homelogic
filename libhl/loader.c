@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Stephan Reinhard <Stephan-Reinhard@gmx.de>
+ * Copyright (C) 2013 - 2017 Stephan Reinhard <Stephan-Reinhard@gmx.de>
  *
  * This file is part of Homelogic.
  *
@@ -219,7 +219,7 @@ int EXPORT hl_load_device(hlc_t *data, int bus, int n)
                 }
 
 
-                if (/*load_verify(bus, n, vry) == 0*/ 1) {
+                if (load_verify(bus, n, vry) == 0) {
                         retry = 0;
                         pos += len;
                         left -= len;
