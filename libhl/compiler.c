@@ -982,6 +982,11 @@ static int assemble_device (hlc_t *hlc, int device)
                 head->ph_program_crc16 = crc16_update(head->ph_program_crc16, mem[i]);
         }
 
+        /* Speichergröße wird auf die Programmgröße reduziert, da sonst der
+         * Loader unnötig viel überträgt.
+         */
+        hlc->device[device].size = hl_program_size(&hlc->device[device]);
+
         return 0;
 }
 
