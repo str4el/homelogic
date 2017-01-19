@@ -89,6 +89,8 @@ char get_memtype(const struct command_s *cmd)
 
 void analyze_command(const struct command_s *cmd)
 {
+        printf("\t%02X %02X%02X%02X:", cmd->c_opcode, cmd->c_address.aa_spec, cmd->c_address.aa_device, cmd->c_address.aa_byte);
+
         const char *name = "Ivalid";
 
         for (int i = 0; i < sizeof(opcodes) / sizeof(*opcodes); i++) {
