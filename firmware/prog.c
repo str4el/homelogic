@@ -479,21 +479,9 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
 
 
                 /* Vorbereiten der Opcodedaten
+                 * periphery_offset errechen, wenn es sich um Daten im RAM handelt.
                  */
-                switch (spec & 0xE0) {
-                case as_dword:
-                        // FIXME: Nicht implementierte funktionalität
-                        prog_error(ERR_FEATURE);
-                        break;
-
-                case as_input:
-                case as_output:
-                case as_memory:
-                        spec &= 0x1F;
-                        // kein break!
-
-                case as_timer:
-                case as_counter:
+                if (as_input <= spec && spec < as_constant) {
                         periphery_offset = prog_get_periphery_offset(progc.cmd.c_address.aa_device,
                                                                    progc.cmd.c_address.aa_spec,
                                                                    progc.cmd.c_address.aa_byte);
@@ -503,6 +491,20 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                         } else {
                                 imageptr = &(progc.image[periphery_offset]);
                         }
+                }
+
+
+                // Bitmaskierungen für die weiteren switch anweisungen
+                switch (spec & 0xE0) {
+                case as_input:
+                case as_output:
+                case as_memory:
+                        spec &= 0x1F;
+                        break;
+
+                case as_timer:
+                case as_counter:
+                        spec &= 0xE0;
                         break;
                 }
 
@@ -545,12 +547,12 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                 case oc_less_equal:
                 case oc_less_equal_brace:
                         switch (spec) {
-                        case as_word:              tmp.a = prog_get_word(imageptr);  break;
-                        case as_byte:              tmp.a = prog_get_byte(imageptr);  break;
-                        case as_timer   | as_word: tmp.c = TIMER_STATUS(*imageptr);  break;
-                        case as_counter | as_word: tmp.a = COUNTER_VALUE(*imageptr); break;
-                        case as_constant:          tmp.a = prog_get_data();          break;
-                        default:                   tmp.c = prog_get_bit(imageptr);   break;
+                        case as_word:     tmp.a = prog_get_word(imageptr);  break;
+                        case as_byte:     tmp.a = prog_get_byte(imageptr);  break;
+                        case as_timer:    tmp.c = TIMER_STATUS(*imageptr);  break;
+                        case as_counter:  tmp.a = COUNTER_VALUE(*imageptr); break;
+                        case as_constant: tmp.a = prog_get_data();          break;
+                        default:          tmp.c = prog_get_bit(imageptr);   break;
                         }
                         break;
 
@@ -559,12 +561,12 @@ prog_register_t prog_execute(prog_register_t reg, uint8_t depth)
                 case oc_or_not:
                 case oc_xor_not:
                         switch (spec) {
-                        case as_word:              tmp.a = ~prog_get_word(imageptr);  break;
-                        case as_byte:              tmp.a = ~prog_get_byte(imageptr);  break;
-                        case as_timer   | as_word: tmp.c = !TIMER_STATUS(*imageptr);  break;
-                        case as_counter | as_word: tmp.a = ~COUNTER_VALUE(*imageptr); break;
-                        case as_constant:          tmp.a = ~prog_get_data();          break;
-                        default:                   tmp.c = !prog_get_bit(imageptr);   break;
+                        case as_word:     tmp.a = ~prog_get_word(imageptr);  break;
+                        case as_byte:     tmp.a = ~prog_get_byte(imageptr);  break;
+                        case as_timer:    tmp.c = !TIMER_STATUS(*imageptr);  break;
+                        case as_counter:  tmp.a = ~COUNTER_VALUE(*imageptr); break;
+                        case as_constant: tmp.a = ~prog_get_data();          break;
+                        default:          tmp.c = !prog_get_bit(imageptr);   break;
                         }
                         break;
 
