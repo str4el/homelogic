@@ -1,10 +1,9 @@
 TARGET = homelogic
 PORPOSE = mcu
-
-include ../defaults.mk
-include ../.config
-
 DEPFILE = .deps
+
+-include .config
+include defaults.mk
 
 HW_SRC-$(atmega32) += hardware/atmega32.m4
 HW_SRC-$(atmega1284p) += hardware/atmega1284p.m4
@@ -13,7 +12,6 @@ HW_SRC-$(at90usb1287) += hardware/at90usb1287.m4
 HW_SRC-$(prototype) += hardware/prototype.m4
 HW_SRC-$(dig_ac230) += hardware/dig_ac230.m4
 HW_SRC-$(CPU_USB) += hardware/usb_cpu.m4
-
 
 SRC = adc.c bus.c error.c main.c prog.c
 
@@ -55,7 +53,7 @@ build: elf hex
 elf: $(TARGET).elf
 hex: $(TARGET).hex
 
-$(HW_H): $(HW_SRC) ../config.h
+$(HW_H): $(HW_SRC) config.h
 	$(M4) $(HW_SRC) > $(HW_H)
 
 .SUFFIXES: .elf .hex
@@ -73,6 +71,9 @@ $(TARGET).elf: $(OBJ)
 clean:
 	$(RM) $(TARGET).hex $(TARGET).elf $(OBJ) $(DEPFILE) $(HW_H)
 
+distclean: clean
+	$(RM) .config config.h
+
 
 # Program the device.
 program: $(TARGET).hex
@@ -89,7 +90,6 @@ fuses:
 	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_LFUSE) $(AVRDUDE_WRITE_HFUSE) $(AVRDUDE_WRITE_EFUSE)
 
 
-
 -include $(DEPFILE)
 
 # Dependency
@@ -97,4 +97,20 @@ $(DEPFILE): $(SRC) $(HW_H)
 	$(CC) $(CFLAGS) -M -mmcu=$(MCU) $(SRC) > $(DEPFILE)
 
 
-.PHONY:	all build elf hex program fuses clean distclean
+CONFIG_SHELL := $(shell if [ x"`uname`" = x"Darwin" ] && [ -x /opt/local/bin/bash ] ; then echo /opt/local/bin/bash; \
+          elif [ x"`uname`" = x"Darwin" ] && [ -x /usr/local/bin/bash ] ; then echo /usr/local/bin/bash; \
+          elif [ x"`uname`" = x"FreeBSD" ]; then echo /usr/local/bin/bash; \
+          elif [ -x "$$BASH" ]; then echo $$BASH; \
+          elif [ -x /bin/bash ]; then echo /bin/bash; \
+          elif [ -x /usr/local/bin/bash ]; then echo /usr/local/bin/bash; \
+          else echo sh; fi)
+
+
+menuconfig:
+	$(MAKE) -C scripts/lxdialog all
+	$(CONFIG_SHELL) scripts/Menuconfig config.in
+	test -e .config
+
+
+
+.PHONY:	all build elf hex program fuses clean distclean menuconfig

@@ -1,139 +1,140 @@
-dep_bool_menu "Firmware" BUILD_FIRMWARE
-        choice 'Target Hardware'             \
-                "Prototype    prototype      \
-                 DigAC230     dig_ac230      \
-                 CPU_USB      CPU_USB"       \
-                'DigAC230' HARDWARE
+string "Version" VERSION "$(git describe 2> /dev/null || echo unknown)"
 
-        case $HARDWARE in
-        prototype|dig_ac230)
-                choice 'Target MCU'			\
-                        "ATmega32     atmega32		\
-                         ATmega1284p  atmega1284p"	\
-                        'ATmega32' MCU
+choice 'Target Hardware'             \
+        "Prototype    prototype      \
+         DigAC230     dig_ac230      \
+         CPU_USB      CPU_USB"       \
+        'DigAC230' HARDWARE
 
-                int "MCU frequency" FREQ 8000000
-                define_int F_CPU ${FREQ}UL
-        ;;
+case $HARDWARE in
+prototype|dig_ac230)
+        choice 'Target MCU'			\
+                "ATmega32     atmega32		\
+                 ATmega1284p  atmega1284p"	\
+                'ATmega32' MCU
 
-        CPU_USB)
-                choice 'Target MCU'                \
-                        "AT90usb1287  at90usb1287" \
-                        'AT90usb1287' MCU
+        int "MCU frequency" FREQ 8000000
+        define_int F_CPU ${FREQ}UL
+;;
 
-                int "MCU frequency" FREQ 16000000
-                define_int F_CPU ${FREQ}UL
-        ;;
-        esac
+CPU_USB)
+        choice 'Target MCU'                \
+                "AT90usb1287  at90usb1287" \
+                'AT90usb1287' MCU
 
-
-
-
-        case $HARDWARE in
-        prototype)
-                int "Input debounce time (ms)" INPUT_DEBOUNCE 200
-                int "Debounce on state multiplier" INPUT_DEBOUNCE_ON_MUL 4
-        ;;
-        dig_ac230|CPU_USB)
-                int "Input debounce time (ms)" INPUT_DEBOUNCE 20
-                int "Debounce on state multiplier" INPUT_DEBOUNCE_ON_MUL 1
-        ;;
-        esac
-
-        int "Bus speed (baudrate)" BAUD 9600
-
-        dep_bool_menu "I2C Bus" I2C_SUPPORT
-                define_int I2C_ACK 1
-                define_int I2C_NACK 0
-
-                mainmenu_option next_comment
-                comment "I2C Bus timing"
-                        int "Bus free time between a STOP and START condition" I2C_T_BUF 5
-                        int "Hold time (repeated) START condition" I2C_T_HD_STA 4
-                        int "LOW period of SCL clock" I2C_T_LOW 5
-                        int "HIGH period of SCL clock" I2C_T_HIGH 4
-                        int "Setup time for a repeated START condition" I2C_T_SU_STA 5
-                        int "Data hold time" I2C_T_HD_DAT 0
-                        int "Data setup time" I2C_T_SU_DAT 1
-                        int "Setup time for STOP condition" I2C_T_SU_STO 4
-                endmenu
-
-                dep_bool "Real Time Clock" RTC_SUPPORT $I2C_SUPPORT
-
-                if [ "$RTC_SUPPORT" = "y" -a "$HARDWARE" = "prototype" -o "$HARDWARE" = "dig_ac230" ]; then
-                        define_bool RTC_USE_SQW y
-                else
-                        define_bool RTC_USE_SQW n
-                fi
-
-        endmenu
+        int "MCU frequency" FREQ 16000000
+        define_int F_CPU ${FREQ}UL
+;;
+esac
 
 
-        dep_bool "USB Support" USB_SUPPORT $CPU_USB
-        dep_bool "Bootloader Support" BOOTLOADER_SUPPORT $CPU_USB
 
 
-        # get the flash size according to the cpu type
-        FLASH_SIZE=$((`echo -e "#include <avr/io.h>\nFLASHEND" | avr-cpp -mmcu=$MCU | sed '$!d'` + 1 ))
+case $HARDWARE in
+prototype)
+        int "Input debounce time (ms)" INPUT_DEBOUNCE 200
+        int "Debounce on state multiplier" INPUT_DEBOUNCE_ON_MUL 4
+;;
+dig_ac230|CPU_USB)
+        int "Input debounce time (ms)" INPUT_DEBOUNCE 20
+        int "Debounce on state multiplier" INPUT_DEBOUNCE_ON_MUL 1
+;;
+esac
 
-        define_hex FLASH_SIZE "$(printf '0x%X\n' $FLASH_SIZE)"
-        define_hex EEPROM_SIZE "$(printf '0x%X\n' $((`echo -e "#include <avr/io.h>\nE2END" | avr-cpp -mmcu=$MCU | sed '$!d'` + 1)))"
-        define_hex RAM_SIZE "$(printf '0x%X\n' $((`echo -e "#include <avr/io.h>\nRAMEND" | avr-cpp -mmcu=$MCU | sed '$!d'` + 1)))"
-        define_hex FLASH_PAGESIZE "$(printf '0x%X\n' $((`echo -e "#include <avr/io.h>\nSPM_PAGESIZE" | avr-cpp -mmcu=$MCU | sed '$!d'`)))"
-        define_hex EEPROM_PAGESIZE "$(printf '0x%X\n' $((`echo -e "#include <avr/io.h>\nE2PAGESIZE" | avr-cpp -mmcu=$MCU | sed '$!d'`)))"
+int "Bus speed (baudrate)" BAUD 9600
 
+dep_bool_menu "I2C Bus" I2C_SUPPORT
+        define_int I2C_ACK 1
+        define_int I2C_NACK 0
 
         mainmenu_option next_comment
-        comment "AVRDUDE configuration"
-                string "Command" AVRDUDE $( command -v avrdude )
-                string "Programmer Type (-c type)" AVRDUDE_PROGRAMMER "avrispmkii"
-                string "Port (-P port)" AVRDUDE_PORT "usb"
-                string "Pass extra options to avrdude" AVRDUDE_EXTRA_OPTIONS
-
-                case "$MCU" in
-                        atmega32)
-                                DEFAULT_AVRDUDE_LFUSE=04
-                                DEFAULT_AVRDUDE_HFUSE=d9
-                                DEFAULT_AVRDUDE_EFUSE=""
-                        ;;
-                        atmega1284p)
-                                DEFAULT_AVRDUDE_LFUSE=c2
-                                DEFAULT_AVRDUDE_HFUSE=d9
-                                DEFAULT_AVRDUDE_EFUSE=fc
-                        ;;
-                        at90usb1287)
-                                DEFAULT_AVRDUDE_LFUSE=de
-                                DEFAULT_AVRDUDE_HFUSE=d9
-                                DEFAULT_AVRDUDE_EFUSE=f0
-                        ;;
-                        *)
-                                DEFAULT_AVRDUDE_LFUSE=""
-                                DEFAULT_AVRDUDE_HFUSE=""
-                                DEFAULT_AVRDUDE_EFUSE=""
-                        ;;
-                esac
-
-                hex "Fuse Low Byte" CONFIG_AVRDUDE_LFUSE $DEFAULT_AVRDUDE_LFUSE
-                if [ "x${CONFIG_AVRDUDE_LFUSE}" != "x" ]; then
-                        define_symbol AVRDUDE_LFUSE 0x${CONFIG_AVRDUDE_LFUSE}
-                fi
-
-                hex "Fuse High Byte" CONFIG_AVRDUDE_HFUSE $DEFAULT_AVRDUDE_HFUSE
-                if [ "x${CONFIG_AVRDUDE_HFUSE}" != "x" ]; then
-                        define_symbol AVRDUDE_HFUSE 0x${CONFIG_AVRDUDE_HFUSE}
-                fi
-
-                hex "Fuse Extended Byte" CONFIG_AVRDUDE_EFUSE $DEFAULT_AVRDUDE_EFUSE
-                if [ "x${CONFIG_AVRDUDE_EFUSE}" != "x" ]; then
-                        define_symbol AVRDUDE_EFUSE 0x${CONFIG_AVRDUDE_EFUSE}
-                fi
-
+        comment "I2C Bus timing"
+                int "Bus free time between a STOP and START condition" I2C_T_BUF 5
+                int "Hold time (repeated) START condition" I2C_T_HD_STA 4
+                int "LOW period of SCL clock" I2C_T_LOW 5
+                int "HIGH period of SCL clock" I2C_T_HIGH 4
+                int "Setup time for a repeated START condition" I2C_T_SU_STA 5
+                int "Data hold time" I2C_T_HD_DAT 0
+                int "Data setup time" I2C_T_SU_DAT 1
+                int "Setup time for STOP condition" I2C_T_SU_STO 4
         endmenu
 
-        mainmenu_option next_comment
-        comment "DFU configuration"
-                string "Command" DFUPROG $( command -v dfu-programmer )
-                string "Pass extra options to dfu-programmer" DFUPROG_EXTRA_OPTIONS
-        endmenu
+        dep_bool "Real Time Clock" RTC_SUPPORT $I2C_SUPPORT
+
+        if [ "$RTC_SUPPORT" = "y" -a "$HARDWARE" = "prototype" -o "$HARDWARE" = "dig_ac230" ]; then
+                define_bool RTC_USE_SQW y
+        else
+                define_bool RTC_USE_SQW n
+        fi
 
 endmenu
+
+
+dep_bool "USB Support" USB_SUPPORT $CPU_USB
+dep_bool "Bootloader Support" BOOTLOADER_SUPPORT $CPU_USB
+
+
+# get the flash size according to the cpu type
+FLASH_SIZE=$((`echo -e "#include <avr/io.h>\nFLASHEND" | avr-cpp -mmcu=$MCU | sed '$!d'` + 1 ))
+
+define_hex FLASH_SIZE "$(printf '0x%X\n' $FLASH_SIZE)"
+define_hex EEPROM_SIZE "$(printf '0x%X\n' $((`echo -e "#include <avr/io.h>\nE2END" | avr-cpp -mmcu=$MCU | sed '$!d'` + 1)))"
+define_hex RAM_SIZE "$(printf '0x%X\n' $((`echo -e "#include <avr/io.h>\nRAMEND" | avr-cpp -mmcu=$MCU | sed '$!d'` + 1)))"
+define_hex FLASH_PAGESIZE "$(printf '0x%X\n' $((`echo -e "#include <avr/io.h>\nSPM_PAGESIZE" | avr-cpp -mmcu=$MCU | sed '$!d'`)))"
+define_hex EEPROM_PAGESIZE "$(printf '0x%X\n' $((`echo -e "#include <avr/io.h>\nE2PAGESIZE" | avr-cpp -mmcu=$MCU | sed '$!d'`)))"
+
+
+mainmenu_option next_comment
+comment "AVRDUDE configuration"
+        string "Command" AVRDUDE $( command -v avrdude )
+        string "Programmer Type (-c type)" AVRDUDE_PROGRAMMER "avrispmkii"
+        string "Port (-P port)" AVRDUDE_PORT "usb"
+        string "Pass extra options to avrdude" AVRDUDE_EXTRA_OPTIONS
+
+        case "$MCU" in
+                atmega32)
+                        DEFAULT_AVRDUDE_LFUSE=04
+                        DEFAULT_AVRDUDE_HFUSE=d9
+                        DEFAULT_AVRDUDE_EFUSE=""
+                ;;
+                atmega1284p)
+                        DEFAULT_AVRDUDE_LFUSE=c2
+                        DEFAULT_AVRDUDE_HFUSE=d9
+                        DEFAULT_AVRDUDE_EFUSE=fc
+                ;;
+                at90usb1287)
+                        DEFAULT_AVRDUDE_LFUSE=de
+                        DEFAULT_AVRDUDE_HFUSE=d9
+                        DEFAULT_AVRDUDE_EFUSE=f0
+                ;;
+                *)
+                        DEFAULT_AVRDUDE_LFUSE=""
+                        DEFAULT_AVRDUDE_HFUSE=""
+                        DEFAULT_AVRDUDE_EFUSE=""
+                ;;
+        esac
+
+        hex "Fuse Low Byte" CONFIG_AVRDUDE_LFUSE $DEFAULT_AVRDUDE_LFUSE
+        if [ "x${CONFIG_AVRDUDE_LFUSE}" != "x" ]; then
+                define_symbol AVRDUDE_LFUSE 0x${CONFIG_AVRDUDE_LFUSE}
+        fi
+
+        hex "Fuse High Byte" CONFIG_AVRDUDE_HFUSE $DEFAULT_AVRDUDE_HFUSE
+        if [ "x${CONFIG_AVRDUDE_HFUSE}" != "x" ]; then
+                define_symbol AVRDUDE_HFUSE 0x${CONFIG_AVRDUDE_HFUSE}
+        fi
+
+        hex "Fuse Extended Byte" CONFIG_AVRDUDE_EFUSE $DEFAULT_AVRDUDE_EFUSE
+        if [ "x${CONFIG_AVRDUDE_EFUSE}" != "x" ]; then
+                define_symbol AVRDUDE_EFUSE 0x${CONFIG_AVRDUDE_EFUSE}
+        fi
+
+endmenu
+
+mainmenu_option next_comment
+comment "DFU configuration"
+        string "Command" DFUPROG $( command -v dfu-programmer )
+        string "Pass extra options to dfu-programmer" DFUPROG_EXTRA_OPTIONS
+endmenu
+
+

@@ -124,7 +124,7 @@ divert(0)dnl
 #ifndef HARDWARE_H
 #define HARDWARE_H
 
-#include "../config.h"
+#include "config.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <avr/io.h>
