@@ -1,0 +1,1674 @@
+commit aca6e493510b8a8e8f85770e1e634014242a6796
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Fri Jan 27 14:50:28 2017 +0100
+
+    Verwende Autotools für lib und hlm
+
+commit 7462308d0c5ccade30b0bf14f458a62caa68bb57
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Wed Jan 25 15:21:26 2017 +0100
+
+    Menuconfig wird nur noch von Firmware benutzt; Den rest von Build dateien gesäubert
+
+commit 03d238169b3363861c59701e3ef33071364787d3
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Wed Jan 25 15:42:26 2017 +0100
+
+    Doc zur erstellung der Firmware hinzugefügt
+
+commit 3354823763a8b664eb61db48a0f5442365b9bba5
+Merge: 4a10ae9 f3f48e7
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Fri Jan 20 13:15:21 2017 +0100
+
+    Merge branch 'master' into compiler_rework
+
+commit 4a10ae9d141338073dd6bef129277b6d300d8719
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Fri Jan 20 13:13:15 2017 +0100
+
+    BUGFIX: Nach BUGFIX BUGFIX werden counter nicht mehr geladen
+
+commit b4946e701c29f8a35c8f471a692e171a5ffaa269
+Merge: 1a7b2dc 5e98221
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Fri Jan 20 11:10:58 2017 +0100
+
+    Merge branch 'los' into compiler_rework
+
+commit 5e982216395c3d58b8e15cf500b39b18497c3692
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Fri Jan 20 11:05:03 2017 +0100
+
+    BUGFIX: BUGFIX hat Zeiten sofort ablaufen lassen
+
+commit 1a7b2dca6afeecd07fa91c56a5d4c1c27a1d2dd0
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Jan 19 20:46:50 2017 +0100
+
+    BUGFIX: Timer reagieren nicht mit compiler update
+
+commit c541e210d7f01709dd22591ca536752a622c56ea
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Thu Jan 19 16:14:21 2017 +0100
+
+    Ausgabe von pana erweitert
+
+commit d301d263ded0505705316450a351b293c3cdf2e2
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Thu Jan 19 15:12:09 2017 +0100
+
+    Auskomentierung zum Debug im Code vergessen
+
+commit ba9d386afc3bf44a2b9b2a70c0496440e479b085
+Merge: 3058f40 1b54e2c
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Thu Jan 19 14:29:30 2017 +0100
+
+    Merge remote-tracking branch 'corsair/compiler_rework' into compiler_rework
+
+commit 3058f40aa15dbca5d1fc61799452693cc192cb5b
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Thu Jan 19 14:27:22 2017 +0100
+
+    BUGFIX: Loader lädt unnötige nullen am Programmende
+
+commit 8a95f9e1b6d74a13ce065ee84f0a769406001668
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Thu Jan 19 13:53:56 2017 +0100
+
+    Laden in libhl und hlm überarbeitet
+
+commit f3f48e7361223c5539487e4fa712875885ed6386
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Jan 18 18:44:51 2017 +0100
+
+    BUGFIX: Homelogic startet ständig neu
+
+commit 1b54e2c501632833cd3b7aa817d7fa3483f6d14c
+Merge: b3b8a3a 18d51fd
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Jan 17 17:59:55 2017 +0100
+
+    Merge branch 'master' into compiler_rework
+
+commit 18d51fdcf23ad4a42b3d7b0372f9da99595a62ce
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Jan 17 17:57:04 2017 +0100
+
+    Türinnenmodul überarbeitet
+
+commit b3b8a3ab1253333fd0e2d11d274d1f9cb74908fa
+Merge: 64eca2a 7d21eda
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Tue Jan 17 11:42:21 2017 +0100
+
+    Merge branch 'master' into compiler_rework
+    
+    Conflicts:
+    	test/hlm.c
+
+commit 64eca2a32ae1d552ad66d383b8f27bcee62ac85b
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Tue Jan 17 08:25:25 2017 +0100
+
+    Label und Target erkennung in Compiler implementiert
+
+commit 4ff223af16549c8be91201f7ff373e908d7e179c
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Dec 6 16:07:02 2016 +0100
+
+    Türmodule umbenannt
+
+commit 8d326dd38de7882c9d2999b516cf9cb4eae64851
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Dec 6 16:02:57 2016 +0100
+
+    Türmodul benannt
+
+commit 1a42d78bab3f171e48c4868bdadd83be486dd3a1
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Dec 6 15:30:12 2016 +0100
+
+    Türaußenmodul abgeschlossen
+
+commit 7d21eda49152653931e376b12d17fbcd9d5f4869
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Nov 27 21:26:49 2016 +0100
+
+    Äußeres Türmodul überarbeitet
+
+commit 92ad00c3e6a4402b183d84f8b3d2ba12e4e17531
+Merge: 5516ccb 1c3839b
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Nov 23 15:53:58 2016 +0100
+
+    Merge remote-tracking branch 'corsair/master'
+
+commit 36d12932add30f1a7c63122856edfbddde664430
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Wed Oct 19 09:11:08 2016 +0200
+
+    Funktionskomentare für neuen Kompiler hinzugefügt
+
+commit 1997778cab622b97a651c111afb7ec2fe6bbd6c5
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Tue Oct 18 15:09:49 2016 +0200
+
+    Warnungen verhindert
+
+commit e0318369e174907d60639f05739b0620511645b4
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Tue Oct 18 14:58:48 2016 +0200
+
+    Compiler wider funktionsfähig
+
+commit 7618f136e58a0cbe851a6226bd2c1fa57b2bbc3a
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Fri Oct 14 11:54:30 2016 +0200
+
+    BUGFIX: Ein Block zu wenig ausgegeben
+
+commit 2787137af122f4b02140816b8786818c9e858d41
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Fri Oct 14 11:26:46 2016 +0200
+
+    Kompiler überarbeitung
+
+commit 1c3839bdada0a1623c56d5ac3c8d7fb73e8b9e1c
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Mon Aug 29 12:47:01 2016 +0200
+
+    Präprozessor implementiert
+    TODO: Fehlerrückmeldung für lib vereinheitlichen
+
+commit c1ad9faac25c82a2a1cad523148a60c629368889
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Wed Aug 17 11:24:55 2016 +0200
+
+    Minimale Layoutverbesserung im Türmodul
+
+commit 5959da7d048a75da057802f0aa75e117d7c3aa32
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Wed Jun 1 14:22:35 2016 +0200
+
+    Erster entwurf des Klingelmoduls
+
+commit 578925ce140ff6677b35f4682f0d79dcc813bb40
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Wed Feb 24 05:10:35 2016 +0100
+
+    Detailverbesserungen an Türmodul
+
+commit 53d8f311f16c849bdba84c808ebfa162107c2df4
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Tue Feb 23 21:26:11 2016 +0100
+
+    Türmodul innen hinzugefügt
+
+commit 5516ccbfee5b52c7fa4037e923182744849b68d7
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Dec 24 13:38:33 2015 +0100
+
+    Noverify zur Standarteinstellung bei hlm gemacht
+
+commit de11973b24c602d73d03c36971f78caafd62abcf
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Dec 24 13:25:31 2015 +0100
+
+    USB Puffer vergrößert um fehlende Nachrichten zu verhindern
+
+commit 12e65468e08570a3d5005cb76b4a9b72084d5981
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Dec 22 16:13:37 2015 +0100
+
+    BUGFIX: Bitreihenfolge der IOs bei USB_CPU vertauscht
+
+commit 5edd5f9277576906385c3783745de12a07c6063a
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Dec 12 15:52:37 2015 +0100
+
+    hlm kann jetzt einzelne Geräte laden
+
+commit 016e5fbcf4056fd81ac4d0d353511a1fac382d58
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Tue Sep 29 12:01:12 2015 +0200
+
+    BUGFIX: Reihenfolge der Ein- und Ausgänge bei CPU_USB vertauscht
+
+commit 11a8704c0470924897821edd47cd916c28dafbed
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Fri Sep 25 08:56:39 2015 +0200
+
+    Ein paar Funktionen in compiler.c Kommentiert
+
+commit 11973121dc65cad098d12b16e849390102d90760
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Thu Sep 24 13:18:23 2015 +0200
+
+    Weitere Funktionen an den neuen Tokenizer angepasst
+
+commit 3befc48203e615b5a9d6286f51136b5a2e06cee2
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Mon Sep 21 14:57:22 2015 +0200
+
+    Scannen von Symbolen auf den neuen tokenizer umgestellt
+
+commit de557e1ba14b365138c5815564cc0e2b1a177251
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Mon Sep 14 14:12:54 2015 +0200
+
+    Kontextsensetiver Tokenizer für lexikalische Analyse erstellt
+
+commit 5d3da20bcdb2b8a7214b910f13e6a72e59acabeb
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Fri Sep 11 14:11:03 2015 +0200
+
+    BUGFIX: AM wird nicht in CPUs ohne Programm übertragen
+
+commit 9bb32afc8cb9577221727bbea1a8a469d26108f5
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Fri Jul 24 09:35:18 2015 +0200
+
+    pana: Einrückung hinzugefügt
+
+commit 12e915dd60c5073243c492e86a4fd671e66235e0
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Jul 23 20:10:04 2015 +0200
+
+    BUGFIX: Daten über USB werden zurückgesendet
+
+commit 3700f09da0805b75e39720677e6ccf61b199b469
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Jul 23 19:45:50 2015 +0200
+
+    Hysterese der Temperaturwarnung angepasst
+
+commit 66c630f249fe18f68c86551a64b06f382b694cc3
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Jul 23 19:17:49 2015 +0200
+
+    Deklaration von usb_configuration_t von usb.h nach usb.c verschoben
+
+commit c6b5cd023eae2917021ecc69dd147f246c8bb436
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Jul 23 19:07:05 2015 +0200
+
+    usb_send_data asynchron gestaltet
+
+commit ee1514bcac6ffbba9b108556a10d3e6736568c54
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Thu Jul 23 14:42:59 2015 +0200
+
+    Programmanalysierer geschrieben
+
+commit 326923843a59f23a830b3bf17e3e63486646ff81
+Merge: 614dfd8 b3b6479
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Wed Jul 22 14:05:53 2015 +0200
+
+    Merge remote-tracking branch 'corsair/master'
+
+commit 614dfd89df90af8629dd803b916252066981e894
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Wed Jul 22 14:04:02 2015 +0200
+
+    Kommentar von yield() verbessert
+
+commit 419484969912f63280f3458ac03c4f886c8d313b
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Wed Jul 22 13:59:20 2015 +0200
+
+    Nebenläufige aktionen in yield() verschoben
+    
+    Wichtige nebenläufige Funktionen werden nun in der Funktion
+    yield() aufgerufen. Diese muss dann von der Hautschleife und
+    alle anderen Warteschleifen aufgerufen werden.
+
+commit 84a9e1785fe8748a0186389daf183f0e71b53f68
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Wed Jul 22 11:36:15 2015 +0200
+
+    BUGFIX: Doppelinitialisierung des Programms bei wechsel von RUN auf DEBUG
+
+commit b3b6479fa1f7af7b2277e156920f8daa5e267455
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Jul 21 17:49:42 2015 +0200
+
+    Schriftart für Deckelbeschriftung geändert
+
+commit 986e85b96a1965153094cf9f5c38789797b16b42
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Tue Jul 21 12:45:41 2015 +0200
+
+    Logo und Beschriftung erstellt
+
+commit fdae1e599871e8d78b7c42f3920399b4268e5c8d
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Jun 30 16:42:22 2015 +0200
+
+    usb.mk vergessen
+
+commit 2071ab1714fbd3e74b5936a1447951a352f780ab
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu May 28 18:08:30 2015 +0200
+
+    Bootloader support implementiert
+
+commit 984db094e16548cdb90b7d9570d81b74d60e252b
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed May 27 17:41:15 2015 +0200
+
+    Eigenen USB Descriptor erstellt
+
+commit bfe51f504453660b81f8184762799794022e05e9
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Fri Feb 6 18:00:17 2015 +0100
+
+    Tippfehler int defaults.mk bereinigt
+
+commit e4ef2101749cf5baa03ab82261bd12e85ae2b9a8
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Jan 6 18:04:49 2015 +0100
+
+    Virtuelle serielle Schnittstelle implementiert
+
+commit 5e4cb124afb2f71c1aabbf3eed796a300ad445f3
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Jan 6 14:50:24 2015 +0100
+
+    USB_CPU zu CPU_USB umbenannt
+
+commit 2084c2108494e7ed25e9e8ccd7df9af30396296a
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Jan 4 17:06:52 2015 +0100
+
+    submodule lufa hinzugefügt
+
+commit 4a19b6958ff4950d1595adfa28d48eedd6506fed
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Jan 4 16:10:44 2015 +0100
+
+    M4 Macro reg in redef umbenannt
+
+commit daa6805106bf6c45b130642011f675599cce917c
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Jan 4 16:01:05 2015 +0100
+
+    Neues SFR system für read_adc übernommen
+
+commit 8c295b8fea0011d09de8537dde09b099b018d505
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Jan 4 15:51:05 2015 +0100
+
+    ADC Prescaler abstarhiert; MCU-spezifische C Dateien entfernt
+
+commit 2f3b471a31b50f158ddb1ad6e479d12ce9fcf3d5
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Jan 3 18:28:30 2015 +0100
+
+    program und fuses in Buildsystem eingeführt
+
+commit e8f8e140dff0d7cebf4d3a3b38ab66a84a5ba8bb
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Jan 3 15:06:39 2015 +0100
+
+    Kleinichkeiten gefixt
+
+commit 85ced1812c9b818bdff6524af35a9d09cf049408
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Jan 3 13:42:57 2015 +0100
+
+    BUGFIX: Bus funktioniert nicht mehr seit commit c9b18e6
+
+commit dfa071c64a5f990a2b22f0e98690f5478d40295c
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Jan 3 11:20:58 2015 +0100
+
+    Timerinitialisierung vereinheitlicht
+
+commit c9b18e602d0815d92f27e8e0d4ba5c8bcfbc6f81
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Dec 31 14:17:12 2014 +0100
+
+    Businitailisierung vereinheitlicht
+
+commit 2ce175a29864018760b382dcda2392f59e85b17e
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Dec 30 20:13:10 2014 +0100
+
+    Ausgangsabschaltung bei Übertemperatur gefixt
+
+commit 52233a7a63631d74ba24d20cb54640080c9416c6
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Dec 30 19:12:34 2014 +0100
+
+    BUGFIX: DDR für rote LED auf CPU USB falsch
+
+commit 95d8e481e028a5f4682953f07f2318c4781ee376
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Mon Dec 29 19:53:15 2014 +0100
+
+    RTC und I2C jetzt optional; usb_cpu hinzugefügt
+
+commit 3f29e7f81d386b3e55e8ab32c2cafb36aa4c02e0
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Mon Dec 29 16:55:46 2014 +0100
+
+    Pin Initialisierung und Hardwaremonitor abstrahiert
+
+commit 67d34cffc6117358628d2e3372ebe01623738975
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Mon Dec 29 16:07:17 2014 +0100
+
+    I2C Bustiming wird jetzt im menu eingestellt
+
+commit 5e7c57b66f40d8b769ca06182807151144996731
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Mon Dec 29 15:36:10 2014 +0100
+
+    Schreiben der Ausgänge vereinheitlicht
+
+commit a021bbf057165890c68d5769b66e4e379f475718
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Dec 27 21:12:59 2014 +0100
+
+    Lesen der Eingänge vereinheitlicht
+
+commit 889f15aa5ccd2afe82b0613fceba40395d6bf290
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Dec 27 18:36:54 2014 +0100
+
+    Überflüssige header gelöscht
+
+commit 4fe18cf672c6f4940766b534aa6c9f03fdfe8cfa
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Dec 27 18:16:37 2014 +0100
+
+    hardware.h der firmware wird jetzt durch m4 makros erstellt
+
+commit 836541114cddb1ed8b88b782b2c39405f521e40b
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Dec 16 19:08:19 2014 +0100
+
+    MCU auswahl jetzt über bedingte Quelle
+
+commit e0d78e07e925b6f6f628cb279e2a69a0e214e458
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Dec 16 18:43:32 2014 +0100
+
+    Baudrate kann jetzt über menuconfig eingestellt werden
+
+commit c0a197f1ad08429ed86395201e871fb24f80a3da
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Dec 16 18:27:16 2014 +0100
+
+    prog_status werte umbenannt um Konflickt mit DEBUG Flag zu beseitigen
+
+commit 4ae83cbe283aa5a496e93e8be582eb7dd4b26a26
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Dec 13 19:16:55 2014 +0100
+
+    einige BUGS entfernt
+
+commit fb948b947898953257f96813fda3f37885c1d8fa
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Dec 13 18:27:56 2014 +0100
+
+    Auskommentiertes include entfernt
+
+commit f5220eef6d86422778c7bee4b2891b4b78d63eff
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Dec 13 18:24:26 2014 +0100
+
+    templatefile entfernt; deps wieder scharf gemacht
+
+commit 040ca685162e5943e5abb6053a3e887bfcd576fe
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Dec 13 18:12:01 2014 +0100
+
+    Firmware an neues Buildsystem angepasst
+
+commit e072d6a6a9c85b4295bf977de7438fc3e030191f
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Dec 13 17:42:18 2014 +0100
+
+    Grundgerüst für neues menu geschaffen
+
+commit 92c3f8932662bf6e6b1f83a2e99d1fcdb92be35d
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Dec 13 11:47:27 2014 +0100
+
+    Minimale abstandskorrektur
+
+commit c04f9914c79070d99e281b6402d8ed7ae1a66302
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Mon Nov 17 20:26:56 2014 +0100
+
+    I2C EEPROM hinzugefügt auf dig_usb hinzugefügt
+
+commit b6abf954dfe818c411b231d2ce9facf46077c246
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Mon Nov 17 19:27:57 2014 +0100
+
+    Zusätzlicher Kondensator für UVcc; HWB mit INT4 verbunden
+
+commit 9ac2416fbacb0f72070a13af0be7cff702bdf844
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Nov 11 13:19:19 2014 +0100
+
+    Testpads hinzugefügt
+
+commit c1070b09258364ef3d4d4b15332ec83822fe898b
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Mon Nov 10 10:08:33 2014 +0100
+
+    Alternativer DC/DC Wandler und Ausgangsfilter hinzugefügt
+
+commit f0ac00f17e86a0acb743de8c99c63441c327c57c
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Oct 26 16:49:58 2014 +0100
+
+    dig_usb: Platinen zusammengeführt
+
+commit ca191d8764514046dfa09c41a1538d4e2c7efc71
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Oct 26 15:39:41 2014 +0100
+
+    dig_usb: Beschriftung besser angeordnet
+
+commit 521378eb92a69fb33071ffe1f9175ee6fd75fee9
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Oct 26 14:42:44 2014 +0100
+
+    dig_usb: Bauteile neu nummeriert und Plan etwas verschönert
+
+commit 037bf9daf89a644acc2f29319087fe27045874c9
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Oct 23 20:41:25 2014 +0200
+
+    Routing auf dig_usb verfeinert
+
+commit 669bc62fbe8706756539a70d883a901d51c2a72c
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Oct 22 19:55:37 2014 +0200
+
+    RJ45 Buchsen für Bus an dig_usb
+
+commit 310314480e82073192d836827b321e2afd38fad5
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Oct 22 18:20:50 2014 +0200
+
+    Steckbare Anschlüsse zu dig_usb hinzugefügt
+
+commit 7638b9fdac0b899cfab2289bc233c99c85fbfaba
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Oct 22 16:32:31 2014 +0200
+
+    UVCC und HWB angeschlossen
+
+commit 63fa9e047e06611978caadee0d99c632df6c48f8
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Mon Oct 20 20:22:26 2014 +0200
+
+    USB Buchse ausgetauscht
+
+commit 0874bd28020a6d6a42d9d2939aecdad223cfc073
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Oct 11 17:46:42 2014 +0200
+
+    Unterer Wannenstecker auf dig_usb verschoben um Platz für Wärmebrücke zu
+    machen
+
+commit 2e14fb2fcd7f33c485d8fd5ec5f13bd1b46dcd76
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Oct 9 22:28:12 2014 +0200
+
+    CHIP Gehäusebauformen ausgetauscht
+
+commit 7f0db6257ca36a24ab9cd3e4209f0bddfbcd7390
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Oct 9 20:35:19 2014 +0200
+
+    Widerstandsarrays für LEDs gegen CHIP0805 bei dig_usb getauscht
+
+commit 1f54969e493d4b2af384d43f94791e58d6abb2f1
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Oct 9 19:55:23 2014 +0200
+
+    Padgröße bei Wannenstecker für dig_usb angepasst
+
+commit e80a011b7c846fa2eb2c71a7691cb559bc7143d3
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Oct 8 20:29:16 2014 +0200
+
+    dig_usb vorläufig komplett geroutet
+
+commit 162decfc9e59e5eaa5fe6eaa0434c468a63c15df
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Oct 8 17:13:48 2014 +0200
+
+    USB Stecker und Quarz hinzugefügt
+
+commit 28c6a7d72988d74fab7db56a2913b5af6703edee
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Oct 5 16:37:28 2014 +0200
+
+    Einiges auf dig_usb controllerboard gerouted
+
+commit 2efa54631ecf33c0db7474f8e554233237db783b
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Oct 5 14:20:02 2014 +0200
+
+    IO Bereich der unteren Platine geroutet
+
+commit 828b8408c314867228c46bf75e3213bd7fd2c3f5
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Sep 28 18:48:00 2014 +0200
+
+    dig_usb auf AT90USB1287 umgestellt
+
+commit c064914e1785e680ecf201fd83ea434dd517ef97
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Sep 28 18:08:19 2014 +0200
+
+    Revision 2 von dig_ac230 wird zur USB variante
+
+commit 2d234ba471a78dd3862b98fd8a363d64e5a10724
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Sep 21 10:17:10 2014 +0200
+
+    Foobar in GPL Header durch Homelogic ersetzt
+
+commit 82ef42cc1511c24ae13f8f4a266eaff993c28360
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Mon Jul 28 19:42:55 2014 +0200
+
+    Verbindungszähler in virtualbus implementiert
+
+commit fa210c02f360d7d2141add085d36f3a468648cc5
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Sat Mar 8 15:48:29 2014 +0100
+
+    BUGFIX: Keine Hysterese bei Temperatur- und Batteriewarnung; Temperaturwerteabschaltwerte angepasst.
+
+commit 7a70374a278d0f15e31413eaaedbe68deed45576
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Sat Mar 8 15:38:02 2014 +0100
+
+    BUGFIX: Falsche ADC Werte wenn der wert gegen Null tendiert
+
+commit a2fb1e65acf4fd732e4c21473a8bb7d150678f86
+Author: Stephan Reinhard <stephan-reinhard@gmx.de>
+Date:   Sat Mar 8 15:29:00 2014 +0100
+
+    BUGFIX: Beim Prototype wird noch die Adresse verdoppelt
+
+commit a8d34ccd1f339e35ef80ad974d4d0ef4bf104d62
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Fri Feb 28 22:07:36 2014 +0100
+
+    Systemzeit über Eingänge abfragbar
+
+commit 45516059d32a06d916beabfea294a36508f206d3
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Fri Feb 28 20:17:20 2014 +0100
+
+    Busbefehl dump auf Zeiten und Zähler erweitert
+
+commit 00a449798478f0b15bb39dc080884c54e41b8dc5
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Fri Feb 28 20:07:09 2014 +0100
+
+    Datenübertragung der Zähler implementiert
+
+commit 5d22a8f4f9f1980365e86b9f5af55e01aa371258
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Feb 27 21:10:09 2014 +0100
+
+    Getrenter Ausgang und Pulsfunktion zu Fhemmodul hinzugefügt
+
+commit 8601f48d94eecfc8bccfc61670832e856b3c71a8
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Feb 27 19:41:06 2014 +0100
+
+    BUGFIX: Endlosreset auf atmega1284
+
+commit 4e4a03f94c32d0f597f6ef6121d9c0b34dc39b2e
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Feb 27 19:19:07 2014 +0100
+
+    Hardwareüberwachung implementiert
+
+commit d522acdf27c8a75a63d1ff9ddee27cb268ccc1d3
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Feb 23 13:46:26 2014 +0100
+
+    MCU Anzeige bei IDY
+
+commit c9d059a76d5725eb6178932a2968b11778421287
+Merge: 2522e10 711fd5f
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Feb 23 13:09:04 2014 +0100
+
+    Merge branch 'fhem'
+
+commit 2522e10832116544ab5a246f9a75da1c20bf3edc
+Merge: e751b55 29d2cc6
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Feb 23 13:08:26 2014 +0100
+
+    Merge branch 'multimcu'
+
+commit e751b55c64567e9bd1ac48519a4c52872a5c1dec
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Feb 23 13:07:32 2014 +0100
+
+    Copyright informationen aktualisiert
+
+commit 29d2cc680532b85a67509201de192c6e5e94292a
+Merge: eeacc9f d72d020
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Feb 23 13:02:25 2014 +0100
+
+    Merge branch 'master' into multimcu
+
+commit eeacc9f2dd5478168a3b91757b7903383ed307cb
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Feb 23 12:59:25 2014 +0100
+
+    MCU spezifisches in entsprechenden header verlegt; at1284p hinzugefügt
+
+commit 039326a6681780a166a095ced2fb979407761214
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Feb 23 11:38:26 2014 +0100
+
+    MCU_ define zu config.h hinzugefügt
+
+commit 0fdaceacba3b8085fbf631572ec0497122f21398
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Feb 23 11:27:00 2014 +0100
+
+    Variablen in Makefile sollen erstellt werden, nicht gespeichert
+
+commit 711fd5f2d4d8425f542bf301ce51a86c7d0974aa
+Merge: 53e8fe6 d72d020
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Feb 23 10:41:35 2014 +0100
+
+    Merge branch 'master' into fhem
+
+commit 53e8fe6ddd71ea05297cc06815fe73d479d4a7c9
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Feb 23 10:36:17 2014 +0100
+
+    BUGFIX: Absturz bei leeren READINGS in HlCon
+
+commit d72d02087fdc9ec10f7652e51b074dd49bb37e45
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Feb 23 10:19:45 2014 +0100
+
+    NoVerify option zu connector hinzugefügt.
+    
+    Damit sollten auch standard 485 Adapter funktionieren,
+    habe es aber noch nicht getestet.
+
+commit 226ab8c22f5ebd304f65aee99c08b80b4caf296e
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Feb 23 09:10:39 2014 +0100
+
+    BUGFIX: strenoperator bei sizeof in compiler_init vergessen
+
+commit c54f44bddbf7418f36f6a34b676f23c6516c4e67
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Feb 22 17:00:45 2014 +0100
+
+    Einfache Moudle für fhem geschrieben
+
+commit 2e01e9adb57872068d14733f35b995b55a0f749f
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Fri Feb 21 16:52:27 2014 +0100
+
+    Toolchain für verschiedene MCUs vorbereitet
+
+commit 9f874202432014fc65dea201a696ed4e23db6aa5
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Feb 18 20:13:52 2014 +0100
+
+    Zähler, Vergleicher und Rechenoperationen implementiert
+
+commit 55840a15f42491dee45b872b1fbbdfb525681499
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Feb 13 20:25:58 2014 +0100
+
+    Imagedatenverarbeitung in prog_execute verbessert
+
+commit af68289513136e862452b7dea14cc20fb3ff5345
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Feb 12 20:18:30 2014 +0100
+
+    Stellen und anzeigen der Echtzeituhr wieder implementiert
+
+commit b5fc09e3615f56f2d0994913762621fde3d243c4
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Feb 12 19:14:50 2014 +0100
+
+    Workaround: virtualbus blockiert beim senden
+
+commit 9fe17d1495ef34402f1822d7d669eecd20c9d47c
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Feb 12 17:21:47 2014 +0100
+
+    Timer implementiert
+
+commit 7ccf87a0fc11e348fe93a4ac85128260b37dc557
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Feb 5 19:57:47 2014 +0100
+
+    BUGFIX: Shared library wird nicht richtig erstellt
+
+commit e66205b448f4c22474c680cc3c1c2838dc7a9fc8
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Feb 1 19:40:39 2014 +0100
+
+    Testprogamme hlc hlload hlterm entfernt; Bibliothek aufgeräumt
+
+commit 67d916074ef1a2e5d74240aad98403a7660629a7
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Feb 1 19:34:27 2014 +0100
+
+    CPUs werden jetzt sequenziel geladen
+
+commit ce4d41d8320451a16a2b8968b706ff2e06468aa2
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Feb 1 19:13:14 2014 +0100
+
+    Program hlm geschrieben und die Bibliothek angepasst
+
+commit 6138cdc61a733ab8cc4e74d9b947e72c40413b34
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Fri Jan 31 19:54:13 2014 +0100
+
+    Errorstrings erstellt
+
+commit d069113870d005ee3d7b13268baaa4eadefed26d
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Fri Jan 31 18:29:09 2014 +0100
+
+    BUGFIX: Programmende nur bei einer CPU
+
+commit b9ed6bcd205566d5dc2bdefd0e051a17f22cb339
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Jan 30 20:01:17 2014 +0100
+
+    Wortverarbeitung von and, or und xor implementiert
+
+commit 9b5115b88db335d1b754761b45a4024302a2f8f4
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Jan 30 19:00:18 2014 +0100
+
+    Laden von Konstanten implementiert
+
+commit e5e428e996f4f4381b772ae387785dededcaf28a
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Jan 30 17:22:35 2014 +0100
+
+    XOR implementiert
+
+commit 3001e0199d0e6c171c4928eaa29c479941ce49fb
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Jan 29 20:19:23 2014 +0100
+
+    Flankenbefehle und S/R implementiert
+
+commit bbb2e82e3f55000a5a0e2448864ba3c422d38e5f
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Jan 29 19:48:07 2014 +0100
+
+    Programmablauf vereifacht durch funktionszusammenführung
+
+commit 7eca1258a2420db1c32b9146ae1d302184ed9a97
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Jan 29 19:09:18 2014 +0100
+
+    Klammerverarbeitung implementiert
+
+commit 0cec13554a7e634393de19e38fa8d687d80635b8
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Mon Jan 27 19:31:14 2014 +0100
+
+    BUGFIX: Bits der ungeraden Bytes werden nicht verarbeitet
+
+commit 1420c9b9134acbf9bde28d6bc53333380f7a20c4
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Mon Jan 27 18:49:12 2014 +0100
+
+    bool.h durch stdbool ersetzt; lib C++ tauglich gemacht
+
+commit e352007d3ae39357b6c78d4f234c659ace24f097
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Mon Jan 27 17:28:16 2014 +0100
+
+    BUGFIX: Unbekannter Befehl bei zu vielen Interrupts
+
+commit 0041cb04fffa8fa9702c2cb0eec599bf83e54cf2
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Jan 23 18:03:27 2014 +0100
+
+    Busbefehl DUMP implementiert
+
+commit 5786c420589f0068f889b4c2610eb4dbef336c96
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Jan 23 17:27:02 2014 +0100
+
+    Eigene eeprom implementierung entfernt und durch libavr ersetzt
+
+commit 92c91d4142d6e665abe2f18cc5dbefd1c87ea473
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Jan 23 16:28:23 2014 +0100
+
+    Verwendete Eingänge werden der address_map der verantwortlichen CPU
+    hinzugefügt
+
+commit 89a1275a1e5abece683bc91e9adb692a9c47d050
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Jan 22 19:32:37 2014 +0100
+
+    terminal in connector umbenannt
+
+commit 911b44518d0281567361789ddad203dfe1f5aa5e
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Jan 22 19:21:38 2014 +0100
+
+    Terminal und Testprogramme auf vbus umgestellt
+
+commit 10a057c18961bb18e8dcf3568456549c2108c16f
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Jan 22 18:41:48 2014 +0100
+
+    virtualbus implementiert
+
+commit 3f8af75f24f8dfc7ae29886176d9891a98366226
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Jan 22 16:20:25 2014 +0100
+
+    Businit setzt Buslock
+
+commit 7b3046dafcbea6e550245f33a79140e995607c40
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Jan 9 20:42:23 2014 +0100
+
+    Not Opcodes und Netzwerkende implementiert
+
+commit beafb701693eab0995d2857aef90b05d2ae86010
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Jan 9 20:41:28 2014 +0100
+
+    Bustimings verlängert
+
+commit 7747e4554027355dd8fa01ba2111e78cfb567844
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Jan 9 20:40:46 2014 +0100
+
+    Testprogramme auf Streamterminal geändert
+
+commit 8f49a7503d10e2fcb78b8c957d5cbd4331fd2046
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Jan 9 20:39:05 2014 +0100
+
+    Terminal auf Stream geändert
+
+commit 249602d69c265c3df53436f04f296fa63769a45c
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Oct 3 17:40:53 2013 +0200
+
+    BUGFIX: Datenfehler nach stop und run
+
+commit 6f8164f36cca0f87327646c42927913b27e435df
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Oct 3 17:40:05 2013 +0200
+
+    Datenstrukturen hlc_t und hlload_t zusammengeführt
+
+commit 2552cc3e576aadcb67e2d0523c9cb6ad21e70e5a
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Oct 3 16:48:08 2013 +0200
+
+    Tippfehler in Firmware behoben
+
+commit 1cb436a60080c1476be0c142d1512fac954e422e
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Oct 3 16:45:31 2013 +0200
+
+    Funktions- und Variablennamen umbenannt für weitere Zusammenführung der
+    Bibliothek
+
+commit 37ff55fa8a267cd7fd334fc55b90d358ab528b68
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Oct 3 14:59:43 2013 +0200
+
+    Makefiles überarbeitet und die konfiguration der firmware vereinfacht
+
+commit 4d71b3a9ca20500e4606d5fab449ba67589b7726
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Oct 2 19:47:33 2013 +0200
+
+    Dateien umbenannt
+
+commit f34dbd5faa772697aaf0c1f77263899fbbbb9d0a
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Oct 2 19:34:17 2013 +0200
+
+    Testprogramme hinzugefügt
+
+commit a4c6262793e28056961421d45c2575eb6b91db5a
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Oct 1 18:09:58 2013 +0200
+
+    Konzept überarbeitet; Synchronisierung der Bibliothek mit der Firmware:
+    
+      - C-Bibliothek für Programmierung und Komunikation
+      - Ablaufprogramm nun mit Header und CRC Prüfung
+      - Dynamische speicherverwaltung der Firmware
+      - Datenübertragung jetzt Wortweise
+      - Bibliothek und Firmware benutzen die selbe Basis
+    
+    Der Interpreter ist bis jetzt nur gerinfügig zum Testen implementiert.
+    Das neue Konzept scheint aber soweit zu funktionieren. Damit habe
+    ich eine gute Basis zum weiterarbeiten.
+
+commit 49413a7c8b8d7d3872699d88fd0b24725086951a
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Sep 26 20:50:43 2013 +0200
+
+    CRC für Programm implementiert
+
+commit 035e06f5d774b2ca65cd674f23329da8cc0ecb9a
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Sep 25 18:42:00 2013 +0200
+
+    Buskomandos überarbeitet
+
+commit e2688fc0ddbf6a3269e08347be227abeb2a547c7
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Sep 25 18:03:43 2013 +0200
+
+    Statusänderung nur am Anfang des Zyklus möglich
+
+commit fedd36d1acc9cb0ae05588d394aafe01a39ab7e2
+Merge: 40ad590 5aa23cc
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Sep 24 19:41:13 2013 +0200
+
+    Merge branch 'master' into lib
+
+commit 5aa23cc8540808910c49da411c074af7b4770400
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Sep 24 19:39:24 2013 +0200
+
+    LED funktionalität erweitert
+
+commit 33713ffe38d93694a53f5706a429db140f5b0767
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Sep 24 19:11:29 2013 +0200
+
+    BUGFIX: Reagiert nicht auf Busbefehle
+
+commit 2a3cffb3b96be813f3e610d99e276b2b4059b9ae
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Sep 24 18:27:10 2013 +0200
+
+    Probleme mit Makefile behoben
+
+commit 40ad590d804c605257a86ed6a665977d9906b1cf
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Sep 19 20:19:30 2013 +0200
+
+    hlterm jetzt direkt über ftdi möglich
+
+commit 0a9f7c1881df165e42cb64a6f2c6372d1e224223
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Sep 18 20:16:10 2013 +0200
+
+    hlterm für device erstellt
+
+commit f36d900cb1a2890d1b9b592c8529d01a3032f8f0
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Aug 21 20:06:21 2013 +0200
+
+    hll_ladefuktionen implementiert
+
+commit 343df5828503078b92f8b013a87d0006e805cf0d
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Aug 21 12:18:09 2013 +0200
+
+    Programmlänge aus sicht des compilers variabel gemacht
+
+commit fb2294621ad306dd0eb7e653978b0607a9a78f8e
+Merge: 9a21318 2703070
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Aug 21 11:38:07 2013 +0200
+
+    Merge remote-tracking branch 'corsair/lib' into lib
+    
+    Conflicts:
+    	libhl/hlc.h
+
+commit 2703070a5473ecf447624849809cea8ec39ca5f8
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Aug 20 21:00:40 2013 +0200
+
+    hlc_write_hexfile erstellt
+
+commit 9a2131899e4c6149d1439a4a7814bcddafab48d4
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Mon Aug 19 11:28:43 2013 +0200
+
+    hlc_compile implementiert
+
+commit 31f105d443e4a70c2fd7cd66998aa835adc11c86
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Aug 18 20:18:07 2013 +0200
+
+    Grundstein des Compilers gelegt
+
+commit c78b60fcae32217c3b9294e9916af521c0df8042
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Aug 15 12:05:10 2013 +0200
+
+    Verzeichnisstruktur geändert
+
+commit e239594fdc66bd9e220a4410de03c9be2b25174e
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Aug 15 09:10:51 2013 +0200
+
+    deps jetzt außerhalb des Makefiles; git describe für Version verwendet
+
+commit 56e2b05bdd1c41a8f743b85b5d8c75b1b1b1a798
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Aug 14 21:18:49 2013 +0200
+
+    Busbefehl SET hinzugefügt
+
+commit 3dcc01d3c5b9b4207ceeab3cca758ae6ff53ba31
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Aug 13 20:59:58 2013 +0200
+
+    bus_send_data_* entfernt und durch bus_send_message_* ersetzt
+
+commit f51c6f4386ac5a684de2b4433f40a224487a514d
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Aug 13 20:29:15 2013 +0200
+
+    bus_send_message_* funktionen erstellt; busfunktionen teilweise
+    umbenannt.
+
+commit d4ab49d54df3a6bb898de3fcaa4e533fc53087f0
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Jul 9 20:57:34 2013 +0200
+
+    Speicherinformationen implememtiert
+
+commit ef382ca5b6f640197c8ff8b7c474b1b5f2f948c6
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Jul 9 19:37:27 2013 +0200
+
+    Depends aus Makefile entfernt
+
+commit c53250aaf7c303a9d0bfc911b5884fa352c6f94e
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Jul 9 19:36:27 2013 +0200
+
+    Gepuffertes senden implementiert
+
+commit 2463b2de6bdb90dec7337463aedd84cabcb2d27d
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Fri Jul 5 22:10:25 2013 +0200
+
+    Bus Empfangsroutienen überarbeitet
+
+commit 71c4d2514f96c8ece92c7e2d304c620f91fa98f0
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Fri Jul 5 13:30:14 2013 +0200
+
+    Warnungen durch casts reduziert
+
+commit 1966fa11562ef3c06fed2eeab6c3cf8ea0fa6d2a
+Merge: bd62de1 07c9602
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Fri Jul 5 12:34:07 2013 +0200
+
+    Merge branch 'master' into smd
+    
+    Conflicts:
+    	main.c
+
+commit bd62de1a2f690b2d224a0bc5442e5d5792a840ba
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Fri Jul 5 12:21:40 2013 +0200
+
+    Firmware an neue Hardware angepasst; Hardwarewahl per Define
+
+commit 0d2d8de27fbded6e9a1c800be2c0990630bfc2ad
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Mon May 6 18:47:55 2013 +0200
+
+    Anschlüsse versetzt
+    
+      Anschlüsse sind jetzt nicht mehr korrekt unter den Löchern dafür
+      müsste die Platine aber ins Gehäuse passen
+
+commit e7112087d77cd6edc873ca1a021c746efb239c34
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Mon May 6 18:34:10 2013 +0200
+
+    Wert von D101 geändert
+
+commit 07c9602d088554efea36dfc42ee35533a9fd4e59
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Mon May 6 17:31:42 2013 +0200
+
+    attribut OS_main gesetzt
+
+commit fe23d27074c7fe9ffe858472eee48574e9f01460
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Fri Apr 19 20:03:50 2013 +0200
+
+    Bezeichnungen angepasst; Position auf Board angepasst
+
+commit b2ab1fad1f47d05f17a3bb8182fbc6105208ccda
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Fri Apr 19 19:02:15 2013 +0200
+
+    Eingänge auf ltv-354t umgestellt
+
+commit 0af32c3d587c2de204a37197dcaea4a18b447d45
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Fri Apr 19 17:39:13 2013 +0200
+
+    Netzklasse netz erstellt und zugeordnet
+
+commit 912b71bc4d62724a2a85c33986bc472fb379a185
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Fri Apr 19 17:21:21 2013 +0200
+
+    Batteriespannungsdioden versetzt
+
+commit edbc95159ef8cb450918f9d7d2fd51c7f2e976e9
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Fri Apr 19 16:46:17 2013 +0200
+
+    Fehlende Leiterbahn erzeugt; keine Stopmaske bei Vias
+
+commit c6567924095b4e8d65068e49adb7260b24fdd835
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Apr 18 21:24:04 2013 +0200
+
+    Beschriftung angepasst
+
+commit 08ecf226d2ebc9c4cbabf413f327fda78ef87579
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Apr 18 20:56:53 2013 +0200
+
+    Bauteile wegen Beschriftung ausgetauscht
+
+commit 1f0471fbb2d7691bb686fff292f587aceccbf2b6
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Apr 18 20:18:34 2013 +0200
+
+    Schematik übersichtlicher gemacht; Bauteile neu benannt; Werte ergänzt
+
+commit bd1210cae523d8cc4bbc4c293f756e6dcbb92b87
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Apr 14 15:32:26 2013 +0200
+
+    Halbleiterrelais wegen gehäuse versetzt
+
+commit 809983697c393d23417613258a4966918c7018af
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Apr 14 14:44:40 2013 +0200
+
+    Statusleds, Temperatur- und Batteriemessung hinzugefügt
+
+commit 9586426e717b939f3f3d7f3c6055ddc61057269a
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Apr 14 13:59:57 2013 +0200
+
+    Leiterbahnführung verbessert; Analog ground verbessert
+
+commit 24ef2b2b2684cc79b88b0233188dea2cbbf3ac1e
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Apr 13 15:51:08 2013 +0200
+
+    kleinere Designfehler beseitigt
+
+commit 2c51fc655dd461569c4290b05d7af1270046be50
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Apr 13 15:32:52 2013 +0200
+
+    rev1 geroutet
+
+commit 84d9515706333945e25ad9b1291000c25ebf0e1b
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Fri Apr 12 12:43:21 2013 +0200
+
+    Bauteile neu positoniert
+
+commit 7bdca2c8b82ec71330f609885e64ac24dd113b09
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Fri Apr 12 11:55:57 2013 +0200
+
+    Erste vorläufige Implementation
+
+commit d7e2e26b432d8276c4482dc6bf9bb666986edc62
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Mon Apr 22 12:08:40 2013 +0200
+
+    Homelogic unter die GPLv3 gestellt
+
+commit 27aa9529c162eeca9cdb93dbdda9aa6d693910f9
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Nov 27 17:55:54 2012 +0100
+
+    Identifizierung hinzugefügt
+
+commit 25d5a9d433397bd7375f9433d56ab8dd4826f237
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Nov 27 17:03:54 2012 +0100
+
+    BUGFIX: Bei Serienschaltern reagieren manchmal beide Eingänge
+    
+    Das Problem kommt vermutlich von einer kapazitiven überlagerung auf der
+    Schaltleitung. Das Eingangssignal muss jetzt länger anstehen bevor
+    darauf reagiert wird. Das löst hoffentlich das Problem.
+
+commit 82342cfb9676e9cec886d0e3190b97173a00290b
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Fri Nov 9 14:47:13 2012 +0100
+
+    BUGFIX: bool.h fehlt
+
+commit 224c99c1b80423ea4f98c1160206581b31191097
+Author: stephan <stephan@elektro2>
+Date:   Tue Sep 18 14:15:46 2012 +0200
+
+    Sicherheit und LED für Spannungsversorgung hinzugefuegt
+
+commit 7b04671cbae457f456c829b5a02126778212a999
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Sep 12 20:04:59 2012 +0200
+
+    Debugfunktion erweitert; BUGFIX: Progarammablauf fehlerhaft bei S, R und X
+
+commit d29d0023743b48ff7739b5a5ed392ea82968e121
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Sep 12 18:11:28 2012 +0200
+
+    Debugfunktion implementiert
+
+commit d2501e668cc4c78530c0cc64139f5a60cdb656aa
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Sep 11 15:51:34 2012 +0200
+
+    dc_adapter erstellt
+
+commit 75674a943ca31f8f1abca496111a5770cef9936c
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Wed Sep 5 18:49:53 2012 +0200
+
+    BUGFIX: UN, ON und = funktionieren nicht richtig
+
+commit 5032b64cc561d1db3b57749a398adc7c50d7caeb
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Sep 4 18:48:32 2012 +0200
+
+    Verify implementiert
+
+commit f1fd8e75a8e282f337a4dd5f258216ad247486e1
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Sep 4 18:02:31 2012 +0200
+
+    Progammablauf an neuen Code angepasst; RUN, STP und PRG implementiert
+
+commit 938f6af1431a9c3b0fbd2dbaa27dc5c3f87601a9
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Mon Sep 3 20:00:42 2012 +0200
+
+    Zwei fehlende break in prog_cycle() ergänzt
+
+commit 2deb422ddff30c752d6ef1fbdc70408b8ef2f70d
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Mon Aug 13 18:36:15 2012 +0200
+
+    Mergeleiche entfernt; Defaultlayer aktiviert
+
+commit 027b4b29bb5fc9e71521aee3c5c1d4912747a124
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Aug 9 19:11:04 2012 +0200
+
+    BUGFIX: SDT funktioniert nicht mit jeder Zeit
+
+commit 85fc8adcdc3f7fe1ff52f5951cc1dbe722d08d45
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Aug 9 19:01:03 2012 +0200
+
+    Programmbearbeitung implementiert; Vorangigkeit funktioniert noch nicht
+
+commit dc2679916ff239c9b85051e257d9a17105ffae64
+Merge: 6e9f74b 4b6be8d
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Aug 7 18:38:24 2012 +0200
+
+    Merge remote-tracking branch 'corsair/master'
+
+commit 6e9f74b34e631b517b67e2834db4c18508875bcc
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Aug 7 18:36:57 2012 +0200
+
+    Fehler in der i2c implementierung beseitigt; Stellen der Uhr
+    implementiert
+
+commit 4b6be8d9a924b173b17df06d184d37583462a026
+Merge: 5d41cb3 6349ff1
+Author: Tobias Stenzinger <tobiasstenzinger@web.de>
+Date:   Mon Aug 6 12:07:25 2012 +0200
+
+    Merge remote branch 'corsair/master'
+    
+    Conflicts:
+    	mm16.brd
+    	mm16.sch
+    	out8.brd
+
+commit 5d41cb363939eeca522b6ff0fd4467e090dac4ee
+Author: Tobias Stenzinger <tobiasstenzinger@web.de>
+Date:   Mon Aug 6 11:58:09 2012 +0200
+
+    Boards beschriftet
+
+commit 6349ff103eb61aba0a9c053d8a8194c0ee936328
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Aug 5 16:02:47 2012 +0200
+
+    BUGFIX: Nur jede zweite Nachricht wurde empfangen
+
+commit 5fdcf50e1b992c3a59b2d03d8f6bf202684caa4b
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Aug 5 12:49:08 2012 +0200
+
+    rtc_time2str implementiert; BUGFIX: bcs wird nicht gesendet und eb1 wird
+    nicht eingelesen
+
+commit f0a9b37ce8b0ec6738d6193a651a58b1110583b7
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Aug 5 11:10:38 2012 +0200
+
+    Busdecodierung für Bitchange implementiert
+
+commit 738f42910d5f809e7228c9bf81507bf8b1734cb2
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Aug 4 16:33:24 2012 +0200
+
+    Busprotokoll angepasst
+
+commit ff107777a36406938f0fda5a5d72311edccd04e3
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Aug 2 20:19:30 2012 +0200
+
+    Bus implementierung begonnen
+
+commit a7c03c17e8609479dd55593ebfae63316eee666e
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Jul 31 18:06:56 2012 +0200
+
+    Pinabstand vom Bateriehalter korrigiert
+
+commit 7f4ad3fe557663d255e6d83c7944890cf1cc0844
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Jul 31 17:53:22 2012 +0200
+
+    BUGFIX: Eingänge werden nicht gelesen; Ausgänge nicht geschrieben.
+
+commit a8437cd3571f39bbd7febdc5f2cd20ebe6b25972
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Jul 29 15:46:34 2012 +0200
+
+    rct.h erstellt
+
+commit 1f71bbaba231ccfaf96587fe514e7c6f248ec8ad
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Jul 29 15:35:15 2012 +0200
+
+    i2c_pread/i2c_pwrite hinzugefügt
+
+commit 2a6f7f4f30146946b9d7b622f84550e922889c05
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Jul 29 15:08:39 2012 +0200
+
+    BUGFIX: i2c Slaveadressierung falsch
+
+commit 628b27de0a1ccd5d264c41344433962bfdfae3bc
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Jul 29 15:01:11 2012 +0200
+
+    Eingangsverarbeitung modifiziert
+
+commit 737282a024cab15842dcf47c2abf1e805bbb5616
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Jul 29 15:00:40 2012 +0200
+
+    i2c implementiert
+
+commit 2f55a54ad2f1e5fc2bdeb1d97e5713f9bc29040c
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Jul 28 22:05:30 2012 +0200
+
+    Erstes Testprogamm geschrieben
+
+commit 8d09f6aa8465a92fa5af23273860f78f747e5503
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Jul 28 17:21:37 2012 +0200
+
+    Batteriehalter ausgetauscht
+
+commit 27b7790588413d8f61a5858578d778421fc5f6df
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Jul 28 14:28:27 2012 +0200
+
+    Optionaler Abschlusswiderstand eingefügt
+
+commit 8d010e5c83fbc2a64f650204e8b1e9539af5a08f
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sat Jul 28 14:16:15 2012 +0200
+
+    Anschlussklemmen ausgetauscht
+
+commit 5fd1eddc2e508695b53e87f007578d239c0716a6
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Jul 26 19:44:02 2012 +0200
+
+    Werte im Schema und Bohrungen im Layout hinzugefügt
+
+commit 8547234a2d330d93e911a7d343c49901c6cd2723
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Jul 26 19:33:18 2012 +0200
+
+    Alarme angeschlossen; Detailverbesserungen am Layout
+
+commit fa05ce73e431bf1b42daeb066c1feb7bd9df5b3b
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Jul 26 18:23:31 2012 +0200
+
+    Anschlüsse neu possitioniert und Bohrungen hinzugefügt
+
+commit 148bddf8ba5ffec18d897692bdf628af8c0e545a
+Author: Tobias Stenzinger <tobiasstenzinger@web.de>
+Date:   Thu Jul 26 09:03:08 2012 +0200
+
+    Leiterbahn verschoben
+
+commit bd6aee3a13ae5a4366d5223bed265ec1a2dfa4fd
+Author: Tobias Stenzinger <tobiasstenzinger@web.de>
+Date:   Tue Jul 24 11:35:29 2012 +0200
+
+    Dipschalter durch Drehschalter ersetzt; 74HC594 durch 74HC595 ersetzt; Signalleitungen gedreht.
+
+commit 98a2d8b96e7ee3dbf3ba950167da79a34985f32e
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Jul 22 16:21:11 2012 +0200
+
+    Batterie auf Multimaster hinzugefügt
+
+commit 8b3fb05335dabaefc176e34b6887318b7e437af7
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Jul 22 15:53:44 2012 +0200
+
+    Busstecker auf Ausgangsboard ersetzt; kleinere Layoutanpassungen
+
+commit 502591fdf7a11bfdc9e422811529c3e6a6b9df99
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Jul 22 10:26:44 2012 +0200
+
+    Multimaster mit 16 Eingängen erstellt
+
+commit 5f7ac7ee5e5d08e92e0d50762226e486bd1a3204
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Jul 19 21:06:36 2012 +0200
+
+    LEDs auf Ausgangsplatine hinzugefügt
+
+commit 62ac680854ee09258f49e9a3b0be36f770de30c4
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Thu Jul 19 20:37:09 2012 +0200
+
+    Achtfach-Ausgangsmodul erstellt
+
+commit 0fe46b753362e10ff2f45d20d043b175a20363f1
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Jul 17 18:50:34 2012 +0200
+
+    Werte korrigiert
+
+commit ec7b30188d2c8f32ba1037bd6a899c47d32aa3fd
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Tue Jul 17 18:30:36 2012 +0200
+
+    Echtzeituhr eingebaut
+
+commit 57611c98bc1a78fb146fdc0193a5ec1fcb8b22aa
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Jul 15 21:22:11 2012 +0200
+
+    Leichte korrekturen an Schematik und Layout
+
+commit a7c41a54fe896cf04d6cd7d91649e8c770ef2678
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Jul 15 21:07:38 2012 +0200
+
+    74594 durch 74HC594 ersetzt
+
+commit 661154415bc17cff5f5a1cb439385b1147f2203d
+Author: Stephan Reinhard <Stephan-Reinhard@gmx.de>
+Date:   Sun Jul 15 21:01:41 2012 +0200
+
+    Schematic und Layout erstellt
